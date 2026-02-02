@@ -3,7 +3,6 @@ import { ArrowRight, Check } from 'lucide-react';
 import { Button } from './Button';
 import { Container } from './Container';
 
-import { GlobeIcon } from './GlobeIcon';
 
 interface FinalCTAProps {
     onJoinClick: () => void;
@@ -39,38 +38,64 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                             <span className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400" /> No credit card required</span>
                         </p>
                         <p className="mt-4 text-xs font-medium text-accent/90 text-center lg:text-left animate-pulse">
-                            Applications reviewed weekly. Next cohort opens Monday.
+                            Applications reviewed weekly.
                         </p>
                     </div>
 
-                    <div className="relative hidden lg:block w-80 h-80">
-                        {/* Abstract visual */}
-                        <div className="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-full border border-white/10 flex items-center justify-center animate-spin-slow">
-                            <div className="w-64 h-64 bg-accent/20 rounded-full blur-3xl"></div>
-                        </div>
-
-                        {/* Central Hub Icon */}
+                    <div className="relative hidden lg:block w-96 h-96">
+                        {/* Center Glow */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="bg-white p-4 rounded-2xl shadow-2xl">
-                                <div className="w-12 h-12 bg-primary flex items-center justify-center rounded-xl text-white">
-                                    <GlobeIcon className="w-8 h-8" />
-                                </div>
-                            </div>
+                            <motion.div
+                                className="w-64 h-64 bg-accent/10 rounded-full blur-3xl"
+                                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                            />
                         </div>
 
-                        {/* Floating Avatars */}
-                        {[0, 72, 144, 216, 288].map((deg, i) => (
+                        {/* Orbiting System Container */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+
+                            {/* Central Hub */}
                             <motion.div
-                                key={i}
-                                className="absolute top-1/2 left-1/2 w-10 h-10 -ml-5 -mt-5 bg-white rounded-full border-2 border-primary overflow-hidden"
-                                style={{ transform: `rotate(${deg}deg) translate(140px) rotate(-${deg}deg)` }}
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ delay: i * 0.1 }}
+                                className="relative z-20 w-24 h-24 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 flex items-center justify-center shadow-2xl overflow-hidden"
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ duration: 0.8 }}
                             >
-                                <img src={`https://images.unsplash.com/photo-${1500000000000 + i}?auto=format&fit=crop&w=50&h=50`} alt="" className="w-full h-full object-cover bg-slate-200" />
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 opacity-50" />
+                                <div className="relative z-10 w-16 h-16 flex items-center justify-center">
+                                    <img src="/logo.png" alt="IFN Logo" className="w-14 h-14 object-contain" />
+                                </div>
                             </motion.div>
-                        ))}
+
+                            {/* Orbit 1 */}
+                            <motion.div
+                                className="absolute border border-white/10 rounded-full w-48 h-48"
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                            >
+                                <motion.div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-accent rounded-full shadow-[0_0_15px_rgba(249,115,22,0.6)]" />
+                                <motion.div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-white/50 rounded-full" />
+                            </motion.div>
+
+                            {/* Orbit 2 */}
+                            <motion.div
+                                className="absolute border border-white/5 rounded-full w-72 h-72"
+                                animate={{ rotate: -360 }}
+                                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                            >
+                                <motion.div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-primary-light rounded-full shadow-[0_0_20px_rgba(56,189,248,0.5)] border border-white/20" />
+                                <motion.div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white/30 rounded-full" />
+                                <motion.div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white/20 rounded-full" />
+                            </motion.div>
+
+                            {/* Connecting Lines (Decorative) */}
+                            <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20 animate-pulse-slow">
+                                <circle cx="50%" cy="50%" r="60" stroke="currentColor" strokeDasharray="4 4" fill="none" className="text-white" />
+                                <circle cx="50%" cy="50%" r="100" stroke="currentColor" strokeWidth="0.5" fill="none" className="text-white" />
+                            </svg>
+
+                        </div>
                     </div>
 
                 </div>

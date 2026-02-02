@@ -1,50 +1,70 @@
 import { useState, Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
-// import { SocialProof } from './components/SocialProof';
-import { ValueProps } from './components/ValueProps';
-import { HowItWorks } from './components/HowItWorks';
+import { Footer } from './components/Footer';
+import { ScrollToAnchor } from './components/ScrollToAnchor';
 
-// Lazy load components that are not immediately visible
-const FounderStory = lazy(() => import('./components/FounderStory').then(module => ({ default: module.FounderStory })));
-const Testimonials = lazy(() => import('./components/Testimonials').then(module => ({ default: module.Testimonials })));
-const EventsPreview = lazy(() => import('./components/EventsPreview').then(module => ({ default: module.EventsPreview })));
-const Resources = lazy(() => import('./components/Resources').then(module => ({ default: module.Resources })));
-const FAQ = lazy(() => import('./components/FAQ').then(module => ({ default: module.FAQ })));
-const FinalCTA = lazy(() => import('./components/FinalCTA').then(module => ({ default: module.FinalCTA })));
-const Footer = lazy(() => import('./components/Footer').then(module => ({ default: module.Footer })));
+// Lazy load pages
+const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
+const About = lazy(() => import('./pages/About').then(module => ({ default: module.About })));
+const Careers = lazy(() => import('./pages/Careers').then(module => ({ default: module.Careers })));
+const Partners = lazy(() => import('./pages/Partners').then(module => ({ default: module.Partners })));
+const Contact = lazy(() => import('./pages/Contact').then(module => ({ default: module.Contact })));
+const Blog = lazy(() => import('./pages/Blog').then(module => ({ default: module.Blog })));
+const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ default: module.Playbooks })));
+const Events = lazy(() => import('./pages/Events').then(module => ({ default: module.Events })));
+const Newsletter = lazy(() => import('./pages/Newsletter').then(module => ({ default: module.Newsletter })));
+const Membership = lazy(() => import('./pages/Membership').then(module => ({ default: module.Membership })));
+const Mentorship = lazy(() => import('./pages/Mentorship').then(module => ({ default: module.Mentorship })));
+const Chapters = lazy(() => import('./pages/Chapters').then(module => ({ default: module.Chapters })));
+const CodeOfConduct = lazy(() => import('./pages/CodeOfConduct').then(module => ({ default: module.CodeOfConduct })));
+
 const JoinModal = lazy(() => import('./components/JoinModal').then(module => ({ default: module.JoinModal })));
 
-function App() {
+function Layout() {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const openJoinModal = () => setIsJoinModalOpen(true);
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar onJoinClick={() => setIsJoinModalOpen(true)} />
-      <main>
-        <Hero onJoinClick={() => setIsJoinModalOpen(true)} />
-        {/* <SocialProof /> */}
-        <ValueProps />
-        <HowItWorks />
-
-        <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading...</div>}>
-          <FounderStory />
-          <Testimonials />
-          <EventsPreview />
-          <Resources />
-          <FAQ />
-          <FinalCTA onJoinClick={() => setIsJoinModalOpen(true)} />
+    <div className="min-h-screen bg-white flex flex-col">
+      <Navbar onJoinClick={openJoinModal} />
+      <main className="flex-grow">
+        <Suspense fallback={<div className="h-screen flex items-center justify-center">Loading...</div>}>
+          <Outlet context={{ openJoinModal }} />
         </Suspense>
       </main>
-
       <Suspense fallback={<div className="h-24" />}>
         <Footer />
       </Suspense>
-
       <Suspense fallback={null}>
         <JoinModal isOpen={isJoinModalOpen} onClose={() => setIsJoinModalOpen(false)} />
       </Suspense>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <ScrollToAnchor />
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/partners" element={<Partners />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/playbooks" element={<Playbooks />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/newsletter" element={<Newsletter />} />
+          <Route path="/membership" element={<Membership />} />
+          <Route path="/mentorship" element={<Mentorship />} />
+          <Route path="/chapters" element={<Chapters />} />
+          <Route path="/code-of-conduct" element={<CodeOfConduct />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

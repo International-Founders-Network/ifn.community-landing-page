@@ -1,4 +1,5 @@
 import { Twitter, Linkedin, Instagram, Mail, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Container } from './Container';
 import { GlobeIcon } from './GlobeIcon';
 
@@ -7,22 +8,15 @@ export function Footer() {
 
     const footerLinks = {
         Company: [
-            { name: 'About Us', href: '#' },
-            { name: 'Careers', href: '#' },
-            { name: 'Partners', href: '#' },
-            { name: 'Contact', href: '#' },
+            { name: 'About Us', href: '/about' },
+            { name: 'Contact', href: '/contact' },
         ],
         Resources: [
-            { name: 'Blog', href: '#' },
-            { name: 'Founder Playbooks', href: '#' },
-            { name: 'Events Calendar', href: '#' },
-            { name: 'Newsletter', href: '#' },
+            { name: 'Events Calendar', href: '/#events' },
+            { name: 'Founders Toolkit', href: '/#resources' },
         ],
         Community: [
-            { name: 'Membership', href: '#' },
-            { name: 'Mentorship', href: '#' },
-            { name: 'Local Chapters', href: '#' },
-            { name: 'Code of Conduct', href: '#' },
+            { name: 'Code of Conduct', href: '/code-of-conduct' },
         ],
     };
 
@@ -32,14 +26,14 @@ export function Footer() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
                     {/* Brand & Newsletter */}
                     <div className="lg:col-span-5 space-y-6">
-                        <a href="#" className="flex items-center gap-2">
+                        <Link to="/" className="flex items-center gap-2">
                             <div className="bg-primary text-white p-2 rounded-lg">
                                 <GlobeIcon className="w-5 h-5" />
                             </div>
                             <span className="font-bold text-xl tracking-tight text-primary">
                                 IFN<span className="text-accent">.community</span>
                             </span>
-                        </a>
+                        </Link>
                         <p className="text-slate-600 max-w-sm">
                             Connecting founders worldwide to build, grow, and succeed together. Join the global network of changemakers.
                         </p>
@@ -55,9 +49,9 @@ export function Footer() {
                                 <ul className="space-y-3">
                                     {links.map((link) => (
                                         <li key={link.name}>
-                                            <a href={link.href} className="text-slate-600 hover:text-primary transition-colors text-sm">
+                                            <Link to={link.href} className="text-slate-600 hover:text-primary transition-colors text-sm">
                                                 {link.name}
-                                            </a>
+                                            </Link>
                                         </li>
                                     ))}
                                 </ul>
