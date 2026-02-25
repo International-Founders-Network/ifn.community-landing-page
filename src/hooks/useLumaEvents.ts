@@ -14,16 +14,20 @@ export function useLumaEvents(): UseLumaEventsReturn {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Simulate loading briefly for smoother UX or just set immediately
         const loadEvents = async () => {
             try {
-                // In a real app, you might want to fetch this JSON from a public URL if it's hosted separately,
-                // but importing it directly bundles it, which is fine for this size.
-                setEvents(eventsData as Event[]);
-                setLoading(false);
+                const response = await fetch('/api/events');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch from API');
+                }
+                const data = await response.json();
+                setEvents(data as Event[]);
             } catch (err) {
-                console.error('Error loading events:', err);
-                setError('Failed to load events');
+                console.warn('API fetch failed, falling back to bundled data:', err);
+                // Fallback to bundled data if API fails (good for local dev without functions running)
+                setEvents(eventsData as Event[]);
+                setError('Failed to load live events, showing cached data');
+            } finally {
                 setLoading(false);
             }
         };

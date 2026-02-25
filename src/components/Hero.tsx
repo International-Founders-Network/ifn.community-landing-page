@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Globe, Users, Trophy } from 'lucide-react';
 import { Button } from './Button';
 import { Container } from './Container';
 import { HeroVisual } from './HeroVisual';
@@ -25,89 +25,138 @@ export function Hero({ onJoinClick }: HeroProps) {
     }, []);
 
     return (
-        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-            {/* Background Gradient */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-light/20 via-slate-50 to-slate-50 -z-10" />
+        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-40 overflow-hidden">
+            {/* Rich Background Elements */}
+            <div className="absolute inset-0 bg-slate-50 -z-50" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-light),transparent_50%)] opacity-30 -z-40" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,var(--color-accent-light),transparent_50%)] opacity-20 -z-40" />
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] -z-30" />
+
+            {/* Animated Mesh Gradients */}
+            <motion.div
+                animate={{
+                    scale: [1, 1.2, 1],
+                    x: [0, 50, 0],
+                    y: [0, -30, 0]
+                }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-20"
+            />
+            <motion.div
+                animate={{
+                    scale: [1.2, 1, 1.2],
+                    x: [0, -50, 0],
+                    y: [0, 30, 0]
+                }}
+                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[150px] -z-20"
+            />
 
             <Container>
-                <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-
+                <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
                     {/* Content */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="flex-1 text-center lg:text-left"
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="flex-1 text-center lg:text-left z-10"
                     >
-                        <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-4 py-2 rounded-full font-medium text-sm mb-6 border border-accent/20">
-                            <span className="flex h-2 w-2 rounded-full bg-accent animate-pulse"></span>
-                            Grand Opening: Inaugurating Today!
-                        </div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full font-bold text-xs mb-8 border border-slate-200 shadow-sm text-slate-800 uppercase tracking-widest"
+                        >
+                            <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+                            World's First Immigrant Founder Network
+                        </motion.div>
 
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6 tracking-tight flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-2">
-                            <span>Where</span>
-                            <span className="inline-flex relative h-[1.2em] w-auto overflow-hidden">
-                                <AnimatePresence mode="wait">
-                                    <motion.span
-                                        key={index}
-                                        initial={{ y: "110%", skewY: 10, opacity: 0, width: "auto" }}
-                                        animate={{ y: 0, skewY: 0, opacity: 1, width: "auto" }}
-                                        exit={{ y: "-110%", skewY: -10, opacity: 0, width: "auto" }}
-                                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                                        className={`block whitespace-nowrap ${words[index].color}`}
-                                    >
-                                        {words[index].text}
-                                    </motion.span>
-                                </AnimatePresence>
+                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.1] mb-8 tracking-tight">
+                            Build Your Legacy <br />
+                            <span className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4">
+                                <span>with</span>
+                                <span className="relative inline-block h-[1.2em] min-w-[200px] text-left">
+                                    <AnimatePresence mode="wait">
+                                        <motion.span
+                                            key={index}
+                                            initial={{ y: 20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            exit={{ y: -20, opacity: 0 }}
+                                            transition={{ duration: 0.5, ease: "circOut" }}
+                                            className={`absolute inset-0 ${words[index].color} italic`}
+                                        >
+                                            {words[index].text}
+                                        </motion.span>
+                                    </AnimatePresence>
+                                </span>
                             </span>
-                            <span className="w-full sm:w-auto">Founders <span className="text-primary">Connect</span>, <span className="text-accent">Grow</span>, and <span className="text-primary">Succeed</span></span>
+                            Connects.
                         </h1>
 
-                        <p className="text-lg sm:text-xl text-slate-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                            The only founder network built specifically for immigrant and international founders navigating US startup ecosystems.
+                        <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                            The International Founders Network (IFN) bridges the gap for immigrant entrepreneurs by providing the capital, community, and coaching needed to scale globally.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-                            <Button size="lg" className="group" onClick={onJoinClick}>
-                                Join the Network
+                        <div className="flex flex-col sm:flex-row items-center gap-5 justify-center lg:justify-start">
+                            <Button size="lg" className="h-16 px-10 text-lg group shadow-2xl shadow-primary/30" onClick={onJoinClick}>
+                                Apply for Membership
                                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Button>
-                            <Button variant="outline" size="lg">
-                                Explore Community
+                            <Button variant="outline" size="lg" className="h-16 px-10 text-lg bg-white/50 backdrop-blur-sm">
+                                Browse Programs
                             </Button>
                         </div>
 
-                        {/* <div className="mt-10 flex items-center justify-center lg:justify-start gap-8 text-slate-500 text-sm font-medium">
-                            <div className="flex items-center gap-2">
-                                <Globe className="w-5 h-5 text-primary" />
-                                <span>85+ Countries</span>
+                        <div className="mt-16 pt-8 border-t border-slate-200/60 flex flex-wrap items-center justify-center lg:justify-start gap-x-10 gap-y-6">
+                            <div className="flex items-center gap-3">
+                                <div className="bg-primary/10 p-2 rounded-lg text-primary">
+                                    <Globe className="w-5 h-5" />
+                                </div>
+                                <span className="text-slate-600 font-bold">25+ Nations</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Users className="w-5 h-5 text-primary" />
-                                <span>5k+ Founders</span>
+                            <div className="flex items-center gap-3">
+                                <div className="bg-primary/10 p-2 rounded-lg text-primary">
+                                    <Users className="w-5 h-5" />
+                                </div>
+                                <span className="text-slate-600 font-bold">500+ Members</span>
                             </div>
-                        </div> */}
+                            <div className="flex items-center gap-3">
+                                <div className="bg-primary/10 p-2 rounded-lg text-primary">
+                                    <Trophy className="w-5 h-5" />
+                                </div>
+                                <span className="text-slate-600 font-bold">$10M+ Raised</span>
+                            </div>
+                        </div>
                     </motion.div>
 
                     {/* Visual / Image */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8 }}
-                        className="flex-1 relative w-full h-full"
+                        initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        className="flex-1 relative w-full perspective-1000"
                     >
                         <HeroVisual />
 
-                        {/* Decorative Blobs */}
-                        <div className="absolute -top-12 -right-12 w-64 h-64 bg-accent/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
-                        <div className="absolute top-12 left-12 bg-white/80 backdrop-blur-md p-4 rounded-xl border border-slate-200 shadow-lg max-w-[200px]">
-                            {/* Content for the new div goes here if any */}
-                        </div>
-                        <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-primary/20 rounded-full blur-3xl -z-10 animate-pulse delay-700"></div>
+                        {/* Interactive UI Overlays */}
+                        <motion.div
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                            className="absolute -top-6 -right-6 lg:-right-12 bg-white p-5 rounded-2xl shadow-2xl border border-slate-100 z-30 hidden sm:block"
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent">
+                                    <Users className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <div className="font-bold text-slate-900">New Member</div>
+                                    <div className="text-xs text-slate-500">Just joined from Berlin</div>
+                                </div>
+                            </div>
+                        </motion.div>
                     </motion.div>
-
-                </div >
-            </Container >
-        </section >
+                </div>
+            </Container>
+        </section>
     );
 }

@@ -22,12 +22,27 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate API call / Google Sheet submission
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        console.log('Form submitted:', formData);
+        try {
+            const response = await fetch('/api/join', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
 
-        setIsSubmitting(false);
-        setStep('success');
+            if (!response.ok) {
+                throw new Error('Failed to submit application');
+            }
+
+            console.log('Form submitted successfully');
+            setStep('success');
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            // You might want to show an error message to the user here
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
