@@ -1,11 +1,18 @@
 import { Container } from '../components/Container';
-import { useLumaEvents } from '../hooks/useLumaEvents';
+import { useEvents } from '../hooks/useEvents';
 import { EventCard } from '../components/EventCard';
-import { Loader2, Calendar, ArrowRight, ExternalLink } from 'lucide-react';
+import { Loader2, Calendar, ArrowRight, Users } from 'lucide-react';
+import React from 'react';
 import { Button } from '../components/Button';
 
 export function Events() {
-    const { events, loading } = useLumaEvents();
+    const { events: allEvents, loading } = useEvents();
+    const [filter, setFilter] = React.useState<'all' | 'luma' | 'meetup'>('all');
+
+    const filteredEvents = allEvents.filter(e => filter === 'all' || e.platform === filter);
+
+    // Aggregated stats
+    const totalPlatforms = new Set(allEvents.map(e => e.platform)).size;
 
     return (
         <main className="pt-24 pb-20">
@@ -13,24 +20,37 @@ export function Events() {
                 <Container>
                     <div className="flex flex-col md:flex-row justify-between items-end gap-8">
                         <div className="max-w-2xl">
-                            <div className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-bold inline-flex items-center gap-2 mb-6">
-                                <Calendar className="w-4 h-4" />
-                                Community Calendar
+                            <div className="flex gap-2 mb-6">
+                                <div className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
+                                    <Calendar className="w-4 h-4" />
+                                    Community Calendar
+                                </div>
+                                {!loading && allEvents.length > 0 && (
+                                    <div className="bg-slate-900 text-white px-4 py-1.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
+                                        <Users size={14} className="text-primary" />
+                                        Aggregating {totalPlatforms} Platforms
+                                    </div>
+                                )}
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">Upcoming Events</h1>
+                            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">Global Startup Events</h1>
                             <p className="text-xl text-slate-600 leading-relaxed">
-                                Join us for workshops, networking mixers, and deep-dive sessions with industry experts. Our events are designed to help you build and scale with a global mindset.
+                                We aggregate founder meetups and workshops from across the IFC ecosystem—including Luma and Meetup.com—providing a single focal point for international entrepreneurs.
                             </p>
                         </div>
-                        <Button
-                            variant="primary"
-                            size="lg"
-                            className="shadow-xl shadow-primary/20"
-                            onClick={() => window.open('https://lu.ma/IFN_ATX?k=c', '_blank')}
-                        >
-                            View on Luma
-                            <ExternalLink className="ml-2 w-4 h-4" />
-                        </Button>
+                        <div className="flex gap-3">
+                            {['all', 'luma', 'meetup'].map((p) => (
+                                <button
+                                    key={p}
+                                    onClick={() => setFilter(p as any)}
+                                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border ${filter === p
+                                        ? 'bg-primary text-white border-primary'
+                                        : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                                        }`}
+                                >
+                                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </Container>
             </section>
@@ -41,9 +61,9 @@ export function Events() {
                         <Loader2 className="w-12 h-12 text-primary animate-spin" />
                         <p className="text-slate-500 font-medium">Fetching the latest events...</p>
                     </div>
-                ) : events.length > 0 ? (
+                ) : filteredEvents.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {events.map((event, index) => (
+                        {filteredEvents.map((event, index) => (
                             <EventCard key={event.id} event={event} index={index} />
                         ))}
                     </div>
@@ -62,7 +82,7 @@ export function Events() {
                 )}
 
                 {/* Newsletter / CTA for Events */}
-                {!loading && events.length > 0 && (
+                {!loading && allEvents.length > 0 && (
                     <div className="mt-24 bg-slate-900 rounded-[3rem] p-12 text-center text-white relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary opacity-20 rounded-full blur-[80px] -mr-32 -mt-32" />
                         <h2 className="text-3xl font-bold mb-6">Never Miss an Event</h2>

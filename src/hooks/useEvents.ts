@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import type { Event } from '../components/EventCard';
 import eventsData from '../data/events.json';
 
-interface UseLumaEventsReturn {
+interface UseEventsReturn {
     events: Event[];
     loading: boolean;
     error: string | null;
 }
 
-export function useLumaEvents(): UseLumaEventsReturn {
+export function useEvents(): UseEventsReturn {
     const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);

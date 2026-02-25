@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { Container } from './Container';
 import { Button } from './Button';
-import { useLumaEvents } from '../hooks/useLumaEvents';
+import { useEvents } from '../hooks/useEvents';
 import { EventCard } from './EventCard';
 
 export function EventsPreview() {
-    const { events, loading } = useLumaEvents();
+    const { events, loading } = useEvents();
     const [currentPage, setCurrentPage] = useState(0);
     const EVENTS_PER_PAGE = 3;
 

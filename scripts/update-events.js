@@ -51,6 +51,7 @@ async function scrapeEvents() {
                         location_name: event.geo_address_info?.full_address || event.geo_address_info?.city || event.location_name || '',
                         url: `https://lu.ma/${event.url_handle || event.api_id}`,
                         cover_url: event.cover_url || '',
+                        platform: 'luma',
                         raw_date: event.start_at
                     };
                 }).filter(e => e && e.title && e.start_at);
