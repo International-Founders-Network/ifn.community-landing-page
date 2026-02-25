@@ -25,92 +25,52 @@ async function scrapeEvents() {
     try {
         await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
 
-        // Wait for the content to appear
-        await page.waitForSelector('.content-card', { timeout: 10000 });
+        // Extract data from __NEXT_DATA__ script tag
+        const data = await page.evaluate(() => {
+            const script = document.getElementById('__NEXT_DATA__');
+            if (!script) return null;
+            try {
+                const json = JSON.parse(script.innerText);
+                // Luma's structure usually has events in props.pageProps.calendar or similar
+                // We'll search for things that look like events
+                const props = json.props?.pageProps;
 
-        // Scroll to bottom to ensure lazy-loaded items appear
-        await page.evaluate(async () => {
-            window.scrollTo(0, document.body.scrollHeight);
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+                // Luma's structure: featured_items often contains the upcoming events in a list view
+                const initialData = props?.initialData?.data || {};
+                const calendarEvents = initialData.featured_items || props?.calendar_items || props?.initialData?.items || [];
+
+                return calendarEvents.map(item => {
+                    const event = item.event || item;
+                    // Skip if not an event object
+                    if (!event.name && !event.title) return null;
+
+                    return {
+                        id: event.api_id || event.id || '',
+                        title: event.name || event.title || '',
+                        start_at: event.start_at || '',
+                        location_name: event.geo_address_info?.full_address || event.geo_address_info?.city || event.location_name || '',
+                        url: `https://lu.ma/${event.url_handle || event.api_id}`,
+                        cover_url: event.cover_url || '',
+                        raw_date: event.start_at
+                    };
+                }).filter(e => e && e.title && e.start_at);
+            } catch (e) {
+                console.error("Failed to parse __NEXT_DATA__", e);
+                return null;
+            }
         });
 
-        // Extract data
-        const events = await page.evaluate(() => {
-            const items = [];
-            const cards = document.querySelectorAll('.content-card');
+        if (!data || data.length === 0) {
+            console.warn("Could not extract events from __NEXT_DATA__, falling back to DOM scraping...");
+            // ... (keep minimal fallback or just error out if we want consistency)
+            // For now, let's just log and fail so we know it needs a real fix
+            throw new Error("No data found in __NEXT_DATA__");
+        }
 
-            cards.forEach((card, index) => {
-                const eventLink = card.querySelector('.event-link');
-                const title = eventLink?.getAttribute('aria-label') || '';
-                const url = eventLink?.href || '';
-                const imgUrl = card.querySelector('img')?.src || '';
-
-                // Extract dates by looking at preceding siblings (headers)
-                let dateStr = '';
-                let curr = card.previousElementSibling;
-                while (curr && !curr.classList.contains('content-card')) {
-                    if (curr.innerText) dateStr = curr.innerText + ' ' + dateStr;
-                    curr = curr.previousElementSibling;
-                }
-                dateStr = dateStr.trim();
-
-                // Extract time
-                const text = card.innerText;
-                const timeMatch = text.match(/\d+:\d+\s*[APM]+/i);
-                const time = timeMatch ? timeMatch[0] : '';
-
-                // Combined Start String (Approximate parsing for our app)
-                // We'll trust the JSON editing for perfect ISO dates, but here we construct a display string
-                // Ideally, we'd parse this to a real date object, but Luma's date format varies.
-                // For now, let's try to construct a valid date if possible, assuming current/next year.
-
-                // Location
-                const lines = text.split('\n').map(l => l.trim()).filter(l => l);
-                let location = '';
-                const byIdx = lines.findIndex(l => l.startsWith('By '));
-                if (byIdx !== -1 && lines[byIdx + 1]) {
-                    location = lines[byIdx + 1];
-                } else {
-                    location = lines[lines.length - 1];
-                }
-
-                // Simple ID generation
-                const id = url.split('/').pop() || `event-${index}`;
-
-                // Try to parse date
-                // dateStr example: "Feb 26 Thursday" or "Thursday Feb 26"
-                // time: "6:30 PM"
-                let isoDate = new Date().toISOString();
-                try {
-                    // Very basic parser: "Feb 26 2026 6:30 PM"
-                    const currentYear = new Date().getFullYear();
-                    // Just assume 2026 per user context or current year + logic
-                    const parseString = `${dateStr} ${currentYear} ${time}`;
-                    const parsed = new Date(parseString);
-                    if (!isNaN(parsed.getTime())) {
-                        isoDate = parsed.toISOString();
-                    }
-                } catch (e) {
-                    console.warn("Date parse error", e);
-                }
-
-                items.push({
-                    id,
-                    title,
-                    start_at: isoDate, // The UI uses this for sorting/display
-                    location_name: location,
-                    url,
-                    cover_url: imgUrl,
-                    raw_date: dateStr + ' ' + time // Debug field
-                });
-            });
-            return items;
-        });
-
-        console.log(`Found ${events.length} events.`);
+        console.log(`Found ${data.length} events.`);
 
         // Write to file
-        fs.writeFileSync(OUTPUT_FILE, JSON.stringify(events, null, 2));
+        fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
         console.log(`Successfully wrote extracted data to ${OUTPUT_FILE}`);
 
     } catch (e) {
