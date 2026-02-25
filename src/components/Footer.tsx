@@ -18,6 +18,10 @@ export function Footer() {
         Community: [
             { name: 'Code of Conduct', href: '/code-of-conduct' },
         ],
+        Legal: [
+            { name: 'Privacy Policy', href: '/privacy-policy' },
+            { name: 'Terms of Service', href: '/terms-and-conditions' },
+        ],
     };
 
     return (
