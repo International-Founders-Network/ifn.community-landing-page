@@ -12,10 +12,12 @@ export function Contact() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setErrorMessage(null);
 
         try {
             const response = await fetch('/api/contact', {
@@ -26,14 +28,17 @@ export function Contact() {
                 body: JSON.stringify(formData),
             });
 
+            const result = await response.json();
+
             if (!response.ok) {
-                throw new Error('Failed to send message');
+                throw new Error(result.error || 'Failed to send message');
             }
 
             setIsSuccess(true);
             setFormData({ name: '', email: '', phone: '', company: '', message: '' });
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error sending message:', error);
+            setErrorMessage(error.message || 'An unexpected error occurred. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -171,6 +176,12 @@ export function Contact() {
                                     ></textarea>
                                 </div>
 
+                                {errorMessage && (
+                                    <div className="p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-medium animate-in fade-in slide-in-from-top-1 duration-300">
+                                        {errorMessage}
+                                    </div>
+                                )}
+
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
@@ -181,6 +192,7 @@ export function Contact() {
                                 </button>
                             </form>
                         )}
+
                     </div>
                 </div>
             </div>
