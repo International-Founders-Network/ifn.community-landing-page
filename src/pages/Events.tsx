@@ -1,18 +1,39 @@
 import { Container } from '../components/Container';
 import { useEvents } from '../hooks/useEvents';
 import { EventCard } from '../components/EventCard';
-import { Loader2, Calendar, ArrowRight, GlobeIcon } from 'lucide-react';
+import { Loader2, Calendar, ArrowRight } from 'lucide-react';
 import React from 'react';
 import { Button } from '../components/Button';
 
 export function Events() {
     const { events: allEvents, loading } = useEvents();
     const [locationFilter, setLocationFilter] = React.useState<'all' | 'austin' | 'global'>('all');
+    const [timeFilter, setTimeFilter] = React.useState<'all' | 'this-month' | 'next-month'>('all');
 
     const filteredEvents = allEvents.filter(e => {
-        if (locationFilter === 'all') return true;
-        const isAustin = e.location_name?.toLowerCase().includes('austin');
-        return locationFilter === 'austin' ? isAustin : !isAustin;
+        // Location Filter
+        const matchesLocation = locationFilter === 'all' ||
+            (locationFilter === 'austin' ? e.location_name?.toLowerCase().includes('austin') : !e.location_name?.toLowerCase().includes('austin'));
+
+        if (!matchesLocation) return false;
+
+        // Time Filter
+        if (timeFilter === 'all') return true;
+
+        const eventDate = new Date(e.start_at);
+        const now = new Date();
+
+        if (timeFilter === 'this-month') {
+            return eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear();
+        }
+
+        if (timeFilter === 'next-month') {
+            const nextMonth = (now.getMonth() + 1) % 12;
+            const nextMonthYear = now.getMonth() === 11 ? now.getFullYear() + 1 : now.getFullYear();
+            return eventDate.getMonth() === nextMonth && eventDate.getFullYear() === nextMonthYear;
+        }
+
+        return true;
     });
 
     return (
@@ -26,19 +47,34 @@ export function Events() {
                                     <Calendar className="w-4 h-4" />
                                     Community Calendar
                                 </div>
-                                {!loading && allEvents.length > 0 && (
-                                    <div className="bg-slate-900 text-white px-4 py-1.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
-                                        <GlobeIcon className="w-3.5 h-3.5 text-primary" />
-                                        Unified Founder Network
-                                    </div>
-                                )}
                             </div>
                             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">The Global Founders Calendar</h1>
                             <p className="text-xl text-slate-600 leading-relaxed">
                                 Curated high-signal meetups, workshops, and mixers for the international founder community. Seamlessly integrated across our ecosystem.
                             </p>
                         </div>
-                        <div className="flex gap-3">
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            {/* Time Filter */}
+                            <div className="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1">
+                                {[
+                                    { id: 'all', label: 'All Time' },
+                                    { id: 'this-month', label: 'This Month' },
+                                    { id: 'next-month', label: 'Next Month' }
+                                ].map((time) => (
+                                    <button
+                                        key={time.id}
+                                        onClick={() => setTimeFilter(time.id as any)}
+                                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${timeFilter === time.id
+                                            ? 'bg-slate-900 text-white shadow-md'
+                                            : 'text-slate-500 hover:text-slate-900'
+                                            }`}
+                                    >
+                                        {time.label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Location Filter */}
                             <div className="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1">
                                 {['all', 'austin', 'global'].map((loc) => (
                                     <button
