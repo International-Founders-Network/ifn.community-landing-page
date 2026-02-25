@@ -48,7 +48,7 @@ export function Resources() {
                         <button
                             key={segment.id}
                             onClick={() => handleSegmentChange(segment.id)}
-                            className={`px-6 py-3 rounded-full font-bold transition-all duration-300 ${activeSegmentId === segment.id
+                            className={`px-6 py-3 rounded-full font-bold transition-all duration-300 cursor-pointer ${activeSegmentId === segment.id
                                 ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105'
                                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                                 }`}
@@ -68,7 +68,7 @@ export function Resources() {
                                     <button
                                         key={stage.id}
                                         onClick={() => setActiveStageId(stage.id)}
-                                        className={`w-full text-left p-4 rounded-2xl transition-all duration-300 group relative ${activeStageId === stage.id
+                                        className={`w-full text-left p-4 rounded-2xl transition-all duration-300 group relative cursor-pointer ${activeStageId === stage.id
                                             ? 'bg-white shadow-md text-primary'
                                             : 'text-slate-600 hover:bg-white/50'
                                             }`}

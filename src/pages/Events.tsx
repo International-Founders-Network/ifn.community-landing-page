@@ -64,7 +64,7 @@ export function Events() {
                                     <button
                                         key={time.id}
                                         onClick={() => setTimeFilter(time.id as any)}
-                                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${timeFilter === time.id
+                                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${timeFilter === time.id
                                             ? 'bg-slate-900 text-white shadow-md'
                                             : 'text-slate-500 hover:text-slate-900'
                                             }`}
@@ -80,7 +80,7 @@ export function Events() {
                                     <button
                                         key={loc}
                                         onClick={() => setLocationFilter(loc as any)}
-                                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${locationFilter === loc
+                                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${locationFilter === loc
                                             ? 'bg-primary text-white shadow-md shadow-primary/20'
                                             : 'text-slate-500 hover:text-slate-900'
                                             }`}
