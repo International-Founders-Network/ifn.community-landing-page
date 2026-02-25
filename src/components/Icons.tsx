@@ -1,7 +1,7 @@
 
 export const LumaLogo = ({ className = "w-4 h-4" }: { className?: string }) => (
     <img
-        src="https://luma.com/apple-touch-icon.png"
+        src="https://luma.com/favicon.ico"
         alt="Luma Logo"
         className={`${className} object-contain`}
     />
@@ -9,7 +9,7 @@ export const LumaLogo = ({ className = "w-4 h-4" }: { className?: string }) => (
 
 export const MeetupLogo = ({ className = "w-4 h-4" }: { className?: string }) => (
     <img
-        src="https://secure.meetupstatic.com/next/images/general/m_redesign_196x196.png"
+        src="https://secure.meetupstatic.com/next/images/favicon.ico"
         alt="Meetup Logo"
         className={`${className} object-contain`}
     />
