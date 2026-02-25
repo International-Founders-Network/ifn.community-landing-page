@@ -4,119 +4,157 @@
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 02)",
     "start_at": "2026-02-27T00:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-ug1gTnDv6gKHGmp",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-02-27T00:30:00.000Z"
-  },
-  {
-    "id": "313180463",
-    "title": "Austin International Founders Meetup (IFN-ATX: Vol. 02)",
-    "start_at": "2026-02-27T00:30:00.000Z",
-    "location_name": "Capital Factory, Austin, TX",
-    "url": "https://www.meetup.com/international-founders-network-austin/events/313180463/",
-    "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "meetup",
-    "raw_date": "Thu, Feb 26 · 6:30 PM CST"
+    "raw_date": "2026-02-27T00:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-ug1gTnDv6gKHGmp"
+      },
+      {
+        "platform": "meetup",
+        "url": "https://www.meetup.com/international-founders-network-austin/events/313180463/"
+      }
+    ]
   },
   {
     "id": "evt-MKlRP2sMNaeA9mt",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 03)",
     "start_at": "2026-03-26T23:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-MKlRP2sMNaeA9mt",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-03-26T23:30:00.000Z"
+    "raw_date": "2026-03-26T23:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-MKlRP2sMNaeA9mt"
+      }
+    ]
   },
   {
     "id": "evt-CCPBsBXEa9lMQEr",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 04)",
     "start_at": "2026-04-23T23:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-CCPBsBXEa9lMQEr",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-04-23T23:30:00.000Z"
+    "raw_date": "2026-04-23T23:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-CCPBsBXEa9lMQEr"
+      }
+    ]
   },
   {
     "id": "evt-WdkwWifzWfHzNcG",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 05)",
     "start_at": "2026-05-28T23:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-WdkwWifzWfHzNcG",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-05-28T23:30:00.000Z"
+    "raw_date": "2026-05-28T23:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-WdkwWifzWfHzNcG"
+      }
+    ]
   },
   {
     "id": "evt-HTOeAvQ7o7BA8qB",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 06)",
     "start_at": "2026-06-25T23:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-HTOeAvQ7o7BA8qB",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-06-25T23:30:00.000Z"
+    "raw_date": "2026-06-25T23:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-HTOeAvQ7o7BA8qB"
+      }
+    ]
   },
   {
     "id": "evt-B57YytQMgkUvUDN",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 07)",
     "start_at": "2026-07-23T23:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-B57YytQMgkUvUDN",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-07-23T23:30:00.000Z"
+    "raw_date": "2026-07-23T23:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-B57YytQMgkUvUDN"
+      }
+    ]
   },
   {
     "id": "evt-LJTB5xTc7LyHuHd",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 01)",
     "start_at": "2026-08-27T23:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-LJTB5xTc7LyHuHd",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-08-27T23:30:00.000Z"
+    "raw_date": "2026-08-27T23:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-LJTB5xTc7LyHuHd"
+      }
+    ]
   },
   {
     "id": "evt-c89RQQulatQxQZ4",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 09)",
     "start_at": "2026-09-24T23:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-c89RQQulatQxQZ4",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-09-24T23:30:00.000Z"
+    "raw_date": "2026-09-24T23:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-c89RQQulatQxQZ4"
+      }
+    ]
   },
   {
     "id": "evt-BFi4Ul1bYqLEBiz",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 10)",
     "start_at": "2026-10-22T23:00:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-BFi4Ul1bYqLEBiz",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-10-22T23:00:00.000Z"
+    "raw_date": "2026-10-22T23:00:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-BFi4Ul1bYqLEBiz"
+      }
+    ]
   },
   {
     "id": "evt-DsjezmSkn7wkcb7",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 11)",
     "start_at": "2026-11-27T00:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-DsjezmSkn7wkcb7",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-11-27T00:30:00.000Z"
+    "raw_date": "2026-11-27T00:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-DsjezmSkn7wkcb7"
+      }
+    ]
   },
   {
     "id": "evt-l959CqFvTtfgIs6",
     "title": "Austin International Founders Meetup (IFN-ATX: Vol. 12)",
     "start_at": "2026-12-25T00:30:00.000Z",
     "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "url": "https://lu.ma/evt-l959CqFvTtfgIs6",
     "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-    "platform": "luma",
-    "raw_date": "2026-12-25T00:30:00.000Z"
+    "raw_date": "2026-12-25T00:30:00.000Z",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/evt-l959CqFvTtfgIs6"
+      }
+    ]
   }
 ]

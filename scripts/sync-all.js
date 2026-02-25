@@ -27,16 +27,51 @@ async function syncAll() {
             meetupData = JSON.parse(fs.readFileSync(MEETUP_FILE, 'utf8'));
         }
 
-        // Merge and sort by date
-        const allEvents = [...lumaData, ...meetupData].sort((a, b) =>
+        // --- Intelligent De-duplication & Merging ---
+        const mergedEvents = new Map();
+
+        [...lumaData, ...meetupData].forEach(event => {
+            // Create a normalization key: "title|date" 
+            const datePart = event.start_at.split('T')[0];
+            const titlePart = event.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const key = `${titlePart}|${datePart}`;
+
+            if (mergedEvents.has(key)) {
+                const existing = mergedEvents.get(key);
+
+                // Initialize registrations array if it doesn't exist
+                if (!existing.registrations) {
+                    existing.registrations = [{ platform: existing.platform, url: existing.url }];
+                    delete existing.platform;
+                    delete existing.url;
+                }
+
+                // Merge this registration if it hasn't been added yet
+                const platformExists = existing.registrations.some(r => r.platform === event.platform);
+                if (!platformExists) {
+                    existing.registrations.push({ platform: event.platform, url: event.url });
+                }
+
+                // Keep the record with the most detail
+                if (event.location_name?.length > (existing.location_name?.length || 0)) {
+                    existing.location_name = event.location_name;
+                }
+            } else {
+                // First time seeing this event: Initialize unified structure
+                const newEvent = { ...event };
+                newEvent.registrations = [{ platform: event.platform, url: event.url }];
+                delete newEvent.platform;
+                delete newEvent.url;
+                mergedEvents.set(key, newEvent);
+            }
+        });
+
+        const uniqueEvents = Array.from(mergedEvents.values()).sort((a, b) =>
             new Date(a.start_at).getTime() - new Date(b.start_at).getTime()
         );
 
-        // Remove duplicates by ID (if any across platforms, though unlikely)
-        const uniqueEvents = Array.from(new Map(allEvents.map(e => [e.id, e])).values());
-
         fs.writeFileSync(FINAL_FILE, JSON.stringify(uniqueEvents, null, 2));
-        console.log(`--- Sync Complete! Total Events: ${uniqueEvents.length} ---`);
+        console.log(`--- Sync Complete! Total Unique Events: ${uniqueEvents.length} ---`);
 
     } catch (error) {
         console.error('Sync failed:', error);

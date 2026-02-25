@@ -1,7 +1,6 @@
-import { Calendar, MapPin, ArrowRight, Users } from 'lucide-react';
+import { Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { Button } from './Button';
 import { motion } from 'framer-motion';
-import { GlobeIcon } from './GlobeIcon';
 
 export interface Event {
     id: string;
@@ -10,8 +9,7 @@ export interface Event {
     start_at: string;
     location_name?: string;
     cover_url?: string;
-    url: string;
-    platform: 'luma' | 'meetup';
+    registrations: { platform: 'luma' | 'meetup'; url: string }[];
 }
 
 interface EventCardProps {
@@ -55,23 +53,6 @@ export function EventCard({ event, index }: EventCardProps) {
 
             {/* Content */}
             <div className="flex flex-col flex-grow p-6">
-                <div className="flex justify-between items-start mb-3">
-                    <div className="flex items-center gap-2">
-                        {event.platform === 'luma' ? (
-                            <div className="bg-primary/10 text-primary p-1.5 rounded-md">
-                                <GlobeIcon className="w-3.5 h-3.5" />
-                            </div>
-                        ) : (
-                            <div className="bg-red-50 text-red-600 p-1.5 rounded-md">
-                                <Users size={14} />
-                            </div>
-                        )}
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                            {event.platform}
-                        </span>
-                    </div>
-                </div>
-
                 <h3 className="text-xl font-bold text-slate-900 mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                     {event.title}
                 </h3>
@@ -89,15 +70,21 @@ export function EventCard({ event, index }: EventCardProps) {
                     )}
                 </div>
 
-                <Button
-                    variant="outline"
-                    fullWidth
-                    className="mt-auto group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all"
-                    onClick={() => window.open(event.url, '_blank')}
-                >
-                    Register Now
-                    <ArrowRight className="w-4 h-4 ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                </Button>
+                <div className="flex flex-col gap-2 mt-auto">
+                    {event.registrations.map((reg) => (
+                        <Button
+                            key={reg.platform}
+                            variant={reg.platform === 'luma' ? 'primary' : 'outline'}
+                            size="sm"
+                            fullWidth
+                            className="transition-all"
+                            onClick={() => window.open(reg.url, '_blank')}
+                        >
+                            {reg.platform === 'luma' ? 'Attend on Luma' : 'Attend on Meetup'}
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                    ))}
+                </div>
             </div>
         </motion.div>
     );

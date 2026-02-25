@@ -1,18 +1,19 @@
 import { Container } from '../components/Container';
 import { useEvents } from '../hooks/useEvents';
 import { EventCard } from '../components/EventCard';
-import { Loader2, Calendar, ArrowRight, Users } from 'lucide-react';
+import { Loader2, Calendar, ArrowRight, GlobeIcon } from 'lucide-react';
 import React from 'react';
 import { Button } from '../components/Button';
 
 export function Events() {
     const { events: allEvents, loading } = useEvents();
-    const [filter, setFilter] = React.useState<'all' | 'luma' | 'meetup'>('all');
+    const [locationFilter, setLocationFilter] = React.useState<'all' | 'austin' | 'global'>('all');
 
-    const filteredEvents = allEvents.filter(e => filter === 'all' || e.platform === filter);
-
-    // Aggregated stats
-    const totalPlatforms = new Set(allEvents.map(e => e.platform)).size;
+    const filteredEvents = allEvents.filter(e => {
+        if (locationFilter === 'all') return true;
+        const isAustin = e.location_name?.toLowerCase().includes('austin');
+        return locationFilter === 'austin' ? isAustin : !isAustin;
+    });
 
     return (
         <main className="pt-24 pb-20">
@@ -27,29 +28,31 @@ export function Events() {
                                 </div>
                                 {!loading && allEvents.length > 0 && (
                                     <div className="bg-slate-900 text-white px-4 py-1.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
-                                        <Users size={14} className="text-primary" />
-                                        Aggregating {totalPlatforms} Platforms
+                                        <GlobeIcon className="w-3.5 h-3.5 text-primary" />
+                                        Unified Founder Network
                                     </div>
                                 )}
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">Global Startup Events</h1>
+                            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">Founder Meetups</h1>
                             <p className="text-xl text-slate-600 leading-relaxed">
-                                We aggregate founder meetups and workshops from across the IFC ecosystem—including Luma and Meetup.com—providing a single focal point for international entrepreneurs.
+                                We aggregate high-signal events for international founders. One community, accessible across multiple platforms.
                             </p>
                         </div>
                         <div className="flex gap-3">
-                            {['all', 'luma', 'meetup'].map((p) => (
-                                <button
-                                    key={p}
-                                    onClick={() => setFilter(p as any)}
-                                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border ${filter === p
-                                        ? 'bg-primary text-white border-primary'
-                                        : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                                        }`}
-                                >
-                                    {p.charAt(0).toUpperCase() + p.slice(1)}
-                                </button>
-                            ))}
+                            <div className="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1">
+                                {['all', 'austin', 'global'].map((loc) => (
+                                    <button
+                                        key={loc}
+                                        onClick={() => setLocationFilter(loc as any)}
+                                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${locationFilter === loc
+                                                ? 'bg-primary text-white shadow-md shadow-primary/20'
+                                                : 'text-slate-500 hover:text-slate-900'
+                                            }`}
+                                    >
+                                        {loc.charAt(0).toUpperCase() + loc.slice(1)}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </Container>
@@ -72,7 +75,7 @@ export function Events() {
                         <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                         <h2 className="text-2xl font-bold text-slate-900 mb-2">No Upcoming Events</h2>
                         <p className="text-slate-600 mb-8 max-w-md mx-auto">
-                            We're currently planning our next set of events. Check back soon or follow our Luma profile to be the first to know.
+                            We're currently planning our next set of events. Check back soon for our next global mixer or workshop.
                         </p>
                         <Button variant="outline" onClick={() => window.open('https://lu.ma/IFN_ATX', '_blank')}>
                             Follow us on Luma
