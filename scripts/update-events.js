@@ -49,7 +49,7 @@ async function scrapeEvents() {
                         title: event.name || event.title || '',
                         start_at: event.start_at || '',
                         location_name: event.geo_address_info?.full_address || event.geo_address_info?.city || event.location_name || '',
-                        url: `https://lu.ma/${event.url_handle || event.api_id}`,
+                        url: (event.url || event.url_handle) ? `https://lu.ma/${event.url || event.url_handle}` : `https://lu.ma/${event.api_id}`,
                         cover_url: event.cover_url || '',
                         platform: 'luma',
                         raw_date: event.start_at

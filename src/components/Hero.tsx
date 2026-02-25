@@ -102,8 +102,13 @@ export function Hero({ onJoinClick }: HeroProps) {
                                 Apply for Membership
                                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Button>
-                            <Button variant="outline" size="lg" className="h-16 px-10 text-lg bg-white/50 backdrop-blur-sm">
-                                Browse Programs
+                            <Button
+                                variant="outline"
+                                size="lg"
+                                className="h-16 px-10 text-lg bg-white/50 backdrop-blur-sm"
+                                onClick={() => document.getElementById('resources')?.scrollIntoView({ behavior: 'smooth' })}
+                            >
+                                Explore Your Journey
                             </Button>
                         </div>
 

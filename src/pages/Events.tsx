@@ -33,9 +33,9 @@ export function Events() {
                                     </div>
                                 )}
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">Founder Meetups</h1>
+                            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">The Global Founders Calendar</h1>
                             <p className="text-xl text-slate-600 leading-relaxed">
-                                We aggregate high-signal events for international founders. One community, accessible across multiple platforms.
+                                Curated high-signal meetups, workshops, and mixers for the international founder community. Seamlessly integrated across our ecosystem.
                             </p>
                         </div>
                         <div className="flex gap-3">
@@ -45,8 +45,8 @@ export function Events() {
                                         key={loc}
                                         onClick={() => setLocationFilter(loc as any)}
                                         className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${locationFilter === loc
-                                                ? 'bg-primary text-white shadow-md shadow-primary/20'
-                                                : 'text-slate-500 hover:text-slate-900'
+                                            ? 'bg-primary text-white shadow-md shadow-primary/20'
+                                            : 'text-slate-500 hover:text-slate-900'
                                             }`}
                                     >
                                         {loc.charAt(0).toUpperCase() + loc.slice(1)}

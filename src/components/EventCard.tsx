@@ -1,6 +1,7 @@
 import { Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { Button } from './Button';
 import { motion } from 'framer-motion';
+import { LumaLogo, MeetupLogo } from './Icons';
 
 export interface Event {
     id: string;
@@ -70,20 +71,27 @@ export function EventCard({ event, index }: EventCardProps) {
                     )}
                 </div>
 
-                <div className="flex flex-col gap-2 mt-auto">
-                    {event.registrations.map((reg) => (
-                        <Button
-                            key={reg.platform}
-                            variant={reg.platform === 'luma' ? 'primary' : 'outline'}
-                            size="sm"
-                            fullWidth
-                            className="transition-all"
-                            onClick={() => window.open(reg.url, '_blank')}
-                        >
-                            {reg.platform === 'luma' ? 'Attend on Luma' : 'Attend on Meetup'}
-                            <ArrowRight className="w-4 h-4 ml-2" />
-                        </Button>
-                    ))}
+                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-slate-100">
+                    <div className="flex flex-col gap-2">
+                        {event.registrations.map(reg => (
+                            <Button
+                                key={reg.platform}
+                                variant={reg.platform === 'luma' ? 'primary' : 'outline'}
+                                fullWidth
+                                className="group relative overflow-hidden"
+                                onClick={() => window.open(reg.url, '_blank')}
+                            >
+                                <div className="flex items-center justify-center gap-2">
+                                    {reg.platform === 'luma' ?
+                                        <LumaLogo className="w-4 h-4" /> :
+                                        <MeetupLogo className="w-4 h-4" />
+                                    }
+                                    <span>Register on {reg.platform === 'luma' ? 'Luma' : 'Meetup'}</span>
+                                    <ArrowRight className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-4px] group-hover:translate-x-0 transition-transform" />
+                                </div>
+                            </Button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </motion.div>
