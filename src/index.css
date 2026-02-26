@@ -12,11 +12,17 @@
   --color-teal-600: #0d9488;
 
   --font-sans: 'Inter', sans-serif;
+  --font-logo: 'MuseoModerno', display;
 }
 
 @layer base {
   body {
     font-family: var(--font-sans);
     @apply antialiased text-slate-800 bg-white;
+  }
+
+  a,
+  button {
+    @apply cursor-pointer;
   }
 }

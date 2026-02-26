@@ -1,12 +1,22 @@
 [
-    {
-        "id": "313180463",
-        "title": "Austin International Founders Meetup (IFN-ATX: Vol. 02)",
-        "start_at": "2026-02-27T00:30:00.000Z",
-        "location_name": "Capital Factory, Austin, TX",
-        "url": "https://www.meetup.com/international-founders-network-austin/events/313180463/",
-        "cover_url": "https://images.lumacdn.com/event-covers/it/80ca7fc6-6a8d-43e5-9079-e5f1cbe7dd76.png",
-        "platform": "meetup",
-        "raw_date": "Thu, Feb 26 · 6:30 PM CST"
-    }
+  {
+    "id": "313180463",
+    "title": "Austin International Founders Meetup (Vol. 02)",
+    "start_at": "2026-02-26T18:30:00-06:00",
+    "location_name": "Austin, TX",
+    "url": "https://www.meetup.com/international-founders-network-austin/events/313180463/",
+    "cover_url": "",
+    "platform": "meetup",
+    "raw_date": "2026-02-26T18:30:00-06:00"
+  },
+  {
+    "id": "313536267",
+    "title": "Austin International Founders Meetup (Vol. 03)",
+    "start_at": "2026-03-26T18:30:00-05:00",
+    "location_name": "Austin, TX",
+    "url": "https://www.meetup.com/international-founders-network-austin/events/313536267/",
+    "cover_url": "",
+    "platform": "meetup",
+    "raw_date": "2026-03-26T18:30:00-05:00"
+  }
 ]

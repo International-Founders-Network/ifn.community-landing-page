@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ScrollToAnchor } from './components/ScrollToAnchor';
+import { ScrollToTop } from './components/ScrollToTop';
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
@@ -20,6 +21,8 @@ const Chapters = lazy(() => import('./pages/Chapters').then(module => ({ default
 const CodeOfConduct = lazy(() => import('./pages/CodeOfConduct').then(module => ({ default: module.CodeOfConduct })));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions').then(module => ({ default: module.TermsAndConditions })));
+const ExperimentalHero = lazy(() => import('./pages/ExperimentalHero').then(module => ({ default: module.ExperimentalHero })));
+const ResourcesHub = lazy(() => import('./pages/ResourcesHub').then(module => ({ default: module.ResourcesHub })));
 
 const JoinModal = lazy(() => import('./components/JoinModal').then(module => ({ default: module.JoinModal })));
 
@@ -49,6 +52,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToAnchor />
+      <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
@@ -59,6 +63,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/playbooks" element={<Playbooks />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/resources" element={<ResourcesHub />} />
           <Route path="/newsletter" element={<Newsletter />} />
           <Route path="/membership" element={<Membership />} />
           <Route path="/mentorship" element={<Mentorship />} />
@@ -66,6 +71,8 @@ function App() {
           <Route path="/code-of-conduct" element={<CodeOfConduct />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/experimental-hero" element={<ExperimentalHero />} />
+
         </Route>
       </Routes>
     </BrowserRouter>

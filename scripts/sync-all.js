@@ -31,10 +31,9 @@ async function syncAll() {
         const mergedEvents = new Map();
 
         [...lumaData, ...meetupData].forEach(event => {
-            // Create a normalization key: "title|date" 
-            const datePart = event.start_at.split('T')[0];
-            const titlePart = event.title.toLowerCase().replace(/[^a-z0-9]/g, '');
-            const key = `${titlePart}|${datePart}`;
+            // Create a normalization key: "timestamp" since titles differ and string dates suffer from UTC rollover
+            const timestamp = new Date(event.start_at).getTime();
+            const key = timestamp.toString();
 
             if (mergedEvents.has(key)) {
                 const existing = mergedEvents.get(key);

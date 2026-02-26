@@ -23,7 +23,7 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                             Ready to Connect with Founders Who Get It?
                         </h2>
                         <p className="text-lg text-slate-300 mb-8 max-w-xl mx-auto lg:mx-0">
-                            Join thousands of founders who are building, learning, and winning together. Stop building alone.
+                            Join a growing network of founders who are building, learning, and winning together. Stop building alone.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -64,7 +64,7 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                             >
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 opacity-50" />
                                 <div className="relative z-10 w-16 h-16 flex items-center justify-center">
-                                    <img src="/logo.png" alt="IFN Logo" className="w-14 h-14 object-contain" />
+                                    <img src="/logo.png" alt="IFN Logo" className="w-14 h-14 object-contain" loading="lazy" />
                                 </div>
                             </motion.div>
 

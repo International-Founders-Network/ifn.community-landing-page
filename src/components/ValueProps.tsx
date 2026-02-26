@@ -7,13 +7,13 @@ export function ValueProps() {
         {
             icon: Users,
             title: 'Mentorship & Peer Matching',
-            description: '1:1 mentor matching within 72 hours. Get matched with founders who have solved your exact challenges.',
+            description: 'Connect with founders who\'ve navigated your exact challenges — from visa hurdles to first US customers.',
             color: 'bg-indigo-500',
         },
         {
             icon: TrendingUp,
-            title: 'Investor Access & Fundraising',
-            description: 'Curated investor intros every month. Perfect your pitch with practice sessions and access guidance.',
+            title: 'Opportunities & Founder Connections',
+            description: 'Tap into a network where warm intros, collaborations, and opportunities happen naturally through trusted relationships.',
             color: 'bg-emerald-500',
         },
         {

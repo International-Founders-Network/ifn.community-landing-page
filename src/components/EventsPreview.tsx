@@ -3,6 +3,7 @@ import { ArrowRight, Loader2 } from 'lucide-react';
 import { Container } from './Container';
 import { Button } from './Button';
 import { useEvents } from '../hooks/useEvents';
+import { Link } from 'react-router-dom';
 import { EventCard } from './EventCard';
 
 export function EventsPreview() {
@@ -87,11 +88,13 @@ export function EventsPreview() {
                     </>
                 )}
 
-                <div className="flex justify-center">
-                    <Button variant="outline" className="group" onClick={() => window.open('https://lu.ma/IFN_ATX?k=c', '_blank')}>
-                        View Full Calendar on Luma
-                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                <div className="text-center">
+                    <Link to="/events">
+                        <Button size="lg" className="group">
+                            View Full Calendar
+                            <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                    </Link>
                 </div>
             </Container>
         </section>

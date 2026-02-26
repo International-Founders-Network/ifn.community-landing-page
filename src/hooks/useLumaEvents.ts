@@ -6,9 +6,10 @@ export interface Event {
     title: string;
     start_at: string;
     location_name: string;
-    url: string;
+    url?: string;
     cover_url: string;
     raw_date: string;
+    registrations?: { platform: string; url: string; }[];
 }
 
 export function useLumaEvents() {
@@ -30,7 +31,7 @@ export function useLumaEvents() {
                 // Fallback to bundled data if API fails (good for local dev without functions running)
                 setEvents(eventsData as Event[]);
                 // We only set the error if it's not a expected fallback during development
-                if (process.env.NODE_ENV === 'production') {
+                if (import.meta.env.MODE === 'production') {
                     setError('Failed to load live events, showing cached data');
                 }
             } finally {

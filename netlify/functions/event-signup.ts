@@ -10,13 +10,13 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
     try {
         const data = JSON.parse(event.body || '{}');
-        const { name, email, phone, company, message } = data;
+        const { email } = data;
 
         // Validation
-        if (!name || !email || !message) {
+        if (!email) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ error: 'Name, email, and message are required fields' }),
+                body: JSON.stringify({ error: 'Email is required' }),
             };
         }
 
@@ -28,34 +28,30 @@ export const handler: Handler = async (event: HandlerEvent) => {
             };
         }
 
-        console.log('Received contact message:', { name, email, company });
+        console.log('Received event signup:', { email });
 
-        // Create table if not exists (Idempotent)
+        // Create table if not exists
         await sql`
-            CREATE TABLE IF NOT EXISTS contact_messages (
+            CREATE TABLE IF NOT EXISTS event_signups (
                 id SERIAL PRIMARY KEY,
-                name TEXT NOT NULL,
                 email TEXT NOT NULL,
-                phone TEXT,
-                company TEXT,
-                message TEXT NOT NULL,
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             )
         `;
 
-        // Insert data using indexed parameters for safety
+        // Insert data
         await sql`
-            INSERT INTO contact_messages (name, email, phone, company, message)
-            VALUES (${name}, ${email}, ${phone || null}, ${company || null}, ${message})
+            INSERT INTO event_signups (email)
+            VALUES (${email})
         `;
 
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'Success! We have received your message.' }),
+            body: JSON.stringify({ message: 'Success! You have been added to our notification list.' }),
         };
     } catch (error) {
-        console.error('Submission error:', error);
+        console.error('Signup error:', error);
         return {
             statusCode: 500,
             headers: { 'Content-Type': 'application/json' },

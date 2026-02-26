@@ -87,9 +87,11 @@ export function About() {
                     <div className="relative">
                         <div className="aspect-square bg-slate-100 rounded-3xl overflow-hidden shadow-2xl">
                             <img
-                                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2070"
+                                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200"
                                 alt="Founders collaborating"
                                 className="w-full h-full object-cover"
+                                loading="eager"
+                                fetchPriority="high"
                             />
                         </div>
                         <div className="absolute -bottom-10 -left-10 bg-white p-8 rounded-2xl shadow-xl max-w-xs hidden md:block border border-slate-100">

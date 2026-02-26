@@ -31,7 +31,7 @@ export function Testimonials() {
                 <div className="text-center max-w-3xl mx-auto mb-16">
                     <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Trusted by Founders Worldwide</h2>
                     <p className="text-lg text-slate-600">
-                        Join thousands of founders who are building, learning, and winning together.
+                        Join a growing network of founders who are building, learning, and winning together.
                     </p>
                 </div>
 
@@ -39,7 +39,7 @@ export function Testimonials() {
                     {testimonials.map((testimonial, index) => (
                         <div key={index} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full">
                             <div className="flex-1 mb-6">
-                                <div className="text-accent text-4xl font-serif mb-4">"</div>
+                                <div className="text-accent text-4xl mb-4">"</div>
                                 <p className="text-slate-700 leading-relaxed italic relative z-10">
                                     {testimonial.quote}
                                 </p>
@@ -49,6 +49,7 @@ export function Testimonials() {
                                     src={testimonial.image}
                                     alt={testimonial.author}
                                     className="w-12 h-12 rounded-full object-cover"
+                                    loading="lazy"
                                 />
                                 <div>
                                     <div className="font-bold text-slate-900">{testimonial.author}</div>

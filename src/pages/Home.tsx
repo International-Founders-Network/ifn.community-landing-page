@@ -6,7 +6,7 @@ import { HowItWorks } from '../components/HowItWorks';
 
 const FounderStory = lazy(() => import('../components/FounderStory').then(module => ({ default: module.FounderStory })));
 const EventsPreview = lazy(() => import('../components/EventsPreview').then(module => ({ default: module.EventsPreview })));
-const Resources = lazy(() => import('../components/Resources').then(module => ({ default: module.Resources })));
+const ResourcesPreview = lazy(() => import('../components/ResourcesPreview').then(module => ({ default: module.ResourcesPreview })));
 const FAQ = lazy(() => import('../components/FAQ').then(module => ({ default: module.FAQ })));
 const FinalCTA = lazy(() => import('../components/FinalCTA').then(module => ({ default: module.FinalCTA })));
 
@@ -17,12 +17,12 @@ export function Home() {
         <main>
             <Hero onJoinClick={openJoinModal} />
             <ValueProps />
-            <HowItWorks />
+            <HowItWorks onJoinClick={openJoinModal} />
 
             <Suspense fallback={<div className="h-96 flex items-center justify-center">Loading...</div>}>
                 <FounderStory />
                 <EventsPreview />
-                <Resources />
+                <ResourcesPreview />
                 <FAQ />
                 <FinalCTA onJoinClick={openJoinModal} />
             </Suspense>

@@ -1,6 +1,10 @@
 import { Container } from './Container';
 
-export function HowItWorks() {
+interface HowItWorksProps {
+    onJoinClick?: () => void;
+}
+
+export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
     const steps = [
         {
             number: '01',
@@ -10,7 +14,7 @@ export function HowItWorks() {
         {
             number: '02',
             title: 'Connect',
-            description: 'Get matched with relevant founders, mentors, and opportunities instantly.',
+            description: 'Get matched with relevant founders, mentors, and opportunities.',
         },
         {
             number: '03',
@@ -31,8 +35,11 @@ export function HowItWorks() {
                         <p className="text-slate-400 text-lg mb-8">
                             We've simplified the path to finding your tribe. No complex hoops, just meaningful connections.
                         </p>
-                        <button className="text-accent font-semibold flex items-center gap-2 hover:gap-3 transition-all">
-                            Start your application →
+                        <button
+                            className="text-accent font-semibold flex items-center gap-2 hover:gap-3 transition-all"
+                            onClick={onJoinClick}
+                        >
+                            Join the Community →
                         </button>
                     </div>
 

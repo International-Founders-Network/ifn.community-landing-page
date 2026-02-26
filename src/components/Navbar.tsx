@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './Button';
-import { GlobeIcon } from './GlobeIcon';
 
 interface NavbarProps {
     onJoinClick: () => void;
@@ -22,10 +21,8 @@ export function Navbar({ onJoinClick }: NavbarProps) {
     }, []);
 
     const navLinks = [
-        { name: 'Community', href: '/#community' },
         { name: 'Events', href: '/events' },
-        { name: 'Mentorship', href: '/mentorship' },
-        { name: 'Resources', href: '/#resources' },
+        { name: 'Resources', href: '/resources' },
     ];
 
     return (
@@ -36,12 +33,9 @@ export function Navbar({ onJoinClick }: NavbarProps) {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
-                    <Link to="/" className="flex items-center gap-2 group">
-                        <div className="bg-primary text-white p-2 rounded-lg group-hover:bg-primary-light transition-colors">
-                            <GlobeIcon className="w-6 h-6" />
-                        </div>
-                        <span className={`font-bold text-xl tracking-tight ${isScrolled ? 'text-primary' : 'text-primary'}`}>
-                            IFN<span className="text-accent">.community</span>
+                    <Link to="/" className="flex items-center group">
+                        <span className="font-['MuseoModerno'] font-black text-3xl tracking-tighter text-primary">
+                            IFN<span className="text-accent">.</span>
                         </span>
                     </Link>
 

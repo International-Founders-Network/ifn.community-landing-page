@@ -56,7 +56,12 @@ export function HeroVisual() {
                         transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut", delay: avatar.delay }}
                         className={`absolute ${avatar.pos} ${avatar.size} bg-white rounded-full p-1 shadow-2xl border-2 border-white/50 overflow-hidden z-20`}
                     >
-                        <img src={`${avatar.img}?auto=format&fit=crop&w=100&h=100`} className="w-full h-full object-cover rounded-full" alt="" />
+                        <img
+                            src={`${avatar.img}?auto=format&fit=crop&w=100&h=100`}
+                            className="w-full h-full object-cover rounded-full"
+                            alt=""
+                            loading="lazy"
+                        />
                     </motion.div>
                 ))}
             </div>
@@ -73,8 +78,8 @@ export function HeroVisual() {
                         <TrendingUp size={24} />
                     </div>
                     <div>
-                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Expansion</div>
-                        <div className="text-xl font-bold text-slate-900">85+ Labs</div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Community</div>
+                        <div className="text-xl font-bold text-slate-900">85+ Founders in Austin</div>
                     </div>
                 </div>
             </motion.div>
@@ -90,8 +95,8 @@ export function HeroVisual() {
                         <Zap size={24} />
                     </div>
                     <div>
-                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Velocity</div>
-                        <div className="text-xl font-bold text-white">2.5x Faster</div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Events</div>
+                        <div className="text-xl font-bold text-white">Monthly Founder Sessions</div>
                     </div>
                 </div>
             </motion.div>

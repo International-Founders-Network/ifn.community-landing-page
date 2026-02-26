@@ -22,18 +22,49 @@ async function scrapeMeetup() {
     await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36');
 
     try {
-        await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
+        await page.goto(TARGET_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        
+        // Wait for JSON-LD script or event cards to load
+        await page.waitForFunction(() => {
+            return document.querySelectorAll('script[type="application/ld+json"]').length > 0 ||
+                   document.querySelectorAll('[data-testid="event-card"]').length > 0;
+        }, { timeout: 15000 }).catch(() => console.log('Timeout waiting for elements, proceeding anyway...'));
 
-        // Meetup often stores data in a script tag with type "application/ld+json" or a global variable
+        // Meetup often stores data in `__NEXT_DATA__` Apollo state
         const events = await page.evaluate(() => {
             const items = [];
-            // Try Schema.org JSON-LD first (most reliable for events)
-            const scripts = document.querySelectorAll('script[type="application/ld+json"]');
+            
+            // Try extracting from __NEXT_DATA__ first
+            const nextDataScript = document.getElementById('__NEXT_DATA__');
+            if (nextDataScript) {
+                try {
+                    const json = JSON.parse(nextDataScript.innerText);
+                    const apolloState = json.props?.pageProps?.__APOLLO_STATE__ || {};
+                    
+                    Object.values(apolloState).forEach(item => {
+                        if (item && item.__typename === 'Event' && item.title) {
+                            items.push({
+                                id: item.id || `meetup-${Math.random().toString(36).substr(2, 9)}`,
+                                title: item.title,
+                                start_at: item.dateTime,
+                                location_name: item.venue?.name || 'Austin, TX',
+                                url: item.eventUrl || `https://www.meetup.com/international-founders-network-austin/events/${item.id}/`,
+                                cover_url: item.displayPhoto?.highResUrl || '',
+                                platform: 'meetup',
+                                raw_date: item.dateTime
+                            });
+                        }
+                    });
+                    
+                    if (items.length > 0) return items.filter(item => item && item.start_at);
+                } catch (e) { console.error("Failed to parse __NEXT_DATA__"); }
+            }
 
+            // Fallback to Schema.org JSON-LD
+            const scripts = document.querySelectorAll('script[type="application/ld+json"]');
             scripts.forEach(script => {
                 try {
                     const data = JSON.parse(script.innerText);
-                    // Single event or array of events
                     const eventList = Array.isArray(data) ? data : [data];
 
                     eventList.forEach(item => {
@@ -53,31 +84,7 @@ async function scrapeMeetup() {
                 } catch (e) { }
             });
 
-            // Fallback to DOM if JSON-LD is missing or empty
-            if (items.length === 0) {
-                const cards = document.querySelectorAll('[data-testid="event-card"]');
-                cards.forEach((card, index) => {
-                    const title = card.querySelector('h2')?.innerText || card.querySelector('h3')?.innerText || '';
-                    const url = card.querySelector('a')?.href || '';
-                    const time = card.querySelector('time')?.getAttribute('datetime') || '';
-                    const img = card.querySelector('img')?.src || '';
-
-                    if (title && url) {
-                        items.push({
-                            id: url.split('/').filter(Boolean).pop() || `meetup-${index}`,
-                            title,
-                            start_at: time,
-                            location_name: 'Austin, TX',
-                            url,
-                            cover_url: img,
-                            platform: 'meetup',
-                            raw_date: time
-                        });
-                    }
-                });
-            }
-
-            return items;
+            return items.filter(item => item && item.start_at);
         });
 
         console.log(`Found ${events.length} Meetup events.`);

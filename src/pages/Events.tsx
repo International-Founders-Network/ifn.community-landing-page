@@ -120,7 +120,6 @@ export function Events() {
                     </div>
                 )}
 
-                {/* Newsletter / CTA for Events */}
                 {!loading && allEvents.length > 0 && (
                     <div className="mt-24 bg-slate-900 rounded-[3rem] p-12 text-center text-white relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary opacity-20 rounded-full blur-[80px] -mr-32 -mt-32" />
@@ -128,19 +127,79 @@ export function Events() {
                         <p className="text-slate-400 max-w-xl mx-auto mb-10 text-lg">
                             Get notified about new meetups, webinars, and exclusive founder sessions delivered straight to your inbox.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="bg-white/10 border border-white/20 rounded-xl px-6 py-4 flex-grow text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-                            />
-                            <button className="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary-dark transition-all whitespace-nowrap">
-                                Get Notified
-                            </button>
-                        </div>
+
+                        <SignupForm />
                     </div>
                 )}
             </Container>
         </main>
+    );
+}
+
+function SignupForm() {
+    const [email, setEmail] = React.useState('');
+    const [status, setStatus] = React.useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+    const [message, setMessage] = React.useState('');
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('submitting');
+
+        try {
+            const response = await fetch('/api/event-signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setStatus('success');
+                setMessage(data.message);
+                setEmail('');
+            } else {
+                setStatus('error');
+                setMessage(data.error || 'Something went wrong');
+            }
+        } catch (error) {
+            setStatus('error');
+            setMessage('Failed to connect to the server');
+        }
+    };
+
+    if (status === 'success') {
+        return (
+            <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-6 max-w-md mx-auto animate-in fade-in zoom-in duration-300">
+                <p className="text-green-400 font-bold">{message}</p>
+            </div>
+        );
+    }
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+                <input
+                    required
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="bg-white/10 border border-white/20 rounded-xl px-6 py-4 flex-grow text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                />
+                <button
+                    disabled={status === 'submitting'}
+                    type="submit"
+                    className="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary-dark transition-all whitespace-nowrap disabled:opacity-50"
+                >
+                    {status === 'submitting' ? 'Signing up...' : 'Get Notified'}
+                </button>
+            </div>
+            {status === 'error' && (
+                <p className="text-red-400 text-sm font-medium animate-in fade-in slide-in-from-top-1">
+                    {message}
+                </p>
+            )}
+        </form>
     );
 }

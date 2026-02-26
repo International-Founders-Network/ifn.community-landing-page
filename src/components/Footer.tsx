@@ -1,7 +1,6 @@
 import { Twitter, Linkedin, Instagram, Mail, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from './Container';
-import { GlobeIcon } from './GlobeIcon';
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -12,7 +11,7 @@ export function Footer() {
             { name: 'Contact', href: '/contact' },
         ],
         Resources: [
-            { name: 'Events Calendar', href: '/#events' },
+            { name: 'Events Calendar', href: '/events' },
             { name: 'Founders Toolkit', href: '/#resources' },
         ],
         Community: [
@@ -30,12 +29,9 @@ export function Footer() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
                     {/* Brand & Newsletter */}
                     <div className="lg:col-span-5 space-y-6">
-                        <Link to="/" className="flex items-center gap-2">
-                            <div className="bg-primary text-white p-2 rounded-lg">
-                                <GlobeIcon className="w-5 h-5" />
-                            </div>
-                            <span className="font-bold text-xl tracking-tight text-primary">
-                                IFN<span className="text-accent">.community</span>
+                        <Link to="/" className="flex items-center">
+                            <span className="font-['MuseoModerno'] font-black text-3xl tracking-tighter text-primary">
+                                IFN<span className="text-accent">.</span>
                             </span>
                         </Link>
                         <p className="text-slate-600 max-w-sm">

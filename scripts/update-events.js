@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const TARGET_URL = 'https://lu.ma/IFN_ATX';
+const TARGET_URL = 'https://lu.ma/IFN';
 const OUTPUT_FILE = path.join(__dirname, '../src/data/events.json');
 
 async function scrapeEvents() {

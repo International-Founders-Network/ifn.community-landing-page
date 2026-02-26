@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Globe, Users, Trophy } from 'lucide-react';
+import { ArrowRight, Users } from 'lucide-react';
 import { Button } from './Button';
 import { Container } from './Container';
 import { HeroVisual } from './HeroVisual';
@@ -12,9 +12,9 @@ interface HeroProps {
 export function Hero({ onJoinClick }: HeroProps) {
     const [index, setIndex] = useState(0);
     const words = [
-        { text: "Global", color: "text-primary" },
+        { text: "Global", color: "text-accent" },
         { text: "International", color: "text-accent" },
-        { text: "Immigrant", color: "text-primary" }
+        { text: "Immigrant", color: "text-accent" }
     ];
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export function Hero({ onJoinClick }: HeroProps) {
     }, []);
 
     return (
-        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-40 overflow-hidden">
+        <section className="relative pt-24 pb-20 lg:pt-36 lg:pb-32 overflow-hidden">
             {/* Rich Background Elements */}
             <div className="absolute inset-0 bg-slate-50 -z-50" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--color-primary-light),transparent_50%)] opacity-30 -z-40" />
@@ -40,7 +40,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                     y: [0, -30, 0]
                 }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-20"
+                className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] -z-20"
             />
             <motion.div
                 animate={{
@@ -49,11 +49,11 @@ export function Hero({ onJoinClick }: HeroProps) {
                     y: [0, 30, 0]
                 }}
                 transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[150px] -z-20"
+                className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] -z-20"
             />
 
             <Container>
-                <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+                <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
                     {/* Content */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
@@ -65,72 +65,52 @@ export function Hero({ onJoinClick }: HeroProps) {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full font-bold text-xs mb-8 border border-slate-200 shadow-sm text-slate-800 uppercase tracking-widest"
+                            className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full font-bold text-xs mb-6 border border-slate-200 shadow-sm text-slate-800 uppercase tracking-widest"
                         >
                             <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
-                            World's First Immigrant Founder Network
+                            The unfair advantage you were missing.
                         </motion.div>
 
-                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.1] mb-8 tracking-tight">
-                            Build Your Legacy <br />
-                            <span className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4">
-                                <span>with</span>
-                                <span className="relative inline-block h-[1.2em] min-w-[200px] text-left">
-                                    <AnimatePresence mode="wait">
-                                        <motion.span
-                                            key={index}
-                                            initial={{ y: 20, opacity: 0 }}
-                                            animate={{ y: 0, opacity: 1 }}
-                                            exit={{ y: -20, opacity: 0 }}
-                                            transition={{ duration: 0.5, ease: "circOut" }}
-                                            className={`absolute inset-0 ${words[index].color} italic`}
-                                        >
-                                            {words[index].text}
-                                        </motion.span>
-                                    </AnimatePresence>
-                                </span>
-                            </span>
-                            Connects.
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-[1.15] mb-6 tracking-tight">
+                            Where{' '}
+                            <span className="relative inline-block h-[1.2em] min-w-[240px] text-left align-middle">
+                                <AnimatePresence mode="wait">
+                                    <motion.span
+                                        key={index}
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        exit={{ y: -20, opacity: 0 }}
+                                        transition={{ duration: 0.5, ease: "circOut" }}
+                                        className={`absolute inset-0 ${words[index].color} italic`}
+                                    >
+                                        {words[index].text}
+                                    </motion.span>
+                                </AnimatePresence>
+                            </span>{' '}
+                            Founders Connect, <span className="text-accent">Grow</span>, and Succeed
                         </h1>
 
-                        <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
-                            The International Founders Network (IFN) bridges the gap for immigrant entrepreneurs by providing the capital, community, and coaching needed to scale globally.
+                        <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                            Warm intros. Founder labs. People who've lived your exact story: visa stress, cultural context-switching, no local playbook - all of it.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row items-center gap-5 justify-center lg:justify-start">
-                            <Button size="lg" className="h-16 px-10 text-lg group shadow-2xl shadow-primary/30" onClick={onJoinClick}>
-                                Apply for Membership
+                        <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+                            <Button size="lg" className="h-14 px-8 text-base group shadow-xl shadow-primary/20" onClick={onJoinClick}>
+                                Join the Community
                                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Button>
                             <Button
                                 variant="outline"
                                 size="lg"
-                                className="h-16 px-10 text-lg bg-white/50 backdrop-blur-sm"
+                                className="h-14 px-8 text-base bg-white/50 backdrop-blur-sm"
                                 onClick={() => document.getElementById('resources')?.scrollIntoView({ behavior: 'smooth' })}
                             >
-                                Explore Your Journey
+                                Browse the Playbook
                             </Button>
                         </div>
 
-                        <div className="mt-16 pt-8 border-t border-slate-200/60 flex flex-wrap items-center justify-center lg:justify-start gap-x-10 gap-y-6">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                                    <Globe className="w-5 h-5" />
-                                </div>
-                                <span className="text-slate-600 font-bold">25+ Nations</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                                    <Users className="w-5 h-5" />
-                                </div>
-                                <span className="text-slate-600 font-bold">500+ Members</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                                    <Trophy className="w-5 h-5" />
-                                </div>
-                                <span className="text-slate-600 font-bold">$10M+ Raised</span>
-                            </div>
+                        <div className="mt-6 text-sm text-slate-500 font-medium flex items-center justify-center lg:justify-start gap-2 italic">
+                            No pitch deck required · Just show up · Free to explore
                         </div>
                     </motion.div>
 
@@ -154,8 +134,8 @@ export function Hero({ onJoinClick }: HeroProps) {
                                     <Users className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <div className="font-bold text-slate-900">New Member</div>
-                                    <div className="text-xs text-slate-500">Just joined from Berlin</div>
+                                    <div className="font-bold text-slate-900">Growing</div>
+                                    <div className="text-xs text-slate-500">New Members Every Week</div>
                                 </div>
                             </div>
                         </motion.div>
