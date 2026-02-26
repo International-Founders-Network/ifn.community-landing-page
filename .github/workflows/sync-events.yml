@@ -2,7 +2,7 @@ name: Sync Events
 
 on:
   schedule:
-    - cron: '0 0 1,15 * *' # Run on the 1st and 15th of every month
+    - cron: "0 0 1,15 * *" # Run on the 1st and 15th of every month
   workflow_dispatch: # Allow manual trigger
 
 permissions:
@@ -19,13 +19,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run Scraper
-        run: node scripts/update-events.js
+        run: |
+          node scripts/update-events.js
+          node scripts/sync-meetup.js
+          node scripts/sync-all.js
 
       - name: Check for changes
         id: check_changes
