@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Users } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from './Button';
 import { Container } from './Container';
 import { HeroVisual } from './HeroVisual';
@@ -10,6 +11,7 @@ interface HeroProps {
 }
 
 export function Hero({ onJoinClick }: HeroProps) {
+    const navigate = useNavigate();
     const [index, setIndex] = useState(0);
     const words = [
         { text: "Global", color: "text-accent" },
@@ -103,7 +105,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                                 variant="outline"
                                 size="lg"
                                 className="h-14 px-8 text-base bg-white/50 backdrop-blur-sm"
-                                onClick={() => document.getElementById('resources')?.scrollIntoView({ behavior: 'smooth' })}
+                                onClick={() => navigate('/resources')}
                             >
                                 Browse the Playbook
                             </Button>
