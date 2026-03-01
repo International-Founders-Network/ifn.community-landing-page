@@ -1,23 +1,5 @@
 [
   {
-    "id": "evt-ug1gTnDv6gKHGmp",
-    "title": "Austin International Founders Meetup (Vol. 02)",
-    "start_at": "2026-02-27T00:30:00.000Z",
-    "location_name": "Capital Factory, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/ko/140cda31-49af-4603-aecd-6e5d6e4215ec.png",
-    "raw_date": "2026-02-27T00:30:00.000Z",
-    "registrations": [
-      {
-        "platform": "luma",
-        "url": "https://lu.ma/zkajddyi"
-      },
-      {
-        "platform": "meetup",
-        "url": "https://www.meetup.com/international-founders-network-austin/events/313180463/"
-      }
-    ]
-  },
-  {
     "id": "evt-MKlRP2sMNaeA9mt",
     "title": "Austin International Founders Meetup (Vol. 03)",
     "start_at": "2026-03-26T23:30:00.000Z",
