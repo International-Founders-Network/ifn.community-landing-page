@@ -18,11 +18,7 @@
     "cover_url": "https://images.lumacdn.com/event-covers/0u/0b99d09d-cbf3-44f1-94bd-d54fb51c178f.png",
     "raw_date": "2026-04-23T23:30:00.000Z",
     "registrations": [
-      {},
-      {
-        "platform": "meetup",
-        "url": "https://www.meetup.com/international-founders-network-austin/events/313956314/"
-      }
+      {}
     ]
   },
   {
@@ -44,7 +40,11 @@
     "cover_url": "https://images.lumacdn.com/event-covers/iv/9e06a423-0211-417b-8fbf-ee1c3949ab8f.png",
     "raw_date": "2026-06-25T23:30:00.000Z",
     "registrations": [
-      {}
+      {},
+      {
+        "platform": "meetup",
+        "url": "https://www.meetup.com/international-founders-network-austin/events/314484597/"
+      }
     ]
   },
   {
