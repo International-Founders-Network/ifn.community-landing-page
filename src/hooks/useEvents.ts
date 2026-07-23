@@ -25,7 +25,7 @@ export function useEvents(): UseEventsReturn {
             } catch (err) {
                 console.warn('API fetch failed, falling back to bundled data:', err);
                 // Fallback to bundled data if API fails (good for local dev without functions running)
-                setEvents(eventsData as Event[]);
+                setEvents(eventsData as unknown as Event[]);
                 setError('Failed to load live events, showing cached data');
             } finally {
                 setLoading(false);
