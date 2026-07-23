@@ -18,7 +18,8 @@ All schema changes should be documented in `db/migrations/`.
 
 1. **`join_applications`**: Stores community joining requests.
 2. **`contact_messages`**: Stores inquiries from the Contact page.
-3. **`events`**: Stores event information (synchronized from Luma/Meetup).
+3. **`event_signups`**: Stores email signups from the Events page.
+4. **`events`**: Stores event information (synchronized from Luma/Meetup).
 
 ## 🌍 Environment Separation
 

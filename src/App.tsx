@@ -23,6 +23,7 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(module => 
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions').then(module => ({ default: module.TermsAndConditions })));
 const ExperimentalHero = lazy(() => import('./pages/ExperimentalHero').then(module => ({ default: module.ExperimentalHero })));
 const ResourcesHub = lazy(() => import('./pages/ResourcesHub').then(module => ({ default: module.ResourcesHub })));
+const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: module.Admin })));
 
 const JoinModal = lazy(() => import('./components/JoinModal').then(module => ({ default: module.JoinModal })));
 
@@ -54,6 +55,14 @@ function App() {
       <ScrollToAnchor />
       <ScrollToTop />
       <Routes>
+        <Route
+          path="/admin"
+          element={
+            <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+              <Admin />
+            </Suspense>
+          }
+        />
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
