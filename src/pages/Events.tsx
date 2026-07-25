@@ -56,14 +56,14 @@ export function Events() {
                         <div className="flex flex-col sm:flex-row gap-3">
                             {/* Time Filter */}
                             <div className="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1">
-                                {[
+                                {([
                                     { id: 'all', label: 'All Time' },
                                     { id: 'this-month', label: 'This Month' },
                                     { id: 'next-month', label: 'Next Month' }
-                                ].map((time) => (
+                                ] as const).map((time) => (
                                     <button
                                         key={time.id}
-                                        onClick={() => setTimeFilter(time.id as any)}
+                                        onClick={() => setTimeFilter(time.id)}
                                         className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${timeFilter === time.id
                                             ? 'bg-slate-900 text-white shadow-md'
                                             : 'text-slate-500 hover:text-slate-900'
@@ -76,10 +76,10 @@ export function Events() {
 
                             {/* Location Filter */}
                             <div className="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1">
-                                {['all', 'austin', 'global'].map((loc) => (
+                                {(['all', 'austin', 'global'] as const).map((loc) => (
                                     <button
                                         key={loc}
-                                        onClick={() => setLocationFilter(loc as any)}
+                                        onClick={() => setLocationFilter(loc)}
                                         className={`px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${locationFilter === loc
                                             ? 'bg-primary text-white shadow-md shadow-primary/20'
                                             : 'text-slate-500 hover:text-slate-900'
@@ -162,7 +162,7 @@ function SignupForm() {
                 setStatus('error');
                 setMessage(data.error || 'Something went wrong');
             }
-        } catch (error) {
+        } catch {
             setStatus('error');
             setMessage('Failed to connect to the server');
         }

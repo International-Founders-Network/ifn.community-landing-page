@@ -36,9 +36,9 @@ export function Contact() {
 
             setIsSuccess(true);
             setFormData({ name: '', email: '', phone: '', company: '', message: '' });
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error sending message:', error);
-            setErrorMessage(error.message || 'An unexpected error occurred. Please try again.');
+            setErrorMessage(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.');
         } finally {
             setIsSubmitting(false);
         }

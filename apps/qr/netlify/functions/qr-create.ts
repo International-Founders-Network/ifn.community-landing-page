@@ -1,4 +1,4 @@
-import { Handler, HandlerEvent } from '@netlify/functions';
+import type { Handler, HandlerEvent } from '@netlify/functions';
 import { randomUUID } from 'node:crypto';
 import { customAlphabet } from 'nanoid';
 import { ensureQrTables, getBaseUrl, getSql, isValidHttpUrl } from './_db';

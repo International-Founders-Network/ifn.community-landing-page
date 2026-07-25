@@ -35,10 +35,11 @@ export function Generator() {
     const syncedUrlRef = useRef<string>('');
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+    const currentFieldsKey = JSON.stringify(fields[contentType]);
     const staticData = useMemo(
         () => buildQrData(contentType, fields[contentType]),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [contentType, JSON.stringify(fields[contentType])]
+        [contentType, currentFieldsKey]
     );
     const empty = isFieldsEmpty(contentType, fields[contentType]);
 
@@ -48,6 +49,7 @@ export function Generator() {
     // Reset dynamic link state when switching away from URL or turning dynamic mode off
     useEffect(() => {
         if (contentType !== 'url' || !dynamicMode) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect -- deliberate reset in response to contentType/dynamicMode changing, not derivable during render
             setDynamicResult(null);
             setCreateError(null);
             setSyncStatus('idle');
@@ -75,7 +77,6 @@ export function Generator() {
         return () => {
             if (debounceRef.current) clearTimeout(debounceRef.current);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fields.url.url, dynamicResult]);
 
     async function handleCreateDynamicLink() {

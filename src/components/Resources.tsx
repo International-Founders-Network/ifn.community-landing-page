@@ -73,7 +73,7 @@ export function Resources() {
         }
 
         return rs;
-    }, [activeSegmentId, activeStageId, activeFilters, searchQuery]);
+    }, [activeSegment, activeStageId, activeFilters, searchQuery]);
 
     const handleSegmentChange = (id: string) => {
         setActiveSegmentId(id);
