@@ -9,13 +9,13 @@ This document tracks pending work and points to the spec of record for each capa
 | **Early-Stage Founder** | 8/10 | Functional "Founder Toolkit", interactive visa guide, easy application. |
 | **Scaling Founder** | 7/10 | Investor pipeline access, peer-founder matching, high-signal events. |
 | **Mentor / Coach** | 4/10 | Dedicated landing page, mentor application flow, portal access. |
-| **Investor / Partner** | 5/10 | Functional partners page, network data visibility, sponsorship info. |
+| **Investor / Partner** | 6/10 | Partners page shipped; network data visibility, formal sponsorship SLA still open. |
 
 ---
 
 ## 🔴 High Priority (Immediate Fixes & Core Content)
 
-- [ ] **Partners page**: build out real content. Spec: [`openspec/specs/placeholder-pages`](openspec/specs/placeholder-pages/spec.md). *(Correction: this was previously described as "a loading issue to investigate" — the page is a static "Coming soon" stub with no async logic at all, so there's nothing to debug; it simply isn't built yet.)*
+- [ ] **Membership page pricing/copy needs to be reconciled with Stripe.** `/membership` is built (see `openspec/specs/membership-page`) but the CTA's Stripe Payment Link currently points to a mismatched product ("IFN Pro," $79/mo) while the founder's actual plan is a $149 public "Founding Member" price and a $99 warm-lead price for the existing attendee list, sent via new links pending as of Jul 29, 2026. Update `src/data/membershipData.ts` once those links are provided.
 - [ ] **Mentorship landing page**: build out from placeholder to a conversion-focused page for mentors. Spec: [`openspec/specs/placeholder-pages`](openspec/specs/placeholder-pages/spec.md).
 - [ ] **Investor pipeline**: initial data gathered in [VC_BACKLOG.md](VC_BACKLOG.md). Future: a dedicated investor-facing section or page (no spec yet — write one via `/opsx:propose` before starting).
 - [ ] **`join.ts` has no server-side validation**, unlike `contact.ts`/`event-signup.ts`. Spec + known gap: [`openspec/specs/join-flow`](openspec/specs/join-flow/spec.md).
@@ -30,7 +30,6 @@ This document tracks pending work and points to the spec of record for each capa
 - [ ] **Resource Hub Content (Phase 4 - Month 4-6)**: SMB section and video content across all sections.
 - [ ] **Loading Optimization**: reduce "Loading..." flicker between routes.
 - [ ] **Chapter Map**: interactive map/list of global chapters. Spec: [`openspec/specs/placeholder-pages`](openspec/specs/placeholder-pages/spec.md).
-- [ ] **Membership Details**: define tiers/benefits. Spec: [`openspec/specs/placeholder-pages`](openspec/specs/placeholder-pages/spec.md).
 - [ ] **Blog/Playbooks**: build out content/CMS. Spec: [`openspec/specs/placeholder-pages`](openspec/specs/placeholder-pages/spec.md).
 - [ ] **`useEvents.ts`/`useLumaEvents.ts` are near-duplicate hooks** — consolidate. Spec + known gap: [`openspec/specs/events-hub`](openspec/specs/events-hub/spec.md).
 - [ ] **Live `events` table and scraped `events.json` are never reconciled** — two independent stores. Spec + known gap: [`openspec/specs/events-hub`](openspec/specs/events-hub/spec.md).
@@ -60,6 +59,8 @@ Full specs (not just this index) exist for every capability below:
 | Legal & static pages | [`openspec/specs/legal-static-pages`](openspec/specs/legal-static-pages/spec.md) |
 | Admin dashboard | [`openspec/specs/admin-dashboard`](openspec/specs/admin-dashboard/spec.md) |
 | Placeholder pages | [`openspec/specs/placeholder-pages`](openspec/specs/placeholder-pages/spec.md) |
+| Partners page | [`openspec/specs/partners-page`](openspec/specs/partners-page/spec.md) |
+| Membership page | [`openspec/specs/membership-page`](openspec/specs/membership-page/spec.md) |
 | QR generator (`apps/qr`) | [`apps/qr/openspec/specs/qr-generator`](apps/qr/openspec/specs/qr-generator/spec.md) |
 | QR bulk generation (`apps/qr`) | [`apps/qr/openspec/specs/qr-bulk-generation`](apps/qr/openspec/specs/qr-bulk-generation/spec.md) |
 | QR link management (`apps/qr`) | [`apps/qr/openspec/specs/qr-link-management`](apps/qr/openspec/specs/qr-link-management/spec.md) |
@@ -67,4 +68,4 @@ Full specs (not just this index) exist for every capability below:
 `apps/qr` is a fully independent app (own lint/tsconfig/dependencies/specs) that may be extracted to its own repository — see `CLAUDE.md`.
 
 ---
-*Last Updated: Jul 25, 2026*
+*Last Updated: Jul 29, 2026*

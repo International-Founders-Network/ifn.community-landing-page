@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Loader2, RefreshCw } from 'lucide-react';
 import { Container } from '../components/Container';
 import { Button } from '../components/Button';
+import { ROADMAP_TIERS } from '../data/roadmapData';
 
 declare global {
     interface Window {
@@ -50,7 +51,7 @@ interface Submissions {
     eventSignups: EventSignup[];
 }
 
-type Tab = 'contact' | 'join' | 'events';
+type Tab = 'contact' | 'join' | 'events' | 'roadmap';
 
 function formatDate(iso: string) {
     return new Date(iso).toLocaleString(undefined, {
@@ -248,6 +249,29 @@ function SubmissionTable({ tab, data, search }: { tab: Tab; data: Submissions; s
     );
 }
 
+function RoadmapPanel() {
+    return (
+        <table className="w-full text-sm">
+            <thead>
+                <tr className="text-left text-slate-500 border-b border-slate-200">
+                    <th className="py-2 pr-4">Tier</th>
+                    <th className="py-2 pr-4">Stage</th>
+                    <th className="py-2 pr-4">Includes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {ROADMAP_TIERS.map((row) => (
+                    <tr key={row.tier} className="border-b border-slate-100 align-top">
+                        <td className="py-2 pr-4 font-medium whitespace-nowrap">{row.tier}</td>
+                        <td className="py-2 pr-4 whitespace-nowrap text-slate-500">{row.stage}</td>
+                        <td className="py-2 pr-4">{row.includes}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+}
+
 function TableSkeleton() {
     return (
         <div className="animate-pulse space-y-3">
@@ -294,6 +318,7 @@ function Dashboard({ email, onLogout }: { email: string; onLogout: () => void })
             { key: 'contact' as Tab, label: 'Contact Messages', count: data?.contactMessages.length ?? 0 },
             { key: 'join' as Tab, label: 'Join Applications', count: data?.joinApplications.length ?? 0 },
             { key: 'events' as Tab, label: 'Event Signups', count: data?.eventSignups.length ?? 0 },
+            { key: 'roadmap' as Tab, label: 'Roadmap', count: null },
         ],
         [data]
     );
@@ -332,7 +357,7 @@ function Dashboard({ email, onLogout }: { email: string; onLogout: () => void })
                                         : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                                 }`}
                             >
-                                {t.label} ({t.count})
+                                {t.label}{t.count !== null ? ` (${t.count})` : ''}
                             </button>
                         ))}
                     </div>
@@ -352,7 +377,9 @@ function Dashboard({ email, onLogout }: { email: string; onLogout: () => void })
                 </div>
 
                 <div className="bg-white rounded-xl border border-slate-200 p-4 overflow-x-auto">
-                    {data ? (
+                    {tab === 'roadmap' ? (
+                        <RoadmapPanel />
+                    ) : data ? (
                         <div className={refreshing ? 'opacity-50 transition-opacity' : 'transition-opacity'}>
                             <SubmissionTable tab={tab} data={data} search={search} />
                         </div>
