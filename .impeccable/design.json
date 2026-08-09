@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-08T00:00:00Z",
+  "title": "Design System: International Founders Network",
+  "extensions": {
+    "colorMeta": {
+      "deep-harbor": {
+        "role": "primary",
+        "displayName": "Deep Harbor",
+        "canonical": "#0f172a",
+        "tonalRamp": [
+          "oklch(15% 0.035 265.755)",
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(32% 0.045 265.755)",
+          "oklch(44% 0.043 265.755)",
+          "oklch(56% 0.046 265.755)",
+          "oklch(70% 0.04 265.755)",
+          "oklch(86% 0.022 265.755)",
+          "oklch(95% 0.008 265.755)"
+        ]
+      },
+      "welcome-amber": {
+        "role": "secondary",
+        "displayName": "Welcome Amber",
+        "canonical": "#f97316",
+        "tonalRamp": [
+          "oklch(15% 0.06 45)",
+          "oklch(28% 0.10 45)",
+          "oklch(40% 0.13 45)",
+          "oklch(52% 0.16 45)",
+          "oklch(64% 0.18 45)",
+          "oklch(70.5% 0.187 45)",
+          "oklch(82% 0.12 45)",
+          "oklch(95% 0.04 45)"
+        ]
+      },
+      "body-ink": {
+        "role": "neutral",
+        "displayName": "Body Ink",
+        "canonical": "oklch(44.6% 0.043 257.281)",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(86.9% 0.022 252.894)",
+          "oklch(96.8% 0.007 247.896)"
+        ]
+      },
+      "harbor-mist": {
+        "role": "neutral",
+        "displayName": "Harbor Mist",
+        "canonical": "oklch(98.4% 0.003 247.858)",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(86.9% 0.022 252.894)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(96.8% 0.007 247.896)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero and page-opening headlines only. Always negative tracking; 36px mobile, 60px desktop." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings within a page, usually centered above a constrained intro paragraph." },
+      "title": { "displayName": "Title", "purpose": "Card headings, benefit titles, event names." },
+      "body": { "displayName": "Body", "purpose": "All running copy, in Body Ink. 18px for lead paragraphs, 16px elsewhere, 65-75ch measure." },
+      "label": { "displayName": "Label", "purpose": "Uppercase eyebrows, category tags, date badges, stat captions." },
+      "wordmark": { "displayName": "Wordmark", "purpose": "The 'IFN.' logotype ONLY. MuseoModerno is never used for headings or body text." }
+    },
+    "shadows": [
+      { "name": "hairline", "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)", "purpose": "The scrolled navigation bar, separating it from content beneath." },
+      { "name": "card-lift", "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)", "purpose": "Card hover state. Never applied at rest." },
+      { "name": "panel-lift", "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)", "purpose": "Floating overlays: modals, offset stat cards, large feature-card hover." },
+      { "name": "action-glow", "value": "0 10px 15px -3px rgb(15 23 42 / 0.2)", "purpose": "Persistent navy-tinted glow beneath primary CTAs. The only resting elevation in the system." }
+    ],
+    "motion": [
+      { "name": "state", "value": "300ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default duration for color, border, shadow, and nav state transitions." },
+      { "name": "entrance", "value": "500ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Scroll-triggered entrance: opacity 0 and 20px below to resting position. Fires once." },
+      { "name": "stagger", "value": "100ms", "purpose": "Delay between grouped items entering in sequence." },
+      { "name": "media", "value": "500ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Image scale-on-hover inside cards (1.0 to 1.05)." },
+      { "name": "press", "value": "scale(0.98)", "purpose": "Button compression on active press." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single highest-intent action on a view. Welcome Amber fill; large instances carry the navy Action Glow.",
+      "html": "<button class=\"ds-btn-primary\">Join Network<svg class=\"ds-btn-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 24px; background: var(--color-accent, #f97316); color: #fff; font-family: Inter, sans-serif; font-size: 16px; font-weight: 500; border: none; border-radius: 8px; cursor: pointer; transition: background-color 300ms cubic-bezier(0.4,0,0.2,1), transform 150ms ease; } .ds-btn-primary:hover { background: var(--color-accent-hover, #ea580c); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-accent, #f97316); } .ds-btn-primary:active { transform: scale(0.98); } .ds-btn-icon { width: 20px; height: 20px; transition: transform 300ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover .ds-btn-icon { transform: translateX(4px); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Deep Harbor fill. Used when amber would over-emphasize, or beside another action that already owns the amber.",
+      "html": "<button class=\"ds-btn-secondary\">View Membership</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 24px; background: var(--color-primary, #0f172a); color: #fff; font-family: Inter, sans-serif; font-size: 16px; font-weight: 500; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.2); transition: background-color 300ms cubic-bezier(0.4,0,0.2,1), transform 150ms ease; } .ds-btn-secondary:hover { background: var(--color-primary-light, #1e293b); } .ds-btn-secondary:focus-visible { outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-primary, #0f172a); } .ds-btn-secondary:active { transform: scale(0.98); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "The standard companion to a primary button. 2px navy border is the one permitted exception to the hairline rule.",
+      "html": "<button class=\"ds-btn-outline\">Browse Resources</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 24px; background: transparent; color: var(--color-primary, #0f172a); font-family: Inter, sans-serif; font-size: 16px; font-weight: 500; border: 2px solid var(--color-primary, #0f172a); border-radius: 8px; cursor: pointer; transition: background-color 300ms cubic-bezier(0.4,0,0.2,1), transform 150ms ease; } .ds-btn-outline:hover { background: rgb(15 23 42 / 0.05); } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-primary, #0f172a); } .ds-btn-outline:active { transform: scale(0.98); }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Canonical form field: white fill, Field Edge hairline, 8px radius. Focus replaces the native outline with a navy border plus soft ring.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-name\">Full name</label><input class=\"ds-input\" id=\"ds-name\" type=\"text\" placeholder=\"Ada Okonkwo\"></div>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 6px; font-family: Inter, sans-serif; max-width: 320px; } .ds-field-label { font-size: 14px; font-weight: 500; color: oklch(44.6% 0.043 257.281); } .ds-input { width: 100%; padding: 8px 16px; background: #fff; color: var(--color-primary, #0f172a); font-family: Inter, sans-serif; font-size: 16px; border: 1px solid oklch(86.9% 0.022 252.894); border-radius: 8px; outline: none; transition: border-color 300ms cubic-bezier(0.4,0,0.2,1), box-shadow 300ms cubic-bezier(0.4,0,0.2,1); } .ds-input::placeholder { color: oklch(70.4% 0.04 256.788); } .ds-input:focus { border-color: var(--color-primary, #0f172a); box-shadow: 0 0 0 2px rgb(15 23 42 / 0.2); } .ds-input:disabled { background: oklch(96.8% 0.007 247.896); color: oklch(70.4% 0.04 256.788); }"
+    },
+    {
+      "name": "Event Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat at rest with a hairline border; lifts and deepens its border on hover. Metadata rows use Quiet Ink icons at 16px.",
+      "html": "<article class=\"ds-card\"><h3 class=\"ds-card-title\">October Founders Meetup</h3><div class=\"ds-card-meta\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M8 2v4\"/><path d=\"M16 2v4\"/><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M3 10h18\"/></svg><span>Oct 14, 2026 &bull; 6:00 PM</span></div><div class=\"ds-card-meta\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/></svg><span>Station Austin</span></div></article>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: 12px; max-width: 340px; padding: 24px; background: #fff; border: 1px solid oklch(92.9% 0.013 255.508); border-radius: 16px; font-family: Inter, sans-serif; transition: box-shadow 300ms cubic-bezier(0.4,0,0.2,1), border-color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-card:hover { border-color: oklch(86.9% 0.022 252.894); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); } .ds-card-title { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.4; color: var(--color-primary, #0f172a); } .ds-card-meta { display: flex; align-items: center; gap: 8px; font-size: 14px; color: oklch(44.6% 0.043 257.281); } .ds-card-meta svg { width: 16px; height: 16px; flex-shrink: 0; color: oklch(70.4% 0.04 256.788); }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Scrolled state: 90% white with backdrop blur and a hairline shadow. The wordmark is the only MuseoModerno in the system; its period is Welcome Amber.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-wordmark\" href=\"#\">IFN<span>.</span></a><div class=\"ds-nav-links\"><a href=\"#\">Events</a><a href=\"#\">Resources</a></div><button class=\"ds-nav-cta\">Join Network</button></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 16px 24px; background: rgb(255 255 255 / 0.9); backdrop-filter: blur(12px); box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); font-family: Inter, sans-serif; } .ds-wordmark { font-family: MuseoModerno, sans-serif; font-size: 30px; font-weight: 900; letter-spacing: -0.05em; color: var(--color-primary, #0f172a); text-decoration: none; } .ds-wordmark span { color: var(--color-accent, #f97316); } .ds-nav-links { display: flex; gap: 24px; } .ds-nav-links a { font-size: 14px; font-weight: 500; color: oklch(44.6% 0.043 257.281); text-decoration: none; transition: color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-nav-links a:hover { color: var(--color-primary, #0f172a); } .ds-nav-links a:focus-visible { outline: 2px solid var(--color-primary, #0f172a); outline-offset: 4px; border-radius: 2px; } .ds-nav-cta { height: 36px; padding: 0 16px; background: var(--color-accent, #f97316); color: #fff; font-size: 14px; font-weight: 500; border: none; border-radius: 8px; cursor: pointer; transition: background-color 300ms cubic-bezier(0.4,0,0.2,1); } .ds-nav-cta:hover { background: var(--color-accent-hover, #ea580c); }"
+    },
+    {
+      "name": "Eyebrow Pill",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Translucent hero eyebrow with backdrop blur, hairline border, and a pulsing navy status dot. Uppercase label type at 0.1em tracking.",
+      "html": "<span class=\"ds-eyebrow\"><i class=\"ds-dot\"></i>Monthly in Austin</span>",
+      "css": ".ds-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgb(255 255 255 / 0.8); backdrop-filter: blur(4px); border: 1px solid oklch(92.9% 0.013 255.508); border-radius: 9999px; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); font-family: Inter, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-primary, #0f172a); } .ds-dot { width: 8px; height: 8px; border-radius: 9999px; background: var(--color-primary, #0f172a); animation: ds-pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; } @keyframes ds-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }"
+    },
+    {
+      "name": "Italic Welcome Headline",
+      "kind": "custom",
+      "refersTo": "display",
+      "description": "The system's signature: exactly one italicized word in Welcome Amber inside an otherwise upright Deep Harbor headline. Appears at the top of essentially every page.",
+      "html": "<h1 class=\"ds-welcome-headline\">Where <em>Immigrant</em> Founders Connect, Grow, and Succeed</h1>",
+      "css": ".ds-welcome-headline { max-width: 16ch; margin: 0; font-family: Inter, sans-serif; font-size: 60px; font-weight: 700; line-height: 1.15; letter-spacing: -0.025em; color: var(--color-primary, #0f172a); } .ds-welcome-headline em { font-style: italic; color: var(--color-accent, #f97316); } @media (max-width: 768px) { .ds-welcome-headline { font-size: 36px; } }"
+    },
+    {
+      "name": "Dark Inset Slab",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "Deep Harbor panel inset from the page edges with a 24px radius and blurred navy/amber orbs bleeding from opposing corners. Used once per page at most.",
+      "html": "<section class=\"ds-slab\"><span class=\"ds-orb ds-orb-a\"></span><span class=\"ds-orb ds-orb-b\"></span><div class=\"ds-slab-body\"><h2>Our DNA</h2><p>The principles that guide our community and define how we operate.</p></div></section>",
+      "css": ".ds-slab { position: relative; overflow: hidden; max-width: 560px; padding: 64px 40px; background: var(--color-primary, #0f172a); border-radius: 24px; font-family: Inter, sans-serif; } .ds-orb { position: absolute; width: 240px; height: 240px; border-radius: 9999px; filter: blur(100px); opacity: 0.1; } .ds-orb-a { top: -80px; right: -80px; background: var(--color-primary, #0f172a); } .ds-orb-b { bottom: -80px; left: -80px; background: var(--color-accent, #f97316); } .ds-slab-body { position: relative; } .ds-slab-body h2 { margin: 0 0 16px; font-size: 36px; font-weight: 700; line-height: 1.2; letter-spacing: -0.025em; color: #fff; } .ds-slab-body p { margin: 0; font-size: 18px; line-height: 1.625; color: oklch(70.4% 0.04 256.788); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Long Table",
+    "overview": "Austin communal hospitality given professional footing. The organizing image is a long table where everyone gets a seat and room to spread out — nobody perched, nobody crowded, no head of the table. That translates directly into the system's most consistent physical property: generosity of space. Containers run wide (1280px), section gaps run deep (80–128px), and cards breathe at 24–32px of internal padding. When a layout feels tight here, it has stopped being the long table.\n\nThe interface has two voices and it needs both. Deep Harbor navy carries nearly all the structure — headings, buttons, dark feature slabs, the wordmark — and it does the work of looking like a real organization rather than a hobby group. Welcome Amber carries the warmth, and it is deliberately rare: an italic word in a headline, the period after the logo, the primary action. The ratio is the design. Navy everywhere and amber nowhere reads as corporate and cold; amber spread across a page reads as a marketing funnel. Neither is IFN.\n\nSurfaces are honest and quiet: white and near-white grounds, hairline borders instead of heavy chrome, flat cards that lift only when you reach for them. Depth is a response to intent, not a decoration applied at rest. The audience is arriving in an unfamiliar country and shopping specifically for trustworthiness, so the system leans on clarity, whitespace, and restraint rather than on visual persuasion. The one place it permits real drama is the dark inset slab — a navy panel with deeply rounded corners, floated inside the page margins with soft colored light bleeding from its corners.",
+    "keyCharacteristics": [
+      "Generous vertical rhythm; sections separated by 80–128px, never crowded",
+      "Two carrying colors — structural navy, rare amber — over a cool slate neutral ramp",
+      "One typeface (Inter) doing all the work, with a single display face reserved for the wordmark",
+      "Flat at rest, hairline borders, elevation only on hover and focus",
+      "Rounded but not soft: 16px cards, 8px buttons, full-round pills",
+      "Motion is short, upward, and once — a 20px rise into place, never a loop"
+    ],
+    "rules": [
+      { "name": "The Rationed Amber Rule", "body": "Welcome Amber appears at most three times in a single viewport, and never on two adjacent elements. Its scarcity is what makes it read as warmth instead of as a call-to-action pattern. If a screen needs a fourth amber moment, the screen has a hierarchy problem, not a color problem.", "section": "colors" },
+      { "name": "The Monochrome Spine Rule", "body": "Structure — layout, borders, type, dark surfaces — is built entirely from navy and the slate ramp. Color is never load-bearing. Remove every amber pixel and the page must still be completely legible and correctly ordered.", "section": "colors" },
+      { "name": "The Two-Color Ceiling Rule", "body": "The palette is navy plus amber plus neutrals. There is no third brand color. A teal was previously declared in the theme and used exactly once; it has been cut. New hues require a real, recurring semantic job — not a single badge.", "section": "colors" },
+      { "name": "The Italic Welcome Rule", "body": "The system's signature typographic move is exactly one italicized word inside an otherwise upright headline, set in Welcome Amber. One word, never two, and it is the word carrying the meaning of the headline — the thing the page is actually about. This is the single most recognizable thing about IFN's typography and it should appear on essentially every page-opening headline.", "section": "typography" },
+      { "name": "The One Voice Rule", "body": "Inter carries every piece of running text on the site. MuseoModerno is permitted on the wordmark and nowhere else — not on headings, not on numerals, not on pull quotes. A second display face would break the plain-spoken register the audience depends on.", "section": "typography" },
+      { "name": "The Tight Display Rule", "body": "Any type at 36px or above takes negative tracking (-0.025em) and line-height at or below 1.2. Large Inter set at default tracking reads as an operating system, not as a brand.", "section": "typography" },
+      { "name": "The Breathing Room Rule", "body": "No section is separated from its neighbor by less than 80px on desktop. When a page feels cramped, the fix is vertical space, not smaller type.", "section": "layout" },
+      { "name": "The Whitespace-Not-Rules Rule", "body": "Sections are separated by changes in background tone (Paper to Harbor Mist) and by space. Horizontal rules between sections are not part of this system.", "section": "layout" },
+      { "name": "The Flat-By-Default Rule", "body": "A new surface gets a hairline border and no shadow. If it needs to be distinguished further, the answer is a background tone change, not elevation. Shadows are reserved for hover, focus, overlay, and the primary action.", "section": "elevation" },
+      { "name": "The Radius Ladder Rule", "body": "Radius scales with element size: fields and buttons 8px, inset elements 12px, cards 16px, large slabs 24px, pills fully round. An element that is smaller than its neighbor never carries a larger radius than it.", "section": "shapes" },
+      { "name": "The Hairline Border Rule", "body": "Borders are 1px, in Hairline for surfaces and Field Edge for inputs. A border heavier than 1px means the element is either an outline button or a mistake.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do open every page with an Italic Welcome headline — one word, italic, in Welcome Amber, inside an otherwise upright Deep Harbor headline.",
+      "Do separate sections with 80–128px of vertical space and alternating Paper / Harbor Mist grounds rather than with rules.",
+      "Do keep cards flat at rest with a 1px Hairline border, and let them lift only on hover.",
+      "Do set body copy in Body Ink at 16–18px with relaxed line-height, constrained to a 65–75 character measure.",
+      "Do give large display type negative tracking (-0.025em) and line-height at or below 1.2.",
+      "Do pair a Welcome Amber primary button with an Outline secondary — one amber action per view.",
+      "Do write plainly. The audience is largely reading in a second language; expand acronyms on first use and avoid American idiom."
+    ],
+    "donts": [
+      "Don't use MuseoModerno for anything but the 'IFN.' wordmark. It is a logotype face, not a display face.",
+      "Don't introduce a third brand color. The palette is navy, amber, and the slate ramp — a teal was declared and cut for exactly this reason.",
+      "Don't spread Welcome Amber across a view. Three appearances per viewport is the ceiling, and never on adjacent elements.",
+      "Don't apply resting shadows to cards or sections. The primary CTA's Action Glow is the only permanent elevation in the system.",
+      "Don't put borders heavier than 1px on anything except the outline button.",
+      "Don't italicize more than one word in a headline — the emphasis lands on the single word carrying the headline's meaning, or it stops reading as a signature.",
+      "Don't add looping, bouncing, or attention-seeking motion. Entrances play once; the cycling hero word is the only ambient animation.",
+      "Don't publish invented statistics, logos, or attributed testimonials. Community-scale claims are a standing credibility risk for this audience — see PRODUCT.md's Evidence on Hand for what is real."
+    ]
+  }
+}
