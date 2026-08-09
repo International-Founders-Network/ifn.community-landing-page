@@ -30,3 +30,6 @@ dist-ssr
 .impeccable/live/sessions/
 .impeccable/live/roots.json
 .impeccable/live/inject-journal.json
+
+# Ephemeral agent worktrees
+.claude/worktrees/

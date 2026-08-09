@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import type { HandlerEvent } from '@netlify/functions';
-import { handler } from './event-signup';
+import { handler } from '../functions/event-signup';
 
 beforeAll(() => {
     process.env.NETLIFY_DATABASE_URL = 'postgres://user:pass@localhost:5432/testdb';

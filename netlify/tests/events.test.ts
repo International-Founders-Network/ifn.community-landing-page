@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import type { HandlerEvent } from '@netlify/functions';
-import { handler } from './events';
+import { handler } from '../functions/events';
 import eventsData from '../../src/data/events.json';
 
 beforeAll(() => {

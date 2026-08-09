@@ -73,4 +73,11 @@ build ran, so the cause is never in the code. A real build failure posts a
 
 ## Testing
 
-`npm test` runs Vitest against `netlify/functions/**/*.test.ts` — validation logic and the admin auth (session sign/verify, allowlist revocation) are covered; page components are not (see `openspec/specs/*` non-goals for why each was or wasn't tested). `apps/qr` doesn't have its own test setup yet.
+`npm test` runs Vitest against `netlify/tests/**/*.test.ts`.
+
+**Tests must NOT live inside `netlify/functions/`.** Netlify treats every file in
+the functions directory as a function, and a name containing a dot
+(`contact.test`) fails its "alphanumeric characters, hyphen & underscores" rule.
+That blocks the entire deploy with `Incorrect function names`, while `CI / verify`
+passes because Vitest does not care where the files sit. Keep tests in
+`netlify/tests/` — validation logic and the admin auth (session sign/verify, allowlist revocation) are covered; page components are not (see `openspec/specs/*` non-goals for why each was or wasn't tested). `apps/qr` doesn't have its own test setup yet.

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import type { HandlerEvent } from '@netlify/functions';
-import { isAllowedEmail, createSessionCookie, getSessionEmail, SESSION_COOKIE_NAME } from './auth';
+import { isAllowedEmail, createSessionCookie, getSessionEmail, SESSION_COOKIE_NAME } from '../functions/_lib/auth';
 
 beforeEach(() => {
     process.env.ADMIN_SESSION_SECRET = 'test-secret-at-least-32-bytes-long!!';
