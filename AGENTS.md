@@ -31,6 +31,24 @@ Working in `apps/qr`: `cd apps/qr && npm run lint && npm run build` — verify i
 
 To exercise `/api/*` endpoints locally (root or `apps/qr`), run `npx netlify dev`, not plain `vite`/`npm run dev` — the latter won't serve the Netlify Functions.
 
+### Commits must be authored by a verified Netlify team member
+
+The IFN Netlify account is on the **Free** plan, which only builds private-repo commits whose author/committer email belongs to a verified team member. The single verified member is **`venkat@ifn.community`**. Any other email — including the `user@hostname.local` address git invents when `user.email` is unset — makes Netlify reject the deploy before the build starts, with:
+
+> Build blocked: Unrecognized Git contributor. This plan allows only verified account members to push to private repos.
+
+That failure surfaces on the PR as four red checks (`Header rules`, `Pages changed`, `Redirect rules`, `netlify deploy-preview`) even though nothing is wrong with the code, and there is no build log to read because no build ran. `CI / verify` passes in the same run — that split is the tell.
+
+Before committing, confirm both fields are right (`--amend --author=` sets only the author, not the committer):
+
+```sh
+git config user.email venkat@ifn.community
+git config user.name "Venkat Vellaichamy"
+git log -1 --format='A:%ae C:%ce'   # neither may contain .local
+```
+
+`Co-Authored-By:` trailers are not checked — only the commit's own author and committer.
+
 ## Database schema is intentionally defined twice
 
 `db/migrations/*.sql` is the documented schema history. Each Netlify Function also runs its own `CREATE TABLE IF NOT EXISTS` at request time (idempotent, so the app works even against an empty database). These two can drift silently — if you change a table's shape, update both, or at least check `db/README.md` for the current convention before assuming one is authoritative.
