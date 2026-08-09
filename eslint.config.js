@@ -6,7 +6,10 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // `.netlify` holds esbuild-bundled function output produced by `netlify dev`.
+  // It is generated, gitignored, and vendored third-party code — linting it only
+  // ever reports on other people's bundles.
+  globalIgnores(['dist', 'apps', '.netlify']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

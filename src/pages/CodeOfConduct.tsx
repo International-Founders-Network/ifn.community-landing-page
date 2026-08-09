@@ -1,100 +1,159 @@
 import { Container } from '../components/Container';
+import { Emphasis } from '../components/Emphasis';
 import { ShieldAlert, Heart, Users, ShieldCheck, Flag } from 'lucide-react';
+
+const POSITIVE_STANDARDS = [
+    'Showing empathy and kindness toward other founders',
+    'Respecting different opinions, experiences, and ways of working',
+    'Giving useful feedback, and accepting it without taking offense',
+    'Taking responsibility and apologizing when we get something wrong',
+    'Thinking about what is best for the whole community, not only ourselves',
+    'Keeping private what other founders share about their companies',
+];
+
+const UNACCEPTABLE = [
+    'Sexual language or imagery, and unwelcome sexual attention or advances',
+    'Deliberately provoking people, insults, and personal or political attacks',
+    'Harassment of any kind, in public or in private',
+    "Publishing someone else's private information without their permission",
+    'Pressuring anyone to invest, buy, or sign anything at an IFN event',
+    'Any other behavior that would be out of place in a professional setting',
+];
+
+const ENFORCEMENT_LADDER = [
+    {
+        title: 'Correction',
+        body: 'A private, written note explaining what happened and why the behavior was not acceptable.',
+    },
+    {
+        title: 'Warning',
+        body: 'A written warning that sets out what happens if it continues. Contact with the people involved is paused for a set period.',
+    },
+    {
+        title: 'Removal',
+        body: 'A permanent ban from IFN events, from the members-only channel, and from every other IFN space.',
+    },
+];
 
 export function CodeOfConduct() {
     return (
-        <Container className="py-24">
-            <div className="max-w-4xl mx-auto">
-                <div className="text-center mb-16">
-                    <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">Code of Conduct</h1>
-                    <p className="text-xl text-slate-600 leading-relaxed">
-                        The International Founders Network (IFN) is dedicated to providing a harassment-free experience for everyone, regardless of gender, orientation, disability, physical appearance, body size, race, or religion.
+        <Container size="md" className="py-24">
+            <div className="mx-auto max-w-4xl">
+                <div className="mb-16 text-center">
+                    <h1 className="mb-6 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+                        Code of <Emphasis>Conduct</Emphasis>
+                    </h1>
+                    <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-600">
+                        The International Founders Network (IFN) exists so that founders who are new to a
+                        country have somewhere safe to ask questions. Everyone is welcome at our events and in
+                        our member spaces, whatever their nationality, immigration status, first language,
+                        gender, orientation, disability, appearance, race, or religion.
                     </p>
+                    <p className="mt-6 text-sm text-slate-500">Last updated: August 8, 2026</p>
                 </div>
 
-                <div className="prose prose-slate max-w-none space-y-12">
+                <div className="space-y-16">
                     <section>
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                                <ShieldCheck className="w-6 h-6" />
-                            </div>
-                            <h2 className="text-2xl font-bold text-slate-900 m-0">Our Standards</h2>
+                        <div className="mb-6 flex items-center gap-3">
+                            <span className="rounded-lg bg-slate-100 p-2 text-primary">
+                                <ShieldCheck className="h-6 w-6" aria-hidden="true" />
+                            </span>
+                            <h2 className="text-2xl font-bold text-primary">What we expect</h2>
                         </div>
-                        <p className="text-slate-600 text-lg leading-relaxed">
-                            Examples of behavior that contributes to a positive environment for our community include:
+                        <p className="text-lg leading-relaxed text-slate-600">
+                            These are the behaviors that make IFN worth attending:
                         </p>
-                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-none p-0">
-                            {[
-                                "Demonstrating empathy and kindness toward other founders",
-                                "Being respectful of differing opinions, viewpoints, and experiences",
-                                "Giving and gracefully accepting constructive feedback",
-                                "Accepting responsibility and apologizing to those affected by our mistakes",
-                                "Focusing on what is best not just for us as individuals, but for the community",
-                                "Maintaining confidentiality of shared founder challenges"
-                            ].map((item, i) => (
-                                <li key={i} className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-start gap-3 m-0">
-                                    <Heart className="w-5 h-5 text-primary shrink-0 mt-1" />
+                        <ul className="mt-6 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2">
+                            {POSITIVE_STANDARDS.map((item) => (
+                                <li
+                                    key={item}
+                                    className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4"
+                                >
+                                    <Heart className="mt-1 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
                                     <span className="text-slate-700">{item}</span>
                                 </li>
                             ))}
                         </ul>
                     </section>
 
-                    <section className="bg-red-50/50 p-8 rounded-3xl border border-red-100">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="bg-red-100 p-2 rounded-lg text-red-600">
-                                <ShieldAlert className="w-6 h-6" />
-                            </div>
-                            <h2 className="text-2xl font-bold text-slate-900 m-0">Unacceptable Behavior</h2>
+                    <section className="rounded-2xl border border-slate-200 bg-slate-50 p-8">
+                        <div className="mb-6 flex items-center gap-3">
+                            <span className="rounded-lg bg-red-50 p-2 text-red-700">
+                                <ShieldAlert className="h-6 w-6" aria-hidden="true" />
+                            </span>
+                            <h2 className="text-2xl font-bold text-primary">What is not allowed</h2>
                         </div>
-                        <p className="text-slate-600 text-lg leading-relaxed mb-6">
-                            The following behaviors are considered harassment and are unacceptable within our community:
+                        <p className="mb-6 text-lg leading-relaxed text-slate-600">
+                            The following count as harassment or misuse of the community, and they are not
+                            tolerated anywhere IFN operates:
                         </p>
-                        <ul className="space-y-3 text-slate-700">
-                            <li>• The use of sexualized language or imagery, and unwelcome sexual attention or advances</li>
-                            <li>• Trolling, insulting or derogatory comments, and personal or political attacks</li>
-                            <li>• Public or private harassment</li>
-                            <li>• Publishing others' private information without explicit permission</li>
-                            <li>• Other conduct which could reasonably be considered inappropriate in a professional setting</li>
+                        <ul className="list-disc space-y-3 pl-6 text-slate-700 marker:text-slate-400">
+                            {UNACCEPTABLE.map((item) => (
+                                <li key={item}>{item}</li>
+                            ))}
                         </ul>
                     </section>
 
                     <section>
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                                <Flag className="w-6 h-6" />
-                            </div>
-                            <h2 className="text-2xl font-bold text-slate-900 m-0">Reporting and Enforcement</h2>
+                        <div className="mb-6 flex items-center gap-3">
+                            <span className="rounded-lg bg-slate-100 p-2 text-primary">
+                                <Flag className="h-6 w-6" aria-hidden="true" />
+                            </span>
+                            <h2 className="text-2xl font-bold text-primary">Reporting a problem</h2>
                         </div>
-                        <p className="text-slate-600 text-lg leading-relaxed">
-                            If you are being harassed, notice that someone else is being harassed, or have any other concerns, please contact the IFN team immediately at <a href="mailto:conduct@ifn.community" className="text-primary font-semibold hover:underline">conduct@ifn.community</a>.
+                        <p className="text-lg leading-relaxed text-slate-600">
+                            If you are being harassed, if you see someone else being harassed, or if something
+                            at an IFN event made you uncomfortable, write to{' '}
+                            <a
+                                href="mailto:hello@ifn.community"
+                                className="rounded-sm font-semibold text-primary underline decoration-slate-300 underline-offset-4 hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                            >
+                                hello@ifn.community
+                            </a>
+                            . That address reaches the founding team directly.
                         </p>
-                        <p className="text-slate-600 text-lg leading-relaxed mt-4">
-                            All reports will be handled with discretion. Community leaders will follow these Community Impact Guidelines in determining the consequences for any action they deem in violation of this Code of Conduct:
+                        <p className="mt-4 text-lg leading-relaxed text-slate-600">
+                            IFN is run by a small team, so we will not pretend there is a duty desk waiting.
+                            What we can promise is that every report is read, kept private, and answered by a
+                            person. Depending on what happened, we take one of these three steps:
                         </p>
-                        <div className="mt-8 space-y-6">
-                            <div className="border-l-4 border-primary pl-6 py-2">
-                                <h3 className="text-xl font-bold text-slate-900 mb-2">1. Correction</h3>
-                                <p className="text-slate-600">A private, written warning, providing clarity around the nature of the violation and an explanation of why the behavior was inappropriate.</p>
-                            </div>
-                            <div className="border-l-4 border-primary pl-6 py-2">
-                                <h3 className="text-xl font-bold text-slate-900 mb-2">2. Warning</h3>
-                                <p className="text-slate-600">A warning with consequences for continued behavior. Interaction with the people involved is restricted for a specified period of time.</p>
-                            </div>
-                            <div className="border-l-4 border-primary pl-6 py-2">
-                                <h3 className="text-xl font-bold text-slate-900 mb-2">3. Expulsion</h3>
-                                <p className="text-slate-600">A permanent ban from any sort of interaction with the community, and removal from all IFN platforms and events.</p>
-                            </div>
-                        </div>
+                        <ol className="mt-8 list-none space-y-4 p-0">
+                            {ENFORCEMENT_LADDER.map((step, index) => (
+                                <li
+                                    key={step.title}
+                                    className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-6"
+                                >
+                                    <span
+                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-primary"
+                                        aria-hidden="true"
+                                    >
+                                        {index + 1}
+                                    </span>
+                                    <div>
+                                        <h3 className="mb-2 text-xl font-bold text-primary">{step.title}</h3>
+                                        <p className="text-slate-600">{step.body}</p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ol>
                     </section>
 
-                    <div className="bg-slate-900 text-white p-10 rounded-3xl mt-16 text-center">
-                        <Users className="w-12 h-12 text-primary mx-auto mb-6 opacity-80" />
-                        <h2 className="text-2xl font-bold mb-4">Questions?</h2>
-                        <p className="text-slate-400 mb-0">
-                            We encourage our members to ask questions regarding these guidelines. Our goal is to foster a safe, collaborative environment for all.
+                    <section className="rounded-3xl bg-primary p-10 text-center text-white">
+                        <Users className="mx-auto mb-6 h-12 w-12 text-accent" aria-hidden="true" />
+                        <h2 className="mb-4 text-2xl font-bold text-white">Not sure about something?</h2>
+                        <p className="mx-auto max-w-2xl leading-relaxed text-slate-300">
+                            Ask. If you are unsure whether something belongs at an IFN event — a pitch, a
+                            photograph, a recruiting message — it is easier to check first than to undo it
+                            afterwards. Write to{' '}
+                            <a
+                                href="mailto:hello@ifn.community"
+                                className="rounded-sm font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+                            >
+                                hello@ifn.community
+                            </a>
+                            .
                         </p>
-                    </div>
+                    </section>
                 </div>
             </div>
         </Container>

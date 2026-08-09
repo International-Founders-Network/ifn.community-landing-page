@@ -2,7 +2,7 @@ import { Handler } from '@netlify/functions';
 import { neon } from '@neondatabase/serverless';
 import eventsData from '../../src/data/events.json';
 
-export const handler: Handler = async (event) => {
+export const handler: Handler = async () => {
     const sql = neon(process.env.NETLIFY_DATABASE_URL!);
 
     try {

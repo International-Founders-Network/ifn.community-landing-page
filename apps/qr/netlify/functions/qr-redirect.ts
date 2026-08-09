@@ -1,4 +1,4 @@
-import { Handler, HandlerEvent } from '@netlify/functions';
+import type { Handler, HandlerEvent, HandlerResponse } from '@netlify/functions';
 import { ensureQrTables, getSql } from './_db';
 
 const notFoundHtml = `<!doctype html>
@@ -7,7 +7,7 @@ const notFoundHtml = `<!doctype html>
 <div style="text-align:center"><h1 style="font-size:1.5rem">This QR link doesn&rsquo;t exist</h1>
 <p style="color:#64748b">It may have been removed.</p></div></body></html>`;
 
-export const handler: Handler = async (event: HandlerEvent) => {
+export const handler: Handler = async (event: HandlerEvent): Promise<HandlerResponse> => {
     // event.path reflects the original request path (e.g. "/r/abc123") regardless
     // of the netlify.toml rewrite target, so parse the code from there. Query param
     // is kept as a fallback for direct function invocation (e.g. manual testing).

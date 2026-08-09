@@ -25,3 +25,11 @@ dist-ssr
 
 # Local Netlify folder
 .netlify
+
+# Impeccable live-mode runtime state (.impeccable/live/config.json is tracked on purpose)
+.impeccable/live/sessions/
+.impeccable/live/roots.json
+.impeccable/live/inject-journal.json
+
+# Ephemeral agent worktrees
+.claude/worktrees/

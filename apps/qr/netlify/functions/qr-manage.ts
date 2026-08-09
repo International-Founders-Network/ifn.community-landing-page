@@ -1,5 +1,4 @@
-import { Handler, HandlerEvent } from '@netlify/functions';
-import type { neon } from '@neondatabase/serverless';
+import type { Handler, HandlerEvent } from '@netlify/functions';
 import { ensureQrTables, getSql, isValidHttpUrl } from './_db';
 
 interface QrLinkRow {
@@ -10,7 +9,7 @@ interface QrLinkRow {
     updated_at: string;
 }
 
-async function loadDetails(sql: ReturnType<typeof neon>, token: string) {
+async function loadDetails(sql: ReturnType<typeof getSql>, token: string) {
     const rows = await sql`
         SELECT code, target_url, label, created_at, updated_at
         FROM qr_links WHERE edit_token = ${token}

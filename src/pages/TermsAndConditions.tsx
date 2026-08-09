@@ -1,62 +1,167 @@
+import { Link } from 'react-router-dom';
 import { Container } from '../components/Container';
+import { Emphasis } from '../components/Emphasis';
+
+const SECTION_HEADING = 'mb-4 text-2xl font-bold text-primary';
+const BODY = 'leading-relaxed text-slate-600';
+const LIST = 'mt-4 list-disc space-y-2 pl-6 text-slate-600 marker:text-slate-400';
+const INLINE_LINK =
+    'rounded-sm font-semibold text-primary underline decoration-slate-300 underline-offset-4 hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2';
 
 export function TermsAndConditions() {
     return (
-        <Container className="py-24">
-            <div className="max-w-4xl mx-auto prose prose-slate">
-                <h1 className="text-4xl font-bold text-slate-900 mb-8">Terms and Conditions</h1>
-                <p className="text-slate-600 mb-6">
-                    Last updated: February 24, 2026
+        <Container size="md" className="py-24">
+            <div className="mx-auto max-w-3xl">
+                <h1 className="mb-6 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+                    Terms and <Emphasis>Conditions</Emphasis>
+                </h1>
+                <p className="mb-4 text-lg leading-relaxed text-slate-600">
+                    These terms cover the ifn.community website, IFN events, and IFN membership. They are
+                    written plainly because most of the people reading them are reading in a second language.
                 </p>
+                <p className="mb-16 text-sm text-slate-500">Last updated: August 8, 2026</p>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold text-slate-800 mb-4">1. Agreement to Terms</h2>
-                    <p className="text-slate-600 mb-4">
-                        These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and IFN ("we," "us" or "our"), concerning your access to and use of the IFN.community website.
-                    </p>
-                </section>
+                <div className="space-y-12">
+                    <section>
+                        <h2 className={SECTION_HEADING}>1. Agreement</h2>
+                        <p className={BODY}>
+                            By using this website, attending an IFN event, or buying an IFN membership, you
+                            agree to these terms. They are an agreement between you — whether for yourself or
+                            on behalf of a company — and the International Founders Network ("IFN", "we",
+                            "us"). If you do not agree with them, please do not use the site.
+                        </p>
+                    </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold text-slate-800 mb-4">2. INTELLECTUAL PROPERTY RIGHTS</h2>
-                    <p className="text-slate-600 mb-4">
-                        Unless otherwise indicated, the Site is our proprietary property and all source code, databases, functionality, software, website designs, audio, video, text, photographs, and graphics on the Site and the trademarks, service marks, and logos contained therein are owned or controlled by us or licensed to us.
-                    </p>
-                </section>
+                    <section>
+                        <h2 className={SECTION_HEADING}>2. What IFN provides</h2>
+                        <p className={BODY}>
+                            IFN runs a monthly in-person meetup in Austin, Texas, publishes a resource library,
+                            and sells an annual membership. We introduce founders to each other and to service
+                            providers we know. We do not take equity, we do not guarantee introductions, and we
+                            do not promise any business outcome.
+                        </p>
+                        <p className={`mt-4 ${BODY}`}>
+                            Event listings and registration are handled on third-party platforms such as Luma
+                            and Meetup, and events are held at partner venues. Those platforms and venues have
+                            their own terms, which apply alongside ours.
+                        </p>
+                    </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold text-slate-800 mb-4">3. USER REPRESENTATIONS</h2>
-                    <p className="text-slate-600 mb-4">
-                        By using the Site, you represent and warrant that: (1) you have the legal capacity and you agree to comply with these Terms and Conditions; (2) you are not a minor in the jurisdiction in which you reside; (3) you will not access the Site through automated or non-human means, whether through a bot, script, or otherwise; (4) you will not use the Site for any illegal or unauthorized purpose; and (5) your use of the Site will not violate any applicable law or regulation.
-                    </p>
-                </section>
+                    <section>
+                        <h2 className={SECTION_HEADING}>3. Membership and payment</h2>
+                        <p className={BODY}>
+                            Membership is sold as an annual subscription at the price shown at checkout.
+                            Payments are processed by Stripe; IFN never receives or stores your card details.
+                            Membership gives you access to the private member channel, the resource library, and
+                            the monthly members-only office-hours call for the period you paid for.
+                        </p>
+                        <p className={`mt-4 ${BODY}`}>
+                            If a payment goes wrong, or if you believe you were charged in error, write to{' '}
+                            <a href="mailto:hello@ifn.community" className={INLINE_LINK}>
+                                hello@ifn.community
+                            </a>{' '}
+                            and a person will look at it.
+                        </p>
+                    </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold text-slate-800 mb-4">4. PROHIBITED ACTIVITIES</h2>
-                    <p className="text-slate-600 mb-4">
-                        You may not access or use the Site for any purpose other than that for which we make the Site available. The Site may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us.
-                    </p>
-                </section>
+                    <section>
+                        <h2 className={SECTION_HEADING}>4. How you agree to behave</h2>
+                        <p className={BODY}>
+                            Everything IFN runs — the site, the events, and the member channel — is governed by
+                            our{' '}
+                            <Link to="/code-of-conduct" className={INLINE_LINK}>
+                                Code of Conduct
+                            </Link>
+                            . In addition, when using this site you agree that:
+                        </p>
+                        <ul className={LIST}>
+                            <li>You are old enough to enter a contract where you live.</li>
+                            <li>You will not use the site for anything illegal.</li>
+                            <li>
+                                You will not collect other people&apos;s details from IFN spaces to sell,
+                                market, or recruit without their permission.
+                            </li>
+                            <li>
+                                You will not use bots, scrapers, or automated tools against the site, and will
+                                not try to break or overload it.
+                            </li>
+                        </ul>
+                        <p className={`mt-4 ${BODY}`}>
+                            We may remove anyone from IFN spaces for breaking these terms or the Code of
+                            Conduct.
+                        </p>
+                    </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold text-slate-800 mb-4">5. LIMITATION OF LIABILITY</h2>
-                    <p className="text-slate-600 mb-4">
-                        In no event will we or our directors, employees, or agents be liable to you or any third party for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages, including lost profit, lost revenue, loss of data, or other damages arising from your use of the site.
-                    </p>
-                </section>
+                    <section>
+                        <h2 className={SECTION_HEADING}>5. We do not give professional advice</h2>
+                        <p className={BODY}>
+                            This matters more at IFN than at most communities. Nothing on this site, said at an
+                            IFN event, or shared in the member channel is legal, immigration, tax, accounting,
+                            or investment advice. That includes anything about visas, company registration,
+                            banking, or fundraising. Members and partners share their own experience, which is
+                            useful and is not a substitute for a licensed professional who has looked at your
+                            situation. Any partner or service provider we introduce you to is an independent
+                            company, and any agreement you make with them is between you and them.
+                        </p>
+                    </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold text-slate-800 mb-4">6. GOVERNING LAW</h2>
-                    <p className="text-slate-600 mb-4">
-                        These Terms and Conditions and your use of the Site are governed by and construed in accordance with the laws of the State of Texas applicable to agreements made and to be entirely performed within the State of Texas, without regard to its conflict of law principles.
-                    </p>
-                </section>
+                    <section>
+                        <h2 className={SECTION_HEADING}>6. Content on this site</h2>
+                        <p className={BODY}>
+                            The design, text, code, and logos on this site belong to IFN or are used with
+                            permission, and partner names and logos belong to those partners. You may read,
+                            quote, and link to this site. You may not copy it wholesale or present it as your
+                            own.
+                        </p>
+                        <p className={`mt-4 ${BODY}`}>
+                            Anything you send us — a message, an application, a resource suggestion — stays
+                            yours. By sending it you allow us to read it and act on it for the purpose you sent
+                            it for. How we handle it is described in our{' '}
+                            <Link to="/privacy-policy" className={INLINE_LINK}>
+                                Privacy Policy
+                            </Link>
+                            .
+                        </p>
+                    </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold text-slate-800 mb-4">7. CONTACT US</h2>
-                    <p className="text-slate-600">
-                        In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at hello@ifn.community.
-                    </p>
-                </section>
+                    <section>
+                        <h2 className={SECTION_HEADING}>7. Limits on our liability</h2>
+                        <p className={BODY}>
+                            The site and the community are provided as they are. To the fullest extent the law
+                            allows, IFN and the people who run it are not liable for indirect or consequential
+                            losses — including lost profit, lost revenue, or lost data — arising from your use
+                            of the site, from attending an event, or from acting on something you heard in the
+                            community. Nothing here limits liability that cannot be limited by law.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 className={SECTION_HEADING}>8. Governing law</h2>
+                        <p className={BODY}>
+                            These terms, and your use of the site, are governed by the laws of the State of
+                            Texas, United States, without regard to its conflict-of-law rules.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 className={SECTION_HEADING}>9. Changes to these terms</h2>
+                        <p className={BODY}>
+                            We may update these terms. When we do, we will change the date at the top of this
+                            page. Continuing to use the site after that means you accept the updated terms.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 className={SECTION_HEADING}>10. Contact</h2>
+                        <p className={BODY}>
+                            For anything about these terms, or a complaint about the site, write to{' '}
+                            <a href="mailto:hello@ifn.community" className={INLINE_LINK}>
+                                hello@ifn.community
+                            </a>
+                            .
+                        </p>
+                    </section>
+                </div>
             </div>
         </Container>
     );

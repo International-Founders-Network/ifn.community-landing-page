@@ -14,3 +14,45 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# The six placeholder routes are real URLs with nothing behind them yet.
+# ComingSoon.tsx injects a client-side noindex tag, but a crawler that does not
+# run JavaScript never sees it — this header is the durable version.
+# Remove the entry for a path once that page has real content.
+[[headers]]
+  for = "/blog"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/careers"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/chapters"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/mentorship"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/newsletter"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/playbooks"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+# Internal admin dashboard. The real access control is server-side (Google
+# sign-in + allowlist, verified in every /api/admin-* function). This header
+# only keeps the route out of search indexes.
+[[headers]]
+  for = "/admin"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

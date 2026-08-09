@@ -1,105 +1,129 @@
 import { motion } from 'framer-motion';
+import { CalendarDays, Users } from 'lucide-react';
 import { GlobeIcon } from './GlobeIcon';
-import { Zap, TrendingUp } from 'lucide-react';
+
+/** Decorative connection points sitting on the outer ring. Percentages are polar
+ *  coordinates on that ring (centre 50%, radius 42%) resolved to left/top. */
+const NODES = [
+    { left: '86.4%', top: '29%' },
+    { left: '13.6%', top: '29%' },
+    { left: '50%', top: '92%' },
+];
+
+/** Everything stated here is verifiable: six-plus months of monthly meetups, the
+ *  Station Austin venue partnership, and the Reuneo speed-networking format. No
+ *  counts, no photographs of people, nothing that cannot be checked. */
+const PROOF = [
+    {
+        icon: CalendarDays,
+        eyebrow: 'Meetups',
+        title: 'Six months of monthly meetups',
+        detail: 'In person, hosted at Station Austin.',
+    },
+    {
+        icon: Users,
+        eyebrow: 'Format',
+        title: 'Speed networking by Reuneo',
+        detail: 'Founders are paired for one-to-one conversations.',
+    },
+];
 
 export function HeroVisual() {
     return (
-        <div className="relative w-full aspect-square max-w-lg mx-auto lg:max-w-none">
-            {/* Ambient Background Glows */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/10 rounded-full blur-[120px] animate-pulse-slow"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-accent/5 rounded-full blur-[100px] animate-pulse-slow delay-1000"></div>
+        <div className="relative w-full max-w-lg mx-auto">
+            {/* Medallion. Static: no rotating rings, no breathing globe — DESIGN.md
+                allows one piece of ambient motion on this page and it belongs to the
+                headline. */}
+            <div className="relative mx-auto aspect-square w-full max-w-[18rem] sm:max-w-[22rem] lg:max-w-[26rem]">
+                <div
+                    aria-hidden="true"
+                    className="absolute inset-0 -z-10 rounded-full bg-primary/10 blur-[90px]"
+                />
 
-            {/* Main Glass Sphere Container */}
-            <div className="relative w-full h-full bg-white/5 backdrop-blur-3xl rounded-full border border-white/20 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] overflow-hidden flex items-center justify-center group">
+                <div className="relative flex h-full w-full items-center justify-center rounded-full border border-slate-200 bg-white/60 backdrop-blur-sm">
+                    <div
+                        aria-hidden="true"
+                        className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.9),transparent_70%)]"
+                    />
+                    <div
+                        aria-hidden="true"
+                        className="absolute inset-[8%] rounded-full border border-dashed border-slate-300"
+                    />
+                    <div
+                        aria-hidden="true"
+                        className="absolute inset-[22%] rounded-full border border-slate-200"
+                    />
 
-                {/* Dynamic Content Layers */}
-                <div className="absolute inset-0 opacity-20">
-                    <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-                        className="w-[180%] h-[180%] border border-dashed border-primary/40 rounded-full absolute top-[-40%] left-[-40%]"
-                    />
-                    <motion.div
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 70, repeat: Infinity, ease: "linear" }}
-                        className="w-[140%] h-[140%] border border-white/20 rounded-full absolute top-[-20%] left-[-20%]"
-                    />
+                    {/* Connection points replace what used to be three stock photographs
+                        of strangers presented as members. Abstract on purpose: the
+                        composition should not imply people IFN cannot name. */}
+                    {NODES.map((node) => (
+                        <span
+                            key={node.left + node.top}
+                            aria-hidden="true"
+                            style={{ left: node.left, top: node.top }}
+                            className="absolute flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white"
+                        >
+                            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                        </span>
+                    ))}
+
+                    <div className="relative z-10 rounded-full border border-slate-200 bg-white p-8 sm:p-10">
+                        <GlobeIcon className="h-24 w-24 text-primary sm:h-28 sm:w-28" />
+                    </div>
                 </div>
-
-                {/* Inner Glow and Texture */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent)]" />
-
-                {/* Core Icon */}
-                <motion.div
-                    animate={{
-                        scale: [1, 1.05, 1],
-                        rotateY: [0, 10, 0]
-                    }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                    className="relative z-10 p-10 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 shadow-2xl"
-                >
-                    <GlobeIcon className="w-28 h-28 text-primary drop-shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.4)]" />
-                </motion.div>
-
-                {/* Orbiting Tech Avatars */}
-                {[
-                    { img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2", delay: 0, size: "w-16 h-16", pos: "top-10 left-10" },
-                    { img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d", delay: 2, size: "w-14 h-14", pos: "bottom-12 right-12" },
-                    { img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e", delay: 4, size: "w-12 h-12", pos: "top-1/2 -left-4" }
-                ].map((avatar, i) => (
-                    <motion.div
-                        key={i}
-                        animate={{
-                            y: [0, -15, 0],
-                            rotate: [0, 5, 0]
-                        }}
-                        transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut", delay: avatar.delay }}
-                        className={`absolute ${avatar.pos} ${avatar.size} bg-white rounded-full p-1 shadow-2xl border-2 border-white/50 overflow-hidden z-20`}
-                    >
-                        <img
-                            src={`${avatar.img}?auto=format&fit=crop&w=100&h=100`}
-                            className="w-full h-full object-cover rounded-full"
-                            alt=""
-                            loading="lazy"
-                        />
-                    </motion.div>
-                ))}
             </div>
 
-            {/* Floating Metric Cards */}
-            <motion.div
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
-                className="absolute top-1/4 -left-16 z-30 hidden xl:block"
-            >
-                <div className="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-2xl border border-white/50 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-primary">
-                        <TrendingUp size={24} />
-                    </div>
-                    <div>
-                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Community</div>
-                        <div className="text-xl font-bold text-slate-900">85+ Founders in Austin</div>
-                    </div>
-                </div>
-            </motion.div>
+            {/* Proof. Visible at every breakpoint — these used to be `hidden xl:block`,
+                which meant every phone and most laptops saw no evidence at all. */}
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                {PROOF.map(({ icon: Icon, eyebrow, title, detail }, i) => {
+                    const onDark = i === 1;
 
-            <motion.div
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.8 }}
-                className="absolute bottom-1/4 -right-16 z-30 hidden xl:block"
-            >
-                <div className="bg-slate-900/95 backdrop-blur-md p-5 rounded-2xl shadow-2xl border border-white/10 flex items-center gap-4 text-white">
-                    <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center text-accent">
-                        <Zap size={24} />
-                    </div>
-                    <div>
-                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Events</div>
-                        <div className="text-xl font-bold text-white">Monthly Founder Sessions</div>
-                    </div>
-                </div>
-            </motion.div>
+                    return (
+                        <motion.div
+                            key={title}
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 + i * 0.1, duration: 0.5 }}
+                            className={
+                                onDark
+                                    ? 'rounded-2xl border border-white/10 bg-primary p-6'
+                                    : 'rounded-2xl border border-slate-200 bg-white p-6'
+                            }
+                        >
+                            <div className="flex items-start gap-4">
+                                <span
+                                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${onDark ? 'bg-white/10 text-white' : 'bg-slate-100 text-primary'
+                                        }`}
+                                >
+                                    <Icon aria-hidden="true" size={20} strokeWidth={1.5} />
+                                </span>
+                                <div>
+                                    <p
+                                        className={`text-xs font-bold uppercase tracking-widest ${onDark ? 'text-slate-300' : 'text-slate-600'
+                                            }`}
+                                    >
+                                        {eyebrow}
+                                    </p>
+                                    <p
+                                        className={`mt-1 text-base font-bold ${onDark ? 'text-white' : 'text-slate-900'
+                                            }`}
+                                    >
+                                        {title}
+                                    </p>
+                                    <p
+                                        className={`mt-1 text-sm ${onDark ? 'text-slate-300' : 'text-slate-600'
+                                            }`}
+                                    >
+                                        {detail}
+                                    </p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    );
+                })}
+            </div>
         </div>
     );
 }

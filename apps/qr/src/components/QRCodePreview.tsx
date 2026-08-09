@@ -28,19 +28,3 @@ export function QRCodePreview({ options, className, onReady }: QRCodePreviewProp
 
     return <div ref={containerRef} className={className} />;
 }
-
-export function useDownloadableQr() {
-    const instanceRef = useRef<QRCodeStyling | null>(null);
-
-    return {
-        setInstance: (qr: QRCodeStyling) => {
-            instanceRef.current = qr;
-        },
-        download: async (name: string, extension: 'png' | 'svg' | 'jpeg' | 'webp') => {
-            await instanceRef.current?.download({ name, extension });
-        },
-        getBlob: async (extension: 'png' | 'svg' | 'jpeg' | 'webp') => {
-            return instanceRef.current?.getRawData(extension) ?? null;
-        },
-    };
-}

@@ -4,7 +4,7 @@ export function getSql() {
     return neon(process.env.NETLIFY_DATABASE_URL!);
 }
 
-export async function ensureQrTables(sql: ReturnType<typeof neon>) {
+export async function ensureQrTables(sql: ReturnType<typeof getSql>) {
     await sql`
         CREATE TABLE IF NOT EXISTS qr_links (
             id SERIAL PRIMARY KEY,
