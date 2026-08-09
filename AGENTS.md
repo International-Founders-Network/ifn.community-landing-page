@@ -31,23 +31,41 @@ Working in `apps/qr`: `cd apps/qr && npm run lint && npm run build` — verify i
 
 To exercise `/api/*` endpoints locally (root or `apps/qr`), run `npx netlify dev`, not plain `vite`/`npm run dev` — the latter won't serve the Netlify Functions.
 
-### Commits must be authored by a verified Netlify team member
+### Netlify Free plan blocks deploys by GIT PUSHER identity
 
-The IFN Netlify account is on the **Free** plan, which only builds private-repo commits whose author/committer email belongs to a verified team member. The single verified member is **`venkat@ifn.community`**. Any other email — including the `user@hostname.local` address git invents when `user.email` is unset — makes Netlify reject the deploy before the build starts, with:
+The IFN Netlify account is on the **Free** plan with strict contributor
+verification enabled. It blocks private-repo deploys before the build starts:
 
-> Build blocked: Unrecognized Git contributor. This plan allows only verified account members to push to private repos.
+> Build blocked: Unrecognized Git contributor. This plan allows only verified
+> account members to push to private repos.
 
-That failure surfaces on the PR as four red checks (`Header rules`, `Pages changed`, `Redirect rules`, `netlify deploy-preview`) even though nothing is wrong with the code, and there is no build log to read because no build ran. `CI / verify` passes in the same run — that split is the tell.
+**Netlify matches on the GitHub account that PUSHED, not on the commit's
+author/committer email.** An earlier commit in this repo claimed the fix was
+stamping `venkat@ifn.community` into both fields. That is wrong, and the deploy
+data disproves it: three failed deploys spanning pre- and post-rewrite commits
+carry byte-identical `error_message` and `strict_contributor_verification_failure:
+true`. Netlify recorded `committer: venkatvellaichamy` (the pushing account) even
+for an older commit whose email was `...@Venkats-MacBook-Pro-2.local`.
 
-Before committing, confirm both fields are right (`--amend --author=` sets only the author, not the committer):
+**Do not try to fix this by rewriting commit authorship. It cannot work.**
+
+The fix is in the Netlify dashboard, not the repo: Team settings -> Members ->
+link a **Git identity** to the team member, attaching the GitHub account that
+actually pushes. As of this writing the sole team member has only a Google
+identity connected (`connected_accounts: {google: venkat@ifn.community}`) and no
+GitHub identity, so no push can ever be recognised.
+
+**How to recognise this failure:** four red checks (`Header rules`, `Pages
+changed`, `Redirect rules`, `netlify deploy-preview`) while `CI / verify` passes,
+AND no build log exists. Confirm with:
 
 ```sh
-git config user.email venkat@ifn.community
-git config user.name "Venkat Vellaichamy"
-git log -1 --format='A:%ae C:%ce'   # neither may contain .local
+npx netlify api getDeploy --data '{"deploy_id":"<id>"}'   # state=error, deploy_time=null
 ```
 
-`Co-Authored-By:` trailers are not checked — only the commit's own author and committer.
+A 404 from the deploy's `/log` endpoint plus a lifespan of ~2 seconds means no
+build ran, so the cause is never in the code. A real build failure posts a
+`pending` status first and runs for 30-60s.
 
 ## Database schema is intentionally defined twice
 
