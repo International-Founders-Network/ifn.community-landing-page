@@ -3,19 +3,53 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Fonts is the only font source: src/fonts.css was removed and
+       public/fonts/ is empty. Preconnect to both hosts BEFORE the stylesheet
+       request so the TLS handshake overlaps the CSS fetch.
+       Weights are limited to what the site actually renders:
+       Inter 400/500/600/700 (DESIGN.md's pinned ramp) and MuseoModerno 900,
+       which is used only by the "IFN." wordmark in the navbar and footer. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=MuseoModerno:wght@400;600;700;800;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=MuseoModerno:wght@900&display=swap"
     rel="stylesheet">
-  <link rel="preload" as="image"
-    href="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200"
-    fetchpriority="high">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <title>International Founders Network — Austin, Texas</title>
   <meta name="description"
-    content="Join the International Founders Network (IFN) - a global community connecting founders worldwide. Access mentorship, investors, events, and a community that understands your journey." />
-  <title>International Founders Network</title>
+    content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
+
+  <!-- No <link rel="canonical"> here on purpose: netlify.toml rewrites /* to
+       this same index.html and nothing updates the head per route, so a
+       hard-coded canonical would declare every route a duplicate of "/". The
+       og:url below has the same single-value limitation, but a stale og:url
+       only affects the URL shown in a share card. -->
+
+  <!-- Open Graph — shared links should carry the Austin reality, not a bare URL. -->
+  <meta property="og:site_name" content="International Founders Network" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ifn.community/" />
+  <meta property="og:title" content="International Founders Network — Austin, Texas" />
+  <meta property="og:description"
+    content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
+  <meta property="og:image" content="https://ifn.community/logo.png" />
+  <meta property="og:image:width" content="1024" />
+  <meta property="og:image:height" content="364" />
+  <meta property="og:image:alt" content="The International Founders Network wordmark: IFN." />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter / X card. No @handle is claimed here because none is verified. -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="International Founders Network — Austin, Texas" />
+  <meta name="twitter:description"
+    content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
+  <meta name="twitter:image" content="https://ifn.community/logo.png" />
+  <meta name="twitter:image:alt" content="The International Founders Network wordmark: IFN." />
 </head>
 
 <body>

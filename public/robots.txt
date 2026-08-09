@@ -1,0 +1,20 @@
+# International Founders Network — ifn.community
+
+User-agent: *
+Allow: /
+
+# Internal admin dashboard. Access is enforced server-side by Google sign-in
+# plus an allowlist (netlify/functions/_lib/auth.ts); this only keeps the URL
+# out of search results.
+Disallow: /admin
+
+# Placeholder routes with no content yet. Also sent as X-Robots-Tag in
+# netlify.toml, which is what non-JS crawlers actually honour.
+Disallow: /blog
+Disallow: /careers
+Disallow: /chapters
+Disallow: /mentorship
+Disallow: /newsletter
+Disallow: /playbooks
+
+Sitemap: https://ifn.community/sitemap.xml

@@ -10,6 +10,10 @@ export function GlobeIcon({ className = "w-6 h-6", ...props }: React.SVGProps<SV
             strokeLinecap="round"
             strokeLinejoin="round"
             className={className}
+            /* Decorative by default. A caller that needs it announced can pass
+               aria-hidden={false} plus a role and label, since props win here. */
+            aria-hidden="true"
+            focusable="false"
             {...props}
         >
             {/* Tilted globe aesthetic for a more dynamic, premium look */}
