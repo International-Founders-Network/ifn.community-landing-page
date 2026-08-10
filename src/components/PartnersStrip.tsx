@@ -241,7 +241,9 @@ export function PartnersStrip() {
                         Station Austin is the venue the meetups are held in. Reuneo runs the speed
                         networking that pairs founders into one-to-one conversations in place of
                         standing-around small talk. Yani Partners provides fractional CTO and
-                        technology help for founders and small teams.
+                        technology help for founders and small teams. These are working
+                        relationships rather than paid placements: nobody on this page bought
+                        their way onto it.
                     </motion.p>
 
                     {/* PRODUCT.md requires this disclosure to travel with the

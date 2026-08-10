@@ -221,6 +221,19 @@ const CLUSTERS: FaqCluster[] = [
                     </>
                 ),
             },
+            {
+                id: 'accelerator',
+                question: 'Is this an accelerator or a program?',
+                answer: (
+                    <>
+                        No. There is no application, no cohort and no selection: anyone building a company
+                        in Austin can come to a meetup, and IFN does not take equity. Accelerators do a
+                        different job and the good ones do it well. This is the layer underneath, for the
+                        months when you are working out a visa, a bank account and a first hire and do not
+                        need a program to do it.
+                    </>
+                ),
+            },
         ],
     },
     {

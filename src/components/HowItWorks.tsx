@@ -135,9 +135,9 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
                         <span className="font-extrabold">happens</span>
                     </h2>
                     <p className="mt-6 text-lg leading-relaxed text-muted">
-                        There is no application to pass and no profile to fill in. You sign up,
-                        you come to a meetup, and you decide from there whether the rest of it is
-                        worth paying for.
+                        There is no application to pass, no profile to fill in, and no equity to
+                        give up. You sign up, you come to a meetup, and you decide from there
+                        whether the rest of it is worth paying for.
                     </p>
                 </motion.div>
 

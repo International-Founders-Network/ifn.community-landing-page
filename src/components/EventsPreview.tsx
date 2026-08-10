@@ -211,8 +211,9 @@ export function EventsPreview() {
                         The next meetup in Austin
                     </h2>
                     <p className="mt-5 text-lg leading-relaxed text-muted">
-                        One meetup a month, in person. Anyone building a company here can come:
-                        you do not need to be a member to attend.
+                        One meetup a month, in person. Open to anyone building a company here, and
+                        to the investors, attorneys and operators who work with founders crossing
+                        borders. You do not need to be a member to attend.
                     </p>
                 </div>
 
