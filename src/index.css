@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Tailwind v4 scans the whole project for class names, markdown included, so a
+   class quoted inside prose becomes a real rule in the shipped stylesheet.
+   AUDIT.md records a texture URL that was removed from the hero on privacy
+   grounds, and quoting it there was enough to re-emit
+   `.bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]` into
+   dist. Nothing rendered it, so no visitor ever requested that host, but the
+   documentation of a fix should not reinstate any part of the thing it
+   documents. Docs are prose, not markup: exclude them from the scan. */
+@source not "../**/*.md";
+
 /* ============================================================================
    IFN TOKEN LAYER. Phases 1 and 2 of REDESIGN-PLAN.md ("The Sign").
    DARK MODE IS LIVE as of Phase 2. See the mode blocks below.

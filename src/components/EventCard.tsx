@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { LumaLogo, MeetupLogo } from './Icons';
 import { ButtonLink } from './ButtonLink';
 import { describeMoment } from '../lib/eventTime';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
@@ -114,26 +113,25 @@ function registrationLabel(platform: RegistrationPlatform, isPast: boolean): str
 }
 
 /**
- * Wrapped in an aria-hidden span: the logo components ship `alt="Luma Logo"`, which would
- * otherwise be read out as part of the link's name.
+ * Registration-platform marks were removed on 2026-08-10 along with
+ * `src/components/Icons.tsx`.
+ *
+ * Both were `<img>` tags hotlinking a favicon from `luma.com` and
+ * `secure.meetupstatic.com`, so /events fired two uninvited third-party
+ * requests carrying the reader's IP before they clicked anything. That is the
+ * same class of request already removed from the hero and from /partners, and
+ * the weaker "it goes to the destination the reader is being sent to" argument
+ * does not survive the fact that it fires whether or not they ever click.
+ *
+ * Nothing is lost by removing them. Both were wrapped in `aria-hidden`, so they
+ * were decorative by construction, and the adjacent link already names the
+ * platform in its own text ("Register on Luma"). `ExternalActionLink`'s `icon`
+ * prop is optional and `EventsPreview` already renders these links without one,
+ * so /events now matches the home page rather than diverging from it.
+ *
+ * Do not reintroduce a hotlinked mark. If a platform mark is genuinely wanted,
+ * vendor the artwork into `public/` with permission and pass it as `icon`.
  */
-function platformIcon(platform: RegistrationPlatform) {
-    if (platform === 'luma') {
-        return (
-            <span aria-hidden="true" className="inline-flex">
-                <LumaLogo className="w-4 h-4" />
-            </span>
-        );
-    }
-    if (platform === 'meetup') {
-        return (
-            <span aria-hidden="true" className="inline-flex">
-                <MeetupLogo className="w-4 h-4" />
-            </span>
-        );
-    }
-    return null;
-}
 
 export function EventCard({ event, index }: EventCardProps) {
     const { date, eventZone, shown, inReaderZone, showReaderLine } = describeMoment(event);
@@ -223,7 +221,6 @@ export function EventCard({ event, index }: EventCardProps) {
                                 key={reg.url}
                                 href={reg.url}
                                 variant={isPast || reg.platform !== 'luma' ? 'outline' : 'solid'}
-                                icon={platformIcon(reg.platform)}
                                 label={registrationLabel(reg.platform, isPast)}
                                 context={event.title}
                                 fullWidth
@@ -235,7 +232,6 @@ export function EventCard({ event, index }: EventCardProps) {
                         <ExternalActionLink
                             href={LUMA_CALENDAR_URL}
                             variant="outline"
-                            icon={platformIcon('luma')}
                             label="Find this meetup on Luma"
                             context={event.title}
                             fullWidth
