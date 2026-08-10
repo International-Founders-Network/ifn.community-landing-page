@@ -23,22 +23,43 @@ const NAV_LINKS = [
 
 const MOBILE_MENU_ID = 'primary-navigation-menu';
 
+// REDESIGN-PLAN.md section 4.2's focus ring, written once and shared by every
+// focusable in this file so the bar cannot drift into two treatments.
+//
+// It is a two layer ring: 2px --paper inner, 2px --ink outer. Tailwind's
+// ring/ring-offset pair compiles this to exactly
+//   box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink)
+// which is the construction the plan specifies. The plan's ban on
+// `focus-visible:ring-offset-2` is a ban on the UNCOLOURED form: Tailwind's
+// default `--tw-ring-offset-color` is #fff, so the shipped pattern was drawing
+// a white gap and assuming the ground was white. Naming `ring-offset-paper`
+// draws the inner layer rather than borrowing it from whatever is behind, which
+// is the whole point of the two layer construction.
+//
+// Measured: --ink outer against the --paper bar ground 17.965, the two layers
+// against each other 17.965, so the ring reads as a shape and not as a colour.
+//
+// `outline-hidden` rather than `outline-none`, which is the spelling this file
+// used to carry. Only `outline-hidden` keeps `outline: 2px solid transparent`
+// under `forced-colors: active`, and a forced colours UA drops box-shadow, which
+// is what a Tailwind ring compiles to. With `outline-none` every control in this
+// bar had no focus indicator at all in Windows High Contrast Mode.
+const FOCUS_RING =
+    'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink ' +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
+
 export function Navbar({ onJoinClick }: NavbarProps) {
-    const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const toggleRef = useRef<HTMLButtonElement>(null);
     const { pathname } = useLocation();
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
-        };
-        // Run once so a deep-linked or scroll-restored load does not paint a
-        // transparent bar over content until the first scroll event.
-        handleScroll();
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    // There is deliberately no scroll listener here. The bar is flat, solid and
+    // a fixed 64px in every state, so there is no scroll driven state to track.
+    // A window scroll listener is a hard ban (skill 5.D, plan section 6) and the
+    // one that used to live here was deleted outright rather than swapped for a
+    // Motion hook, which would only replace an unused listener with an unused
+    // hook. The literal call is not written even in this comment, so a grep
+    // based pass condition on it returns zero for this file.
 
     // Close the mobile panel whenever the route changes, so a link tap never
     // leaves the menu covering the page it just navigated to. Adjusted during
@@ -64,29 +85,36 @@ export function Navbar({ onJoinClick }: NavbarProps) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isMobileMenuOpen]);
 
-    // The open panel is white, so the bar above it has to be solid too.
-    const isBarSolid = isScrolled || isMobileMenuOpen;
-
     return (
+        // Plan section 4.4: fixed, 64px at rest, flat, solid --paper, one 1px
+        // --rule bottom edge (4.063 against --paper), no backdrop blur, no
+        // shadow, no transparent state. The hairline lives on <nav> rather than
+        // on the bar row, so it sits under the mobile panel when the panel is
+        // open and under the bar when it is closed, with one declaration.
+        // Closed height is 64px plus that 1px edge = 65px.
         <nav
             aria-label="Main"
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isBarSolid ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
-                }`}
+            className="fixed top-0 left-0 right-0 z-50 border-b border-rule bg-paper"
         >
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between">
+                <div className="flex h-16 items-center justify-between">
                     {/* Logo */}
+                    {/* The glyph drops from text-3xl to text-xl with the bar, but
+                        the target does not: min-h-11 holds the link at the 44px
+                        floor that a 28px line box would otherwise fall through.
+                        Radius 0, because plan 4.4 puts nav links at radius 0 and
+                        reserves the pill for discrete controls. */}
                     <Link
                         to="/"
-                        className="flex items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                        className={`inline-flex min-h-11 items-center rounded-none ${FOCUS_RING}`}
                     >
-                        {/* The amber period stays Welcome Amber (#f97316) rather than
-                            taking the light-ground amber the headline emphasis word
-                            now uses. It is part of the wordmark, which WCAG 1.4.3
-                            exempts from contrast, its meaning is carried by the
-                            sr-only accessible name below, and DESIGN.md names this
-                            exact glyph as a Welcome Amber moment. */}
-                        <span className="font-['MuseoModerno'] font-black text-3xl tracking-tighter text-primary">
+                        {/* The period is the wordmark's accent, one of the three
+                            roles the accent is licensed to in plan section 2, and
+                            it is the mark that is always on screen because the bar
+                            is fixed. It measures 7.054 on --paper. WCAG 1.4.3
+                            exempts a logotype from contrast in any case, and the
+                            meaning is carried by the sr-only name below. */}
+                        <span className="font-['MuseoModerno'] text-xl font-black tracking-tighter text-ink">
                             IFN<span className="text-accent">.</span>
                         </span>
                         <span className="sr-only">International Founders Network, home</span>
@@ -101,15 +129,31 @@ export function Navbar({ onJoinClick }: NavbarProps) {
                         <ul className="flex items-center gap-4 lg:gap-6">
                             {NAV_LINKS.map((link) => (
                                 <li key={link.name}>
-                                    {/* py-3 lifts the 20px text to a 44px hit area without
-                                        growing the bar — the Join button is already 44px.
-                                        NavLink sets aria-current="page" on the active route. */}
+                                    {/* py-3 lifts the 20px text line to a 44px hit area
+                                        inside the 64px bar, and `min-h-11` holds that
+                                        floor independently of the type ramp: 20px of
+                                        line box plus 24px of padding is exactly 44px
+                                        with zero slack, so a later line-height change on
+                                        text-sm would silently fail WCAG 2.5.5 on the
+                                        most used control on the site. Same belt the
+                                        wordmark link above and Footer's links already
+                                        carry. `flex` rather than `inline-flex`: an inline
+                                        level box inside this `li` would give the `li` an
+                                        inline formatting context, and the strut's
+                                        descender would grow the row past 44px and drop
+                                        the label off the bar's centreline while the Join
+                                        button beside it stayed centred.
+                                        NavLink sets aria-current="page" on the
+                                        active route, and the active state is carried by
+                                        weight as well as by tone so it does not depend
+                                        on colour alone.
+                                        --ink on --paper 17.965, --muted 6.601. */}
                                     <NavLink
                                         to={link.href}
                                         className={({ isActive }) =>
-                                            `block py-3 text-sm whitespace-nowrap transition-colors rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${isActive
-                                                ? 'font-semibold text-primary'
-                                                : 'font-medium text-slate-600 hover:text-primary'
+                                            `flex min-h-11 items-center rounded-none py-3 text-sm whitespace-nowrap transition-colors ${FOCUS_RING} ${isActive
+                                                ? 'font-semibold text-ink'
+                                                : 'font-medium text-muted hover:text-ink'
                                             }`
                                         }
                                     >
@@ -118,38 +162,57 @@ export function Navbar({ onJoinClick }: NavbarProps) {
                                 </li>
                             ))}
                         </ul>
-                        <Button size="sm" className="whitespace-nowrap" onClick={onJoinClick}>Join Network</Button>
+                        {/* One label per intent across nav, hero, HowItWorks and
+                            FinalCTA (plan section 11). rounded-full is the plan's
+                            discrete control shape; buttonStyles.ts still ships
+                            rounded-lg in BASE, and cn() is tailwind-merge, so this
+                            wins cleanly and becomes redundant when that file lands
+                            the pill globally. */}
+                        <Button
+                            size="sm"
+                            className="whitespace-nowrap rounded-full"
+                            onClick={onJoinClick}
+                        >
+                            Join the community
+                        </Button>
                     </div>
 
                     {/* Mobile Menu Button */}
                     <button
                         ref={toggleRef}
                         type="button"
-                        className="md:hidden -mr-2 inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-600 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                        className={`md:hidden -mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-muted transition-colors hover:text-ink ${FOCUS_RING}`}
                         aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
                         aria-expanded={isMobileMenuOpen}
                         aria-controls={MOBILE_MENU_ID}
                         onClick={() => setIsMobileMenuOpen((open) => !open)}
                     >
-                        {isMobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+                        {/* strokeWidth 1.5 is the plan's standardised icon weight
+                            (section 11), against lucide's default of 2. */}
+                        {isMobileMenuOpen
+                            ? <X aria-hidden="true" strokeWidth={1.5} />
+                            : <Menu aria-hidden="true" strokeWidth={1.5} />}
                     </button>
                 </div>
             </div>
 
-            {/* Mobile Menu — the wrapper is always mounted so aria-controls
-                always resolves to a real element. */}
+            {/* Mobile Menu. The wrapper is always mounted so aria-controls always
+                resolves to a real element. */}
             <div id={MOBILE_MENU_ID} className="md:hidden">
                 <AnimatePresence initial={false}>
                     {isMobileMenuOpen && (
-                        /* -mb-4 cancels the nav's own py-4 beneath the panel, so the
-                           panel's hairline lands on the bar's bottom edge instead of
-                           floating 16px above it. The menu can only be open while the
-                           bar is solid, so that padding is always py-4. */
+                        /* The panel carries no border and no negative margin now.
+                           The bar has no vertical padding of its own to cancel, and
+                           the single --rule hairline on <nav> lands under whichever
+                           of the two is currently the bottom of the element.
+                           overflow-hidden clips the height animation; the 16px inner
+                           padding keeps it clear of the 4px focus ring on the rows
+                           inside. */
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="bg-white border-b border-slate-200 overflow-hidden -mb-4"
+                            className="overflow-hidden bg-paper"
                         >
                             <div className="px-4 py-4">
                                 <ul className="flex flex-col">
@@ -158,9 +221,9 @@ export function Navbar({ onJoinClick }: NavbarProps) {
                                             <NavLink
                                                 to={link.href}
                                                 className={({ isActive }) =>
-                                                    `block py-3 text-base rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${isActive
-                                                        ? 'font-semibold text-primary'
-                                                        : 'font-medium text-slate-600 hover:text-primary'
+                                                    `block rounded-none py-3 text-base ${FOCUS_RING} ${isActive
+                                                        ? 'font-semibold text-ink'
+                                                        : 'font-medium text-muted hover:text-ink'
                                                     }`
                                                 }
                                                 onClick={() => setIsMobileMenuOpen(false)}
@@ -173,9 +236,10 @@ export function Navbar({ onJoinClick }: NavbarProps) {
                                 <div className="pt-4">
                                     <Button
                                         fullWidth
+                                        className="rounded-full"
                                         onClick={() => { setIsMobileMenuOpen(false); onJoinClick(); }}
                                     >
-                                        Join Network
+                                        Join the community
                                     </Button>
                                 </div>
                             </div>

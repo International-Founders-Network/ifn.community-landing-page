@@ -10,7 +10,7 @@ import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 /**
  * The panel that replaced the decorative orbital system. Every line is a fact
- * IFN can point at — see PRODUCT.md, "Evidence on Hand" — which is worth more to
+ * IFN can point at (see PRODUCT.md, "Evidence on Hand"), which is worth more to
  * this audience than an animation, and it now renders at every screen width
  * instead of being hidden below `lg`.
  */
@@ -62,14 +62,14 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                             Come to one meetup in <Emphasis onDark>Austin</Emphasis>.
                         </h2>
                         <p className="text-lg text-slate-300 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                            Once a month, founders who moved here to build meet in the same room — people
+                            Once a month, founders who moved here to build meet in the same room: people
                             working through the same visa questions, the same bank paperwork, the same
                             first hire in another country. Come once and decide from there.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                             <Button size="lg" variant="primary" onDark onClick={onJoinClick}>
-                                Join International Founders Network
+                                Join the community
                                 <ArrowRight className="ml-2 w-5 h-5" aria-hidden="true" />
                             </Button>
 
@@ -80,8 +80,8 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         </div>
 
                         <p className="mt-6 text-sm text-slate-400 max-w-xl mx-auto lg:mx-0">
-                            The meetups cost nothing and you do not need an account to come. Membership —
-                            the private member channel, the resource library and monthly office hours — is
+                            The meetups cost nothing and you do not need an account to come. Membership
+                            (the private member channel, the resource library and monthly office hours) is
                             the paid layer: {MEMBERSHIP_PRICE_STANDARD} a year, or{' '}
                             {MEMBERSHIP_PRICE_ATTENDEE} if you already come to the meetups.
                         </p>

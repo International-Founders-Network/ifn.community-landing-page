@@ -18,7 +18,7 @@ const WORDS = ['International', 'Global', 'Immigrant'] as const;
 const WORD_INTERVAL_MS = 3000;
 
 /* A quiet dot grid, drawn in CSS. This replaces a texture that used to be fetched
-   from transparenttextures.com on the critical path — an external request that let
+   from transparenttextures.com on the critical path, an external request that let
    a third party see every visitor. */
 const DOT_GRID = {
     backgroundImage: 'radial-gradient(rgb(15 23 42 / 0.06) 1px, transparent 0)',
@@ -31,8 +31,8 @@ export function Hero({ onJoinClick }: HeroProps) {
 
     // WCAG 2.2.2: nothing may auto-update for a reader who has asked for still
     // interfaces. Framer Motion's transitions are handled globally by
-    // <MotionConfig reducedMotion="user">, but this timer is ours to stop — with
-    // it stopped the headline simply settles on WORDS[0].
+    // <MotionConfig reducedMotion="user">, but this timer is ours to stop, and
+    // with it stopped the headline simply settles on WORDS[0].
     useEffect(() => {
         if (prefersReducedMotion) return;
 
@@ -68,8 +68,9 @@ export function Hero({ onJoinClick }: HeroProps) {
                 <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
                     {/* Content */}
                     {/* No opacity in this entrance. This wrapper holds the <h1>, both
-                        CTAs and the lead copy — the largest contentful paint of the whole
-                        site. Gating opacity here leaves all of it at `opacity: 0` with no
+                        CTAs and the lead copy, which together are the largest contentful
+                        paint of the whole site. Gating opacity here leaves all of it at
+                        `opacity: 0` with no
                         animation queued whenever the frame loop does not run (a background
                         tab, a paused rAF, a Motion failure). Animating x alone degrades to
                         "sits 30px left", which is invisible to the user rather than fatal. */}
@@ -97,7 +98,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                             {/* The word slot is an overlapping grid cell. Every candidate
                                 word is rendered invisibly in the same cell, so the slot is
                                 exactly as wide as the longest one at the current font size
-                                — it never jumps as the word changes, and it never forces a
+                                so it never jumps as the word changes, and it never forces a
                                 line wider than the viewport the way the old min-w-[240px]
                                 floor did. Alignment is inherited from the headline, so the
                                 word centres on mobile and sits left from lg up. */}
@@ -114,7 +115,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                                 {/* This is the one emphasis word in the system that cannot use
                                     <Emphasis>: it animates in and out, so it has to be a
                                     motion.span. It carries <Emphasis>'s light-ground colour by
-                                    hand — the ground here is bg-slate-50, where Welcome Amber
+                                    hand, because the ground here is bg-slate-50, where Welcome Amber
                                     #f97316 measures 2.68:1 against a 3:1 floor. Its class list
                                     must stay identical to the invisible twins above apart from
                                     colour, or the slot stops sizing to the longest word. */}
@@ -146,7 +147,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                                 className="w-full sm:w-auto group shadow-xl shadow-primary/20"
                                 onClick={onJoinClick}
                             >
-                                Join the Community
+                                Join the community
                                 <ArrowRight
                                     aria-hidden="true"
                                     className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform"

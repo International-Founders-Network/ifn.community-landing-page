@@ -58,49 +58,125 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
     },
 ];
 
+/**
+ * The two layer focus ring from REDESIGN-PLAN.md section 4.2: 2px `--paper`
+ * inner, 2px `--ink` outer, identical in both modes, and NOT reversed for dark
+ * (the two tokens already swap, so reversing on top of the swap inverts it
+ * twice and collapses the ring to a single line at 1.000 on its own ground).
+ *
+ * Written as a box shadow pair rather than as `ring-2` + `ring-offset-2`
+ * because the plan retires the `ring-offset` construction: a ring offset
+ * assumes a known solid ground, and this ring must survive any ground. The two
+ * layers contrast with each other at 17.965, so the indicator reads as a shape
+ * rather than as a colour, and the better of the two layers never drops below
+ * 4.264 across all 256 greys.
+ *
+ * ARBITRARY PROPERTY, NOT THE `shadow-[...]` UTILITY, and that is load bearing.
+ * Compiled with this project's own Tailwind, the utility form emits
+ * `--tw-shadow: 0 0 0 2px var(--tw-shadow-color, var(--paper)), 0 0 0 4px
+ * var(--tw-shadow-color, var(--ink))`. Any `shadow-<colour>` utility reaching
+ * the same element sets `--tw-shadow-color`, which then wins the fallback in
+ * BOTH layers and repaints the entire ring in one colour. `buttonStyles.ts`
+ * documents the identical trap and takes the identical escape. The arbitrary
+ * property form emits both layers verbatim and cannot be reached by
+ * `--tw-shadow-color`. Verified in compiled CSS, not inferred.
+ *
+ * `outline-hidden` rather than `outline-none`, for the reason `buttonStyles.ts`
+ * gives: only `outline-hidden` keeps `outline: 2px solid transparent` under
+ * `forced-colors: active`. A forced colours UA drops `box-shadow` entirely, so
+ * `outline-none` would leave every footer link with no focus indicator at all
+ * in Windows High Contrast Mode.
+ *
+ * The geometry is identical to `ring-2 ring-ink ring-offset-2
+ * ring-offset-paper`, which is how `Navbar` and `FAQ` still spell it. Those two
+ * pin both ring colours through named tokens, so neither is reachable by
+ * `--tw-shadow-color` and neither carries the defect fixed here. What must not
+ * happen is two different ring geometries.
+ */
+const FOCUS_RING =
+    'focus-visible:outline-hidden ' +
+    'focus-visible:[box-shadow:0_0_0_2px_var(--paper),0_0_0_4px_var(--ink)]';
+
+/**
+ * Footer links are navigation, not secondary metadata, so they carry `--ink`
+ * at 17.965 on `--paper` and the group labels above them carry `--muted` at
+ * 6.601. Hover is an underline rather than a colour change: the accent is
+ * licensed to three roles only (the mark, the primary action fill, the
+ * wordmark period) and a link hover is none of them.
+ *
+ * Radius 0. Plan section 4.4 reserves the full pill for discrete controls and
+ * keeps nav links square, carrying their pressability through the focus ring.
+ * `min-h-11` holds the 44px touch floor.
+ */
 const LINK_CLASSES =
-    'inline-flex min-h-11 items-center rounded-lg text-sm text-slate-600 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50';
+    'inline-flex min-h-11 items-center rounded-none text-sm text-ink ' +
+    'decoration-1 underline-offset-4 hover:underline ' +
+    FOCUS_RING;
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-slate-50 border-t border-slate-200 pt-16 pb-8">
+        /*
+         * Ground is `--paper`, separated from the page above by a single full
+         * opacity 1px `--rule` hairline at 4.063. Not a partial opacity border:
+         * plan section 4.2 measures a rule at 75% coverage at 2.665 in light and
+         * 2.764 in dark, both under the 3:1 non text floor.
+         *
+         * PHASE 3 HANDOFF: on `/` this hairline meets FinalCTA. Once FinalCTA
+         * becomes the section 9 accent field, `--rule` against `--accent-plate`
+         * measures 1.736 light and 1.573 dark and the plan bans any hairline
+         * terminating on that field. Whoever builds the plate owns this edge.
+         * On the other sixteen routes the hairline is the mechanism, because
+         * ground tone alone between the two surfaces is only 1.103.
+         */
+        <footer className="border-t border-rule bg-paper">
             <Container>
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
-                    {/* Brand & positioning */}
-                    <div className="lg:col-span-5 space-y-4">
+                <div className="grid grid-cols-1 gap-12 pt-20 pb-16 lg:grid-cols-12 lg:gap-16 lg:pt-24">
+                    {/* Brand and positioning */}
+                    <div className="space-y-5 lg:col-span-5">
                         <Link
                             to="/"
-                            className="inline-flex items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50"
+                            className={`inline-flex items-center rounded-none ${FOCUS_RING}`}
                         >
-                            <span className="font-['MuseoModerno'] font-black text-3xl tracking-tighter text-primary">
+                            <span className="font-['MuseoModerno'] text-3xl font-black tracking-tighter text-ink">
                                 IFN<span className="text-accent">.</span>
                             </span>
                             <span className="sr-only">International Founders Network home page</span>
                         </Link>
-                        <p className="text-slate-600 max-w-sm">
+                        <p className="max-w-sm leading-relaxed text-ink">
                             A community for founders who moved to Austin, Texas from another
                             country. We meet in person every month to work through the practical
                             parts: visas, U.S. banking, unfamiliar funding rules, and building a
                             network from zero.
                         </p>
-                        <p className="text-sm text-slate-500 max-w-sm">
+                        <p className="max-w-sm text-sm text-muted">
                             Six-plus months of monthly meetups, hosted at Station Austin.
                         </p>
                     </div>
 
-                    {/* Links Grid */}
-                    <nav aria-label="Footer" className="lg:col-span-7 grid grid-cols-2 md:grid-cols-4 gap-8">
+                    {/*
+                     * Links grid. Each group is opened by a 1px `--rule` hairline
+                     * rather than boxed in a card, so grouping is carried by rule
+                     * and space, which is the only device that works on both
+                     * grounds in both modes.
+                     */}
+                    <nav
+                        aria-label="Footer"
+                        className="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4 lg:col-span-7"
+                    >
                         {FOOTER_LINKS.map((group) => (
-                            <div key={group.id}>
+                            <div key={group.id} className="border-t border-rule pt-4">
                                 <h2
                                     id={`footer-${group.id}-heading`}
-                                    className="font-bold text-slate-900 mb-2"
+                                    className="text-xs font-semibold uppercase tracking-[0.08em] text-muted"
                                 >
                                     {group.heading}
                                 </h2>
-                                <ul aria-labelledby={`footer-${group.id}-heading`} className="space-y-0.5">
+                                <ul
+                                    aria-labelledby={`footer-${group.id}-heading`}
+                                    className="mt-1"
+                                >
                                     {group.links.map((link) => (
                                         <li key={link.name}>
                                             {link.external ? (
@@ -126,24 +202,41 @@ export function Footer() {
                     </nav>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-slate-500 text-sm">
-                        © {currentYear} IFN Global LLC. All rights reserved.
-                    </p>
+                {/* Bottom bar */}
+                <div className="flex flex-col items-center gap-6 border-t border-rule py-8 md:flex-row md:justify-between">
+                    <div className="flex flex-col items-center gap-2 text-sm text-muted sm:flex-row sm:gap-4">
+                        <p>© {currentYear} IFN Global LLC. All rights reserved.</p>
 
-                    <p className="flex items-center gap-1.5 text-sm text-slate-500">
-                        <span>Built with</span>
-                        <Heart size={14} aria-hidden="true" className="text-accent fill-accent" />
-                        <span className="sr-only">love</span>
-                        <span>from Austin</span>
-                    </p>
+                        {/*
+                         * The heart is deliberately NOT accent coloured any more.
+                         * The accent is licensed to the mark, the primary action
+                         * fill and the wordmark period, and the mark may only
+                         * attach to a phrase a reader can check against a named
+                         * artifact. "Built with love from Austin" is not one, so
+                         * the glyph inherits `--muted` at 6.601 on `--paper`.
+                         */}
+                        <p className="flex items-center gap-1.5 sm:border-l sm:border-rule sm:pl-4">
+                            <span>Built with</span>
+                            <Heart
+                                size={14}
+                                strokeWidth={1.5}
+                                aria-hidden="true"
+                                className="fill-current"
+                            />
+                            <span className="sr-only">love</span>
+                            <span>from Austin</span>
+                        </p>
+                    </div>
 
                     {/*
                      * Channel row. Every entry, its URL and its accessible name live in
-                     * src/data/socialLinks.ts — entries flagged `verified: false` there are
+                     * src/data/socialLinks.ts. Entries flagged `verified: false` there are
                      * unconfirmed guesses at IFN's handle and should be confirmed or removed
-                     * from that file before launch rather than edited here.
+                     * from that file before launch rather than filtered out here: this
+                     * component renders the list as given, on purpose.
+                     *
+                     * These are discrete controls, so they take the full pill under plan
+                     * section 4.4 while the text links above stay square.
                      */}
                     <ul className="flex items-center gap-1">
                         {SOCIAL_LINKS.map((social) => {
@@ -162,9 +255,13 @@ export function Footer() {
                                         {...(social.external
                                             ? { target: '_blank', rel: 'noopener noreferrer' }
                                             : {})}
-                                        className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50"
+                                        className={
+                                            'inline-flex h-11 w-11 items-center justify-center rounded-full ' +
+                                            'text-muted transition-colors hover:text-ink ' +
+                                            FOCUS_RING
+                                        }
                                     >
-                                        <Icon size={20} aria-hidden="true" />
+                                        <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
                                     </a>
                                 </li>
                             );

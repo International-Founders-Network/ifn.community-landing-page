@@ -5,22 +5,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Fonts is the only font source: src/fonts.css was removed and
-       public/fonts/ is empty. Preconnect to both hosts BEFORE the stylesheet
-       request so the TLS handshake overlaps the CSS fetch.
-       Weights are limited to what the site actually renders:
-       Inter 400/500/600/700 (DESIGN.md's pinned ramp) and MuseoModerno 900,
-       which is used only by the "IFN." wordmark in the navbar and footer. -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=MuseoModerno:wght@900&display=swap"
-    rel="stylesheet">
+  <!-- Fonts are self hosted from public/fonts/ and declared with @font-face in
+       src/index.css. The render blocking Google Fonts stylesheet that used to
+       sit here, and its two preconnects, are deleted: a self hosted face needs
+       no third party origin, costs no extra connection, and sends no visitor IP
+       to a third party. Inter is retired with it; Archivo is now the one family
+       for everything and MuseoModerno 900 is still the "IFN." wordmark only.
+
+       Only Archivo's latin subset is preloaded. latin-ext is bytes most
+       visitors never use, and MuseoModerno is small enough that a swap on the
+       wordmark is invisible. `crossorigin` is required even though the file is
+       same origin: fonts are fetched in anonymous CORS mode, so without it the
+       preload does not match the @font-face request and Archivo is fetched
+       twice. `type` lets a browser that cannot decode woff2 skip the download
+       rather than waste it. -->
+  <link rel="preload" href="/fonts/archivo-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
 
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <meta name="theme-color" content="#0f172a" />
+  <!-- Matches the live page ground, --paper. The previous value was the
+       retired brand navy #0f172a, which tinted mobile browser chrome a colour
+       that no longer appears anywhere on the site.
 
-  <title>International Founders Network — Austin, Texas</title>
+       Phase 2 companion, to land in the same commit that activates the dark
+       tokens in src/index.css and not before:
+       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131311" />
+       Until then this single light value is correct, because the site is
+       light only on every route. -->
+  <meta name="theme-color" content="#FBFBFA" />
+
+  <title>International Founders Network | Austin, Texas</title>
   <meta name="description"
     content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
 
@@ -30,11 +43,11 @@
        og:url below has the same single-value limitation, but a stale og:url
        only affects the URL shown in a share card. -->
 
-  <!-- Open Graph — shared links should carry the Austin reality, not a bare URL. -->
+  <!-- Open Graph. Shared links should carry the Austin reality, not a bare URL. -->
   <meta property="og:site_name" content="International Founders Network" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ifn.community/" />
-  <meta property="og:title" content="International Founders Network — Austin, Texas" />
+  <meta property="og:title" content="International Founders Network | Austin, Texas" />
   <meta property="og:description"
     content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
   <meta property="og:image" content="https://ifn.community/logo.png" />
@@ -45,7 +58,7 @@
 
   <!-- Twitter / X card. No @handle is claimed here because none is verified. -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="International Founders Network — Austin, Texas" />
+  <meta name="twitter:title" content="International Founders Network | Austin, Texas" />
   <meta name="twitter:description"
     content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
   <meta name="twitter:image" content="https://ifn.community/logo.png" />

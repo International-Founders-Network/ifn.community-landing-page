@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, ArrowUpRight, AlertCircle } from 'lucide-react';
 import { Button } from './Button';
 import { ButtonLink } from './ButtonLink';
-import { Emphasis } from './Emphasis';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 interface JoinModalProps {
@@ -27,9 +26,55 @@ const EMPTY_FORM = {
     stage: STAGES[0] as string,
 };
 
+/**
+ * The focus ring, per REDESIGN-PLAN.md section 4.2.
+ *
+ * Two layers, 2px `--paper` inner plus 2px `--ink` outer, drawn as one
+ * box-shadow with no `ring-offset`. Three properties of this construction are
+ * load bearing and none of them is stylistic:
+ *
+ *  - It is DRAWN rather than inherited. `ring-offset` shows whatever sits
+ *    behind the control, which is an assumption about the ground. Here the
+ *    inner layer is painted, so the ring survives any ground. Swept across all
+ *    256 greys the better of the two layers never drops below 4.264.
+ *  - The two layers contrast with each other at 17.965, so the indicator reads
+ *    as a SHAPE rather than as a colour. Inside this dialog the inner `--paper`
+ *    layer against a `--band` field fill is only 1.103; the outer `--ink` layer
+ *    against the modal's `--paper` ground is 17.965 and the layer boundary is
+ *    17.965, which is what actually carries it.
+ *  - It is full opacity. The outgoing `ring-primary/30` expressed the indicator
+ *    with an alpha, and section 4.2's partial coverage row measures that class
+ *    of indicator below the 3:1 floor. No focus indicator on this page is
+ *    allowed to be an alpha or an `opacity`.
+ *
+ * There is NO dark mode reversal, deliberately. `--paper` is always the page
+ * colour and `--ink` is always the type colour, so the construction inverts
+ * itself when the tokens swap. Writing a reversal on top of that inverts it
+ * twice and collapses the ring to a single 2px line at 1.000.
+ *
+ * The class strings below are spelled out in full at every call site rather
+ * than composed from a shared constant, because Tailwind scans source text for
+ * whole candidates: `focus-visible:${RING}` would emit two candidates that
+ * neither of them generates the rule.
+ */
+
+/**
+ * Fields, per plan sections 4.1, 4.2 and 4.4.
+ *
+ *   fill      --band    against the modal's --paper ground this is 1.103, so
+ *                       the fill is NOT what makes the field perceivable
+ *   border    --edge    4.960 against the modal ground, 4.495 against its own
+ *                       fill. This is the mechanism, which is why it is a
+ *                       mandatory 1px full opacity stroke and not decoration
+ *   value     --ink     16.281 on the fill
+ *   holder    --muted   5.982 on the fill
+ *   radius    pill      a discrete interactive control, so shape tells a
+ *                       reader it is pressable before they read the label
+ */
 const FIELD_CLASSES =
-    'w-full h-11 px-4 rounded-lg border border-slate-300 bg-white text-slate-900 outline-none ' +
-    'transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30';
+    'w-full h-11 px-4 rounded-full border border-edge bg-band text-ink ' +
+    'placeholder:text-muted transition-colors ' +
+    'focus:outline-hidden focus:[box-shadow:0_0_0_2px_var(--paper),0_0_0_4px_var(--ink)]';
 
 /**
  * People type their LinkedIn in every shape: a full URL, `linkedin.com/in/x`,
@@ -46,7 +91,7 @@ function normalizeLinkedIn(raw: string): string {
 }
 
 const NETWORK_ERROR =
-    'We could not send your details just now. Everything you typed is still here — please check your connection and try again.';
+    'We could not send your details just now. Everything you typed is still here. Please check your connection and try again.';
 
 const FOCUSABLE_SELECTOR =
     'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -197,14 +242,27 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
         <AnimatePresence>
             {isOpen && (
                 <>
+                    {/* --scrim, the only alpha composite left on the page and
+                        deliberately theme invariant. The outgoing
+                        `backdrop-blur-sm` is gone under the flat material rule:
+                        no blur, no backdrop-filter, no shadow, no glass. */}
                     <motion.div
                         aria-hidden="true"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+                        className="fixed inset-0 bg-scrim z-50"
                     />
+                    {/* The modal boundary, measured rather than assumed. In light
+                        mode the scrim over the page ground composites to #70706E
+                        and this --paper surface reads 4.793 against it, so tone
+                        carries the edge. In dark mode that composite returns to
+                        #131311 and the surface reads 1.000 against its own
+                        backdrop, so the 1px --rule border is the mechanism there
+                        (4.005). Both modes clear 3:1 by different means, which is
+                        why the border is mandatory rather than stylistic. Radius
+                        0: a surface is not a control. */}
                     <motion.div
                         ref={panelRef}
                         role="dialog"
@@ -214,7 +272,7 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg max-h-[90dvh] overflow-y-auto bg-white rounded-2xl shadow-xl z-50"
+                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg max-h-[90dvh] overflow-y-auto border border-rule bg-paper z-50"
                     >
                         {/* Present at all times; only its text changes, which is what
                             makes a polite live region reliable. */}
@@ -222,47 +280,48 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                             {isSubmitting ? 'Sending your details.' : ''}
                         </p>
 
-                        <div className="p-6">
-                            <div className="flex justify-between items-start gap-4 mb-5">
-                                <h2 id="join-modal-title" className="text-xl font-bold text-slate-900 pt-2">
-                                    {/* The panel is white, so the Italic Welcome word takes the
-                                        light-ground amber. Passing `onDark` here would put #f97316
-                                        back on white at 2.80:1. */}
+                        <div className="p-6 sm:p-8">
+                            <div className="flex justify-between items-start gap-4 mb-6">
+                                {/* Emphasis is a WEIGHT STEP inside the line, 500
+                                    against 800, which is how the IFN slide sets
+                                    `International` light against `Founders` black.
+                                    Not italic and not colour: the accent is
+                                    licensed to the mark, the primary action fill
+                                    and the wordmark period, and "IFN" here marks
+                                    nothing a reader can check. The dialog title
+                                    strings are unchanged, and the space inside
+                                    "Join IFN" is kept literal because
+                                    aria-labelledby computes the accessible name
+                                    from text content. */}
+                                <h2
+                                    id="join-modal-title"
+                                    className="text-xl font-medium tracking-tight text-ink pt-2"
+                                >
                                     {step === 'form' ? (
-                                        <>Join <Emphasis>IFN</Emphasis></>
+                                        <>Join <span className="font-extrabold">IFN</span></>
                                     ) : (
-                                        <>You&rsquo;re on the <Emphasis>list</Emphasis></>
+                                        <>You&rsquo;re on the <span className="font-extrabold">list</span></>
                                     )}
                                 </h2>
                                 <button
                                     type="button"
                                     onClick={onClose}
                                     aria-label="Close"
-                                    className="shrink-0 w-11 h-11 -mr-2 -mt-1 inline-flex items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                    className="shrink-0 w-11 h-11 -mr-2 -mt-1 inline-flex items-center justify-center rounded-full text-muted transition-colors hover:bg-band hover:text-ink focus-visible:outline-hidden focus-visible:[box-shadow:0_0_0_2px_var(--paper),0_0_0_4px_var(--ink)]"
                                 >
-                                    <X size={20} aria-hidden="true" />
+                                    <X size={20} strokeWidth={1.5} aria-hidden="true" />
                                 </button>
                             </div>
 
                             {step === 'form' ? (
-                                <form onSubmit={handleSubmit} className="space-y-4">
-                                    <p className="text-slate-600 leading-relaxed">
-                                        Monthly, in person, in Austin, Texas &mdash; and running for more than six
+                                <form onSubmit={handleSubmit} className="space-y-5">
+                                    <p className="text-ink leading-relaxed">
+                                        Monthly, in person, in Austin, Texas, and running for more than six
                                         months. Tell us who you are, and come to the next one.
                                     </p>
 
-                                    {errorMessage && (
-                                        <div
-                                            role="alert"
-                                            className="flex gap-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800"
-                                        >
-                                            <AlertCircle size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
-                                            <span>{errorMessage}</span>
-                                        </div>
-                                    )}
-
-                                    <div>
-                                        <label htmlFor="join-name" className="block text-sm font-medium text-slate-700 mb-1">
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="join-name" className="text-sm font-medium text-ink">
                                             Full name
                                         </label>
                                         <input
@@ -280,8 +339,8 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                                         />
                                     </div>
 
-                                    <div>
-                                        <label htmlFor="join-email" className="block text-sm font-medium text-slate-700 mb-1">
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="join-email" className="text-sm font-medium text-ink">
                                             Email
                                         </label>
                                         <input
@@ -298,9 +357,9 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                                         />
                                     </div>
 
-                                    <div>
-                                        <label htmlFor="join-linkedin" className="block text-sm font-medium text-slate-700 mb-1">
-                                            LinkedIn <span className="font-normal text-slate-500">(optional)</span>
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="join-linkedin" className="text-sm font-medium text-ink">
+                                            LinkedIn <span className="font-normal text-muted">(optional)</span>
                                         </label>
                                         <input
                                             id="join-linkedin"
@@ -317,15 +376,22 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                                             className={FIELD_CLASSES}
                                             placeholder="linkedin.com/in/jane-founder"
                                         />
-                                        <p id="join-linkedin-help" className="mt-1 text-xs text-slate-500">
-                                            The full web address or just your profile name &mdash; both work.
+                                        <p id="join-linkedin-help" className="text-sm text-muted">
+                                            The full web address or just your profile name. Both work.
                                         </p>
                                     </div>
 
-                                    <div>
-                                        <label htmlFor="join-stage" className="block text-sm font-medium text-slate-700 mb-1">
+                                    <div className="flex flex-col gap-2">
+                                        <label htmlFor="join-stage" className="text-sm font-medium text-ink">
                                             Stage of your company
                                         </label>
+                                        {/* A native <select> on purpose. It will render its
+                                            own popup with the system colour scheme, which is
+                                            correct today because light is the only live mode.
+                                            Phase 2 declares `color-scheme: light dark` on
+                                            :root in the same commit that activates the dark
+                                            tokens; that is the fix, and it does not belong
+                                            in a component. */}
                                         <select
                                             id="join-stage"
                                             name="stage"
@@ -342,37 +408,66 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                                         </select>
                                     </div>
 
+                                    {/* Below every field and immediately above the
+                                        control focus is returned to, so the reason and
+                                        the retry are the same glance. No accent: the
+                                        error state carries --ink type at 17.965 on the
+                                        modal's --paper ground plus a 3px --ink rule,
+                                        because one colour licensed to checkable claims
+                                        cannot also mean "something went wrong". */}
+                                    {errorMessage && (
+                                        <div
+                                            role="alert"
+                                            className="flex gap-3 border-l-[3px] border-l-ink pl-4 py-1 text-sm text-ink"
+                                        >
+                                            <AlertCircle
+                                                size={18}
+                                                strokeWidth={1.5}
+                                                className="shrink-0 mt-0.5"
+                                                aria-hidden="true"
+                                            />
+                                            <span>{errorMessage}</span>
+                                        </div>
+                                    )}
+
                                     <div className="pt-2">
                                         <Button ref={submitRef} type="submit" fullWidth disabled={isSubmitting}>
                                             {isSubmitting ? 'Sending…' : 'Send my details'}
                                         </Button>
-                                        <p className="text-xs text-slate-500 text-center mt-3">
+                                        <p className="text-sm text-muted mt-3">
                                             Your details go to the IFN organizers in Austin.
                                         </p>
                                     </div>
                                 </form>
                             ) : (
-                                <div ref={successRef} tabIndex={-1} className="text-center py-6 focus:outline-none">
-                                    <div className="w-16 h-16 bg-green-100 text-green-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <Check size={32} aria-hidden="true" />
-                                    </div>
-                                    <p className="text-slate-600 leading-relaxed mb-2">
+                                <div ref={successRef} tabIndex={-1} className="py-2 focus:outline-none">
+                                    {/* The outgoing green disc is gone. Green is a second
+                                        brand hue, and the palette licenses exactly one
+                                        colour. The glyph stays because it is a glance
+                                        level confirmation, and it is --ink at 17.965. */}
+                                    <Check
+                                        size={32}
+                                        strokeWidth={1.5}
+                                        className="text-ink mb-4"
+                                        aria-hidden="true"
+                                    />
+                                    <p className="text-ink leading-relaxed mb-2">
                                         Your details are saved. This form does not send email, so nothing will arrive in
-                                        your inbox &mdash; there is nothing to wait for.
+                                        your inbox. There is nothing to wait for.
                                     </p>
-                                    <p className="text-slate-600 leading-relaxed mb-6">
+                                    <p className="text-ink leading-relaxed mb-6">
                                         The next step is the meetup itself. Every date and sign-up is on Luma.
                                     </p>
 
-                                    {/* Navigation, so it stays a real link — ButtonLink adds
+                                    {/* Navigation, so it stays a real link. ButtonLink adds
                                         target/rel and the "(opens in a new tab)" hint itself,
                                         which is why none of that is written here. */}
                                     <ButtonLink href={LUMA_CALENDAR_URL} fullWidth className="gap-2">
                                         See the next Austin meetup
-                                        <ArrowUpRight size={18} aria-hidden="true" />
+                                        <ArrowUpRight size={18} strokeWidth={1.5} aria-hidden="true" />
                                     </ButtonLink>
 
-                                    <div className="mt-2">
+                                    <div className="mt-3">
                                         <Button fullWidth onClick={onClose} variant="ghost">
                                             Close
                                         </Button>
