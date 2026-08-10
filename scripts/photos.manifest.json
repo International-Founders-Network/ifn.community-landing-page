@@ -1,0 +1,206 @@
+{
+  "$about": [
+    "Declarative input for scripts/build-photos.mjs. See REDESIGN-PLAN.md section 7.",
+    "Sources live in assets/photos-source/ and are never published: Vite copies public/ verbatim,",
+    "and the 15 originals are 41MB. Only the derivatives named here reach dist/.",
+    "Crop boxes are in SOURCE pixels. Every source is 4000x2252, EXIF orientation 1.",
+    "Consent: participants signed off on appearing in IFN marketing material (founder ruling 2026-08-09).",
+    "Venue: Capital Factory was rebranded Station Austin. Its signage in these frames is dated, not dishonest."
+  ],
+  "sourceRoot": "assets/photos-source",
+  "outDir": "public/photos",
+  "publicPath": "/photos",
+  "generatedManifest": "src/data/photos.generated.ts",
+  "hardCapLongEdge": 1920,
+
+  "budget": {
+    "$note": "REDESIGN-PLAN.md section 7. Measured at build, never estimated.",
+    "heroAt1440AvifBytes": 112640,
+    "totalAt1440ViewportBytes": 512000
+  },
+
+  "encode": {
+    "avif": { "quality": 50, "effort": 9, "chromaSubsampling": "4:2:0" },
+    "webp": { "quality": 76, "effort": 6, "smartSubsample": true },
+    "jpeg": { "quality": 78, "progressive": true, "mozjpeg": true }
+  },
+
+  "grades": {
+    "$note": [
+      "Baked in at build so the grade costs nothing at runtime.",
+      "whiteBalance is a per channel multiplier applied with the levels move, not a separate pass.",
+      "blackPoint and whitePoint are fractions of full range: out = wb * (white - black) * in + black * 255."
+    ],
+    "april-2026": {
+      "whiteBalance": [1.0, 1.0, 1.0],
+      "saturation": 0.55,
+      "blackPoint": 0.04,
+      "whitePoint": 0.92,
+      "note": "Daylight through a full height glass wall. Measured on the hero crop: mean RGB 93.6 / 94.8 / 91.7, so red sits 1.3 percent over green and blue 3.4 percent over green. That is neutral inside any correction worth applying, so none is applied."
+    },
+    "february-2026": {
+      "whiteBalance": [1.024, 1.0, 0.914],
+      "saturation": 0.55,
+      "blackPoint": 0.04,
+      "whitePoint": 0.92,
+      "note": "REDESIGN-PLAN.md section 7 calls this night a green cast. The files do not agree and this is the measurement that corrects it: on the reserve hero crop mean RGB is 61.4 / 64.3 / 77.6, so blue runs 21 percent over green and red 4.5 percent under it. The cast is blue, not green. A full grey world correction would be [1.0475, 1.0, 0.8286] and it erases the night by neutralising a window that really is that colour, so this is half of it, which reads as a cool room rather than a lavender one. Verified by rendering the reserve hero, not by argument. No February frame ships on day one."
+    },
+    "july-2026": {
+      "whiteBalance": [1.0, 1.0, 1.0],
+      "saturation": 0.55,
+      "blackPoint": 0.04,
+      "whitePoint": 0.92,
+      "note": "Evening interior under white LED strips. Measured on the reserve middle stop crop: mean RGB 126.1 / 118.1 / 114.0, so red runs 6.8 percent over green. That warmth is the room and correcting it out makes skin tones grey, so it is left alone. Checked by rendering. No July frame ships on day one."
+    }
+  },
+
+  "slots": [
+    {
+      "name": "hero-band",
+      "status": "ship",
+      "source": "meetups/20260423_184515.jpg",
+      "grade": "april-2026",
+      "aspectRatio": "2.4:1",
+      "crop": { "left": 0, "top": 585, "width": 4000, "height": 1667 },
+      "cropNote": [
+        "Full source width, so the vertical offset is the only free parameter and 585 is its maximum.",
+        "Bottom anchored: it drops the ductwork ceiling and keeps every seated person and the foreground chairs.",
+        "Checked against the plan's one design preference on this frame: after the grade the former venue gear",
+        "reads mid grey in the upper left and the brightest objects in the band are the two IFN screens and the",
+        "glass wall, so the dated logo is not the highest contrast object. Verified by rendering, not reasoned."
+      ],
+      "outputs": [
+        { "width": 720, "height": 300 },
+        { "width": 1080, "height": 450 },
+        { "width": 1440, "height": 600 },
+        { "width": 1920, "height": 800 }
+      ],
+      "fallbackWidth": 1080,
+      "sizes": "100vw",
+      "alt": "A dozen founders seated in a circle in conversation, photographed from behind the back row, with an IFN meetup slide on two screens and downtown Austin through a full height glass wall.",
+      "loading": "eager",
+      "fetchPriority": "auto"
+    },
+    {
+      "name": "how-it-works-middle",
+      "status": "ship",
+      "source": "meetups/20260423_184540.jpg",
+      "grade": "april-2026",
+      "aspectRatio": "1093:874",
+      "crop": { "left": 900, "top": 0, "width": 2816, "height": 2252 },
+      "cropNote": [
+        "Full source height, so the horizontal offset is the only free parameter and it is free across 1184px.",
+        "Rendered at 600, 900 and 1184 and compared. 600 slices a foreground shoulder at the left edge and 1184",
+        "slices a head at it. 900 is the only candidate where no subject is cut by an edge the original did not",
+        "already cut: the listener at left, the speaker mid gesture and the listener at right are all whole."
+      ],
+      "outputs": [
+        { "width": 640, "height": 512 },
+        { "width": 1024, "height": 819 },
+        { "width": 1440, "height": 1151 }
+      ],
+      "fallbackWidth": 1024,
+      "sizes": "(max-width: 767px) 100vw, (max-width: 1279px) 45vw, 600px",
+      "alt": "One founder mid gesture in a small seated circle with the others listening, an IFN meetup slide on the screen behind them and the city through the window.",
+      "loading": "lazy",
+      "fetchPriority": "auto"
+    },
+
+    {
+      "name": "hero-band-reserve",
+      "status": "reserve",
+      "source": "venue/20260226_184628.jpg",
+      "grade": "february-2026",
+      "aspectRatio": "2.4:1",
+      "crop": { "left": 0, "top": 0, "width": 4000, "height": 1667 },
+      "cropNote": [
+        "Standing fallback for the hero band, same slot and same ratio, so a swap is one status edit.",
+        "Top anchored: it keeps the lit sign, the pendant lamp, the two reflections in the window glass and the",
+        "night skyline, and it drops the two partial heads along the bottom edge of the source."
+      ],
+      "outputs": [
+        { "width": 720, "height": 300 },
+        { "width": 1080, "height": 450 },
+        { "width": 1440, "height": 600 },
+        { "width": 1920, "height": 800 }
+      ],
+      "fallbackWidth": 1080,
+      "sizes": "100vw",
+      "alt": "The IFN meetup slide lit on a screen at night, reflected twice in a window over the faintly lit skyline.",
+      "loading": "eager",
+      "fetchPriority": "auto"
+    },
+    {
+      "name": "how-it-works-middle-reserve",
+      "status": "reserve",
+      "source": "meetups/20260723_190939.jpg",
+      "grade": "july-2026",
+      "aspectRatio": "1093:874",
+      "crop": { "left": 260, "top": 0, "width": 2816, "height": 2252 },
+      "cropNote": [
+        "Swap ready alternate for the middle stop at the same ratio. Prepared, not selected.",
+        "Section 7 files this frame under reserve on redundancy grounds. It is worth a second look: it is the",
+        "only close range frame of people from a different evening than the hero band, it carries no third party",
+        "branding, and swapping it in would separate the two day one photographs by date as well as by subject,",
+        "which is the residual risk section 10 leaves open. That is a selection call for the founder, not for the",
+        "pipeline, so it ships as reserve and the crop box is here so the decision costs one word."
+      ],
+      "outputs": [
+        { "width": 640, "height": 512 },
+        { "width": 1024, "height": 819 },
+        { "width": 1440, "height": 1151 }
+      ],
+      "fallbackWidth": 1024,
+      "sizes": "(max-width: 767px) 100vw, (max-width: 1279px) 45vw, 600px",
+      "alt": "Three founders standing with drinks mid conversation, an IFN meetup slide on the screen behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto"
+    }
+  ],
+
+  "pool": {
+    "$note": [
+      "The audit record for every source that has no slot. Not built, by design: a frame with no slot has no",
+      "ratio, so inventing a crop box for it would be inventing a layout. Give it a slot above and it builds.",
+      "Status vocabulary matches REDESIGN-PLAN.md section 7."
+    ],
+    "returned-to-pool": [
+      {
+        "source": "venue/20260226_184645.jpg",
+        "reason": "Consent and venue rulings void the old exclusion. Not selected: the former venue logo is the composition itself."
+      },
+      {
+        "source": "meetups/20260423_184536.jpg",
+        "reason": "Consent and venue rulings void the old exclusion. Not selected: same room, same evening as the hero band, less well composed."
+      },
+      {
+        "source": "meetups/20260423_184620.jpg",
+        "reason": "Consent recorded, so the identifiability argument is no longer an active gate. Not selected: same seated group as the hero band, further away, with a laptop dominating the foreground."
+      }
+    ],
+    "reserve": [
+      { "source": "venue/20260226_184639.jpg", "reason": "The frame the accent hue was sampled from. Redundant with the reserve hero band." },
+      { "source": "meetups/20260423_184509.jpg", "reason": "Same evening and subject as the hero band." },
+      { "source": "meetups/20260423_184523.jpg", "reason": "Same evening and subject as the hero band." },
+      { "source": "meetups/20260423_184527.jpg", "reason": "Same evening and subject as the hero band." }
+    ],
+    "excluded": [
+      {
+        "source": "venue/20260723_175654.jpg",
+        "reason": "A wall of national and service flags. For a brand addressing people arriving from other countries that is a signal not to send by accident. Independent of both 2026-08-09 rulings."
+      },
+      {
+        "source": "venue/20260723_190952.jpg",
+        "reason": "Same flags, foreground and lit."
+      },
+      {
+        "source": "meetups/20260226_184622.jpg",
+        "reason": "Six people among a dozen empty chairs. A composition judgment that never depended on consent."
+      },
+      {
+        "source": "meetups/20260423_201820.jpg",
+        "reason": "A posed camera facing line up. A different genre from the documentary frames this page is built on."
+      }
+    ]
+  }
+}

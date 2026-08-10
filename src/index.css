@@ -122,8 +122,27 @@
   --on-plate: #FBFBFA;      /* 7.054 on the plate, in both modes */
 
   /* The JoinModal backdrop, and the only alpha composite left on the page.
-     Theme invariant. Composited per channel in sRGB gamma space this resolves
-     to #70706E over paper and #6B6B69 over band. */
+
+     THEME INVARIANT, and that is a measurement rather than a convenience. The
+     scrim's job is to dim the page CONTENT, and it dims it by exactly the same
+     amount in both modes: page --ink text behind it reads 3.748 against its own
+     ground in light AND in dark, down from 17.965 unscrimmed. The composite is
+     symmetric about the two tokens that swap, so one value serves both modes
+     for the same reason the focus ring needs no reversal.
+
+     WHAT IT DELIBERATELY DOES NOT DO is create a tonal step under the dialog.
+     Composited per channel in sRGB gamma space it resolves to #70706E over
+     --paper and #6B6B69 over --band in light mode, and to #131311 and #171715
+     in dark, where the first of those is the same colour as the modal's own
+     --paper surface (1.000). No scrim value repairs that: a scrim can only
+     darken toward black and the dark page ground is already there, so the
+     tonal step is unavailable in dark mode at any alpha. The modal boundary is
+     carried by the better of its tone and its 1px --ink border, which is
+     measured over --paper, --band and the --accent-plate in both modes by
+     scripts/verify-dark-contrast.py and never drops below 4.719 on any grey
+     ground. Do not reach for a darker scrim, a per mode scrim, or a lighter
+     modal surface; none of the three moves that number, and a lighter surface
+     would collapse the --band field fills inside the dialog to 1.000. */
   --scrim: rgb(19 19 17 / 0.6);
 }
 
@@ -308,19 +327,22 @@
     @apply cursor-pointer;
   }
 
-  /* Anchor targets must clear the fixed navbar (~92px at rest). Scoped to the
-     things that are actually linked to. A bare [id] selector also matches every
-     form field and would offset any programmatic scrollIntoView by 96px.
+  /* Anchor targets must clear the fixed navbar. Scoped to the things that are
+     actually linked to. A bare [id] selector also matches every form field and
+     would offset any programmatic scrollIntoView by the same amount.
 
-     NOT retuned in Phase 1. Plan section 4.4 pairs this with the 64px navbar
-     and Phase 4 in section 9 assigns it to Phase 4, which is a contradiction
-     inside the plan. Left at 6rem because the two failure modes are not
-     symmetric: too much clearance leaves a 32px gap above an anchored section,
-     too little puts the section heading underneath the fixed bar. Whoever
-     lands the 64px navbar owns closing that gap. */
+     RETUNED to the shipped bar, which is measured rather than quoted: the
+     rendered header is 64px of content plus its 1px --rule bottom edge = 65px,
+     read off the built page at 1366, 1024, 768 and 390. 4.5rem is 72px, so an
+     anchored section lands 7px below the bar. The 6rem this replaces was sized
+     for the ~92px pre-redesign bar and left a 31px hole above every anchor.
+
+     The two failure modes are not symmetric, which is why the residual is on
+     the generous side: too much clearance leaves a visible gap, too little puts
+     the section heading underneath the bar where it cannot be read at all. */
   :target,
   section[id] {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 4.5rem;
   }
 
   /* Framer Motion is handled globally by <MotionConfig reducedMotion="user">

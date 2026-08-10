@@ -254,15 +254,76 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                         onClick={onClose}
                         className="fixed inset-0 bg-scrim z-50"
                     />
-                    {/* The modal boundary, measured rather than assumed. In light
-                        mode the scrim over the page ground composites to #70706E
-                        and this --paper surface reads 4.793 against it, so tone
-                        carries the edge. In dark mode that composite returns to
-                        #131311 and the surface reads 1.000 against its own
-                        backdrop, so the 1px --rule border is the mechanism there
-                        (4.005). Both modes clear 3:1 by different means, which is
-                        why the border is mandatory rather than stylistic. Radius
-                        0: a surface is not a control. */}
+                    {/* THE MODAL BOUNDARY. Measured in both modes and over every
+                        ground the scrim can composite over, because a fixed
+                        backdrop can sit above any section on any route.
+
+                        It is a TWO MECHANISM edge and neither mechanism is
+                        decoration:
+
+                          tone    this --paper surface against the scrim
+                                  dimmed page behind it
+                          border  a 1px full opacity --ink line
+
+                        Which one carries depends on the mode AND on what is
+                        behind the scrim, and the two swap roles rather than
+                        reinforcing each other:
+
+                          scrim over --paper    light  tone  4.793  border  3.748
+                                                dark   tone  1.000  border 17.965
+                          scrim over --band     light  tone  5.158  border  3.483
+                                                dark   tone  1.036  border 17.337
+                          scrim over the        light  tone 13.815  border  1.300
+                          --accent-plate        dark   tone  1.300  border 13.815
+
+                        So the gate is the BETTER of the two, which is exactly
+                        how plan section 4.2 gates the better of the focus
+                        ring's two layers. Swept across all 256 GREY grounds
+                        under the scrim the better leg never drops below 4.719,
+                        and it is the same number in both modes because the
+                        construction inverts itself when --paper and --ink swap.
+                        Greys only, like the focus ring's own sweep: a per pixel
+                        photographic ground is not bounded by it, and nothing
+                        needs it to be, because the Plate Rule keeps type and
+                        controls off photographs and this dialog is centred in
+                        the viewport rather than pinned to a band.
+
+                        THE BORDER IS --ink AND NOT THE --rule EVERY OTHER PLATE
+                        CARRIES, and that is derived rather than preferred. A
+                        plate's outer neighbour is --paper, where --rule
+                        measures 4.063. This surface's outer neighbour is a
+                        scrim composite, where --rule measures 1.180 over
+                        --paper and 1.270 over --band in light mode: the shipped
+                        border was invisible against its own backdrop in the
+                        mode where tone happened to be carrying, and in dark
+                        mode it was the only mechanism at 4.005 while the
+                        surface measured 1.000 against its own backdrop.
+
+                        LIGHT MODE IS THE BINDING CASE, and stating it that way
+                        rather than as "--ink is the only token that works"
+                        matters, because in dark mode every token in the palette
+                        clears both sides at once for the reason that makes dark
+                        mode broken in the first place: the scrim composite IS
+                        the surface, so a border's two neighbours are the same
+                        colour. It is the INTERSECTION of the two modes that
+                        leaves exactly one token, and --ink is it. The full
+                        per token table is printed by
+                        scripts/verify-dark-contrast.py. It takes the dark mode
+                        edge from 4.005 to 17.965 and the light mode edge off
+                        the floor at the same time.
+
+                        Full opacity 1px, never an alpha and never a fractional
+                        device pixel offset, under the hairline rule in section
+                        4.2. At 75% antialiased coverage the border leg measures
+                        2.729 over the light --band composite, below the 3.0
+                        floor, which is the same arithmetic that governs every
+                        other hairline on this page rather than a new hazard. On
+                        that one ground the tone leg carries at 5.158 anyway.
+
+                        Not a two layer halo. The palette already owns that
+                        construction and it means "focused"; a permanent one
+                        around the dialog would spend the meaning. Radius 0: a
+                        surface is not a control. */}
                     <motion.div
                         ref={panelRef}
                         role="dialog"
@@ -272,7 +333,7 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg max-h-[90dvh] overflow-y-auto border border-rule bg-paper z-50"
+                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg max-h-[90dvh] overflow-y-auto border border-ink bg-paper z-50"
                     >
                         {/* Present at all times; only its text changes, which is what
                             makes a polite live region reliable. */}

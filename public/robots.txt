@@ -1,4 +1,4 @@
-# International Founders Network — ifn.community
+# International Founders Network, ifn.community
 
 User-agent: *
 Allow: /

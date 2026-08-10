@@ -5,6 +5,12 @@ Tokens are PARSED OUT OF src/index.css, never retyped, so a drift between the
 plan and the shipped stylesheet shows up as a parse mismatch rather than as a
 number that agrees with itself. Alpha composites are done per channel in sRGB
 gamma space, which is what a browser does.
+
+The JoinModal's surface and border tokens are CHOSEN IN A .tsx rather than in
+the stylesheet, so they are parsed out of src/components/JoinModal.tsx for the
+same reason. Hardcoding them here would reintroduce exactly the drift the
+paragraph above disclaims: the modal rows would keep agreeing with themselves
+after somebody edited the component.
 """
 import re
 import sys
@@ -87,6 +93,30 @@ def block(pattern):
     return out
 
 
+# ------------------------------------- parse the modal surface and edge tokens
+# The panel is found by a class that is structural rather than cosmetic
+# (`max-h-[90dvh]`), so a restyle that keeps the dialog scrollable keeps this
+# working, while a change of surface or border token is picked up and recomputed
+# instead of being silently trusted.
+MODAL_SRC = (ROOT / "src" / "components" / "JoinModal.tsx").read_text()
+_panel = re.search(r'className="([^"]*max-h-\[90dvh\][^"]*)"', MODAL_SRC)
+if not _panel:
+    sys.exit("FATAL: could not find the JoinModal panel className in JoinModal.tsx")
+_classes = _panel.group(1).split()
+
+_fills = [c[3:] for c in _classes if c.startswith("bg-")]
+_borders = [c[7:] for c in _classes if c.startswith("border-")]
+if len(_fills) != 1 or len(_borders) != 1:
+    sys.exit("FATAL: JoinModal panel must carry exactly one bg- and one border- "
+             "token, found bg=%r border=%r" % (_fills, _borders))
+MODAL_SURFACE, MODAL_EDGE = _fills[0], _borders[0]
+
+# Width is part of the claim, not decoration: every hairline on this page is a
+# full-opacity 1px line (plan section 4.2), and a `border-2` here would be a
+# different object measured by different rows.
+if "border" not in _classes:
+    sys.exit("FATAL: JoinModal panel border is not the bare 1px `border` utility")
+
 light_root = block(r"(?<!\])\n:root")
 dark_media = block(r":root:not\(\[data-theme=\"light\"\]\)")
 dark_attr = block(r":root\[data-theme=\"dark\"\]")
@@ -114,7 +144,14 @@ for k in ["paper", "band", "ink", "muted", "rule", "edge", "accent",
 print("%-14s %-10s %-10s %s" % ("--scrim", light_root["--scrim"],
                                 light_root["--scrim"], "NO (invariant)"))
 print("color-scheme on :root ->", light_root.get("color-scheme", "*** MISSING ***"))
+print("JoinModal panel, as parsed from JoinModal.tsx -> surface --%s, 1px border --%s"
+      % (MODAL_SURFACE, MODAL_EDGE))
 print()
+
+for _tok in (MODAL_SURFACE, MODAL_EDGE):
+    if _tok not in LIGHT:
+        sys.exit("FATAL: JoinModal uses --%s, which is not a colour token in "
+                 "src/index.css" % _tok)
 
 L = {k: srgb(v) for k, v in LIGHT.items()}
 D = {k: srgb(v) for k, v in DARK.items()}
@@ -130,7 +167,10 @@ def row(mode, label, fg, bg, req, note=""):
     return rr
 
 
-# ------------------------------------------------------------- the 65 plan rows
+# -------------------------------------------- the plan rows, plus the JoinModal
+# boundary rows, which describe what SHIPS rather than what the plan's section
+# 4.2 tables predicted. See the JOINMODAL BOUNDARY block further down for the
+# per-ground working and for the rows that are recorded rather than gated.
 for mode, T in (("light", L), ("dark", D)):
     row(mode, "--ink body/display on --paper", T["ink"], T["paper"], 4.5)
     row(mode, "--ink on --band", T["ink"], T["band"], 4.5)
@@ -158,8 +198,9 @@ for mode, T in (("light", L), ("dark", D)):
     row(mode, "--on-plate type on --accent-plate", T["on-plate"], T["accent-plate"], 4.5)
     row(mode, "--on-plate pill fill boundary vs --accent-plate", T["on-plate"], T["accent-plate"], 3.0)
     row(mode, "--accent-plate label on the --on-plate pill", T["accent-plate"], T["on-plate"], 4.5)
-    row(mode, "JoinModal 1px --rule border vs modal --paper ground", T["rule"], T["paper"], 3.0)
-    row(mode, "error text --ink on modal --paper ground", T["ink"], T["paper"], 4.5)
+    row(mode, "JoinModal 1px --%s border vs modal --%s surface" % (MODAL_EDGE, MODAL_SURFACE),
+        T[MODAL_EDGE], T[MODAL_SURFACE], 3.0)
+    row(mode, "error text --ink on modal --%s surface" % MODAL_SURFACE, T["ink"], T[MODAL_SURFACE], 4.5)
 
     # focus ring better layer on the invariant plate
     inner, outer = T["paper"], T["ink"]
@@ -169,13 +210,38 @@ for mode, T in (("light", L), ("dark", D)):
                  hexof(inner if which.startswith("inner") else outer),
                  hexof(T["accent-plate"]), better, 3.0, better >= 3.0, ""))
 
-    # scrim composites
+    # The modal boundary against everything the fixed scrim can composite over.
+    # GATED ON THE BETTER OF THE TWO MECHANISMS, tone and border, exactly as the
+    # focus ring above is gated on the better of its two layers. The legs swap
+    # roles by mode and by ground, so gating either one alone would fail a
+    # boundary that is plainly visible, which is what the previous four failing
+    # rows were doing.
+    for gname in ("paper", "band", "accent-plate"):
+        comp = over(SCRIM_RGB, T[gname], SCRIM_A)
+        tone = ratio(T[MODAL_SURFACE], comp)
+        edge = ratio(T[MODAL_EDGE], comp)
+        better = max(tone, edge)
+        which = "tone" if tone >= edge else "border"
+        rows.append((mode, "JoinModal edge vs --scrim over --%s (better: %s)" % (gname, which),
+                     hexof(T[MODAL_SURFACE] if which == "tone" else T[MODAL_EDGE]),
+                     hexof(comp), better, 3.0, better >= 3.0,
+                     "tone %.3f / border %.3f" % (tone, edge)))
+
+    # AND, over the two grounds that exist on every route today, the BORDER LEG
+    # ALONE. Scoped deliberately. The better-of gate above is the accessibility
+    # floor and the old --rule border cleared it too (3.080 on the dark plate
+    # composite), so it cannot on its own tell a mode-dependent boundary from a
+    # mode-independent one. Over --paper and --band the boundary must not depend
+    # on which mode the reader is in: both legs clear independently, and this
+    # pair of rows is what fails if the border is ever put back to a token whose
+    # outer neighbour it cannot see. The --accent-plate is excluded on purpose,
+    # not quietly: it has no live consumer yet, and over it the two legs swap
+    # cleanly by mode (13.815 each way), which is the general behaviour the grey
+    # sweep below covers.
     for gname in ("paper", "band"):
         comp = over(SCRIM_RGB, T[gname], SCRIM_A)
-        row(mode, "JoinModal --paper surface vs --scrim over --%s" % gname,
-            T["paper"], comp, 3.0, "composite %s" % hexof(comp))
-        row(mode, "JoinModal --rule border vs --scrim over --%s" % gname,
-            T["rule"], comp, 3.0, "composite %s" % hexof(comp))
+        row(mode, "JoinModal --%s border alone vs --scrim over --%s" % (MODAL_EDGE, gname),
+            T[MODAL_EDGE], comp, 3.0, "composite %s" % hexof(comp))
 
 # --------------------------------------------------- the published FAILING rows
 print("=" * 78)
@@ -195,7 +261,13 @@ for mode, label, fg, bg, req in fails:
     print("  %-5s %-62s %7.3f  (floor %.1f)" % (mode, label, ratio(fg, bg), req))
 
 print()
-print("  hairline at 75%% antialiased pixel coverage over its own ground:")
+print("  The fifth row above is RECORDED, not repaired, and its published rule is")
+print("  restated by what shipped: no scrim value and no surface value can put a")
+print("  tonal step under a dark modal, because a scrim only darkens toward black")
+print("  and the dark page ground is already there. The boundary is the better of")
+print("  tone and border, and in dark mode that is the border. See below.")
+print()
+print("  hairline at 75% antialiased pixel coverage over its own ground:")
 for mode, T in (("light", L), ("dark", D)):
     full = ratio(T["rule"], T["paper"])
     part = ratio(over(T["rule"], T["paper"], 0.75), T["paper"])
@@ -203,6 +275,147 @@ for mode, T in (("light", L), ("dark", D)):
           % (mode, full, part, "PASS" if part >= 3.0 else "FAILS the 3.0 floor"))
     print("            headroom at full opacity %+.1f%%, at 75%% coverage %+.1f%%"
           % ((full / 3.0 - 1) * 100, (part / 3.0 - 1) * 100))
+print()
+
+# ------------------------------------------------------ the JoinModal boundary
+print("=" * 78)
+print("THE JOINMODAL BOUNDARY, AS SHIPPED  (surface --%s, 1px border --%s)"
+      % (MODAL_SURFACE, MODAL_EDGE))
+print("=" * 78)
+print("  A two mechanism edge. Which leg carries depends on the mode AND on what")
+print("  is behind the fixed scrim, and the legs swap rather than reinforce, so")
+print("  the gated row is the better of the two. Both legs are printed here.")
+print()
+print("  %-5s %-24s %-10s %8s %9s %9s" % ("mode", "ground under the scrim",
+                                          "composite", "tone", "border", "better"))
+for mode, T in (("light", L), ("dark", D)):
+    for gname in ("paper", "band", "accent-plate"):
+        comp = over(SCRIM_RGB, T[gname], SCRIM_A)
+        tone = ratio(T[MODAL_SURFACE], comp)
+        edge = ratio(T[MODAL_EDGE], comp)
+        print("  %-5s --%-22s %-10s %8.3f %9.3f %9.3f" %
+              (mode, gname, hexof(comp), tone, edge, max(tone, edge)))
+print()
+print("  Grey sweep, all 256 GREY grounds under the scrim. This is the")
+print("  generalisation beyond the three named grounds, since a fixed backdrop")
+print("  can sit over any section on any route. Greys only, exactly like the")
+print("  focus ring's own sweep: a per pixel photographic ground is not bounded")
+print("  by it, and the Plate Rule is what keeps that out of scope.")
+for mode, T in (("light", L), ("dark", D)):
+    worst, worst_src, worst_comp = 999, None, None
+    for v in range(256):
+        comp = over(SCRIM_RGB, (v, v, v), SCRIM_A)
+        better = max(ratio(T[MODAL_SURFACE], comp), ratio(T[MODAL_EDGE], comp))
+        if better < worst:
+            worst, worst_src, worst_comp = better, (v, v, v), comp
+    print("     %-5s better leg never below %.3f (worst source ground %s -> composite %s)"
+          % (mode, worst, hexof(worst_src), hexof(worst_comp)))
+print("  Identical in both modes, because the construction inverts itself when")
+print("  --paper and --ink swap. Same property as the focus ring, whose own grey")
+print("  sweep floor is 4.264.")
+print()
+print("  WHY THE BORDER IS --ink RATHER THAN THE --rule EVERY OTHER PLATE CARRIES.")
+print("  A plate's outer neighbour is a page ground; this surface's outer neighbour")
+print("  is a scrim composite. Every token in the palette, measured on BOTH sides:")
+print()
+print("  %-5s %-8s %9s %9s %9s %s" % ("mode", "token", "inside", "over paper",
+                                      "over band", "clears 3.0 on both sides"))
+for mode, T in (("light", L), ("dark", D)):
+    cp = over(SCRIM_RGB, T["paper"], SCRIM_A)
+    cb = over(SCRIM_RGB, T["band"], SCRIM_A)
+    for tok in ("rule", "edge", "muted", "accent", "ink"):
+        inside = ratio(T[tok], T[MODAL_SURFACE])
+        op, ob = ratio(T[tok], cp), ratio(T[tok], cb)
+        ok = min(inside, op, ob) >= 3.0
+        print("  %-5s --%-6s %9.3f %9.3f %9.3f %s"
+              % (mode, tok, inside, op, ob, "yes" if ok else "no"))
+print()
+print("  LIGHT MODE IS THE BINDING CASE and --ink is the only token that survives")
+print("  it. In dark mode every token in the table clears, for the reason that")
+print("  makes the mode broken in the first place: the composite IS the surface,")
+print("  so a border's two neighbours are the same colour and any legible border")
+print("  passes both sides at once. The intersection of the two modes is one")
+print("  token. The shipped --rule border measured 1.180 and 1.270 against its")
+print("  own backdrop in light and was the sole mechanism in dark at 4.005;")
+print("  --ink takes the dark edge to 17.965 and the light edge off the floor.")
+print()
+print("  Rejected alternatives, with the number that rejects each:")
+for mode, T in (("light", L), ("dark", D)):
+    cp = over(SCRIM_RGB, T["paper"], SCRIM_A)
+    print("     %-5s an elevated --band surface: %.3f against the scrim composite,"
+          % (mode, ratio(T["band"], cp)))
+    print("           and the --band field fills inside the dialog would read %.3f"
+          % ratio(T["band"], T["band"]))
+    black = over(srgb("#000000"), T["paper"], SCRIM_A)
+    print("     %-5s a pure black scrim at the same alpha: composite %s, surface"
+          % (mode, hexof(black)))
+    print("           against it %.3f" % ratio(T[MODAL_SURFACE], black))
+print("     Neither is a repair. The elevated surface buys 4.343 in light, where")
+print("     tone already measures 4.793, and 1.101 in dark, where the defect is;")
+print("     it also collapses every field fill in the dialog to 1.000. The black")
+print("     scrim reaches 1.077 in dark, is still nowhere near 3.0, and pure")
+print("     black is banned outright by skill section 9.A.")
+print()
+print("  Hairline discipline applies unchanged. The border leg at 75% antialiased")
+print("  coverage, which is why plan section 4.2 bans partial coverage outright:")
+for mode, T in (("light", L), ("dark", D)):
+    for gname in ("paper", "band"):
+        comp = over(SCRIM_RGB, T[gname], SCRIM_A)
+        full = ratio(T[MODAL_EDGE], comp)
+        part = ratio(over(T[MODAL_EDGE], comp, 0.75), comp)
+        print("     %-5s over --%-12s full %6.3f   at 75%% coverage %6.3f   (tone leg %.3f)"
+              % (mode, gname, full, part, ratio(T[MODAL_SURFACE], comp)))
+print()
+
+# ---------------------------------------------------------- the form, in the modal
+print("=" * 78)
+print("JOINMODAL FORM CONTRAST  (skill 4.5 and 4.6, both modes)")
+print("=" * 78)
+print("  Ground for labels, helper text and error text is the modal --%s surface."
+      % MODAL_SURFACE)
+print("  Ground for values and placeholders is the --band field fill.")
+print()
+form_rows = [
+    ("label --ink on the modal surface", "ink", MODAL_SURFACE, 4.5),
+    ("label's (optional) --muted on the modal surface", "muted", MODAL_SURFACE, 4.5),
+    ("helper text --muted on the modal surface", "muted", MODAL_SURFACE, 4.5),
+    ("error text --ink on the modal surface", "ink", MODAL_SURFACE, 4.5),
+    ("error 3px --ink left rule vs the modal surface", "ink", MODAL_SURFACE, 3.0),
+    ("field value --ink on the --band fill", "ink", "band", 4.5),
+    ("placeholder --muted on the --band fill", "muted", "band", 4.5),
+    ("field 1px --edge border vs the modal surface", "edge", MODAL_SURFACE, 3.0),
+    ("field 1px --edge border vs its own --band fill", "edge", "band", 3.0),
+    ("submit label --on-accent on the --accent fill", "on-accent", "accent", 4.5),
+    ("submit hover label --on-accent on --accent-press", "on-accent", "accent-press", 4.5),
+    ("submit fill boundary --accent vs the modal surface", "accent", MODAL_SURFACE, 3.0),
+    ("disabled submit label --muted on the --band fill", "muted", "band", 4.5),
+    ("disabled submit 2px --edge stroke vs the modal surface", "edge", MODAL_SURFACE, 3.0),
+    ("close button --muted glyph on the modal surface", "muted", MODAL_SURFACE, 4.5),
+    ("close button hover --ink glyph on the --band hover fill", "ink", "band", 4.5),
+]
+form_failed = []
+for mode, T in (("light", L), ("dark", D)):
+    for label, fg, bg, req in form_rows:
+        rr = ratio(T[fg], T[bg])
+        ok = rr >= req
+        if not ok:
+            form_failed.append((mode, label, rr, req))
+        print("  %-5s %-56s %7.3f  (floor %.1f) %s"
+              % (mode, label, rr, req, "pass" if ok else "**FAIL**"))
+    inner, outer = T["paper"], T["ink"]
+    print("  %-5s %-56s %7.3f  (floor %.1f) %s"
+          % (mode, "focus ring inner --paper vs the --band field fill", ratio(inner, T["band"]),
+             3.0, "carried by the outer layer, see next two rows"))
+    for label, val in (("focus ring outer --ink vs the modal surface", ratio(outer, T[MODAL_SURFACE])),
+                       ("focus ring inner vs outer, the layer boundary", ratio(inner, outer))):
+        ok = val >= 3.0
+        if not ok:
+            form_failed.append((mode, label, val, 3.0))
+        print("  %-5s %-56s %7.3f  (floor 3.0) %s" % (mode, label, val, "pass" if ok else "**FAIL**"))
+print()
+print("  %d form rows below their floor." % len(form_failed))
+for mode, label, rr, req in form_failed:
+    print("     FAIL %-5s %-56s %.3f < %.1f" % (mode, label, rr, req))
 print()
 
 # ------------------------------------------------- the four named defect classes
@@ -325,20 +538,26 @@ print()
 print("=" * 78)
 print("FULL RECOMPUTED TABLE")
 print("=" * 78)
-print("%-6s %-58s %-9s %-9s %8s %6s %s" % ("mode", "pairing", "fg", "bg", "ratio", "floor", ""))
+print("%-6s %-64s %-9s %-9s %8s %6s %s" % ("mode", "pairing", "fg", "bg", "ratio", "floor", ""))
 failed = []
 for mode, label, fg, bg, rr, req, ok, note in rows:
     mark = "pass" if ok else "**FAIL**"
     if not ok:
         failed.append((mode, label, rr, req))
-    print("%-6s %-58s %-9s %-9s %8.3f %6.1f %s %s" % (mode, label[:58], fg, bg, rr, req, mark, note))
+    print("%-6s %-64s %-9s %-9s %8.3f %6.1f %s %s" % (mode, label[:64], fg, bg, rr, req, mark, note))
 
 print()
 print("=" * 78)
 n_light = sum(1 for r in rows if r[0] == "light")
 n_dark = sum(1 for r in rows if r[0] == "dark")
-print("%d rows recomputed (%d light, %d dark). %d below their floor."
-      % (len(rows), n_light, n_dark, len(failed)))
-for mode, label, rr, req in failed:
+print("%d rows recomputed (%d light, %d dark), plus %d JoinModal form rows. "
+      "%d below their floor."
+      % (len(rows), n_light, n_dark, len(form_rows) * 2 + 4, len(failed) + len(form_failed)))
+for mode, label, rr, req in failed + form_failed:
     print("   FAIL %-5s %-60s %.3f < %.1f" % (mode, label, rr, req))
 print("=" * 78)
+
+# A non-zero exit so this can be wired to a gate. It reported four failures for
+# the whole of Phase 2 while exiting 0, which is a verification script that
+# cannot be verified against.
+sys.exit(1 if (failed or form_failed) else 0)

@@ -1,37 +1,63 @@
 import { useState, useEffect } from 'react';
+import { preload } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from './Button';
 import { ButtonLink } from './ButtonLink';
-import { Container } from './Container';
-import { HeroVisual } from './HeroVisual';
+import { photos } from '../data/photos.generated';
 
 interface HeroProps {
     onJoinClick: () => void;
 }
 
-/** The cycling word in the Italic Welcome headline (DESIGN.md's signature move).
- *  "International" leads because it is the word the organisation is named for, and
- *  it is the single word the headline settles on when motion is switched off. */
+const heroBand = photos['hero-band'];
+
+/**
+ * LCP PRELOAD (plan section 7 "Delivery", and the brief's explicit instruction).
+ *
+ * React 19 hoists this into <head> as
+ * `<link rel="preload" as="image" imagesrcset=... imagesizes=... type=...
+ *  fetchpriority="high">`. It is issued from module scope so it fires when the
+ * Home chunk evaluates, which is one render pass ahead of the <img> below.
+ *
+ * `imageSrcSet` and `imageSizes` are the SAME strings the <picture> hands its
+ * AVIF <source>, byte for byte, and both come from the same generated object.
+ * If they ever diverge the browser preloads one tier and then downloads another,
+ * which is a double fetch rather than a speed-up.
+ *
+ * `type` is declared so a user agent that cannot decode AVIF skips the preload
+ * instead of spending the request on a file it will throw away. Those browsers
+ * fall through to the WebP source at normal priority. No `crossOrigin`: the file
+ * is same origin and requested in no-cors mode, and naming it here would make
+ * the preload miss the <img>'s own request.
+ *
+ * STATED TENSION, not hidden. Plan section 7 makes the preload conditional on
+ * measurement, because at 1366x768 the band sits below the fold and the request
+ * competes with the Archivo preload that gates the TEXT LCP. The brief overrides
+ * that with an instruction to preload, so this ships. The narrower lever, a
+ * static <link> in index.html, is the only version that beats the module chunk,
+ * and index.html is not this component's file. The exact line is handed to the
+ * integrator in the delivery notes.
+ */
+preload(heroBand.derivatives[2].avif, {
+    as: 'image',
+    type: 'image/avif',
+    imageSrcSet: heroBand.avif,
+    imageSizes: heroBand.sizes,
+    fetchPriority: 'high',
+});
+
+/** The cycling word. Three ways this audience names itself, in one slot.
+ *
+ *  "International" leads because it is the word the organisation is named for,
+ *  and it is the word the headline settles on when motion is switched off.
+ *
+ *  It carries NO accent and NO mark (plan section 4.3). The mark means
+ *  "checkable", and how a founder names their own origin is not a checkable
+ *  fact. It is the light rung of the weight ladder instead. */
 const WORDS = ['International', 'Global', 'Immigrant'] as const;
 
 const WORD_INTERVAL_MS = 3000;
-
-/* A quiet dot grid, drawn in CSS. This replaces a texture that used to be fetched
-   from transparenttextures.com on the critical path, an external request that let
-   a third party see every visitor.
-
-   Tokenised in Phase 2. The dot was `rgb(15 23 42 / 0.06)`, which is Tailwind's
-   neutral-900 written as a function so the utility grep never saw it; against the
-   dark page ground it composites to #131312 and measures 1.002, i.e. it vanishes.
-   `--ink` tracks the mode swap, so the grid is equally faint in both. The alpha
-   composite itself still violates section 4.1 ("--scrim is the only alpha
-   composite left on the page") and is a Phase 4 carry-forward with the hero. */
-const DOT_GRID = {
-    backgroundImage:
-        'radial-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 0)',
-    backgroundSize: '28px 28px',
-};
 
 export function Hero({ onJoinClick }: HeroProps) {
     const prefersReducedMotion = useReducedMotion();
@@ -39,8 +65,9 @@ export function Hero({ onJoinClick }: HeroProps) {
 
     // WCAG 2.2.2: nothing may auto-update for a reader who has asked for still
     // interfaces. Framer Motion's transitions are handled globally by
-    // <MotionConfig reducedMotion="user">, but this timer is ours to stop, and
-    // with it stopped the headline simply settles on WORDS[0].
+    // <MotionConfig reducedMotion="user">, but a setInterval is a plain JS timer
+    // that MotionConfig cannot reach, so it is ours to stop, and with it stopped
+    // the headline simply settles on WORDS[0].
     useEffect(() => {
         if (prefersReducedMotion) return;
 
@@ -54,146 +81,293 @@ export function Hero({ onJoinClick }: HeroProps) {
     const activeWord = WORDS[index];
 
     return (
-        <section className="relative pt-24 pb-20 lg:pt-36 lg:pb-32 overflow-hidden">
-            {/* Background. Static by design: DESIGN.md permits exactly one piece of
-                ambient motion on this page and it is the cycling word above. */}
-            <div className="absolute inset-0 bg-band -z-50" />
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -top-24 -right-24 w-[400px] h-[400px] rounded-full bg-ink/10 blur-[100px] -z-40"
-            />
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -bottom-24 -left-24 w-[500px] h-[500px] rounded-full bg-accent/10 blur-[120px] -z-40"
-            />
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 -z-30"
-                style={DOT_GRID}
-            />
+        // LAYOUT FAMILY: poster stack above a full-bleed photographic band
+        // (plan section 5, row 1). Nothing else on this page is a full-bleed
+        // image, and nothing else runs a headline to the page gutter.
+        //
+        // min-h-[100dvh], never h-screen: h-screen resolves against the largest
+        // viewport on iOS Safari and jumps when the address bar collapses.
+        //
+        // The column is `flex` so any slack on a short viewport lands ABOVE the
+        // band rather than after it, which keeps the photograph flush to the
+        // bottom edge of the section instead of leaving a strip of ground under
+        // it.
+        <section className="relative flex min-h-[100dvh] flex-col bg-paper">
+            {/* THE POSTER.
+                Its own gutter, `clamp(1rem, 6vw, 6.5rem)`, rather than
+                Container's px-4/6/8. That gutter is part of what makes this
+                section's geometry distinct from every other section, and it is
+                measured: it resolves to 82.0px at 1366 (content measure 1202px),
+                104px at 1920 (content capped by max-w-7xl at 1280px) and 16px at
+                360 (measure 316.8px). All three were read out of a rendered page,
+                not derived.
 
-            <Container>
-                <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                    {/* Content */}
-                    {/* No opacity in this entrance. This wrapper holds the <h1>, both
-                        CTAs and the lead copy, which together are the largest contentful
-                        paint of the whole site. Gating opacity here leaves all of it at
-                        `opacity: 0` with no
-                        animation queued whenever the frame loop does not run (a background
-                        tab, a paused rAF, a Motion failure). Animating x alone degrades to
-                        "sits 30px left", which is invisible to the user rather than fatal. */}
+                pt-24 is the cap in the brief and the skill (section 4.7). The
+                navbar is `fixed` with no spacer in App.tsx, so 96px of padding
+                against a 64px bar plus its 1px hairline is 31px of visible
+                clearance under the nav. Do not raise it: the plan's own stack
+                arithmetic added 64px of nav to 80px of padding on the assumption
+                of a spacer that does not exist. */}
+            <div className="grow px-[clamp(1rem,6vw,6.5rem)] pt-24 pb-14 md:pb-16">
+                <div className="mx-auto max-w-7xl">
+                    {/* NO OPACITY IN THIS ENTRANCE, AND THIS IS THE LOAD BEARING
+                        COMMENT IN THE FILE.
+
+                        This wrapper holds the h1, the subtext and both CTAs,
+                        which together are the largest contentful paint of the
+                        whole site. Opacity composites multiplicatively down the
+                        ancestor chain, so gating it here leaves all of it at
+                        `opacity: 0` with no animation queued whenever the frame
+                        loop does not run: a background tab, a paused rAF, a
+                        Motion failure. The second audit measured exactly that on
+                        this component after the first audit reported it fixed,
+                        because a single-element read of getComputedStyle cannot
+                        see an ancestor's contribution.
+
+                        Translating y degrades to "sits 16px low", which is
+                        invisible to a reader rather than fatal. Nothing above the
+                        band may animate opacity, clip-path or mask, and nothing
+                        here may use whileInView. */}
                     <motion.div
-                        initial={{ x: -30 }}
-                        animate={{ x: 0 }}
-                        transition={{ duration: 0.8, ease: 'easeOut' }}
-                        className="flex-1 text-center lg:text-left z-10"
+                        initial={{ y: 16 }}
+                        animate={{ y: 0 }}
+                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                     >
-                        <motion.p
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="inline-flex items-center gap-2 bg-paper px-4 py-2 rounded-full font-bold text-xs mb-6 border border-rule shadow-sm text-ink uppercase tracking-widest"
-                        >
-                            <span aria-hidden="true" className="flex h-2 w-2 rounded-full bg-ink" />
+                        {/* Eyebrow, 1 of the page's 2 allocated eyebrows.
+                            Ships as bare tracked type, with no pill and no dot.
+                            The dot is banned by skill 9.F and independently by
+                            this plan: it is accent that marks nothing and it
+                            would spend one of the two marks the density rule
+                            allows per viewport. The pill goes with it because
+                            plan section 4.4 reserves the full radius for
+                            DISCRETE INTERACTIVE controls, and an eyebrow is
+                            neither, so a rounded-full eyebrow would be the one
+                            object on the page breaking the shape lock. */}
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
                             Monthly meetups in Austin, Texas
-                        </motion.p>
+                        </p>
 
-                        {/* The 60px display step lands at xl, not lg: at lg the column
-                            halves to ~440px while the type would jump to 60px, which
-                            orphans "Where" on its own line. */}
-                        <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold text-ink leading-[1.15] mb-6 tracking-tight">
+                        {/* THE WEIGHT LADDER (plan section 4.3).
+                            Three rungs, no italic and no colour: `wght 300` on
+                            the cycling word, `500` on the line, `800` on
+                            "Founders". That is IFN's own event slide, which sets
+                            International light against Founders black, and it
+                            is why italic is retired here: it clipped the
+                            descender on "Immigrant" and it carried emphasis in a
+                            hue, which a colourblind reader cannot see.
+
+                            Measured, not asserted: clamp resolves to 81.96px at
+                            1366 and the headline sets in 2 lines with every one
+                            of the three candidate words; 84px and 2 lines at
+                            1920; 44px and 5 lines at 360, with document
+                            scrollWidth equal to viewport width at 360 and 390,
+                            so the slot cannot force horizontal overflow the way
+                            the retired min-w-[240px] floor did. */}
+                        <h1 className="mt-6 text-ink font-medium text-[clamp(2.75rem,6vw,5.25rem)] leading-[0.95] tracking-[-0.025em]">
                             Where{' '}
-                            {/* The word slot is an overlapping grid cell. Every candidate
-                                word is rendered invisibly in the same cell, so the slot is
-                                exactly as wide as the longest one at the current font size
-                                so it never jumps as the word changes, and it never forces a
-                                line wider than the viewport the way the old min-w-[240px]
-                                floor did. Alignment is inherited from the headline, so the
-                                word centres on mobile and sits left from lg up. */}
-                            <span className="inline-grid">
+                            {/* THE SLOT.
+                                An overlapping inline-grid: every candidate word
+                                is rendered invisibly in one cell, so the slot is
+                                exactly as wide as the longest of them at the
+                                current font size. It never jumps as the word
+                                changes and it never forces a line wider than the
+                                viewport.
+
+                                The twins stay IN FLOW. They are what the outer
+                                inline-grid takes its baseline from, and they are
+                                why the clip window below can be
+                                `absolute inset-0` without disturbing the line:
+                                an out-of-flow box contributes to neither the
+                                grid's sizing nor its baseline. Measured at 1366
+                                and 1920: a probe glyph inside the window and one
+                                outside it share a baseline to 0.00px. Putting
+                                `overflow: hidden` on the inline-grid itself
+                                instead would move its baseline to its bottom
+                                margin edge and lift the word roughly 28px off
+                                the line.
+
+                                leading-[1.15] with pb-1 reserve is the descender
+                                clearance: "Immigrant" carries a g, and a
+                                vertical roll inside a clipped slot cuts a
+                                descender exactly the way leading-none does. The
+                                cost is measured and accepted: this line box is
+                                90px against the following line's 78px at 1366,
+                                so the first headline line sits 12px looser. At
+                                desktop the headline is 2 lines, so there is one
+                                gap and nothing to compare it against.
+
+                                ALIGNMENT IS BREAKPOINT SCOPED AND THE
+                                BREAKPOINT WAS SWEPT, NOT GUESSED. The slot is
+                                as wide as "International"; "Global" leaves 210px
+                                of slack at 1366. Left aligned, that whole gap
+                                lands between the word and "Founders" and reads
+                                as a missing word, so from `sm` up it is centred
+                                and reads as poster spacing instead. Below that
+                                the slot is the last thing on its line or alone
+                                on one, where the slack is invisible at the left
+                                and centring would indent a single word off a
+                                flush left column. Sweeping 320px to 1500px in
+                                4px steps put the crossover, the width at which
+                                "Founders" joins the slot's line, at 644px. `sm`
+                                is 640, so a 4px band of viewports centres a line
+                                end slot. Document scrollWidth equalled viewport
+                                width at every one of those 296 widths. */}
+                            <span className="relative inline-grid font-light leading-[1.15] pb-1">
                                 {WORDS.map((word) => (
                                     <span
                                         key={word}
                                         aria-hidden="true"
-                                        className="col-start-1 row-start-1 invisible italic"
+                                        className="col-start-1 row-start-1 invisible"
                                     >
                                         {word}
                                     </span>
                                 ))}
-                                {/* This is the one emphasis word in the system that cannot use
-                                    <Emphasis>: it animates in and out, so it has to be a
-                                    motion.span. It carries <Emphasis>'s colour by hand. That
-                                    colour is now the semantic accent, which measures 6.393 on
-                                    the --band ground this section sits on, replacing the
-                                    retired amber that measured 2.679 there against a 3:1
-                                    floor. Its class list must stay identical to the invisible
-                                    twins above apart from colour, or the slot stops sizing to
-                                    the longest word. */}
-                                <AnimatePresence mode="wait" initial={false}>
-                                    <motion.span
-                                        key={activeWord}
-                                        initial={{ y: '0.3em', opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        exit={{ y: '-0.3em', opacity: 0 }}
-                                        transition={{ duration: 0.4, ease: 'circOut' }}
-                                        className="col-start-1 row-start-1 text-accent italic"
-                                    >
-                                        {activeWord}
-                                    </motion.span>
-                                </AnimatePresence>
+                                <span className="absolute inset-0 overflow-hidden text-left sm:text-center">
+                                    {/* TRANSFORM ONLY. No opacity, on purpose.
+                                        `initial={false}` on AnimatePresence
+                                        renders the first word at its resting
+                                        position, so first paint (the LCP paint)
+                                        is correct even if no frame ever runs.
+                                        An opacity-gated word would leave a hole
+                                        in the h1 in exactly that case. */}
+                                    <AnimatePresence mode="wait" initial={false}>
+                                        <motion.span
+                                            key={activeWord}
+                                            initial={{ y: '100%' }}
+                                            animate={{ y: '0%' }}
+                                            exit={{ y: '-100%' }}
+                                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                                            className="block"
+                                        >
+                                            {activeWord}
+                                        </motion.span>
+                                    </AnimatePresence>
+                                </span>
                             </span>{' '}
-                            Founders Connect, Grow, and Succeed
+                            <span className="font-extrabold">Founders</span> Connect, Grow, and
+                            Succeed
                         </h1>
 
-                        <p className="text-lg text-muted mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
-                            Visas, U.S. banking, hiring across borders, funding norms nobody
-                            explained to you. Once a month in Austin, you can ask about any of it out
-                            loud, with founders who have already solved it.
-                        </p>
+                        {/* THE 7fr / 5fr SPLIT.
+                            The subtext and the actions take 7 of 12 columns and
+                            the remaining 5 are deliberately empty. The asymmetry
+                            is the composition: it holds the lead at a readable
+                            measure under a headline that runs the full width,
+                            and it is the reason this section does not read as a
+                            centred stack.
 
-                        <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-                            <Button
-                                size="lg"
-                                className="w-full sm:w-auto group shadow-xl"
-                                onClick={onJoinClick}
-                            >
-                                Join the community
-                                <ArrowRight
-                                    aria-hidden="true"
-                                    className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform"
-                                />
-                            </Button>
-                            {/* Navigation is an anchor, not a button with a click handler, so
-                                it can be opened in a new tab and read as a link. ButtonLink
-                                gives it the button's styling from the same source Button uses.
-                                No onDark: this sits on the --band ground. */}
-                            <ButtonLink
-                                to="/resources"
-                                variant="outline"
-                                size="lg"
-                                className="w-full sm:w-auto"
-                            >
-                                Browse our resources
-                            </ButtonLink>
+                            THE SPLIT STARTS AT `lg`, NOT `md`, AND THAT IS A
+                            MEASUREMENT. The two lg buttons plus their gap need
+                            489px on one line. At `md` (768px) seven of twelve
+                            columns is 394px, so the row would either wrap both
+                            labels or, with buttonClasses' `sm:whitespace-nowrap`
+                            holding them, spill out of its own column. At `lg`
+                            (1024px) the same column is 526px, which clears 489
+                            by 37. Measured in a rendered page at 640, 768, 1024
+                            and 1366: the actions row is 56px tall, one line, at
+                            every one of them, and document scrollWidth never
+                            exceeds the viewport.
+
+                            COLLAPSE, declared here rather than assumed:
+                            below `lg` (1024px) the grid does not exist at all
+                            and the block is a single full-width column. Below
+                            `sm` (640px) the actions stack vertically and each
+                            button goes full width. */}
+                        <div className="lg:grid lg:grid-cols-12">
+                            <div className="lg:col-span-7">
+                                {/* SUBTEXT. 19 words, 112 characters, 2 rendered
+                                    lines at both 1366 and 1920. It replaces a
+                                    33 word, 186 character, 3 line string under
+                                    the founder's delegation of 2026-08-09.
+
+                                    It still answers "ask who?", which is the one
+                                    requirement carried forward: "the founders who
+                                    have already solved it" is the sentence's only
+                                    piece of reassurance and a shorter line that
+                                    drops it buys a word count with the offer.
+
+                                    --ink rather than --muted: this is primary
+                                    body copy, not a caption, and it measures
+                                    17.965 on --paper in both modes. */}
+                                <p className="mt-6 max-w-[65ch] text-lg leading-relaxed text-ink">
+                                    Visas, U.S. banking, hiring across borders. Once a month in
+                                    Austin, ask the founders who have already solved it.
+                                </p>
+
+                                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+                                    <Button
+                                        size="lg"
+                                        className="w-full sm:w-auto"
+                                        onClick={onJoinClick}
+                                    >
+                                        Join the community
+                                        <ArrowRight
+                                            aria-hidden="true"
+                                            className="ml-2 h-5 w-5"
+                                            strokeWidth={1.5}
+                                        />
+                                    </Button>
+                                    {/* Navigation is an anchor, not a button with
+                                        a click handler, so it can be opened in a
+                                        new tab and is announced as a link.
+                                        ButtonLink shares buttonClasses with
+                                        Button so the two can never drift. */}
+                                    <ButtonLink
+                                        to="/resources"
+                                        variant="outline"
+                                        size="lg"
+                                        className="w-full sm:w-auto"
+                                    >
+                                        Browse our resources
+                                    </ButtonLink>
+                                </div>
+                            </div>
                         </div>
-
-                        <p className="mt-6 text-sm text-muted font-medium">
-                            No pitch deck required · No introduction needed · Come to one meetup and
-                            decide
-                        </p>
-                    </motion.div>
-
-                    {/* Visual */}
-                    <motion.div
-                        initial={{ scale: 0.95 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                        className="flex-1 relative w-full"
-                    >
-                        <HeroVisual />
                     </motion.div>
                 </div>
-            </Container>
+            </div>
+
+            {/* THE BAND.
+                Full bleed, edge to edge, breaking the poster's gutter. It is a
+                real documentary photograph of a real IFN evening, replacing a
+                div and CSS globe medallion that skill 9.E bans outright.
+
+                THE PLATE RULE: no type sits on it, ever, and no caption sits over
+                it. Its derivation is a measurement rather than a preference, an
+                ink scrim over the worst real pixel inside a candidate frame's
+                type zone needs an alpha that erases the photograph before it
+                reaches AAA, so the whole class of case is deleted rather than
+                mitigated.
+
+                No entrance animation. Plan section 6's LCP guard bars whileInView
+                and any opacity, clip-path or mask on the band, and there is
+                nothing left worth animating on a photograph that is meant to be
+                the first thing painted.
+
+                CLS is zero by construction: `width` and `height` are the
+                intrinsic dimensions of the fallback tier and every tier in the
+                srcset shares one aspect ratio to within 0.5 percent, which the
+                build script enforces, so one reserved box is correct whichever
+                tier the browser picks.
+
+                fetchPriority is written as "high" rather than read from the
+                manifest, which still carries the pre-decision default of "auto". */}
+            <div className="w-full">
+                <picture>
+                    <source type="image/avif" srcSet={heroBand.avif} sizes={heroBand.sizes} />
+                    <source type="image/webp" srcSet={heroBand.webp} sizes={heroBand.sizes} />
+                    <img
+                        src={heroBand.src}
+                        width={heroBand.width}
+                        height={heroBand.height}
+                        alt={heroBand.alt}
+                        loading={heroBand.loading}
+                        fetchPriority="high"
+                        decoding="async"
+                        className="block h-auto w-full"
+                    />
+                </picture>
+            </div>
         </section>
     );
 }
