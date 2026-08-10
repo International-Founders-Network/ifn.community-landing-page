@@ -66,7 +66,7 @@ function countLabel(n: number, tab: Tab) {
     return `${n} ${n === 1 ? TAB_META[tab].one : TAB_META[tab].many}`;
 }
 
-/** Timestamps carry their zone, as `/events` does — an unlabelled time is ambiguous. */
+/** Timestamps carry their zone, as `/events` does. An unlabelled time is ambiguous. */
 function formatDate(iso: string) {
     return new Date(iso).toLocaleString(undefined, {
         year: 'numeric',
@@ -89,7 +89,7 @@ const TH = 'py-2 pr-4 font-semibold';
 function EmptyRow({ colSpan, searching }: { colSpan: number; searching: boolean }) {
     return (
         <tr>
-            <td colSpan={colSpan} className="py-8 text-center text-slate-500">
+            <td colSpan={colSpan} className="py-8 text-center text-muted">
                 {searching ? 'Nothing matches this search.' : 'Nothing here yet.'}
             </td>
         </tr>
@@ -134,7 +134,7 @@ function GoogleSignInButton({ onCredential }: { onCredential: (credential: strin
 
     if (!clientId) {
         return (
-            <p className="max-w-sm text-center text-sm text-red-700">
+            <p className="max-w-sm text-center text-sm text-ink">
                 Google Sign-In is not configured. Set <code>VITE_GOOGLE_CLIENT_ID</code> in the environment.
             </p>
         );
@@ -171,20 +171,20 @@ function LoginScreen({ onAuthenticated }: { onAuthenticated: (email: string) => 
 
     return (
         <div className="flex min-h-[60vh] items-center justify-center px-4 py-16">
-            <div className="flex w-full max-w-sm flex-col items-center gap-6 rounded-2xl border border-slate-200 bg-white p-10">
-                <h2 className="text-2xl font-bold text-primary">Sign in</h2>
-                <p className="text-center text-sm text-slate-600">
+            <div className="flex w-full max-w-sm flex-col items-center gap-6 rounded-2xl border border-rule bg-paper p-10">
+                <h2 className="text-2xl font-bold text-ink">Sign in</h2>
+                <p className="text-center text-sm text-muted">
                     Sign in with an authorized Google account to view form submissions.
                 </p>
                 <GoogleSignInButton onCredential={handleCredential} />
                 {loading && (
-                    <p role="status" className="flex items-center gap-2 text-sm text-slate-600">
+                    <p role="status" className="flex items-center gap-2 text-sm text-muted">
                         <Loader2 className="h-4 w-4 animate-spin motion-status" aria-hidden="true" />
                         Signing in&hellip;
                     </p>
                 )}
                 {error && (
-                    <p role="alert" className="text-center text-sm text-red-700">
+                    <p role="alert" className="text-center text-sm text-ink">
                         {error}
                     </p>
                 )}
@@ -212,7 +212,7 @@ function SubmissionTable({
         return (
             <table className="w-full text-sm">
                 <thead>
-                    <tr className="border-b border-slate-200 text-left text-slate-600">
+                    <tr className="border-b border-rule text-left text-muted">
                         <th scope="col" className={TH}>Date</th>
                         <th scope="col" className={TH}>Name</th>
                         <th scope="col" className={TH}>Email</th>
@@ -224,14 +224,14 @@ function SubmissionTable({
                 <tbody>
                     {rows.contact.length === 0 && <EmptyRow colSpan={6} searching={searching} />}
                     {rows.contact.map((r) => (
-                        <tr key={r.id} className="border-b border-slate-100 align-top">
-                            <td className="whitespace-nowrap py-2 pr-4 text-slate-500">
+                        <tr key={r.id} className="border-b border-rule align-top">
+                            <td className="whitespace-nowrap py-2 pr-4 text-muted">
                                 <time dateTime={r.created_at}>{formatDate(r.created_at)}</time>
                             </td>
                             <td className="py-2 pr-4 font-medium">{r.name}</td>
                             <td className="py-2 pr-4">{r.email}</td>
-                            <td className="py-2 pr-4">{r.phone || '—'}</td>
-                            <td className="py-2 pr-4">{r.company || '—'}</td>
+                            <td className="py-2 pr-4">{r.phone || '-'}</td>
+                            <td className="py-2 pr-4">{r.company || '-'}</td>
                             <td className="max-w-md whitespace-pre-wrap py-2 pr-4">{r.message}</td>
                         </tr>
                     ))}
@@ -244,7 +244,7 @@ function SubmissionTable({
         return (
             <table className="w-full text-sm">
                 <thead>
-                    <tr className="border-b border-slate-200 text-left text-slate-600">
+                    <tr className="border-b border-rule text-left text-muted">
                         <th scope="col" className={TH}>Date</th>
                         <th scope="col" className={TH}>Name</th>
                         <th scope="col" className={TH}>Email</th>
@@ -255,31 +255,33 @@ function SubmissionTable({
                 <tbody>
                     {rows.join.length === 0 && <EmptyRow colSpan={5} searching={searching} />}
                     {rows.join.map((r) => (
-                        <tr key={r.id} className="border-b border-slate-100">
-                            <td className="whitespace-nowrap py-2 pr-4 text-slate-500">
+                        <tr key={r.id} className="border-b border-rule">
+                            <td className="whitespace-nowrap py-2 pr-4 text-muted">
                                 <time dateTime={r.created_at}>{formatDate(r.created_at)}</time>
                             </td>
                             <td className="py-2 pr-4 font-medium">{r.name}</td>
                             <td className="py-2 pr-4">{r.email}</td>
                             <td className="py-2 pr-4">
                                 {r.linkedin ? (
-                                    // Navy, not amber: this is 14px body text, so it needs 4.5:1 —
-                                    // #ea580c only reaches 3.56:1 — and one amber link per row would
-                                    // break the Rationed Amber Rule outright.
+                                    // Neutral, not the accent. This is 14px body text, so it needs
+                                    // 4.5:1, and the accent is licensed to the mark, the primary
+                                    // action and the wordmark period. A link colour is none of the
+                                    // three. `--muted` measures 6.601 here and the underline, not
+                                    // the colour, is what identifies the link.
                                     <a
                                         href={r.linkedin}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="rounded-sm text-slate-600 underline decoration-slate-300 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                        className="rounded-sm text-muted underline decoration-rule underline-offset-4 transition-colors hover:text-ink hover:decoration-ink focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                                     >
                                         Profile
                                         <span className="sr-only"> for {r.name} (opens in a new tab)</span>
                                     </a>
                                 ) : (
-                                    '—'
+                                    '-'
                                 )}
                             </td>
-                            <td className="py-2 pr-4">{r.stage || '—'}</td>
+                            <td className="py-2 pr-4">{r.stage || '-'}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -290,7 +292,7 @@ function SubmissionTable({
     return (
         <table className="w-full text-sm">
             <thead>
-                <tr className="border-b border-slate-200 text-left text-slate-600">
+                <tr className="border-b border-rule text-left text-muted">
                     <th scope="col" className={TH}>Date</th>
                     <th scope="col" className={TH}>Email</th>
                 </tr>
@@ -298,8 +300,8 @@ function SubmissionTable({
             <tbody>
                 {rows.events.length === 0 && <EmptyRow colSpan={2} searching={searching} />}
                 {rows.events.map((r) => (
-                    <tr key={r.id} className="border-b border-slate-100">
-                        <td className="whitespace-nowrap py-2 pr-4 text-slate-500">
+                    <tr key={r.id} className="border-b border-rule">
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">
                             <time dateTime={r.created_at}>{formatDate(r.created_at)}</time>
                         </td>
                         <td className="py-2 pr-4">{r.email}</td>
@@ -314,7 +316,7 @@ function RoadmapPanel() {
     return (
         <table className="w-full text-sm">
             <thead>
-                <tr className="border-b border-slate-200 text-left text-slate-600">
+                <tr className="border-b border-rule text-left text-muted">
                     <th scope="col" className={TH}>Tier</th>
                     <th scope="col" className={TH}>Stage</th>
                     <th scope="col" className={TH}>Includes</th>
@@ -322,9 +324,9 @@ function RoadmapPanel() {
             </thead>
             <tbody>
                 {ROADMAP_TIERS.map((row) => (
-                    <tr key={row.tier} className="border-b border-slate-100 align-top">
+                    <tr key={row.tier} className="border-b border-rule align-top">
                         <td className="whitespace-nowrap py-2 pr-4 font-medium">{row.tier}</td>
-                        <td className="whitespace-nowrap py-2 pr-4 text-slate-500">{row.stage}</td>
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.stage}</td>
                         <td className="py-2 pr-4">{row.includes}</td>
                     </tr>
                 ))}
@@ -335,7 +337,7 @@ function RoadmapPanel() {
 
 /**
  * Placeholder rows while the first load runs. `motion-status` keeps the pulse
- * alive under prefers-reduced-motion — the global rule collapses animations to
+ * alive under prefers-reduced-motion: the global rule collapses animations to
  * one 0.01ms iteration, which would freeze this into a static grey block. The
  * pulse never carries the message on its own: the panel's status line says
  * "Loading submissions…" in text, and this is hidden from assistive tech.
@@ -343,17 +345,17 @@ function RoadmapPanel() {
 function TableSkeleton() {
     return (
         <div className="motion-status animate-pulse space-y-3" aria-hidden="true">
-            <div className="h-4 w-full rounded bg-slate-100" />
+            <div className="h-4 w-full rounded bg-band" />
             {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-10 w-full rounded bg-slate-100" />
+                <div key={i} className="h-10 w-full rounded bg-band" />
             ))}
         </div>
     );
 }
 
 const TAB_BASE =
-    'h-11 rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-none ' +
-    'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2';
+    'h-11 rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-hidden ' +
+    'focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
 
 function Dashboard({ onLogout }: { onLogout: () => void }) {
     const [data, setData] = useState<Submissions | null>(null);
@@ -432,10 +434,18 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
     return (
         <Container className="py-8">
+            {/* Section 4.2's error form, the same one JoinModal carries: `--ink` on
+                `--paper` at 17.965 plus a 3px `--ink` rule, no accent and no second hue.
+                It was a stock red-50 slab with a red-200 border and red-700 type, which
+                section 11's Color Consistency Lock bans outright and which inverts to a
+                near-white slab at 17.005 against the dark page ground once dark mode is
+                on. Class names described, not spelled, so Tailwind v4's raw-text scan
+                does not re-emit them. role="alert" and the message text carry the
+                meaning; the colour never did. */}
             {error && (
                 <p
                     role="alert"
-                    className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                    className="mb-6 border-l-[3px] border-l-ink py-1 pl-4 text-sm text-ink"
                 >
                     {error}
                 </p>
@@ -453,8 +463,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                                 aria-pressed={active}
                                 className={`${TAB_BASE} ${
                                     active
-                                        ? 'bg-primary text-white'
-                                        : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
+                                        ? 'bg-ink text-paper'
+                                        : 'border border-rule bg-paper text-muted hover:bg-band'
                                 }`}
                             >
                                 {TAB_META[t.key].label}
@@ -476,7 +486,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                                 placeholder="Search…"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="h-11 w-48 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-500 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                                className="h-11 w-48 rounded-lg border border-edge bg-paper px-3 text-sm text-ink placeholder:text-muted transition-colors focus:border-ink focus:outline-hidden focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-paper"
                             />
                         </>
                     )}
@@ -492,13 +502,13 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
             <section
                 aria-labelledby="admin-panel-heading"
-                className="rounded-xl border border-slate-200 bg-white"
+                className="rounded-xl border border-rule bg-paper"
             >
-                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-slate-200 px-4 py-3">
-                    <h2 id="admin-panel-heading" className="text-sm font-bold text-primary">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-rule px-4 py-3">
+                    <h2 id="admin-panel-heading" className="text-sm font-bold text-ink">
                         {TAB_META[tab].label}
                     </h2>
-                    <p role="status" className="text-sm text-slate-600">
+                    <p role="status" className="text-sm text-muted">
                         {statusText}
                     </p>
                 </div>
@@ -517,7 +527,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 }
 
 /**
- * The chrome shared by all three states — checking, signed out, signed in — so
+ * The chrome shared by all three states (checking, signed out, signed in), so
  * the surface carries exactly one <h1> in the DOM at every moment.
  *
  * It also supplies the <main> landmark. Page components normally must not, but
@@ -526,10 +536,10 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
  */
 function AdminShell({ children, actions }: { children: React.ReactNode; actions?: React.ReactNode }) {
     return (
-        <div className="flex min-h-screen flex-col bg-slate-50">
-            <header className="border-b border-slate-200 bg-white">
+        <div className="flex min-h-screen flex-col bg-band">
+            <header className="border-b border-rule bg-paper">
                 <Container className="flex flex-wrap items-center justify-between gap-4 py-4">
-                    <h1 className="text-xl font-bold text-primary">IFN Admin</h1>
+                    <h1 className="text-xl font-bold text-ink">IFN Admin</h1>
                     <div className="flex flex-wrap items-center gap-2">
                         <ButtonLink to="/" variant="ghost" size="sm">
                             Back to the site
@@ -552,7 +562,7 @@ function SignedInActions({ email, onLoggedOut }: { email: string; onLoggedOut: (
 
     return (
         <>
-            <span className="text-sm text-slate-600">{email}</span>
+            <span className="text-sm text-muted">{email}</span>
             <Button variant="ghost" size="sm" onClick={handleLogout}>
                 Log out
             </Button>
@@ -570,12 +580,12 @@ export function Admin() {
      * it; this covers crawlers that execute JavaScript. Both the tag and the
      * previous <title> are restored on unmount.
      *
-     * None of this is access control — that is the signed, httpOnly session
+     * None of this is access control. That is the signed, httpOnly session
      * cookie checked server-side on every /api/admin-* request.
      */
     useEffect(() => {
         const previousTitle = document.title;
-        document.title = 'Admin — International Founders Network';
+        document.title = 'Admin | International Founders Network';
 
         const robots = document.createElement('meta');
         robots.name = 'robots';
@@ -601,7 +611,7 @@ export function Admin() {
                 <Container className="py-24">
                     <p
                         role="status"
-                        className="flex items-center justify-center gap-3 text-sm text-slate-600"
+                        className="flex items-center justify-center gap-3 text-sm text-muted"
                     >
                         <Loader2 className="h-5 w-5 animate-spin motion-status" aria-hidden="true" />
                         Checking your sign-in&hellip;

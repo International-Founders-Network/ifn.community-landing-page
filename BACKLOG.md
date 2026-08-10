@@ -38,7 +38,7 @@ This document tracks pending work and points to the spec of record for each capa
 
 - [ ] **SEO Optimization**: unique meta tags, OpenGraph data, Twitter cards for all routes.
 - [ ] **Social Links**: update footer social icons with real IFN handles.
-- [ ] **Dark Mode Support**: theme toggle.
+- [x] **Dark Mode Support**: theme toggle. Tokens swap in `src/index.css` (light on bare `:root`, dark under a `prefers-color-scheme` block guarded as `:root:not([data-theme="light"])` and again under `:root[data-theme="dark"]`). The footer control is `src/components/ThemeToggle.tsx`: three states (light, system, dark), `system` by default and stored as the absence of the `ifn-theme` key. The no-flash bootstrap is the inline classic script in `index.html`.
 - [x] **Performance Optimization (Batch 1)**: lazy-loading, resized hero images, LCP preload, font-loading fixes.
 - [x] **Automated Performance Audit**: `scripts/audit-performance.js`, `npm run audit`.
 - [x] **Automated Testing Suite**: Vitest added, covering the validated backend functions and auth logic (see `netlify/functions/*.test.ts`). Playwright/E2E not yet added.

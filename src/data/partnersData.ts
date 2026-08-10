@@ -11,7 +11,7 @@ export const PARTNERS: Partner[] = [
         id: 'station-austin',
         name: 'Station Austin',
         category: 'Venue Partner',
-        description: 'The center of gravity for entrepreneurs in Texas — hosting IFN meetups and connecting our community with Austin\'s broader startup ecosystem.',
+        description: 'The center of gravity for entrepreneurs in Texas, hosting IFN meetups and connecting our community with Austin\'s broader startup ecosystem.',
         website: 'https://stationaustin.org',
     },
     {

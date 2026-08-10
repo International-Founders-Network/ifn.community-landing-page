@@ -5,6 +5,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- THEME BOOTSTRAP. This is the whole of the no-flash mechanism.
+
+       src/components/ThemeToggle.tsx persists a three state choice at
+       localStorage['ifn-theme']: 'light', 'dark', or the key being absent,
+       which means "follow the system". React cannot apply that choice early
+       enough. The bundle is a module script, so it is deferred by definition
+       and does not execute until after the document is parsed; a dark-choosing
+       reader on a light system would get a fully painted light page first and
+       watch it invert.
+
+       A CLASSIC, NON-DEFERRED, NON-MODULE inline script is the only thing in
+       the document that runs during head parsing. It executes before <body> is
+       parsed and therefore before the first style computation and the first
+       paint, so `data-theme` is already on the root element by the time any
+       pixel is produced. There is no frame in which the wrong palette exists.
+
+       It must stay inline. An external file would be a network round trip that
+       either blocks the parser or arrives too late, which is the same flash by
+       a slower route. There is no Content-Security-Policy on this site
+       (netlify.toml sets only X-Robots-Tag headers and public/_headers is
+       empty), so no nonce or hash is required; if a CSP is ever added, this
+       script needs a hash entry rather than deletion.
+
+       Only 'light' and 'dark' are written. Anything else, including a corrupted
+       value and storage throwing outright, leaves the attribute absent, which
+       is exactly the system state: src/index.css guards its dark block as
+       `:root:not([data-theme="light"])` under the media query and declares
+       `:root[data-theme="dark"]` separately, so an absent attribute follows the
+       OS and a present one wins over it in both directions. -->
+  <script>
+    (function () {
+      try {
+        var choice = localStorage.getItem('ifn-theme');
+        if (choice === 'light' || choice === 'dark') {
+          document.documentElement.setAttribute('data-theme', choice);
+        }
+      } catch (e) {
+        /* Storage unavailable (Safari private browsing throws on access rather
+           than returning null). No attribute means follow the system. */
+      }
+    })();
+  </script>
+
   <!-- Fonts are self hosted from public/fonts/ and declared with @font-face in
        src/index.css. The render blocking Google Fonts stylesheet that used to
        sit here, and its two preconnects, are deleted: a self hosted face needs
@@ -22,16 +65,20 @@
   <link rel="preload" href="/fonts/archivo-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
 
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <!-- Matches the live page ground, --paper. The previous value was the
-       retired brand navy #0f172a, which tinted mobile browser chrome a colour
-       that no longer appears anywhere on the site.
+  <!-- Both values are `--paper`, the page ground of their mode, quoted from
+       REDESIGN-PLAN.md section 4.1. The dark row is the Phase 2 companion this
+       comment used to hold in reserve, and it lands here because the condition
+       it named has been met: the dark tokens in src/index.css are live.
 
-       Phase 2 companion, to land in the same commit that activates the dark
-       tokens in src/index.css and not before:
-       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131311" />
-       Until then this single light value is correct, because the site is
-       light only on every route. -->
-  <meta name="theme-color" content="#FBFBFA" />
+       Media scoped rather than rewritten from JavaScript. That is a deliberate
+       limit, stated rather than hidden: browser chrome follows the SYSTEM
+       preference, so a reader who manually picks the mode their OS is not in
+       gets a chrome tint from the other mode. That is a tint on the surrounding
+       browser UI, not a flash on the page, and mutating `media` on a live
+       theme-color meta is re-evaluated inconsistently across user agents, so
+       the static pair is the more predictable trade. -->
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFBFA" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131311" />
 
   <title>International Founders Network | Austin, Texas</title>
   <meta name="description"

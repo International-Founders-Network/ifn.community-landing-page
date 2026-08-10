@@ -6,31 +6,37 @@ import { Emphasis } from '../components/Emphasis';
 import { Mail, MapPin, CalendarDays, Send, CheckCircle2, ArrowUpRight } from 'lucide-react';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
-/** Verified in src/data/socialLinks.ts — Luma is IFN's source of record for meetup dates. */
+/** Verified in src/data/socialLinks.ts. Luma is IFN's source of record for meetup dates. */
 
 /**
  * Field styles live here rather than being repeated five times.
  *
  * - `rounded-lg` (8px) is the interactive radius from DESIGN.md's Radius Ladder;
  *   the previous `rounded-xl` put fields a step above the button they submit to.
- * - `border-slate-300` is Field Edge — one step darker than a card's Hairline
- *   border, because a field has to read as enterable.
- * - The focus ring is a solid navy ring, not the old `ring-primary/20`, which
- *   measured roughly 1.3:1 against white and failed WCAG 1.4.11's 3:1 minimum
- *   for non-text indicators. Navy on white is ~17:1. The native outline is
- *   suppressed only because this replaces it.
+ * - `border-edge` is the control boundary token, one step stronger than the
+ *   `--rule` hairline a plate carries, because a field has to read as enterable.
+ *   It measures 4.960 on `--paper` and 4.495 on `--band`.
+ * - The fill is `--band`, the opposite ground from the `--paper` card that holds
+ *   it, so the field reads as a well rather than as more card. `--muted` as its
+ *   placeholder measures 5.982 on that fill.
+ * - The focus ring is the canonical two-layer ring: a 2px `--paper` offset
+ *   inside a 2px `--ink` ring. Its two layers contrast with each other at
+ *   17.965, so it reads as a shape on any ground and in either mode. The native
+ *   outline is suppressed only because this replaces it, and `outline-hidden`
+ *   rather than the v3 spelling of the same idea keeps a transparent 2px
+ *   outline under `forced-colors: active`, where the ring is dropped by the OS.
  */
 const FIELD_CLASSES =
-    'w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-slate-900 ' +
-    'placeholder:text-slate-400 transition-colors ' +
-    'focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-2';
+    'w-full px-4 py-3 rounded-lg border border-edge bg-band text-ink ' +
+    'placeholder:text-muted transition-colors ' +
+    'focus:outline-hidden focus:border-ink focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-paper';
 
-const LABEL_CLASSES = 'block text-sm font-medium text-slate-700';
+const LABEL_CLASSES = 'block text-sm font-medium text-ink';
 
-/** Asterisks stay slate. Amber on this page is rationed to the headline word and the submit button. */
+/** The required mark is neutral. The accent on this page is rationed to the headline word and the submit button. */
 function RequiredMark() {
     return (
-        <span aria-hidden="true" className="text-slate-500">
+        <span aria-hidden="true" className="text-muted">
             {' '}
             *
         </span>
@@ -56,8 +62,8 @@ export function Contact() {
 
     // The success state replaces the form in place. Without moving focus, a
     // screen-reader or keyboard user is left on a button that no longer exists
-    // and is never told the submission worked. Focus is the announcement here —
-    // a live region on the same subtree would make some readers say it twice.
+    // and is never told the submission worked. Focus is the announcement here.
+    // A live region on the same subtree would make some readers say it twice.
     useEffect(() => {
         if (!hasSubmittedRef.current) return;
         if (isSuccess) {
@@ -81,7 +87,7 @@ export function Contact() {
                 body: JSON.stringify(formData),
             });
 
-            // A failing endpoint does not always return JSON — contact.ts answers a
+            // A failing endpoint does not always return JSON. contact.ts answers a
             // 405 with the bare string "Method Not Allowed", and Netlify returns HTML
             // on a 502. Parsing defensively keeps a browser exception out of the
             // alert below, which is read aloud.
@@ -122,10 +128,10 @@ export function Contact() {
                     {/* Contact info */}
                     <div className="space-y-10">
                         <div>
-                            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-5 tracking-tight leading-tight">
+                            <h1 className="text-4xl sm:text-5xl font-bold text-ink mb-5 tracking-tight leading-tight">
                                 Ask us a <Emphasis>question</Emphasis>
                             </h1>
-                            <p className="text-lg text-slate-600 leading-relaxed">
+                            <p className="text-lg text-muted leading-relaxed">
                                 IFN is a community for international founders building in Austin, Texas. We have
                                 run an in-person meetup here every month for more than six months. Ask us about a
                                 meetup, about membership, or about working together. This form reaches us directly.
@@ -133,20 +139,20 @@ export function Contact() {
                         </div>
 
                         <div>
-                            <h2 className="text-sm font-bold uppercase tracking-[0.1em] text-slate-500 mb-6">
+                            <h2 className="text-sm font-bold uppercase tracking-[0.1em] text-muted mb-6">
                                 Ways to reach us
                             </h2>
 
                             <div className="space-y-6">
                                 <div className="flex items-start gap-4">
-                                    <div className="bg-primary/10 p-3 rounded-full text-primary shrink-0">
+                                    <div className="bg-ink/10 p-3 rounded-full text-ink shrink-0">
                                         <Mail className="w-6 h-6" aria-hidden="true" />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-slate-900">Email</h3>
+                                        <h3 className="font-semibold text-ink">Email</h3>
                                         <a
                                             href="mailto:hello@ifn.community"
-                                            className="text-slate-600 underline decoration-slate-300 underline-offset-4 hover:text-primary hover:decoration-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
+                                            className="text-muted underline decoration-rule underline-offset-4 hover:text-ink hover:decoration-ink transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper rounded-sm"
                                         >
                                             hello@ifn.community
                                         </a>
@@ -154,24 +160,24 @@ export function Contact() {
                                 </div>
 
                                 <div className="flex items-start gap-4">
-                                    <div className="bg-primary/10 p-3 rounded-full text-primary shrink-0">
+                                    <div className="bg-ink/10 p-3 rounded-full text-ink shrink-0">
                                         <MapPin className="w-6 h-6" aria-hidden="true" />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-slate-900">Where we are</h3>
-                                        <p className="text-slate-600">
+                                        <h3 className="font-semibold text-ink">Where we are</h3>
+                                        <p className="text-muted">
                                             Austin, Texas, USA. IFN has no public office.
                                         </p>
                                     </div>
                                 </div>
 
                                 <div className="flex items-start gap-4">
-                                    <div className="bg-primary/10 p-3 rounded-full text-primary shrink-0">
+                                    <div className="bg-ink/10 p-3 rounded-full text-ink shrink-0">
                                         <CalendarDays className="w-6 h-6" aria-hidden="true" />
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-slate-900">Come to a meetup</h3>
-                                        <p className="text-slate-600">
+                                        <h3 className="font-semibold text-ink">Come to a meetup</h3>
+                                        <p className="text-muted">
                                             One in-person meetup a month, hosted at Station Austin. Dates and sign-up
                                             are published on Luma.
                                         </p>
@@ -179,7 +185,7 @@ export function Contact() {
                                             href={LUMA_CALENDAR_URL}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mt-2 inline-flex items-center gap-1 font-semibold text-primary underline decoration-slate-300 underline-offset-4 hover:decoration-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
+                                            className="mt-2 inline-flex items-center gap-1 font-semibold text-ink underline decoration-rule underline-offset-4 hover:decoration-ink transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper rounded-sm"
                                         >
                                             See upcoming dates on Luma
                                             <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
@@ -191,23 +197,37 @@ export function Contact() {
                         </div>
                     </div>
 
-                    {/* Contact form — flat at rest: hairline border, no resting shadow. */}
-                    <div className="bg-white rounded-2xl p-8 border border-slate-200">
+                    {/* Contact form. Flat at rest: hairline border, no resting shadow. */}
+                    <div className="bg-paper rounded-2xl p-8 border border-rule">
                         {isSuccess ? (
                             <div className="h-full flex flex-col items-center justify-center text-center py-12">
-                                <div className="w-16 h-16 bg-green-100 text-green-700 rounded-full flex items-center justify-center mb-6">
+                                {/* Tokenised in Phase 2. It was a stock green-100 fill with
+                                    green-700 type (class names described rather than spelled,
+                                    because Tailwind v4 scans raw text and would re-emit them as
+                                    dead CSS), a second hue banned by section 11's Consistency Lock
+                                    and, worse, a fixed light chip that reads 16.910 against the
+                                    dark page ground once dark mode is on. `--band` is the fill
+                                    because this sits on the form card's `--paper` ground, so the
+                                    chip is 1.103 by tone. Deliberately borderless, matching the
+                                    other decorative icon chips in this tree: section 4.2's
+                                    mandatory 1px `--rule` plate border governs recessed content
+                                    surfaces, not an icon background whose perceivable object is
+                                    the glyph, at 16.281 light and 16.318 dark. Nothing semantic
+                                    was carried by the green: the glyph is aria-hidden and the
+                                    "Message sent" heading below states the outcome in words. */}
+                                <div className="w-16 h-16 bg-band text-ink rounded-full flex items-center justify-center mb-6">
                                     <CheckCircle2 className="w-8 h-8" aria-hidden="true" />
                                 </div>
                                 <h2
                                     ref={successHeadingRef}
                                     tabIndex={-1}
-                                    className="text-2xl font-bold text-slate-900 mb-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                    className="text-2xl font-bold text-ink mb-3 rounded-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                                 >
                                     Message sent
                                 </h2>
-                                <p className="text-slate-600 mb-8 max-w-sm leading-relaxed">
+                                <p className="text-muted mb-8 max-w-sm leading-relaxed">
                                     Thank you. IFN is run by a small founder team, and your message comes straight
-                                    to us — we read every one.
+                                    to us. We read every one.
                                 </p>
                                 <Button
                                     variant="outline"
@@ -222,7 +242,7 @@ export function Contact() {
                                     href={LUMA_CALENDAR_URL}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary underline decoration-slate-300 underline-offset-4 hover:decoration-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
+                                    className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-ink underline decoration-rule underline-offset-4 hover:decoration-ink transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper rounded-sm"
                                 >
                                     Meanwhile, see the next Austin meetup
                                     <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
@@ -232,8 +252,8 @@ export function Contact() {
                         ) : (
                             <form className="space-y-6" onSubmit={handleSubmit}>
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900">Send a message</h2>
-                                    <p className="mt-1 text-sm text-slate-500">
+                                    <h2 className="text-xl font-bold text-ink">Send a message</h2>
+                                    <p className="mt-1 text-sm text-muted">
                                         An asterisk (*) marks a field you have to fill in.
                                     </p>
                                 </div>
@@ -292,7 +312,7 @@ export function Contact() {
                                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                             className={FIELD_CLASSES}
                                         />
-                                        <p id="contact-phone-hint" className="text-xs text-slate-500">
+                                        <p id="contact-phone-hint" className="text-xs text-muted">
                                             Please include your country code if you are outside the United States.
                                         </p>
                                     </div>
@@ -333,11 +353,20 @@ export function Contact() {
                                         // role="alert" fires on insertion, so the failure is announced
                                         // instead of only being visible. MotionConfig in App.tsx
                                         // handles prefers-reduced-motion for this entrance.
+                                        //
+                                        // Section 4.2's error form, identical to JoinModal's:
+                                        // --ink on --paper at 17.965 plus a 3px --ink rule.
+                                        // It was a stock red-50 slab with a red-200 border and
+                                        // red-700 type: a second brand hue that section 11 bans
+                                        // on the error path, and a fixed light slab that reads
+                                        // 17.005 against the dark page ground once dark mode is
+                                        // on. Class names described, not spelled, so Tailwind
+                                        // v4's raw-text scan does not re-emit them.
                                         role="alert"
                                         initial={{ opacity: 0, y: -4 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.3 }}
-                                        className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm font-medium"
+                                        className="border-l-[3px] border-l-ink py-1 pl-4 text-sm font-medium text-ink"
                                     >
                                         {errorMessage}
                                     </motion.div>
@@ -349,7 +378,7 @@ export function Contact() {
                                     fullWidth
                                     disabled={isSubmitting}
                                     aria-busy={isSubmitting}
-                                    className="gap-2 shadow-lg shadow-primary/20"
+                                    className="gap-2 shadow-lg"
                                 >
                                     {isSubmitting ? 'Sending…' : 'Send message'}
                                     <Send className="w-4 h-4" aria-hidden="true" />

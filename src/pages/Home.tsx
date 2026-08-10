@@ -28,40 +28,40 @@ function SectionPlaceholder({ className }: { className: string }) {
 export function Home() {
     const { openJoinModal } = useOutletContext<{ openJoinModal: () => void }>();
 
-    // No <main> here — App.tsx already provides the single main landmark.
+    // No <main> here. App.tsx already provides the single main landmark.
     return (
         <>
             <Hero onJoinClick={openJoinModal} />
             <ValueProps />
             <HowItWorks onJoinClick={openJoinModal} />
 
-            <Suspense fallback={<SectionPlaceholder className="bg-slate-50 min-h-[36rem]" />}>
+            <Suspense fallback={<SectionPlaceholder className="bg-band min-h-[36rem]" />}>
                 <FounderStory />
             </Suspense>
 
-            <Suspense fallback={<SectionPlaceholder className="bg-white min-h-[52rem]" />}>
+            <Suspense fallback={<SectionPlaceholder className="bg-paper min-h-[52rem]" />}>
                 <EventsPreview />
             </Suspense>
 
             {/* Directly after the meetups, because that is where a visitor asks
-                "is this real?" — and the venue and the speed-networking format
+                "is this real?", and the venue and the speed-networking format
                 are the two partners that make the meetup they just read about
                 happen. Harbor Mist here also restores the Paper / Harbor Mist
                 alternation, which EventsPreview and ResourcesPreview had broken
                 by sitting on white back to back. */}
-            <Suspense fallback={<SectionPlaceholder className="bg-slate-50 min-h-[44rem]" />}>
+            <Suspense fallback={<SectionPlaceholder className="bg-band min-h-[44rem]" />}>
                 <PartnersStrip />
             </Suspense>
 
-            <Suspense fallback={<SectionPlaceholder className="bg-white min-h-[56rem]" />}>
+            <Suspense fallback={<SectionPlaceholder className="bg-paper min-h-[56rem]" />}>
                 <ResourcesPreview />
             </Suspense>
 
-            <Suspense fallback={<SectionPlaceholder className="bg-slate-50 min-h-[40rem]" />}>
+            <Suspense fallback={<SectionPlaceholder className="bg-band min-h-[40rem]" />}>
                 <FAQ />
             </Suspense>
 
-            <Suspense fallback={<SectionPlaceholder className="bg-primary min-h-[30rem]" />}>
+            <Suspense fallback={<SectionPlaceholder className="bg-band min-h-[30rem]" />}>
                 <FinalCTA onJoinClick={openJoinModal} />
             </Suspense>
         </>

@@ -26,8 +26,9 @@ export function EventsPreview() {
      *    current instant, so tonight's meetup does not disappear at 6:31 PM.
      *
      * 2. Every entry in the bundled fallback data carries `registrations: [{}]`
-     *    — no platform, no URL. Those produced register buttons that pointed at
-     *    nothing. Malformed entries are dropped before the card ever sees them.
+     *    with no platform and no URL. Those produced register buttons that
+     *    pointed at nothing. Malformed entries are dropped before the card ever
+     *    sees them.
      */
     const upcoming = useMemo<Event[]>(() => {
         const startOfToday = new Date();
@@ -50,15 +51,15 @@ export function EventsPreview() {
     const isPaginated = !loading && upcoming.length > EVENTS_PER_PAGE;
 
     return (
-        <section className="py-24 bg-white" id="events">
+        <section className="py-24 bg-paper" id="events">
             <Container>
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
                     <div className="max-w-2xl">
-                        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-4">
+                        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-ink mb-4">
                             The next meetup in Austin
                         </h2>
-                        <p className="text-lg text-slate-600 leading-relaxed">
-                            One meetup a month, in person. Anyone building a company here can come —
+                        <p className="text-lg text-muted leading-relaxed">
+                            One meetup a month, in person. Anyone building a company here can come:
                             you do not need to be a member to attend.
                         </p>
                     </div>
@@ -73,7 +74,7 @@ export function EventsPreview() {
                             >
                                 Previous
                             </Button>
-                            <p aria-live="polite" className="text-sm font-medium text-slate-600 whitespace-nowrap">
+                            <p aria-live="polite" className="text-sm font-medium text-muted whitespace-nowrap">
                                 Page {currentPage + 1} of {totalPages}
                             </p>
                             <Button
@@ -94,17 +95,17 @@ export function EventsPreview() {
                     // visible rather than sr-only, so the message never rests on motion alone.
                     <div
                         role="status"
-                        className="w-full min-h-[28rem] flex flex-col items-center justify-center gap-3 bg-slate-50 rounded-2xl border border-dashed border-slate-200"
+                        className="w-full min-h-[28rem] flex flex-col items-center justify-center gap-3 bg-band rounded-2xl border border-dashed border-rule"
                     >
-                        <Loader2 aria-hidden="true" className="motion-status w-8 h-8 text-slate-400 animate-spin" />
-                        <p className="text-slate-600 font-medium">Loading the upcoming meetups.</p>
+                        <Loader2 aria-hidden="true" className="motion-status w-8 h-8 text-muted animate-spin" />
+                        <p className="text-muted font-medium">Loading the upcoming meetups.</p>
                     </div>
                 )}
 
                 {!loading && upcoming.length === 0 && (
-                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-6 py-14 text-center">
-                        <p className="text-xl font-bold text-slate-900">The next date is not on the calendar yet.</p>
-                        <p className="mt-3 mx-auto max-w-md text-slate-600 leading-relaxed">
+                    <div className="rounded-2xl border border-rule bg-band px-6 py-14 text-center">
+                        <p className="text-xl font-bold text-ink">The next date is not on the calendar yet.</p>
+                        <p className="mt-3 mx-auto max-w-md text-muted leading-relaxed">
                             IFN meets once a month in Austin. Every date is published on Luma.
                         </p>
                         <ButtonLink href={LUMA_CALENDAR_URL} variant="outline" className="mt-8">
@@ -132,15 +133,15 @@ export function EventsPreview() {
                                             onClick={() => setRequestedPage(idx)}
                                             aria-label={`Go to page ${idx + 1} of ${totalPages}`}
                                             aria-current={isCurrent ? 'true' : undefined}
-                                            /* The dot is 8px, but the control is 44px — the hit area is
+                                            /* The dot is 8px, but the control is 44px. The hit area is
                                                a transparent square around it (WCAG 2.5.5). */
-                                            className="group h-11 w-11 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                            className="group h-11 w-11 flex items-center justify-center rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                                         >
                                             <span
                                                 aria-hidden="true"
                                                 /* Width carries the state as well as colour, so the
                                                    current page is not signalled by colour alone. */
-                                                className={`block h-2 rounded-full transition-all duration-300 ${isCurrent ? 'w-6 bg-primary' : 'w-2 bg-slate-300 group-hover:bg-slate-500'
+                                                className={`block h-2 rounded-full transition-all duration-300 ${isCurrent ? 'w-6 bg-ink' : 'w-2 bg-rule group-hover:bg-edge'
                                                     }`}
                                             />
                                         </button>
@@ -152,19 +153,20 @@ export function EventsPreview() {
                 )}
 
                 <div className="mt-4 flex flex-col items-center gap-5 text-center">
-                    {/* Outline, not amber: the cards above already carry the register actions,
-                        and the Rationed Amber rule caps a viewport at three amber moments. */}
+                    {/* Outline, not the accent fill: the cards above already carry the
+                        register actions, and plan section 2 caps a viewport at two
+                        accent marks plus the wordmark period. */}
                     <ButtonLink to="/events" variant="outline" size="lg" className="gap-2">
                         See all meetups
                         <ArrowRight size={18} aria-hidden="true" />
                     </ButtonLink>
-                    <p className="text-sm text-slate-600">
+                    <p className="text-sm text-muted">
                         Registration for every meetup is on{' '}
                         <a
                             href={LUMA_CALENDAR_URL}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="font-semibold text-primary underline underline-offset-4 decoration-slate-300 hover:decoration-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
+                            className="font-semibold text-ink underline underline-offset-4 decoration-rule hover:decoration-ink transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper rounded-sm"
                         >
                             Luma
                             <span className="sr-only"> (opens in a new tab)</span>

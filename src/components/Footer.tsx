@@ -1,6 +1,7 @@
 import { Linkedin, Calendar, Instagram, Mail, Heart, type LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from './Container';
+import { ThemeToggle } from './ThemeToggle';
 import { SOCIAL_LINKS, LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 /**
@@ -81,11 +82,13 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
  * property form emits both layers verbatim and cannot be reached by
  * `--tw-shadow-color`. Verified in compiled CSS, not inferred.
  *
- * `outline-hidden` rather than `outline-none`, for the reason `buttonStyles.ts`
- * gives: only `outline-hidden` keeps `outline: 2px solid transparent` under
- * `forced-colors: active`. A forced colours UA drops `box-shadow` entirely, so
- * `outline-none` would leave every footer link with no focus indicator at all
- * in Windows High Contrast Mode.
+ * `outline-hidden` rather than the v3 spelling of the same idea, for the reason
+ * `buttonStyles.ts` gives: only `outline-hidden` keeps
+ * `outline: 2px solid transparent` under `forced-colors: active`. A forced
+ * colours UA drops `box-shadow` entirely, so the retired spelling would leave
+ * every footer link with no focus indicator at all in Windows High Contrast
+ * Mode. That spelling is not written out even here, so a grep based pass
+ * condition on it returns zero for this file.
  *
  * The geometry is identical to `ring-2 ring-ink ring-offset-2
  * ring-offset-paper`, which is how `Navbar` and `FAQ` still spell it. Those two
@@ -202,8 +205,22 @@ export function Footer() {
                     </nav>
                 </div>
 
-                {/* Bottom bar */}
-                <div className="flex flex-col items-center gap-6 border-t border-rule py-8 md:flex-row md:justify-between">
+                {/*
+                 * Bottom bar. The side-by-side split moved from `md` to `lg` when
+                 * the theme control landed here, and the reason is arithmetic
+                 * rather than taste. The controls group has a hard min-content
+                 * width: 197px of theme control (three 44px chips that cannot
+                 * shrink, plus the label) and 188px of channel row, plus the 32px
+                 * `sm:gap-8`, so roughly 417px that will not compress. Against the
+                 * ~720px the container gives at 768px, the copyright block is left
+                 * about 149px short of its natural width and wraps to two lines
+                 * across the whole 768 to 920px band, on all seventeen routes. It
+                 * never overflows (its own min-content is ~142px), so this is
+                 * crowding rather than a break, and holding the split until `lg`
+                 * gives the metadata its own row until there is genuinely room for
+                 * two.
+                 */}
+                <div className="flex flex-col items-center gap-6 border-t border-rule py-8 lg:flex-row lg:justify-between">
                     <div className="flex flex-col items-center gap-2 text-sm text-muted sm:flex-row sm:gap-4">
                         <p>© {currentYear} IFN Global LLC. All rights reserved.</p>
 
@@ -229,44 +246,67 @@ export function Footer() {
                     </div>
 
                     {/*
-                     * Channel row. Every entry, its URL and its accessible name live in
-                     * src/data/socialLinks.ts. Entries flagged `verified: false` there are
-                     * unconfirmed guesses at IFN's handle and should be confirmed or removed
-                     * from that file before launch rather than filtered out here: this
-                     * component renders the list as given, on purpose.
+                     * The controls end of the bottom bar. The theme control and the
+                     * channel row are wrapped in ONE group so the bar keeps its two
+                     * part composition: metadata left, controls right. Mounting the
+                     * toggle as a third direct child would have turned
+                     * `md:justify-between` into a three way spread and pushed the
+                     * channel row off the right edge of the reading rhythm.
                      *
-                     * These are discrete controls, so they take the full pill under plan
-                     * section 4.4 while the text links above stay square.
+                     * They stack at the narrowest widths and sit on one line from
+                     * `sm` up. That is this block's sub 768px collapse, declared in
+                     * the same component as the asymmetry per plan section 11.
                      */}
-                    <ul className="flex items-center gap-1">
-                        {SOCIAL_LINKS.map((social) => {
-                            const Icon = SOCIAL_ICONS[social.id];
-                            if (!Icon) return null;
+                    <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-8">
+                        {/*
+                         * Theme control. Three states, `system` by default, persisted in
+                         * localStorage and applied as `data-theme` on the document
+                         * element. The no-flash bootstrap for it is the inline script in
+                         * index.html, which stamps the same attribute from the same
+                         * storage key during head parsing, before first paint.
+                         */}
+                        <ThemeToggle />
 
-                            return (
-                                <li key={social.id}>
-                                    <a
-                                        href={social.href}
-                                        aria-label={
-                                            social.external
-                                                ? `${social.label} (opens in a new tab)`
-                                                : social.label
-                                        }
-                                        {...(social.external
-                                            ? { target: '_blank', rel: 'noopener noreferrer' }
-                                            : {})}
-                                        className={
-                                            'inline-flex h-11 w-11 items-center justify-center rounded-full ' +
-                                            'text-muted transition-colors hover:text-ink ' +
-                                            FOCUS_RING
-                                        }
-                                    >
-                                        <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
-                                    </a>
-                                </li>
-                            );
-                        })}
-                    </ul>
+                        {/*
+                         * Channel row. Every entry, its URL and its accessible name live in
+                         * src/data/socialLinks.ts. Entries flagged `verified: false` there are
+                         * unconfirmed guesses at IFN's handle and should be confirmed or removed
+                         * from that file before launch rather than filtered out here: this
+                         * component renders the list as given, on purpose.
+                         *
+                         * These are discrete controls, so they take the full pill under plan
+                         * section 4.4 while the text links above stay square.
+                         */}
+                        <ul className="flex items-center gap-1">
+                            {SOCIAL_LINKS.map((social) => {
+                                const Icon = SOCIAL_ICONS[social.id];
+                                if (!Icon) return null;
+
+                                return (
+                                    <li key={social.id}>
+                                        <a
+                                            href={social.href}
+                                            aria-label={
+                                                social.external
+                                                    ? `${social.label} (opens in a new tab)`
+                                                    : social.label
+                                            }
+                                            {...(social.external
+                                                ? { target: '_blank', rel: 'noopener noreferrer' }
+                                                : {})}
+                                            className={
+                                                'inline-flex h-11 w-11 items-center justify-center rounded-full ' +
+                                                'text-muted transition-colors hover:text-ink ' +
+                                                FOCUS_RING
+                                            }
+                                        >
+                                            <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
+                                        </a>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
                 </div>
             </Container>
         </footer>

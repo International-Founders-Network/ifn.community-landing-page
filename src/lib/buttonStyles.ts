@@ -35,35 +35,36 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
  * contrast with EACH OTHER at 17.965, so the ring reads as a shape, and the
  * better of the two layers carries the 3:1 non text floor on its own:
  *
- *   on --paper   outer --ink 17.965      on --band          outer --ink 16.281
- *   on --accent  inner --paper  7.054    on --accent-plate  inner --paper 7.054
- *   on --ink slab (bg-primary)  inner --paper 17.965  (outer --ink is 1.042)
- *   on slate-900 legacy slab    inner --paper 17.241  (outer --ink is 1.042)
+ *   on --paper          outer --ink    17.965
+ *   on --band           outer --ink    16.281 light, 16.318 dark
+ *   on --accent         inner --paper   7.054
+ *   on --accent-plate   inner --paper   7.054
+ *   on an --ink fill    inner --paper  17.965  (outer --ink is 1.000)
  *
- * The last two rows are the reason `ON_DARK` no longer carries a ring override:
- * on a near black slab the outer layer vanishes and the inner layer is doing
- * all the work, which is exactly what the construction is designed for. Plan
- * section 4.2 swept all 256 greys and the better layer never drops below 4.264.
+ * That last row is the reason `ON_DARK` no longer carries a ring override: on
+ * an --ink fill the outer layer vanishes into its own ground and the inner
+ * layer does all the work, which is exactly what the construction is designed
+ * for. Plan section 4.2 swept all 256 greys and the better layer never drops
+ * below 4.264.
  *
  * WRITTEN AS AN ARBITRARY PROPERTY, NOT AS A SHADOW UTILITY, AND THAT IS LOAD
  * BEARING. Compiled with this project's own Tailwind 4.1.18, the utility form
  * of the same value emits
- * `--tw-shadow: 0 0 0 2px var(--tw-shadow-color, var(--paper)), ...`. Five call
- * sites currently pass a Tailwind shadow-colour utility through `className`
- * (Hero.tsx:146, ResourcesPreview.tsx:192, Membership.tsx:118,
- * Partners.tsx:124, Contact.tsx:352). Those set `--tw-shadow-color`, which
- * would then win the fallback in BOTH layers and repaint the entire focus ring
- * in a translucent navy. The arbitrary property form emits
+ * `--tw-shadow: 0 0 0 2px var(--tw-shadow-color, var(--paper)), ...`. Any call
+ * site that passes a Tailwind shadow-colour utility through `className` sets
+ * `--tw-shadow-color`, which would then win the fallback in BOTH layers and
+ * repaint the entire focus ring in that one colour. Phase 2 deleted the five
+ * shadow-colour utilities that were live when this was written (Hero,
+ * ResourcesPreview, Membership, Partners, Contact); the arbitrary property form
+ * stays so the hazard cannot come back, because it emits
  * `box-shadow: 0 0 0 2px var(--paper),0 0 0 4px var(--ink)` verbatim and cannot
  * be reached by `--tw-shadow-color`. Verified in compiled CSS, not inferred.
  *
  * Both layers are one `box-shadow` declaration on purpose, so they share a
- * fate. All three `onDark` call sites sit inside sections that set
- * `overflow: hidden` (HowItWorks.tsx:35, FinalCTA.tsx:46, Events.tsx:220); a
- * split construction
- * where the inner layer is a clippable box-shadow and the outer is an unclipped
- * outline would degrade to an invisible ring on precisely the grounds where the
- * inner layer is the only one that measures.
+ * fate. Several sections set `overflow: hidden` (HowItWorks, FinalCTA, Events);
+ * a split construction where the inner layer is a clippable box-shadow and the
+ * outer is an unclipped outline would degrade to an invisible ring on precisely
+ * the grounds where the inner layer is the only one that measures.
  *
  * `outline-hidden` rather than the v3 spelling of the same idea: it is the one
  * that keeps `outline: 2px solid transparent` under `forced-colors: active`,
@@ -160,51 +161,45 @@ const VARIANTS: Record<ButtonVariant, string> = {
 };
 
 /**
- * `onDark` covers the two legacy near black slabs that Phase 1 does not retire:
- * `bg-primary` (which now resolves to `--ink`) and `bg-slate-900`. Phase 3
- * deletes both, and this whole block goes with them.
+ * `onDark` IS A NO-OP, DELIBERATELY, AND EVERY ROW BELOW IS EMPTY ON PURPOSE.
  *
- * PRIMARY IS DELIBERATELY EMPTY, AND THAT IS NOT AN OVERSIGHT. It used to carry
- * an accent ring plus a navy ring offset, and both halves of that are now
- * handled elsewhere:
+ * It existed for the two legacy near black slab grounds that Phase 1 did not
+ * retire. Phase 2 retired both: every slab section is now `--band`, which is
+ * the second surface of whichever mode is active, so it is a light ground in
+ * light mode and a dark one in dark mode exactly like `--paper`. There is no
+ * ground left on the page that wants a different button treatment, so
+ * `VARIANTS` above governs everywhere and this map contributes nothing.
  *
- *   - The ring is ground independent by construction. See FOCUS_RING above.
- *   - The fill is handled by the legacy dark slab bridge at the bottom of
- *     `src/index.css`, which redefines `--accent`, `--accent-press` and
- *     `--on-accent` inside `.bg-primary`, `.bg-slate-900` and `.bg-ink`. The
- *     unmodified `bg-accent text-on-accent hover:bg-accent-press` above
- *     therefore renders as a #E85C77 fill with an `--ink` label at 5.517
- *     (6.629 on hover) inside those slabs, and the fill boundary measures 5.517
- *     against `--ink` and 5.295 against slate-900.
+ * WHY THE ROWS ARE EMPTIED RATHER THAN THE PROP DELETED. Component files
+ * outside this one still pass `onDark`, so the prop stays on
+ * `ButtonStyleOptions` and they keep typechecking while Phase 3 rewrites them.
+ * Emptying the map is also the safe order of operations: it produces the
+ * correct render whether or not a given call site has dropped the attribute.
  *
- * THIS IS A SILENT DEPENDENCY ON A SELECTOR IN ANOTHER FILE. If any agent
- * renames a dark ground class, the bridge stops matching, `--accent` reverts to
- * #A81B36 and the primary action on that slab drops to 2.547 against its own
- * ground with no build error and no failing test. That failure mode is stated
- * at length in `src/index.css`; this comment exists so it is also stated at the
- * call site that depends on it. Reached from HowItWorks.tsx:56,
- * FinalCTA.tsx:71 and Events.tsx:307.
+ * THE ROW THAT MATTERED IS `outline`. It read
+ * `border-paper bg-transparent text-paper hover:bg-paper hover:text-ink`, which
+ * is correct only on a near black fill. On `--band` its stroke and its label
+ * both measure 1.103 in light and 1.101 in dark: an invisible border and an
+ * invisible label until hover, on the closing conversion path in FinalCTA. With
+ * this map empty that call site takes `VARIANTS.outline` instead, a 2px `--edge`
+ * stroke measuring 4.495 on `--band` (4.363 dark) around an `--ink` label at
+ * 17.965 on its own `--paper` fill.
  *
- * The other three rows drop every 40% and 10% white alpha composite the old
- * block used. Those were unmeasured and the plan's material rule allows no
- * alpha on the page except the modal scrim. Ratios on the two live slabs:
+ * `primary` was already empty and stays so. The ring is ground independent by
+ * construction (see FOCUS_RING above), and the `--accent` fill needs no
+ * override on `--band`, where the fill boundary measures 6.393 in light and
+ * 5.011 in dark and the `--on-accent` label measures the same.
  *
- *   secondary  --ink on the --paper fill    17.965   hover on --band  16.281
- *   outline    --paper label and 2px --paper stroke: 17.965 on --ink,
- *              17.241 on slate-900. Hover inverts to a --paper fill with an
- *              --ink label at 17.965.
- *   ghost      --paper label 17.965 on --ink, 17.241 on slate-900.
- *
- * The disabled block in BASE is not overridden here, so a disabled control on a
- * dark slab renders as a near white `--band` pill with a `--muted` label at
- * 5.982. That clears the floor and looks odd; it is transitional, reachable
- * only at Events.tsx:307 mid submit, and it dies with the slab in Phase 3.
+ * The disabled block in BASE was never overridden here and still is not: a
+ * disabled control renders as a `--band` pill with a 2px `--edge` stroke and a
+ * `--muted` label at 5.982 light and 6.808 dark, which is now correct on every
+ * ground rather than transitional.
  */
 const ON_DARK: Record<ButtonVariant, string> = {
     primary: '',
-    secondary: 'bg-paper text-ink hover:bg-band',
-    outline: 'border-paper bg-transparent text-paper hover:bg-paper hover:text-ink',
-    ghost: 'text-paper hover:bg-paper hover:text-ink',
+    secondary: '',
+    outline: '',
+    ghost: '',
 };
 
 // Every size clears the 44px WCAG 2.5.5 touch target. `h-11` is 44px and `h-14`
@@ -221,7 +216,10 @@ export interface ButtonStyleOptions {
     variant?: ButtonVariant;
     size?: ButtonSize;
     fullWidth?: boolean;
-    /** Use on the legacy near black slabs: `bg-primary` and `bg-slate-900`. */
+    /**
+     * Retained for the call sites Phase 3 has yet to rewrite. Accepted and
+     * ignored: see `ON_DARK` above for why it no longer resolves to anything.
+     */
     onDark?: boolean;
     className?: string;
 }

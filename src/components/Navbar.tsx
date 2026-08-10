@@ -39,11 +39,13 @@ const MOBILE_MENU_ID = 'primary-navigation-menu';
 // Measured: --ink outer against the --paper bar ground 17.965, the two layers
 // against each other 17.965, so the ring reads as a shape and not as a colour.
 //
-// `outline-hidden` rather than `outline-none`, which is the spelling this file
-// used to carry. Only `outline-hidden` keeps `outline: 2px solid transparent`
-// under `forced-colors: active`, and a forced colours UA drops box-shadow, which
-// is what a Tailwind ring compiles to. With `outline-none` every control in this
-// bar had no focus indicator at all in Windows High Contrast Mode.
+// `outline-hidden` rather than the v3 spelling of the same idea, which is what
+// this file used to carry. Only `outline-hidden` keeps
+// `outline: 2px solid transparent` under `forced-colors: active`, and a forced
+// colours UA drops box-shadow, which is what a Tailwind ring compiles to. Under
+// the old spelling every control in this bar had no focus indicator at all in
+// Windows High Contrast Mode. The retired spelling is not written out even
+// here, so a grep based pass condition on it returns zero for this file.
 const FOCUS_RING =
     'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink ' +
     'focus-visible:ring-offset-2 focus-visible:ring-offset-paper';

@@ -31,27 +31,27 @@ const PROOF = [
 export function HeroVisual() {
     return (
         <div className="relative w-full max-w-lg mx-auto">
-            {/* Medallion. Static: no rotating rings, no breathing globe — DESIGN.md
+            {/* Medallion. Static: no rotating rings, no breathing globe. DESIGN.md
                 allows one piece of ambient motion on this page and it belongs to the
                 headline. */}
             <div className="relative mx-auto aspect-square w-full max-w-[18rem] sm:max-w-[22rem] lg:max-w-[26rem]">
                 <div
                     aria-hidden="true"
-                    className="absolute inset-0 -z-10 rounded-full bg-primary/10 blur-[90px]"
+                    className="absolute inset-0 -z-10 rounded-full bg-ink/10 blur-[90px]"
                 />
 
-                <div className="relative flex h-full w-full items-center justify-center rounded-full border border-slate-200 bg-white/60 backdrop-blur-sm">
+                <div className="relative flex h-full w-full items-center justify-center rounded-full border border-rule bg-paper">
                     <div
                         aria-hidden="true"
-                        className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.9),transparent_70%)]"
+                        className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,var(--paper),transparent_70%)]"
                     />
                     <div
                         aria-hidden="true"
-                        className="absolute inset-[8%] rounded-full border border-dashed border-slate-300"
+                        className="absolute inset-[8%] rounded-full border border-dashed border-rule"
                     />
                     <div
                         aria-hidden="true"
-                        className="absolute inset-[22%] rounded-full border border-slate-200"
+                        className="absolute inset-[22%] rounded-full border border-rule"
                     />
 
                     {/* Connection points replace what used to be three stock photographs
@@ -62,19 +62,19 @@ export function HeroVisual() {
                             key={node.left + node.top}
                             aria-hidden="true"
                             style={{ left: node.left, top: node.top }}
-                            className="absolute flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white"
+                            className="absolute flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-rule bg-paper"
                         >
-                            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-ink" />
                         </span>
                     ))}
 
-                    <div className="relative z-10 rounded-full border border-slate-200 bg-white p-8 sm:p-10">
-                        <GlobeIcon className="h-24 w-24 text-primary sm:h-28 sm:w-28" />
+                    <div className="relative z-10 rounded-full border border-rule bg-paper p-8 sm:p-10">
+                        <GlobeIcon className="h-24 w-24 text-ink sm:h-28 sm:w-28" />
                     </div>
                 </div>
             </div>
 
-            {/* Proof. Visible at every breakpoint — these used to be `hidden xl:block`,
+            {/* Proof. Visible at every breakpoint. These used to be `hidden xl:block`,
                 which meant every phone and most laptops saw no evidence at all. */}
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 {PROOF.map(({ icon: Icon, eyebrow, title, detail }, i) => {
@@ -88,36 +88,20 @@ export function HeroVisual() {
                             transition={{ delay: 0.5 + i * 0.1, duration: 0.5 }}
                             className={
                                 onDark
-                                    ? 'rounded-2xl border border-white/10 bg-primary p-6'
-                                    : 'rounded-2xl border border-slate-200 bg-white p-6'
+                                    ? 'rounded-2xl border border-rule bg-band p-6'
+                                    : 'rounded-2xl border border-rule bg-paper p-6'
                             }
                         >
                             <div className="flex items-start gap-4">
-                                <span
-                                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${onDark ? 'bg-white/10 text-white' : 'bg-slate-100 text-primary'
-                                        }`}
-                                >
+                                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-band text-ink">
                                     <Icon aria-hidden="true" size={20} strokeWidth={1.5} />
                                 </span>
                                 <div>
-                                    <p
-                                        className={`text-xs font-bold uppercase tracking-widest ${onDark ? 'text-slate-300' : 'text-slate-600'
-                                            }`}
-                                    >
+                                    <p className="text-xs font-bold uppercase tracking-widest text-muted">
                                         {eyebrow}
                                     </p>
-                                    <p
-                                        className={`mt-1 text-base font-bold ${onDark ? 'text-white' : 'text-slate-900'
-                                            }`}
-                                    >
-                                        {title}
-                                    </p>
-                                    <p
-                                        className={`mt-1 text-sm ${onDark ? 'text-slate-300' : 'text-slate-600'
-                                            }`}
-                                    >
-                                        {detail}
-                                    </p>
+                                    <p className="mt-1 text-base font-bold text-ink">{title}</p>
+                                    <p className="mt-1 text-sm text-muted">{detail}</p>
                                 </div>
                             </div>
                         </motion.div>

@@ -9,18 +9,18 @@ import { PARTNERS, type Partner } from '../data/partnersData';
  * The three named partners, surfaced on the home page.
  *
  * `/partners` existed but was reachable only from a footer link, so the single
- * strongest credibility asset IFN has — three companies a sceptical visitor can
- * look up — never appeared on the page where the question "is this real?" is
+ * strongest credibility asset IFN has (three companies a sceptical visitor can
+ * look up) never appeared on the page where the question "is this real?" is
  * actually asked. This is the compact answer: names, roles, and one honest
  * disclosure. The full cards stay on `/partners`; this strip does not repeat them.
  *
- * Ground is Harbor Mist, so it sits between the two Paper bands around it and
- * separates them by tone rather than by a rule. Amber appears exactly once here,
- * in the headline's italic word.
+ * Ground is `--band`, so it sits between the two `--paper` sections around it and
+ * separates them by tone rather than by a rule. The accent appears exactly once
+ * here, in the headline's marked word.
  */
 
 /**
- * Real artwork only — the same sources `/partners` uses. Anything without a logo
+ * Real artwork only. The same sources `/partners` uses. Anything without a logo
  * gets a filled well with initials rather than an empty square; the name is
  * already in the <h3> beside it, so the initials are decorative.
  */
@@ -47,7 +47,7 @@ function PartnerLogo({ partner }: { partner: Partner }) {
                 .slice(0, 2)
                 .toUpperCase();
             return (
-                <span aria-hidden="true" className="text-sm font-bold tracking-tight text-slate-500">
+                <span aria-hidden="true" className="text-sm font-bold tracking-tight text-muted">
                     {initials}
                 </span>
             );
@@ -66,16 +66,16 @@ export function PartnersStrip() {
     };
 
     return (
-        <section className="py-24 bg-slate-50" id="partners">
+        <section className="py-24 bg-band" id="partners">
             <Container>
                 <div className="max-w-3xl mb-12">
-                    <p className="text-xs font-bold tracking-[0.1em] text-slate-500 uppercase mb-4">
+                    <p className="text-xs font-bold tracking-[0.1em] text-muted uppercase mb-4">
                         Who we work with
                     </p>
                     {/* Headline scale, matching every sibling section on Home.
-                        Ground is Harbor Mist — light — so Emphasis stays on its
-                        light-ground colour and must not take onDark. */}
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 tracking-tight">
+                        Ground is `--band`, and Emphasis now carries one accent
+                        colour on every ground, so it takes no ground prop. */}
+                    <h2 className="text-3xl md:text-4xl font-bold text-ink mb-6 tracking-tight">
                         Three named <Emphasis>partners</Emphasis>, and what each one does
                     </h2>
                     {/* Three distinct jobs, kept distinct. Station Austin and Reuneo
@@ -83,7 +83,7 @@ export function PartnersStrip() {
                         sentence that flattened all three into "they run the meetups"
                         would be exactly the overclaiming this section exists to
                         answer. */}
-                    <p className="text-lg text-slate-600 leading-relaxed">
+                    <p className="text-lg text-muted leading-relaxed">
                         A partner here is a company with one specific job: the venue the meetups
                         are held in, the speed-networking format that pairs founders into
                         one-to-one conversations, and fractional technology help for founders and
@@ -100,25 +100,25 @@ export function PartnersStrip() {
                 >
                     {/* Name and role only. The full description belongs to /partners;
                         repeating it here would make this a second copy of that page
-                        rather than a way into it — and `category` already carries the
+                        rather than a way into it, and `category` already carries the
                         role, so the strip has no second source of truth to drift from. */}
                     {PARTNERS.map((partner) => (
                         <motion.li
                             key={partner.id}
                             variants={item}
-                            className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-6"
+                            className="flex items-center gap-4 rounded-2xl border border-rule bg-paper p-6"
                         >
                             {/* One well size for all three, with object-contain inside
                                 it, so a square favicon and a round photograph read at
                                 the same optical weight instead of one filling the box. */}
-                            <div className="w-12 h-12 flex-none rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center overflow-hidden">
+                            <div className="w-12 h-12 flex-none rounded-xl bg-band border border-rule flex items-center justify-center overflow-hidden">
                                 <PartnerLogo partner={partner} />
                             </div>
                             <div className="min-w-0">
-                                <h3 className="text-lg font-bold text-slate-900 leading-tight">
+                                <h3 className="text-lg font-bold text-ink leading-tight">
                                     {partner.name}
                                 </h3>
-                                <p className="mt-1 text-xs font-bold uppercase tracking-wider text-slate-500">
+                                <p className="mt-1 text-xs font-bold uppercase tracking-wider text-muted">
                                     {partner.category}
                                 </p>
                             </div>
@@ -127,10 +127,10 @@ export function PartnersStrip() {
                 </motion.ul>
 
                 {/* PRODUCT.md requires this disclosure to travel with the Yani
-                    Partners claim wherever the claim appears — not only on
+                    Partners claim wherever the claim appears, not only on
                     /partners. It is the point of the section, not a footnote. */}
-                <p className="mt-8 max-w-2xl text-sm text-slate-500 leading-relaxed">
-                    <span className="font-bold text-slate-600">Disclosure:</span> Yani Partners was
+                <p className="mt-8 max-w-2xl text-sm text-muted leading-relaxed">
+                    <span className="font-bold text-muted">Disclosure:</span> Yani Partners was
                     founded by the same people who run IFN. It is not an outside company
                     recommending us, and we would rather tell you that here than have you find it
                     out later.

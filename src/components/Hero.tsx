@@ -19,9 +19,17 @@ const WORD_INTERVAL_MS = 3000;
 
 /* A quiet dot grid, drawn in CSS. This replaces a texture that used to be fetched
    from transparenttextures.com on the critical path, an external request that let
-   a third party see every visitor. */
+   a third party see every visitor.
+
+   Tokenised in Phase 2. The dot was `rgb(15 23 42 / 0.06)`, which is Tailwind's
+   neutral-900 written as a function so the utility grep never saw it; against the
+   dark page ground it composites to #131312 and measures 1.002, i.e. it vanishes.
+   `--ink` tracks the mode swap, so the grid is equally faint in both. The alpha
+   composite itself still violates section 4.1 ("--scrim is the only alpha
+   composite left on the page") and is a Phase 4 carry-forward with the hero. */
 const DOT_GRID = {
-    backgroundImage: 'radial-gradient(rgb(15 23 42 / 0.06) 1px, transparent 0)',
+    backgroundImage:
+        'radial-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 0)',
     backgroundSize: '28px 28px',
 };
 
@@ -49,10 +57,10 @@ export function Hero({ onJoinClick }: HeroProps) {
         <section className="relative pt-24 pb-20 lg:pt-36 lg:pb-32 overflow-hidden">
             {/* Background. Static by design: DESIGN.md permits exactly one piece of
                 ambient motion on this page and it is the cycling word above. */}
-            <div className="absolute inset-0 bg-slate-50 -z-50" />
+            <div className="absolute inset-0 bg-band -z-50" />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -top-24 -right-24 w-[400px] h-[400px] rounded-full bg-primary/10 blur-[100px] -z-40"
+                className="pointer-events-none absolute -top-24 -right-24 w-[400px] h-[400px] rounded-full bg-ink/10 blur-[100px] -z-40"
             />
             <div
                 aria-hidden="true"
@@ -84,16 +92,16 @@ export function Hero({ onJoinClick }: HeroProps) {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full font-bold text-xs mb-6 border border-slate-200 shadow-sm text-slate-800 uppercase tracking-widest"
+                            className="inline-flex items-center gap-2 bg-paper px-4 py-2 rounded-full font-bold text-xs mb-6 border border-rule shadow-sm text-ink uppercase tracking-widest"
                         >
-                            <span aria-hidden="true" className="flex h-2 w-2 rounded-full bg-primary" />
+                            <span aria-hidden="true" className="flex h-2 w-2 rounded-full bg-ink" />
                             Monthly meetups in Austin, Texas
                         </motion.p>
 
                         {/* The 60px display step lands at xl, not lg: at lg the column
                             halves to ~440px while the type would jump to 60px, which
                             orphans "Where" on its own line. */}
-                        <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold text-slate-900 leading-[1.15] mb-6 tracking-tight">
+                        <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold text-ink leading-[1.15] mb-6 tracking-tight">
                             Where{' '}
                             {/* The word slot is an overlapping grid cell. Every candidate
                                 word is rendered invisibly in the same cell, so the slot is
@@ -114,11 +122,13 @@ export function Hero({ onJoinClick }: HeroProps) {
                                 ))}
                                 {/* This is the one emphasis word in the system that cannot use
                                     <Emphasis>: it animates in and out, so it has to be a
-                                    motion.span. It carries <Emphasis>'s light-ground colour by
-                                    hand, because the ground here is bg-slate-50, where Welcome Amber
-                                    #f97316 measures 2.68:1 against a 3:1 floor. Its class list
-                                    must stay identical to the invisible twins above apart from
-                                    colour, or the slot stops sizing to the longest word. */}
+                                    motion.span. It carries <Emphasis>'s colour by hand. That
+                                    colour is now the semantic accent, which measures 6.393 on
+                                    the --band ground this section sits on, replacing the
+                                    retired amber that measured 2.679 there against a 3:1
+                                    floor. Its class list must stay identical to the invisible
+                                    twins above apart from colour, or the slot stops sizing to
+                                    the longest word. */}
                                 <AnimatePresence mode="wait" initial={false}>
                                     <motion.span
                                         key={activeWord}
@@ -126,7 +136,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                                         animate={{ y: 0, opacity: 1 }}
                                         exit={{ y: '-0.3em', opacity: 0 }}
                                         transition={{ duration: 0.4, ease: 'circOut' }}
-                                        className="col-start-1 row-start-1 text-accent-on-light italic"
+                                        className="col-start-1 row-start-1 text-accent italic"
                                     >
                                         {activeWord}
                                     </motion.span>
@@ -135,7 +145,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                             Founders Connect, Grow, and Succeed
                         </h1>
 
-                        <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                        <p className="text-lg text-muted mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium">
                             Visas, U.S. banking, hiring across borders, funding norms nobody
                             explained to you. Once a month in Austin, you can ask about any of it out
                             loud, with founders who have already solved it.
@@ -144,7 +154,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                         <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
                             <Button
                                 size="lg"
-                                className="w-full sm:w-auto group shadow-xl shadow-primary/20"
+                                className="w-full sm:w-auto group shadow-xl"
                                 onClick={onJoinClick}
                             >
                                 Join the community
@@ -156,7 +166,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                             {/* Navigation is an anchor, not a button with a click handler, so
                                 it can be opened in a new tab and read as a link. ButtonLink
                                 gives it the button's styling from the same source Button uses.
-                                No onDark: this sits on bg-slate-50. */}
+                                No onDark: this sits on the --band ground. */}
                             <ButtonLink
                                 to="/resources"
                                 variant="outline"
@@ -167,7 +177,7 @@ export function Hero({ onJoinClick }: HeroProps) {
                             </ButtonLink>
                         </div>
 
-                        <p className="mt-6 text-sm text-slate-600 font-medium">
+                        <p className="mt-6 text-sm text-muted font-medium">
                             No pitch deck required · No introduction needed · Come to one meetup and
                             decide
                         </p>

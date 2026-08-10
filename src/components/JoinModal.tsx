@@ -42,10 +42,10 @@ const EMPTY_FORM = {
  *    layer against a `--band` field fill is only 1.103; the outer `--ink` layer
  *    against the modal's `--paper` ground is 17.965 and the layer boundary is
  *    17.965, which is what actually carries it.
- *  - It is full opacity. The outgoing `ring-primary/30` expressed the indicator
- *    with an alpha, and section 4.2's partial coverage row measures that class
- *    of indicator below the 3:1 floor. No focus indicator on this page is
- *    allowed to be an alpha or an `opacity`.
+ *  - It is full opacity. The outgoing ring expressed the indicator with the
+ *    retired navy at 30% alpha, and section 4.2's partial coverage row
+ *    measures that class of indicator below the 3:1 floor. No focus indicator
+ *    on this page is allowed to be an alpha or an `opacity`.
  *
  * There is NO dark mode reversal, deliberately. `--paper` is always the page
  * colour and `--ink` is always the type colour, so the construction inverts
@@ -440,7 +440,7 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                                     </div>
                                 </form>
                             ) : (
-                                <div ref={successRef} tabIndex={-1} className="py-2 focus:outline-none">
+                                <div ref={successRef} tabIndex={-1} className="py-2 focus:outline-hidden">
                                     {/* The outgoing green disc is gone. Green is a second
                                         brand hue, and the palette licenses exactly one
                                         colour. The glyph stays because it is a glance

@@ -38,16 +38,16 @@ const SITE_NAME = 'International Founders Network';
  * own title alongside the noindex tag it injects, and owns both.
  */
 const ROUTE_TITLES: Record<string, string> = {
-    '/': `${SITE_NAME} — Austin, Texas`,
-    '/about': `About IFN — ${SITE_NAME}`,
-    '/partners': `Partners — ${SITE_NAME}`,
-    '/contact': `Contact us — ${SITE_NAME}`,
-    '/events': `Monthly meetups in Austin — ${SITE_NAME}`,
-    '/resources': `Founder resources — ${SITE_NAME}`,
-    '/membership': `Membership — ${SITE_NAME}`,
-    '/code-of-conduct': `Code of conduct — ${SITE_NAME}`,
-    '/privacy-policy': `Privacy policy — ${SITE_NAME}`,
-    '/terms-and-conditions': `Terms and conditions — ${SITE_NAME}`,
+    '/': `${SITE_NAME} | Austin, Texas`,
+    '/about': `About IFN | ${SITE_NAME}`,
+    '/partners': `Partners | ${SITE_NAME}`,
+    '/contact': `Contact us | ${SITE_NAME}`,
+    '/events': `Monthly meetups in Austin | ${SITE_NAME}`,
+    '/resources': `Founder resources | ${SITE_NAME}`,
+    '/membership': `Membership | ${SITE_NAME}`,
+    '/code-of-conduct': `Code of conduct | ${SITE_NAME}`,
+    '/privacy-policy': `Privacy policy | ${SITE_NAME}`,
+    '/terms-and-conditions': `Terms and conditions | ${SITE_NAME}`,
 };
 
 function RouteTitle() {
@@ -60,7 +60,7 @@ function RouteTitle() {
         } else if (!(pathname in ROUTE_TITLES)) {
             // Unmatched path renders NotFound; ComingSoon routes set their own.
             const isComingSoon = COMING_SOON_PATHS.has(pathname);
-            if (!isComingSoon) document.title = `Page not found — ${SITE_NAME}`;
+            if (!isComingSoon) document.title = `Page not found | ${SITE_NAME}`;
         }
     }, [pathname]);
 
@@ -79,7 +79,7 @@ const COMING_SOON_PATHS = new Set([
 function PageFallback() {
     return (
         <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
-            <span className="text-slate-500">Loading&hellip;</span>
+            <span className="text-muted">Loading&hellip;</span>
         </div>
     );
 }
@@ -89,10 +89,10 @@ function Layout() {
     const openJoinModal = () => setIsJoinModalOpen(true);
 
     return (
-        <div className="min-h-screen bg-white flex flex-col">
+        <div className="min-h-screen bg-paper flex flex-col">
             <a
                 href="#main-content"
-                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-5 focus:py-3 focus:text-white focus:font-semibold"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-ink focus:px-5 focus:py-3 focus:text-paper focus:font-semibold"
             >
                 Skip to main content
             </a>

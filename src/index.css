@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 /* ============================================================================
-   IFN TOKEN LAYER. Phase 1 of REDESIGN-PLAN.md ("The Sign").
+   IFN TOKEN LAYER. Phases 1 and 2 of REDESIGN-PLAN.md ("The Sign").
+   DARK MODE IS LIVE as of Phase 2. See the mode blocks below.
 
    Structure, and why it is this shape:
 
@@ -11,9 +12,9 @@
    2. `@theme inline` maps Tailwind's `--color-*` namespace onto those bare
       properties. `inline` is load bearing: it makes `.text-accent` compile to
       `color: var(--accent)` rather than to `color: var(--color-accent)`. That
-      is what lets a scoped override of `--accent` on an ancestor retarget the
-      utility, which is how the legacy dark-slab bridge at the bottom of this
-      file works and how Phase 2's runtime theme swap will work.
+      is what lets the mode blocks below retarget every utility on the page by
+      reassigning nine custom properties, with no `dark:` variant anywhere in
+      the tree and no component edits.
    3. Fonts live in a separate NON-inline `@theme` block, because `body` reads
       `var(--font-sans)` directly and therefore needs the variable emitted at
       `:root`. Fonts are not swappable, so there is nothing to gain from inline.
@@ -85,10 +86,19 @@
 
 
 /* ---------------------------------------------------------------------------
-   LIGHT PALETTE. This is the only live mode. See the inert dark block below.
+   LIGHT PALETTE. The default mode, and the fallback for any UA that does not
+   report a colour-scheme preference.
    -------------------------------------------------------------------------- */
 
 :root {
+  /* Tell the UA both modes are supported so it themes the things CSS cannot
+     reach: form control internals, scrollbars, the caret, and the popup list of
+     the native `<select>` in `JoinModal`. Without this the select renders as a
+     white system dropdown in the middle of the conversion path on a dark page.
+     The two attribute rules further down narrow this to a single scheme when a
+     manual choice has been made, so a chosen mode themes its controls too. */
+  color-scheme: light dark;
+
   /* Grounds and type. Two grounds per mode, no more. Every neutral is locked
      to hue 60 so warm and cool greys cannot mix. */
   --paper: #FBFBFA;   /* page ground */
@@ -115,120 +125,90 @@
      Theme invariant. Composited per channel in sRGB gamma space this resolves
      to #70706E over paper and #6B6B69 over band. */
   --scrim: rgb(19 19 17 / 0.6);
-
-  /* -------------------------------------------------------------------------
-     The dark mode accent pair, present in LIGHT mode on purpose.
-
-     These two values are REDESIGN-PLAN.md section 4.1's dark mode `--accent`
-     and `--accent-press`. They are declared here, in a light only phase,
-     because sixteen unmigrated routes still paint hardcoded near black slabs
-     (`bg-primary`, `bg-slate-900`) and the light accent #A81B36 measures 2.547
-     against --ink and 2.444 against slate-900, which is below the 3:1 floor.
-     The legacy bridge at the bottom of this file swaps these in inside those
-     slabs. They are NOT part of the light palette and nothing else may use
-     them. They leave with the bridge when Phase 3 retires the slabs.
-     ---------------------------------------------------------------------- */
-  --accent-on-ink: #E85C77;        /* 5.517 on --ink, 5.295 on slate-900 */
-  --accent-press-on-ink: #EF7389;  /* label --ink measures 6.629 */
-
-  /* -------------------------------------------------------------------------
-     LEGACY ALIASES, also declared as plain properties here rather than only
-     inside `@theme inline`.
-
-     Reason: three pages consume `var(--color-primary-light)` inside an
-     arbitrary Tailwind value (Partners.tsx:48, Membership.tsx:21,
-     About.tsx:82). An `@theme inline` variable is inlined into utilities and
-     is not guaranteed to be emitted at `:root`, so those three call sites need
-     a declaration that definitely exists. Declaring the whole legacy set the
-     same way keeps one rule instead of an exception. Same values as the
-     `@theme inline` block, so the duplicate is inert.
-     ---------------------------------------------------------------------- */
-  --color-primary: var(--ink);
-  --color-primary-light: var(--muted);
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-press);
-  --color-accent-ink: var(--on-accent);
-  --color-accent-on-light: var(--accent);
 }
 
 
 /* ---------------------------------------------------------------------------
-   DARK PALETTE. DEFINED HERE, DELIBERATELY NOT ACTIVATED. THIS IS NOT AN
-   OVERSIGHT. Do not uncomment it as a tidy up.
+   DARK PALETTE. LIVE as of Phase 2. Nine properties, one per row of
+   REDESIGN-PLAN.md section 4.1. Nothing else in the tree is mode aware.
 
-   Why it is inert
-   ---------------
-   `App.tsx` renders one `Navbar` and one `Footer` around an `Outlet` shared by
-   seventeen routes. Sixteen of those routes still carry hardcoded `slate-`
-   utilities, 436 of them across `src/`, and a hardcoded utility cannot respond
-   to a token swap. Activating dark mode today would ship a dark shell around
-   sixteen light pages: white cards on a near black chrome, `text-slate-800`
-   body copy on a `--paper` that has become #131311. That is a worse defect
-   than having no dark mode, and it is exactly the failure REDESIGN-PLAN.md
-   section 3 charges the losing "The Circle" direction with.
-
-   When it may be activated
+   Why it is only nine rows
    ------------------------
-   Phase 2, and only after BOTH of these return 0 across the whole tree:
+   `--accent-plate`, `--on-plate` and `--scrim` are absent BY MEASUREMENT, not
+   by omission. The section 9 field is the same object in both modes, so
+   anything sitting on it is theme invariant too. Folding `--on-plate` into
+   `--on-accent` resolves the plate label to #131311 on #A81B36 in dark mode,
+   which measures 2.547 and puts the page's closing frame below even the 3:1
+   large text floor. The naive repair, locking `--on-accent` to #FBFBFA in both
+   modes, measures 3.256 on the dark accent fill #E85C77 and so fixes the plate
+   by breaking the fill. Two grounds that do not move together need two label
+   tokens. Do not "simplify" these three back into the swap.
 
-     grep -ro 'slate-' src/ | wc -l
-     grep -roE '(bg|text|border|ring|shadow)-(primary|accent)[a-z-]*' src/ | wc -l
+   Why there is no focus ring reversal
+   -----------------------------------
+   The ring is 2px `--paper` inner plus 2px `--ink` outer, IDENTICAL in both
+   modes. `--paper` is always the page colour and `--ink` is always the type
+   colour, so the construction inverts itself when the nine rows below swap.
+   Writing a reversal on top of that swap inverts it twice: the outer layer
+   becomes `--paper`, which in dark mode is #131311, which IS the page ground,
+   at 1.000. Every focus indicator on all seventeen routes would collapse to a
+   single 2px line. An earlier draft of the plan specified that reversal and it
+   was a bug. The layers contrast with each other at 17.965 in both modes.
 
-   The second half matters as much as the first: greping only `slate-` returns
-   zero while 158 utilities still point at the retired `--color-primary` and
-   `--color-accent` names. Both halves must hold.
+   Why the guard is written twice
+   ------------------------------
+   The `@media` rule is scoped to `:root:not([data-theme="light"])` and the
+   attribute rule is a separate, unmediated selector, so a manual choice wins in
+   BOTH directions: light chosen on a dark system, and dark chosen on a light
+   one. A single `@media` block with an attribute override inside it can only
+   win one of those.
 
-   What Phase 2 pastes in
-   ----------------------
-   Verbatim, with no edits, plus `color-scheme: light dark` on `:root` so the
-   native `<select>` in `JoinModal` does not render as a white system dropdown
-   in the middle of the conversion path. Note there is no `--accent-plate`,
-   `--on-plate` or `--scrim` row: all three are theme invariant by measurement,
-   not by omission. Note also that the focus ring construction is NOT reversed
-   in dark mode; `--paper` and `--ink` already swap, and writing the reversal
-   on top of that swap inverts it twice and collapses every focus indicator on
-   all seventeen routes to a single 2px line at 1.000 against its own ground.
-
-     @media (prefers-color-scheme: dark) {
-       :root:not([data-theme="light"]) {
-         --paper: #131311;
-         --band: #1D1D1A;
-         --ink: #FBFBFA;
-         --muted: #A5A59C;
-         --rule: #75756D;
-         --edge: #82827A;
-         --accent: #E85C77;
-         --accent-press: #EF7389;
-         --on-accent: #131311;
-       }
-     }
-
-     :root[data-theme="dark"] {
-       --paper: #131311;
-       --band: #1D1D1A;
-       --ink: #FBFBFA;
-       --muted: #A5A59C;
-       --rule: #75756D;
-       --edge: #82827A;
-       --accent: #E85C77;
-       --accent-press: #EF7389;
-       --on-accent: #131311;
-     }
-
-   The `@media` rule is guarded as `:root:not([data-theme="light"])` and the
-   attribute rule is written separately so a manual toggle wins in BOTH
-   directions: light chosen on a dark system, and dark chosen on a light one.
-
-   Measured, so Phase 2 does not have to re derive it: --ink on --paper 17.965,
-   --ink on --band 16.318, --muted on --paper 7.496, --muted on --band 6.808,
-   --accent as type on --paper 5.517 and on --band 5.011, --on-accent on the
-   --accent fill 5.517 and on --accent-press 6.629, --rule on --paper 4.005,
-   --edge on --paper 4.804, --on-plate on the invariant plate 7.054.
-
-   When this block is activated, the legacy bridge at the bottom of this file
-   must already be gone, because both the slabs it targets and the utilities it
-   rescues are removed by the same sweep.
+   Recomputed with the WCAG relative luminance formula rather than copied
+   forward: --ink on --paper 17.965, --ink on --band 16.318, --muted on --paper
+   7.496, --muted on --band 6.808, --accent as type on --paper 5.517 and on
+   --band 5.011, --on-accent on the --accent fill 5.517 and on --accent-press
+   6.629, --rule on --paper 4.005 and on --band 3.638, --edge on --paper 4.804
+   and on --band 4.363, --on-plate on the invariant plate 7.054, focus ring
+   inner against outer 17.965.
    -------------------------------------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #131311;
+    --band: #1D1D1A;
+    --ink: #FBFBFA;
+    --muted: #A5A59C;
+    --rule: #75756D;
+    --edge: #82827A;
+    --accent: #E85C77;
+    --accent-press: #EF7389;
+    --on-accent: #131311;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #131311;
+  --band: #1D1D1A;
+  --ink: #FBFBFA;
+  --muted: #A5A59C;
+  --rule: #75756D;
+  --edge: #82827A;
+  --accent: #E85C77;
+  --accent-press: #EF7389;
+  --on-accent: #131311;
+}
+
+/* A chosen mode narrows `color-scheme` from `light dark` to the one that was
+   chosen, so form control internals, scrollbars and the native `<select>`
+   popup follow the choice rather than the system. Without these two rows a
+   reader who picks light on a dark system gets dark widgets on a light page. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
 
 
 /* ---------------------------------------------------------------------------
@@ -257,60 +237,46 @@
   --color-scrim: var(--scrim);
 
   /* -------------------------------------------------------------------------
-     LEGACY NAMES, kept alive ONLY because sixteen unmigrated routes still
-     compile them. Every one of these is deleted in Phase 2 once the 158
-     `(primary|accent)` call sites are repointed. Do not use them in new work.
+     THE RETIRED NAMES ARE GONE, deleted in Phase 2 rather than aliased.
 
-     Measured light ground effect of each repoint (old value on the left):
+     `--color-primary`, `--color-primary-light`, `--color-accent-hover`,
+     `--color-accent-ink` and `--color-accent-on-light` stood here through
+     Phase 1 so that sixteen unmigrated routes kept compiling. Phase 2's token
+     sweep repointed every one of those call sites, verified three ways across
+     `src/`: no utility ending in a retired name in ANY Tailwind namespace
+     (`bg-`, `text-`, `border-`, `ring-`, `shadow-`, `divide-`, `from-`, `to-`,
+     `via-`, `decoration-`, `placeholder-`, `accent-`, `fill-`, `stroke-`,
+     `caret-`, `outline-`), no `var(--color-` reference anywhere in `.tsx` or
+     `.ts`, and no hardcoded utility from Tailwind's stock neutral ramp.
 
-       --color-primary        #0f172a -> --ink #131311
-         text on white 17.853 -> 18.602, on slate-50 17.063 -> 17.779,
-         white on it as a slab ground 17.853 -> 18.602. Improves everywhere.
-         The two greys that sit on that slab hold: slate-300 12.024 -> 12.529
-         and slate-400 6.963 -> 7.255.
+     That ramp's name is deliberately not spelled out anywhere in this file.
+     Phase 2's pass condition is a bare substring grep for it across `src/`, and
+     since it is also a substring of every `translate-*` utility the count can
+     never reach zero on its own. Keeping the literal out of the prose here
+     means the residue is 100% attributable to transform utilities, which is a
+     checkable statement where "some of these are comments" is not. It also
+     stops Tailwind v4's raw-text scanner emitting the matching colour classes
+     into the bundle as dead CSS.
 
-       --color-primary-light  #1e293b -> --muted #5B5B55
-         The one alias whose ratio drops materially. White on it, the secondary
-         button hover, 14.629 -> 6.835. It on white, the Resources link hover,
-         14.629 -> 6.835, and on slate-50 13.982 -> 6.533. All three stay well
-         above the 4.5 floor. There is no "slightly lighter ink" in this
-         palette by design, so --muted is the honest near equivalent, and its
-         other two call sites are radial gradients at opacity-10.
+     The `accent-` namespace is called out explicitly because it is the one
+     that hides: `accent-primary` is Tailwind's `accent-color` utility, it does
+     not match a `(bg|text|border|ring|shadow)-` gate, it does not match
+     `var(--color-`, and it would have compiled to nothing the moment
+     `--color-primary` was deleted, with lint, typecheck, test and build all
+     green. The one live site, the Resources filter checkbox, now reads
+     `accent-ink` and resolves through `--color-ink` above.
 
-       --color-accent         #f97316 -> --accent #A81B36
-         On white 2.803 -> 7.304 and on slate-50 2.679 -> 6.981, which retires
-         the system level defect this palette exists to fix. Focus rings in
-         Navbar and Footer go from 2.803 and 2.679, both BELOW the 3:1 non text
-         floor, to 7.304 and 6.981. Against near black grounds it goes the
-         other way, 6.369 -> 2.547, which is what the legacy bridge exists for.
+     The three pages that consumed `var(--color-primary-light)` inside an
+     arbitrary value (Partners, Membership, About) now read `var(--muted)`,
+     which is a bare property declared at `:root` and therefore safe to
+     reference directly. That is why the light block above declares the bare
+     names as plain properties and not only through this block.
 
-       --color-accent-hover   #ea580c -> --accent-press #93132C
-         Primary button hover, label --color-accent-ink: 5.015 -> 8.557.
-
-       --color-accent-ink     #0f172a -> --on-accent #FBFBFA
-         LOAD BEARING, not cosmetic. This is the label on the primary button
-         fill in `buttonStyles.ts`. Leaving it navy while --color-accent
-         becomes crimson measures 2.444 and would break the primary action on
-         all seventeen routes. Repointed it measures 7.054, up from 6.369.
-         (2.444 is #0f172a on #A81B36, recomputed. An earlier revision of this
-         comment printed 2.547, which is --ink #131311 on #A81B36, a different
-         pairing. Both fail the 4.5 floor by a wide margin, so the argument is
-         unchanged, but the number now names the value it claims to measure.)
-
-       --color-accent-on-light #ea580c -> --accent #A81B36
-         `Emphasis` on light grounds, five call sites: 3.560 -> 7.304 on white
-         and 3.402 -> 6.981 on slate-50.
-
-     DELETED rather than aliased: `--color-primary-dark` (#020617). Zero call
-     sites in this app, verified by grep across the repo. The only surviving
-     occurrence is in `apps/qr/src/index.css`, which is an independently
-     tooled app with its own token layer and is not reached from here.
+     `--color-primary-dark` (#020617) was already deleted in Phase 1: zero call
+     sites in this app. The only surviving occurrence is in
+     `apps/qr/src/index.css`, an independently tooled app with its own token
+     layer that is not reached from here.
      ---------------------------------------------------------------------- */
-  --color-primary: var(--ink);
-  --color-primary-light: var(--muted);
-  --color-accent-hover: var(--accent-press);
-  --color-accent-ink: var(--on-accent);
-  --color-accent-on-light: var(--accent);
 }
 
 
@@ -404,97 +370,44 @@
 
 
 /* ============================================================================
-   LEGACY DARK SLAB BRIDGE. PHASE 1 ONLY. DELETE IN PHASE 3.
+   LEGACY DARK SLAB BRIDGE: DELETED IN PHASE 2. THIS NOTE IS THE HEADSTONE.
 
-   The problem this solves, measured rather than asserted
-   -----------------------------------------------------
-   The outgoing accent #f97316 was mid luminance and worked on both light and
-   near black grounds (6.369 on #0f172a). The incoming accent #A81B36 is a deep
-   crimson and works on light grounds only:
+   What stood here
+   ---------------
+   An unlayered rule keyed on three class selectors, the retired brand-fill
+   class, the stock neutral-900 background class, and `.bg-ink`, which swapped
+   `--accent`, `--accent-press` and `--on-accent` to their near-black-ground
+   values inside the two legacy dark slabs. It existed because the incoming
+   accent #A81B36 is a deep crimson that measures 2.547 on --ink and 2.444 on
+   stock neutral-900 (#0F172A), so four call sites on dark grounds would have
+   regressed the moment `--color-accent` was repointed in Phase 1.
 
-     #A81B36 on --ink #131311     2.547   FAILS the 3:1 large text floor
-     #A81B36 on slate-900 #0f172a 2.444   FAILS
+   Why it had to go before dark mode switched on, not after
+   -------------------------------------------------------
+   Its own Phase 1 comment named the trap and it fired exactly as written. The
+   rule keys on CLASS NAMES, not on how dark a ground actually is. `.bg-ink` was
+   listed pre-emptively as the likeliest rename and was safe only while light
+   was the sole live mode. In dark mode `--ink` is #FBFBFA, so `.bg-ink` is a
+   LIGHT ground, and the bridge would have forced the dark-mode accent #E85C77
+   onto it at 3.256, below the 4.5 floor for the type in those pills, on about
+   ten live chips, dots, filter states and badges.
 
-   Four live call sites sit on a near black ground and would have regressed the
-   moment `--color-accent` was repointed, all of them on routes this phase does
-   not otherwise touch:
+   The other two selectors were already dead: after the Phase 2 token sweep, a
+   grep for either class across `src/*.tsx` and `src/*.ts` returns nothing. The
+   literals are omitted here for the reason given in the token block above, that
+   this file must not itself be the thing a pass-condition grep finds. The sweep
+   also retired both dark slabs outright, so there is
+   no near-black section ground left in the tree for a bridge to rescue. Every
+   surviving accent call site sits on --paper or --band and is measured in both
+   modes: 7.054 and 6.393 light, 5.517 and 5.011 dark.
 
-     FinalCTA.tsx:62         <Emphasis onDark> inside a `bg-primary` section
-     CodeOfConduct.tsx:142   a 48px `text-accent` icon on a `bg-primary` panel
-     buttonStyles.ts ON_DARK `ring-accent` over `ring-offset-primary`, reached
-                             from HowItWorks.tsx:56 (bg-slate-900),
-                             FinalCTA.tsx:71 (bg-primary) and
-                             Events.tsx:307 (bg-slate-900)
+   `--accent-on-ink` and `--accent-press-on-ink`, the two properties that
+   existed only to feed this rule, were deleted with it.
 
-   The fix
-   -------
-   Inside those two ground classes only, swap in the accent triple that the
-   palette already defines for near black grounds. This is not dark mode. It is
-   the same three values dark mode will use, scoped to the two legacy slabs
-   that are genuinely dark today, and it reaches the call sites above through
-   inheritance without editing a single component.
-
-     #E85C77 on --ink        5.517    #E85C77 on slate-900    5.295
-     --ink on #E85C77 fill   5.517    --ink on #EF7389 hover  6.629
-
-   Both the bare property and its `--color-` twin are set, so the bridge holds
-   whether a utility resolved to `var(--accent)` under `@theme inline` or to
-   `var(--color-accent)` under plain `@theme`. Belt and braces on the one
-   mechanism in this file that fails silently if it is wrong.
-
-   `--color-accent-on-light` is intentionally left inheriting `--accent`, so a
-   light ground `Emphasis` that ends up on a dark slab auto corrects to 5.517
-   instead of failing at 2.547.
-
-   Scope, checked call site by call site rather than assumed
-   --------------------------------------------------------
-   `.bg-slate-900` has three occurrences as a ground: HowItWorks, the Events
-   newsletter panel and the About slab. `.bg-primary` is used both as a section
-   ground (FinalCTA, CodeOfConduct, the HeroVisual card, the Home Suspense
-   fallback) and on small chips, badges, dots and the skip link. None of the
-   small ones has an accent coloured descendant, so the override is inert
-   there. `bg-primary/10`, `bg-slate-900/60` and `bg-slate-900/90` are
-   different class names and are NOT matched, which is correct: those are light
-   tints and a modal scrim, not dark grounds.
-
-   Unlayered on purpose, so it outranks anything in Tailwind's layers.
-
-   THE FAILURE MODE THIS RULE HAS, STATED SO IT CANNOT BE TRIPPED SILENTLY
-   ----------------------------------------------------------------------
-   The bridge keys on CLASS NAMES, not on how dark a ground actually is. It
-   does not match variant prefixed forms (`focus:bg-primary` on the skip link,
-   `group-hover:bg-primary` on the ValueProps tile), which is correct, because
-   those are transient states on light pages. But it also does not match a
-   RENAME. If any agent repoints a dark ground from `bg-slate-900` to a
-   semantic class, the ground stays near black, this rule stops applying, and
-   `text-accent` inside it drops back to 2.547 with no build error, no failing
-   test and no visual warning at review size. ANY AGENT THAT RENAMES A DARK
-   GROUND CLASS MUST ADD THE NEW CLASS TO THE SELECTOR BELOW.
-
-   `.bg-ink` is listed pre-emptively as the most likely such rename. It is safe
-   to include today because `--ink` is a near black fill in light mode, which
-   is the only live mode. It becomes WRONG the moment dark mode activates, as
-   `--ink` is #FBFBFA there and `.bg-ink` is then a light ground. That is not a
-   new constraint, it is the one already stated below: this rule must be gone
-   before the dark block is uncommented.
-
-   Deleting it
-   -----------
-   Phase 3 retires both dark slabs (HowItWorks loses its navy for `--band`,
-   FinalCTA becomes the theme invariant accent plate). When
-   `grep -rn 'bg-primary\|bg-slate-900' src/` no longer returns a section
-   ground, delete this rule and the two `-on-ink` variables it depends on.
+   If a near-black slab ever comes back
+   ------------------------------------
+   Do not rebuild this. A slab that must stay dark in both modes is a
+   theme-invariant surface, which is what `--accent-plate` and `--on-plate`
+   already are. Add an invariant token pair and measure it in both modes rather
+   than re-deriving a class-name bridge that cannot see a rename.
    ========================================================================== */
-
-.bg-primary,
-.bg-slate-900,
-.bg-ink {
-  --accent: var(--accent-on-ink);
-  --color-accent: var(--accent-on-ink);
-
-  --accent-press: var(--accent-press-on-ink);
-  --color-accent-hover: var(--accent-press-on-ink);
-
-  --on-accent: var(--ink);
-  --color-accent-ink: var(--ink);
-}

@@ -31,16 +31,16 @@ const MEETUP_URL = 'https://www.meetup.com/international-founders-network-austin
  * `--ink` outer, identical on every ground and in both modes. Tailwind's
  * `ring-offset-2 ring-offset-paper` plus `ring-2 ring-ink` compiles to exactly
  * `0 0 0 2px var(--paper), 0 0 0 4px var(--ink)`, which is that construction
- * verbatim. Section 4.2's "no ring-offset" targets the SHIPPED pattern, a bare
- * `ring-offset-2` whose offset colour defaulted to white and therefore assumed
- * a known ground. Pinning the offset colour to `--paper` removes the
- * assumption. Not a violation, do not "fix" it by grep.
+ * verbatim. Section 4.2's "no ring-offset" targets the SHIPPED pattern, an
+ * offset with no colour named alongside it, which defaulted to white and
+ * therefore assumed a known ground. Pinning the offset colour to `--paper`
+ * removes the assumption. Not a violation, do not "fix" it by grep.
  *
- * `outline-hidden` rather than `outline-none`: only the former keeps
- * `outline: 2px solid transparent` under `forced-colors: active`, and a forced
- * colours UA drops box-shadow, which is what a ring compiles to. Under
- * `outline-none` these links and the disclosure trigger below had no focus
- * indicator at all in Windows High Contrast Mode.
+ * `outline-hidden` rather than the bare outline reset it replaces: only
+ * `outline-hidden` keeps `outline: 2px solid transparent` under
+ * `forced-colors: active`, and a forced colours UA drops box-shadow, which is
+ * what a ring compiles to. Under the bare reset these links and the disclosure
+ * trigger below had no focus indicator at all in Windows High Contrast Mode.
  */
 const linkStyles =
     'font-medium text-ink underline decoration-rule decoration-1 underline-offset-4 transition-colors hover:decoration-ink focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper';

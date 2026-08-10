@@ -44,7 +44,7 @@ function isSupportedTimeZone(timeZone: string): boolean {
 }
 
 /**
- * The zone the event actually happens in — never the reader's.
+ * The zone the event actually happens in, never the reader's.
  *
  * An Austin meetup starting 2026-08-27T23:30Z is 6:30 PM CDT. Rendered in the reader's
  * zone with no label, a founder in Berlin was being told 1:30 AM the following day.
@@ -120,15 +120,17 @@ interface ExternalActionLinkProps {
 /**
  * An off-site card action: a real link that looks like a button.
  *
- * The styling is `ButtonLink`'s, not its own — this only adds the three things a bare
+ * The styling is `ButtonLink`'s, not its own. This only adds the three things a bare
  * button link has no opinion about: the platform logo, the arrow that slides in on
  * hover, and the event title appended to the accessible name so six identical
  * "Register on Luma" links stay tellable apart. `ButtonLink` supplies the new-tab
  * handling and the "(opens in a new tab)" hint, so neither is written here.
  *
- * Card actions are Deep Harbor rather than Welcome Amber: a three-across grid of amber
- * buttons would put amber on adjacent elements and blow past the three-per-viewport
- * ceiling. Amber on this page is spent on the headline word and the notify button.
+ * Card actions take the `secondary` and `outline` button variants, never the accent
+ * fill: a three-across grid of accent buttons would put the accent on adjacent
+ * elements and blow past the two-marks-per-viewport ceiling REDESIGN-PLAN.md
+ * section 2 sets. This card is Phase 5 work and the paragraph it replaces described
+ * the retired amber palette, so it is restated here rather than left standing.
  */
 export function ExternalActionLink({
     href,
@@ -209,10 +211,10 @@ export function EventCard({ event, index }: EventCardProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: Math.min(index, 5) * 0.08 }}
             viewport={{ once: true }}
-            className="group flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-slate-300 h-full"
+            className="group flex flex-col bg-paper rounded-2xl border border-rule overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-edge h-full"
         >
             {/* Cover */}
-            <div className="h-48 bg-slate-100 relative overflow-hidden">
+            <div className="h-48 bg-band relative overflow-hidden">
                 {event.cover_url ? (
                     <img
                         src={event.cover_url}
@@ -222,18 +224,18 @@ export function EventCard({ event, index }: EventCardProps) {
                         loading="lazy"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-300">
+                    <div className="w-full h-full flex items-center justify-center bg-band text-muted">
                         <Calendar className="w-12 h-12" aria-hidden="true" />
                     </div>
                 )}
 
-                <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-3 py-2 text-center min-w-[60px]">
-                    <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">{shown.month}</div>
-                    <div className="text-xl font-bold text-slate-900 leading-none">{shown.day}</div>
+                <div className="absolute top-4 left-4 bg-paper rounded-xl px-3 py-2 text-center min-w-[60px]">
+                    <div className="text-xs font-bold text-muted uppercase tracking-wider">{shown.month}</div>
+                    <div className="text-xl font-bold text-ink leading-none">{shown.day}</div>
                 </div>
 
                 {isPast && (
-                    <span className="absolute top-4 right-4 rounded-full bg-slate-900/90 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                    <span className="absolute top-4 right-4 rounded-full bg-ink px-3 py-1 text-xs font-bold uppercase tracking-wider text-paper">
                         Past meetup
                     </span>
                 )}
@@ -241,34 +243,34 @@ export function EventCard({ event, index }: EventCardProps) {
 
             {/* Content */}
             <div className="flex flex-col flex-grow p-6">
-                <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2">{event.title}</h3>
+                <h3 className="text-xl font-bold text-ink mb-3 line-clamp-2">{event.title}</h3>
 
                 <div className="space-y-3 mb-6 flex-grow">
-                    <div className="flex items-start text-slate-600 text-sm">
-                        <Calendar className="w-4 h-4 mr-2 mt-0.5 shrink-0 text-slate-400" aria-hidden="true" />
+                    <div className="flex items-start text-muted text-sm">
+                        <Calendar className="w-4 h-4 mr-2 mt-0.5 shrink-0 text-muted" aria-hidden="true" />
                         <div>
-                            <time dateTime={event.start_at} className="block font-medium text-slate-700">
+                            <time dateTime={event.start_at} className="block font-medium text-ink">
                                 {shown.date} · {shown.time} {shown.zone}
                             </time>
                             {showReaderLine ? (
-                                <span className="block text-slate-500">
+                                <span className="block text-muted">
                                     In your time zone: {inReaderZone.time} {inReaderZone.zone}, {inReaderZone.date}
                                 </span>
                             ) : eventZone === null ? (
-                                <span className="block text-slate-500">Shown in your time zone.</span>
+                                <span className="block text-muted">Shown in your time zone.</span>
                             ) : null}
                         </div>
                     </div>
 
                     {event.location_name && (
-                        <div className="flex items-center text-slate-600 text-sm">
-                            <MapPin className="w-4 h-4 mr-2 shrink-0 text-slate-400" aria-hidden="true" />
+                        <div className="flex items-center text-muted text-sm">
+                            <MapPin className="w-4 h-4 mr-2 shrink-0 text-muted" aria-hidden="true" />
                             <span className="line-clamp-1">{event.location_name}</span>
                         </div>
                     )}
                 </div>
 
-                <div className="flex flex-col gap-2 mt-auto pt-6 border-t border-slate-100">
+                <div className="flex flex-col gap-2 mt-auto pt-6 border-t border-rule">
                     {links.length > 0 ? (
                         links.map((reg) => (
                             <ExternalActionLink

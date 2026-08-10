@@ -1,24 +1,24 @@
 import { Container } from '../components/Container';
 import { Emphasis } from '../components/Emphasis';
 
-const SECTION_HEADING = 'mb-4 text-2xl font-bold text-primary';
-const BODY = 'leading-relaxed text-slate-600';
-const LIST = 'mt-4 list-disc space-y-2 pl-6 text-slate-600 marker:text-slate-400';
+const SECTION_HEADING = 'mb-4 text-2xl font-bold text-ink';
+const BODY = 'leading-relaxed text-muted';
+const LIST = 'mt-4 list-disc space-y-2 pl-6 text-muted marker:text-muted';
 const MAIL_LINK =
-    'rounded-sm font-semibold text-primary underline decoration-slate-300 underline-offset-4 hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2';
+    'rounded-sm font-semibold text-ink underline decoration-rule underline-offset-4 hover:decoration-ink focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
 
 export function PrivacyPolicy() {
     return (
         <Container size="md" className="py-24">
             <div className="mx-auto max-w-3xl">
-                <h1 className="mb-6 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+                <h1 className="mb-6 text-4xl font-bold tracking-tight text-ink md:text-5xl">
                     Privacy <Emphasis>Policy</Emphasis>
                 </h1>
-                <p className="mb-4 text-lg leading-relaxed text-slate-600">
+                <p className="mb-4 text-lg leading-relaxed text-muted">
                     This page explains what the International Founders Network (IFN) does with the information
                     you give us on ifn.community. It is written in plain language on purpose.
                 </p>
-                <p className="mb-16 text-sm text-slate-500">Last updated: August 8, 2026</p>
+                <p className="mb-16 text-sm text-muted">Last updated: August 8, 2026</p>
 
                 <div className="space-y-12">
                     <section>
@@ -41,21 +41,21 @@ export function PrivacyPolicy() {
                         </p>
                         <ul className={LIST}>
                             <li>
-                                <strong className="text-slate-800">If you apply to join:</strong> your name,
-                                email address, and — if you choose to add them — your LinkedIn address and the
+                                <strong className="text-ink">If you apply to join:</strong> your name,
+                                email address, and (if you choose to add them) your LinkedIn address and the
                                 stage your company is at.
                             </li>
                             <li>
-                                <strong className="text-slate-800">If you use the contact form:</strong> your
+                                <strong className="text-ink">If you use the contact form:</strong> your
                                 name, email address, your message, and optionally your phone number and company
                                 name.
                             </li>
                             <li>
-                                <strong className="text-slate-800">If you ask to be told about events:</strong>{' '}
+                                <strong className="text-ink">If you ask to be told about events:</strong>{' '}
                                 your email address.
                             </li>
                             <li>
-                                <strong className="text-slate-800">Technical information:</strong> our hosting
+                                <strong className="text-ink">Technical information:</strong> our hosting
                                 provider records ordinary web-server data such as your internet protocol (IP)
                                 address and which browser you used. This is not linked to your name.
                             </li>
@@ -85,26 +85,26 @@ export function PrivacyPolicy() {
                         </p>
                         <ul className={LIST}>
                             <li>
-                                <strong className="text-slate-800">Netlify</strong> hosts the website and its
+                                <strong className="text-ink">Netlify</strong> hosts the website and its
                                 server functions.
                             </li>
                             <li>
-                                <strong className="text-slate-800">Neon</strong> hosts the database where form
+                                <strong className="text-ink">Neon</strong> hosts the database where form
                                 submissions are stored.
                             </li>
                             <li>
-                                <strong className="text-slate-800">Stripe</strong> takes membership payments.
-                                Your card details go to Stripe, never to us — IFN never sees or stores a card
+                                <strong className="text-ink">Stripe</strong> takes membership payments.
+                                Your card details go to Stripe, never to us. IFN never sees or stores a card
                                 number.
                             </li>
                             <li>
-                                <strong className="text-slate-800">Luma</strong> and{' '}
-                                <strong className="text-slate-800">Meetup</strong> host our event listings. If
+                                <strong className="text-ink">Luma</strong> and{' '}
+                                <strong className="text-ink">Meetup</strong> host our event listings. If
                                 you register for a meetup there, that registration is covered by their privacy
                                 policies, not this one.
                             </li>
                             <li>
-                                <strong className="text-slate-800">Google Fonts</strong> serves the typefaces
+                                <strong className="text-ink">Google Fonts</strong> serves the typefaces
                                 this site uses, which means your browser contacts Google when a page loads.
                             </li>
                         </ul>
