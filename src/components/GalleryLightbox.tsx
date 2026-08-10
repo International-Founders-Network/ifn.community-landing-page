@@ -2,40 +2,97 @@ import { useEffect, useId, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Button } from './Button';
-import type { GalleryNight } from '../data/photos.generated';
+import type { GalleryFrame } from '../data/photos.generated';
 
 /**
  * THE ENLARGED VIEW FOR THE GALLERY ROUTE.
  *
+ * REBUILT 2026-08-10 alongside the gallery. Three things changed and each one
+ * answers a specific instruction:
+ *
+ *   - IT NO LONGER TAKES AN EVENING. It takes a flat list of frames and an
+ *     index into the rendered reading order, so previous and next follow the
+ *     composition rather than a grouping. The dialog's accessible name used to
+ *     be the DATE of the evening, which is exactly the claim the gallery is not
+ *     allowed to make any more, so the name is now the position readout.
+ *   - THE VISIBLE DESCRIPTION IS GONE. The panel previously printed the frame's
+ *     alt text as a caption under the image. Every visible caption and
+ *     description is deleted from this route.
+ *   - THE `alt` IS BACK ON THE IMAGE and is no longer empty. It was empty only
+ *     because the description was rendered visibly beside it and an identical
+ *     alt would have said everything twice. With the caption gone, an empty alt
+ *     would leave the enlarged view announcing nothing at all, which is the
+ *     accessibility regression REDESIGN-PLAN.md section 8 forbids. An `alt`
+ *     attribute is not a caption: a caption is copy every reader sees, and alt
+ *     is invisible to sighted readers and is the only route by which a screen
+ *     reader user perceives the photograph.
+ *
+ * THE ALT AND THE STATUS REGION BOTH EXIST, AND THE OVERLAP IS DELIBERATE. The
+ * status region is the only thing that fires when the reader presses an arrow
+ * or Next, so without the description in it a screen reader user moving through
+ * fifteen frames would hear nothing but numbers. The `alt` is the only thing
+ * that fires for a browse mode reader who reaches the image itself. Each covers
+ * a path the other cannot, and the one path on which both are heard costs a
+ * single repeated sentence, which is cheaper than losing either.
+ *
  * Why this exists at all, given the brief allows shipping without it
  * ------------------------------------------------------------------
- * The grid can only render the 640px tile tier (see `Gallery.tsx` for the byte
- * arithmetic), so every frame on the sheet is a thumbnail of roughly 390 CSS px
- * at the widest. `photos.generated.ts` ships a second, 1280px `view` tier for
- * each frame precisely so a reader can actually look at one. Without this
- * dialog that tier is dead weight in the repository and the gallery is ten
- * thumbnails a visitor can never open.
+ * The wall renders 640px and 1280px tiles into cells between 304 and 906 CSS
+ * px. This panel is wider than the largest cell (`max-w-5xl` is 1024, so the
+ * image runs to about 976 CSS px against the largest cell's 906) and it renders
+ * the 1280 `view` tier, so opening a frame always makes it bigger rather than
+ * smaller. Without this dialog that tier is dead weight in the repository.
  *
  * The brief permits shipping without a lightbox if one cannot be made properly
  * accessible in scope. It can be, because this repository already contains an
  * audited focus trap in `JoinModal.tsx` and this component mirrors it rather
- * than inventing a second one. Every mechanism below is that file's, adapted:
+ * than inventing a second one:
  *
- *   - one capture phase keydown listener carrying Escape and the Tab trap, so
- *     their ordering is explicit rather than emergent
- *   - focusables re-queried on EVERY Tab, because the navigation buttons and
- *     the caption change as the reader moves through an evening
+ *   - one capture phase keydown listener carrying Escape, the arrows and the
+ *     Tab trap, so their ordering is explicit rather than emergent
+ *   - focusables re-queried on EVERY Tab, because the navigation buttons change
+ *     as the reader moves through the wall
  *   - the body scroll lock restores the PREVIOUS value on close rather than
  *     assuming it was `''`
  *   - the dialog carries an accessible name through `aria-labelledby`
  *
+ * A FOCUS ESCAPE THAT WAS IN THE SHIPPED TRAP, FOUND BY TRACING THE TAB ORDER
+ * RATHER THAN BY READING THE JSX, AND FIXED HERE.
+ * ---------------------------------------------------------------------------
+ * On open, focus moves to the panel, which is `tabIndex={-1}`. The focusable
+ * selector excludes `[tabindex="-1"]`, so the panel is NOT a member of
+ * `focusables`; that list is the close button and the two navigation buttons.
+ * The shipped Shift+Tab branch read:
+ *
+ *     if (!inside || active === first) { preventDefault(); last.focus(); }
+ *
+ * With focus on the panel, `inside` is true (the panel contains itself) and
+ * `active` is not `first`, so NEITHER branch fired, no `preventDefault` ran,
+ * and the browser moved focus backwards out of the dialog and into the gallery
+ * behind it. The very first Shift+Tab after opening escaped the trap.
+ *
+ * The fix is one clause: the panel counts as the START boundary. Traced in full
+ * for both frame counts rather than argued:
+ *
+ *   many frames, focusables = [close, previous, next]
+ *     Tab from panel        inside, not last            default moves to close
+ *     Tab from close        not last                    default moves to previous
+ *     Tab from next         is last                     trapped, wraps to close
+ *     Shift+Tab from panel  IS the start boundary       trapped, wraps to next
+ *     Shift+Tab from close  is first                    trapped, wraps to next
+ *     Shift+Tab from next   not first, not panel        default moves to previous
+ *   one frame, focusables = [close], first === last
+ *     Tab from panel        inside, not last            default moves to close
+ *     Tab from close        is last                     trapped, stays on close
+ *     Shift+Tab from panel  IS the start boundary       trapped, moves to close
+ *     Shift+Tab from close  is first                    trapped, stays on close
+ *
+ * No path leaves the dialog in either direction at either count.
+ *
  * Focus restoration is deliberately NOT done here. It lives in `Gallery.tsx`,
- * which owns the tile buttons and can therefore return focus to the tile of the
- * frame the reader was last looking at rather than to the one they opened.
- * Escaping out of photograph six and landing back on photograph one is a real
- * loss of place, and only the page knows the mapping. See the `closeLightbox`
- * handler there; the contract is stated in both files so neither can drop it
- * silently.
+ * which owns the cell buttons and can therefore return focus to the cell of the
+ * frame the reader was last looking at rather than to the one they opened. The
+ * contract is stated in both files so neither can drop it silently.
  *
  * NO CONTROL SITS ON A PHOTOGRAPH, and that is structural rather than a taste
  * call. Plan section 4.4's Plate Rule keeps type off every photograph on this
@@ -43,22 +100,30 @@ import type { GalleryNight } from '../data/photos.generated';
  * bounded over GREY grounds only, "because nothing focusable sits on a
  * photograph under the Plate Rule". An overlaid close or next control would put
  * a focus indicator on a per pixel ground that no sweep covers. So close sits
- * in the header row above the image, previous and next sit in a row below the
- * caption, and the image is untouched by both.
+ * in the header row above the image and previous and next sit in a row below
+ * it, and the image is untouched by both.
  *
- * MEASURED CONTRAST, recomputed with the WCAG relative luminance formula rather
- * than copied, light then dark:
+ * THE ONE PIECE OF TYPE ATTACHED TO A FRAME IS THE POSITION READOUT, AND IT IS
+ * NOT A CAPTION. "Photograph 4 of 15" says where the reader is inside a set of
+ * controls; it describes nothing about the photograph, carries no date and
+ * makes no claim about the meetups. It is also the dialog's accessible name,
+ * which the dialog is required to have. Skill 9.F bans decorative `01 / 4`
+ * pagination stamped onto images; this is a navigational readout set outside
+ * the frame, next to the controls it belongs to.
  *
- *   --ink title on the --paper surface      17.965  17.965
- *   --ink counter on --paper                17.965  17.965
- *   --muted description on --paper           6.601   7.496
- *   1px --ink dialog border vs the surface  17.965  17.965
- *   dialog surface vs --scrim over --paper   4.793   1.000
- *   dialog border  vs --scrim over --paper   3.748  17.965
- *   dialog surface vs --scrim over --band    5.158   1.036
- *   dialog border  vs --scrim over --band    3.483  17.337
- *   close button --muted label on --paper     6.601   7.496
- *   close button --ink label on --band hover 16.281  16.318
+ * MEASURED CONTRAST, recomputed with the WCAG relative luminance formula in
+ * python rather than copied, light then dark:
+ *
+ *   --ink readout on the --paper surface                17.965  17.965
+ *   1px --ink dialog border vs the surface              17.965  17.965
+ *   dialog surface vs --scrim over --paper               4.793   1.000
+ *   dialog border  vs --scrim over --paper               3.748  17.965
+ *   dialog surface vs --scrim over --band                5.158   1.036
+ *   dialog border  vs --scrim over --band                3.483  17.337
+ *   close button --muted glyph on --paper                6.601   7.496
+ *   close button --ink glyph on the --band hover fill   16.281  16.318
+ *   outline Button 1px --edge stroke vs --paper          4.960   4.804
+ *   outline Button --ink label on its --paper fill      17.965  17.965
  *
  * The boundary is carried by the BETTER of tone and border in each mode, which
  * is the construction `JoinModal.tsx` derives at length: light mode leans on
@@ -72,35 +137,32 @@ import type { GalleryNight } from '../data/photos.generated';
  * were reading rather than that the page replaced itself. `MotionConfig
  * reducedMotion="user"` in `App.tsx` drops transform animations and keeps
  * opacity, which is why the panel's `scale` and `y` are safe to declare and why
- * the fade survives reduced motion. That is the house pattern in `JoinModal`,
- * not an oversight: an instantaneous appearance of a full screen layer is the
- * one thing reduced motion users report as worse, not better.
+ * the fade survives reduced motion.
  */
 
 const FOCUSABLE_SELECTOR =
     'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 interface GalleryLightboxProps {
-    /** The evening being viewed. `null` closes the dialog. */
-    night: GalleryNight | null;
-    /** Index of the frame WITHIN that evening. */
-    index: number;
+    /** Every frame on the wall, in the rendered reading order. */
+    frames: GalleryFrame[];
+    /** Index into `frames`, or `null` when the dialog is closed. */
+    index: number | null;
     onClose: () => void;
-    /** Called with the next index within the same evening. Wraps at both ends. */
+    /** Called with the next index. Wraps at both ends. */
     onNavigate: (nextIndex: number) => void;
 }
 
-export function GalleryLightbox({ night, index, onClose, onNavigate }: GalleryLightboxProps) {
+export function GalleryLightbox({ frames, index, onClose, onNavigate }: GalleryLightboxProps) {
     const titleId = useId();
     const panelRef = useRef<HTMLDivElement>(null);
 
-    const open = night !== null;
-    const frames = night?.frames ?? [];
     const count = frames.length;
+    const open = index !== null && count > 0;
     // Clamped rather than trusted. The page can only produce an in-range index
-    // today, but an out-of-range one would otherwise render `undefined.tile`.
-    const safeIndex = count > 0 ? Math.min(Math.max(index, 0), count - 1) : 0;
-    const frame = count > 0 ? frames[safeIndex] : null;
+    // today, but an out-of-range one would otherwise render `undefined.view`.
+    const safeIndex = open ? Math.min(Math.max(index, 0), count - 1) : 0;
+    const frame = open ? frames[safeIndex] : null;
 
     // Latest-value ref for the keyboard handler. Without it the capture phase
     // listener is torn down and re-registered on every arrow key, because
@@ -131,15 +193,19 @@ export function GalleryLightbox({ night, index, onClose, onNavigate }: GalleryLi
         if (!open) return;
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            const { onClose: close, onNavigate: navigate, safeIndex: at, count: total } =
-                navRef.current;
+            const {
+                onClose: close,
+                onNavigate: navigate,
+                safeIndex: at,
+                count: total,
+            } = navRef.current;
 
             if (e.key === 'Escape') {
                 close();
                 return;
             }
 
-            // Arrow keys move within the evening and wrap. Wrapping rather than
+            // Arrow keys move along the wall and wrap. Wrapping rather than
             // stopping is deliberate: a disabled control at either end drops
             // focus to <body> the moment it disables itself, which is exactly
             // the class of keyboard defect this project has already had audited.
@@ -166,8 +232,14 @@ export function GalleryLightbox({ night, index, onClose, onNavigate }: GalleryLi
             const active = document.activeElement;
             const inside = active instanceof Node && panel.contains(active);
 
+            // The panel is the start boundary as well as `first`. It is
+            // `tabIndex={-1}` and therefore not a member of `focusables`, so
+            // without this clause a Shift+Tab taken while it holds focus
+            // matches neither branch and walks backwards out of the dialog.
+            const atStart = !inside || active === first || active === panel;
+
             if (e.shiftKey) {
-                if (!inside || active === first) {
+                if (atStart) {
                     e.preventDefault();
                     last.focus();
                 }
@@ -194,7 +266,7 @@ export function GalleryLightbox({ night, index, onClose, onNavigate }: GalleryLi
 
     return (
         <AnimatePresence>
-            {open && frame && night && (
+            {open && frame && (
                 <>
                     {/* --scrim, theme invariant, the only alpha composite on the
                         site. No backdrop blur: the page is flat material. */}
@@ -216,18 +288,19 @@ export function GalleryLightbox({ night, index, onClose, onNavigate }: GalleryLi
                         initial={{ opacity: 0, scale: 0.98, y: 12 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.98, y: 12 }}
-                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100%-1.5rem)] max-w-3xl max-h-[92dvh] overflow-y-auto border border-ink bg-paper"
+                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100%-1.5rem)] max-w-5xl max-h-[92dvh] overflow-y-auto border border-ink bg-paper"
                     >
                         <div className="p-5 sm:p-6">
-                            {/* The dialog's accessible name is the evening. It is
-                                the one fact this page is willing to attach to a
-                                frame, and it is the fact the grouping argues from. */}
                             <div className="flex items-start justify-between gap-4">
+                                {/* The position readout, which is also the
+                                    dialog's accessible name. Tabular figures so
+                                    the line does not shuffle as the reader moves
+                                    through the wall. */}
                                 <h2
                                     id={titleId}
-                                    className="pt-2 text-xl font-medium tracking-tight text-ink"
+                                    className="pt-2 text-xl font-medium tracking-tight text-ink tabular-nums"
                                 >
-                                    {night.label}
+                                    Photograph {safeIndex + 1} of {count}
                                 </h2>
                                 <button
                                     type="button"
@@ -239,13 +312,17 @@ export function GalleryLightbox({ night, index, onClose, onNavigate }: GalleryLi
                                 </button>
                             </div>
 
-                            <figure className="mt-5">
-                                {/* The 1280px `view` tier, ONE url per format and
-                                    no srcset, fetched only now. A srcset here
-                                    would let a 2x display pull a tier this
+                            {/* No <figure> and no <figcaption>. A figure with no
+                                visible caption is just an image, and a status
+                                region is not a caption. */}
+                            <div className="mt-5">
+                                {/* The 1280px `view` tier, ONE url per format
+                                    and no srcset, fetched only now. A srcset
+                                    here would let a 2x display pull a tier this
                                     dialog never renders at: the panel caps at
-                                    768 CSS px and the image at 720, so 1280 is
-                                    1.78x coverage and nothing larger is useful.
+                                    1024 CSS px and the image at about 976, so
+                                    1280 is 1.31x coverage and nothing larger is
+                                    useful.
 
                                     `key` on the <picture> forces a remount when
                                     the frame changes. Without it React reuses
@@ -256,21 +333,13 @@ export function GalleryLightbox({ night, index, onClose, onNavigate }: GalleryLi
 
                                     `src` is the 640px JPEG and `width`/`height`
                                     are the 1280px tier's. That is correct rather
-                                    than a mismatch: there is no 1280 JPEG tier to
-                                    point at, both tiers are 16:9, and the two
+                                    than a mismatch: there is no 1280 JPEG tier
+                                    to point at, both tiers are 16:9, and the two
                                     attributes only have to reserve the right
-                                    SHAPE. Any browser reaching the <img> fallback
-                                    has no avif and no webp, which is a decade old
-                                    engine, and it gets the right box and a
-                                    smaller file.
-
-                                    alt is EMPTY here, deliberately. The frame's
-                                    description is rendered as visible text in
-                                    the caption below and announced from there,
-                                    so an identical alt would say every
-                                    description twice. On the grid the tiles
-                                    carry the real alt, because there is no
-                                    visible description beside them. */}
+                                    SHAPE. Any browser reaching the <img>
+                                    fallback has no avif and no webp, which is a
+                                    decade old engine, and it gets the right box
+                                    and a smaller file. */}
                                 <picture key={frame.slot} className="block">
                                     <source type="image/avif" srcSet={frame.view.avif} />
                                     <source type="image/webp" srcSet={frame.view.webp} />
@@ -278,7 +347,7 @@ export function GalleryLightbox({ night, index, onClose, onNavigate }: GalleryLi
                                         src={frame.tile.src}
                                         width={frame.view.width}
                                         height={frame.view.height}
-                                        alt=""
+                                        alt={frame.alt}
                                         loading="eager"
                                         decoding="async"
                                         className="block h-auto w-full"
@@ -287,28 +356,22 @@ export function GalleryLightbox({ night, index, onClose, onNavigate }: GalleryLi
 
                                 {/* PERMANENTLY MOUNTED LIVE REGION while the
                                     dialog is open. Only its TEXT changes as the
-                                    reader moves through the evening, never its
-                                    existence, which is what makes a polite live
-                                    region announce reliably. Without this,
-                                    previous and next would be silent to a screen
-                                    reader: their entire effect is swapping an
-                                    image, and swapping an image announces
-                                    nothing.
+                                    reader moves, never its existence, which is
+                                    what makes a polite live region announce
+                                    reliably. Without it, previous and next would
+                                    be silent to a screen reader: their entire
+                                    effect is swapping an image, and swapping an
+                                    image announces nothing.
 
-                                    The count is scoped to the EVENING, not to
-                                    the whole gallery, so "photograph 3 of 6"
-                                    cannot be misread as a total. */}
-                                <figcaption role="status" aria-live="polite" className="mt-5">
-                                    <p className="text-sm font-semibold text-ink tabular-nums">
-                                        Photograph {safeIndex + 1} of {count}
-                                    </p>
-                                    <p className="mt-2 max-w-[68ch] text-sm leading-relaxed text-muted">
-                                        {frame.alt}
-                                    </p>
-                                </figcaption>
-                            </figure>
+                                    `sr-only`, so it is not a visible caption.
+                                    Nothing on this route prints a description
+                                    beside a photograph. */}
+                                <p role="status" aria-live="polite" className="sr-only">
+                                    Photograph {safeIndex + 1} of {count}. {frame.alt}
+                                </p>
+                            </div>
 
-                            {/* One evening with a single frame gets no navigation
+                            {/* A wall with a single frame gets no navigation
                                 rather than two controls that do nothing. */}
                             {count > 1 && (
                                 <div className="mt-6 flex items-center justify-between gap-4">

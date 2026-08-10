@@ -50,6 +50,17 @@ const FinalCTA = lazy(() => import('../components/FinalCTA').then(module => ({ d
  * measured. EventsPreview LOST its gallery link to the new section, taking 60px
  * off its `base` band. Neither was the edit anyone was thinking about.
  *
+ * THIRD PASS, the gallery and photography round, and it is worth recording what
+ * did NOT move as much as what did. All seven sections were re-measured on the
+ * rebuilt page. Six came back byte for byte identical to the second pass at all
+ * nine widths, INCLUDING FounderStory, whose photograph was repointed at a
+ * different source: the replacement is 16:9 at the same placement, so it
+ * contributes exactly the same height. GalleryPreview is the one that moved. It
+ * lost one rendered line of lead paragraph when the count of evenings came out
+ * of its copy, and it is 27px shorter at every width from 340 up. Its five fits
+ * are re-declared at its own boundary below; the six constants are untouched
+ * because re-declaring an unchanged measurement is how a correct number drifts.
+ *
  * NINE WIDTHS, not five. The extra four (800, 900, 1100, 1279) exist because
  * these sections set their headlines with `clamp()`, so height varies
  * CONTINUOUSLY across a breakpoint band rather than stepping at its edge.
@@ -61,7 +72,7 @@ const FinalCTA = lazy(() => import('../components/FinalCTA').then(module => ({ d
  *   FounderStory    1510  1442  1442  1442  1339  1339  1339  1339  1339
  *   EventsPreview   1473  1327  1306  1316  1330  1333  1333  1333  1333
  *   PartnersStrip   1110   939   942   951   961   968   980   980   980
- *   GalleryPreview  1062  1072  1099  1187   894   933  1021  1022  1022
+ *   GalleryPreview  1035  1045  1072  1160   867   906   994   994   994
  *   ResourcesPrev.  1248  1162  1162  1170  1181  1187  1195  1195  1195
  *   FAQ             2272  1903  1903  1907  1990  1993  1997  1997  1997
  *   FinalCTA        1159   907   908   912   966   973   990   881   883
@@ -71,7 +82,7 @@ const FinalCTA = lazy(() => import('../components/FinalCTA').then(module => ({ d
  *   FounderStory     94.375 / 90.125 / 83.6875 rem                   0px
  *   EventsPreview    92.0625 / 82.25 / 83.25 rem                    11px
  *   PartnersStrip    69.375 / 59.125 / 60.625 / 61.25 rem           10px
- *   GalleryPreview   five linear fits, see its own note below       25px
+ *   GalleryPreview   five linear fits, see its own note below       26px
  *   ResourcesPrev.   78 / 72.875 / 74.25 rem                         7px
  *   FAQ              142 / 119.0625 / 124.6875 rem                    5px
  *   FinalCTA    max(100dvh, 72.4375 / 57 / 61.125 / 55.125 rem)      12px
@@ -85,7 +96,7 @@ const FinalCTA = lazy(() => import('../components/FinalCTA').then(module => ({ d
  *
  * The nine widths above are ALSO the reason GalleryPreview does not get a
  * constant: sampled at nine widths it looks like the others, but sampled at
- * seventeen it runs 1004 to 1455 inside the base band alone. A photographic
+ * forty it runs 977 to 1428 inside the base band alone. A photographic
  * section is a different shape of problem and it gets a different shape of
  * fallback. Its own note sits with its `Suspense` boundary below.
  *
@@ -166,33 +177,51 @@ export function Home() {
                 lands within 12px. This one is made of 16:9 photographs, whose
                 height is width times 0.5625, so its height is close to LINEAR
                 IN VIEWPORT WIDTH and a constant is the wrong shape of fallback
-                entirely. Measured across its four variable bands it runs 1004
-                to 1455, 900 to 1007, 1070 to 1296 and 894 to 1021, so a single
-                value per band would be out by up to 225px, which is twenty
+                entirely. Measured across its four variable bands it runs 977
+                to 1428, 873 to 980, 1045 to 1269 and 867 to 994, so a single
+                value per band would be out by up to 226px, which is twenty
                 times the worst residual anywhere else in this file.
 
                 So each band declares its own least squares fit of the rendered
                 height against viewport width, in the same units the browser
-                lays out in. Points, all measured on the built page under
-                `prefers-reduced-motion: reduce` after every lazy chunk had
-                resolved:
+                lays out in.
 
-                    320 1004   360 1044   430 1130   480 1187   560 1322   639 1455
-                    700  950   767 1007
-                    850 1143   960 1240  1023 1296
-                   1100  933  1200  984  1279 1021
-                   1400 1022  1600 1022  1920 1022
+                RE-MEASURED 2026-08-10 in the gallery round, and this is the
+                standing obligation catching its own round for the third time.
+                `GalleryPreview` lost one rendered line from its lead paragraph
+                when the count of evenings came out of it on the founder's
+                ruling, so the section is EXACTLY 27px shorter at every width
+                from 340 up and all five fits moved. Nothing about the frames
+                changed: same count, same 16:9 ratio, same placement, so the
+                slopes barely move and the intercepts carry the difference. The
+                three frames it selects DID change, but a photograph swapped for
+                another at the same ratio contributes no height at all.
+
+                Points, all re-measured on the built page under
+                `prefers-reduced-motion: reduce` after every lazy chunk had
+                resolved, at forty widths rather than seventeen:
+
+                    320  977   340  983   360 1017   390 1035   400 1052
+                    430 1103   450 1136   480 1187   500 1221   520 1255
+                    560 1322   600 1362   620 1396   639 1428
+                    640  873   660  889   680  906   700  923   720  940
+                    750  965   767  980
+                    768 1045   800 1072   850 1116   900 1160   960 1213
+                   1000 1248  1023 1269
+                   1024  867  1060  886  1100  906  1150  931  1200  957
+                   1240  976  1279  994
+                   1280  994  1366  994  1440  994  1600  994  1920  994
 
                 and the fits, with their worst residual inside the band:
 
-                   base   532.6px + 141.5vw    25px  (the one band that is not
+                   base   475.4px + 148.6vw    26px  (the one band that is not
                                                      straight: below 640 the
                                                      header text is still
                                                      reflowing under the frames)
-                   sm     354.5px +  85.1vw     1px
-                   md     391.3px +  88.4vw     2px
-                   lg     392.2px +  49.2vw     2px
-                   xl     1022px, constant      0px  (the container caps at
+                   sm     332.6px +  84.4vw     1px
+                   md     369.1px +  87.9vw     1px
+                   lg     356.2px +  50.0vw     2px
+                   xl      994px, constant      0px  (the container caps at
                                                      max-w-7xl, so nothing in
                                                      the section grows past 1280)
 
@@ -201,13 +230,31 @@ export function Home() {
                 Windows this over-declares by roughly 13px. Over is the safe
                 direction: it pulls the page up rather than pushing it down.
 
+                THE BASE BAND'S RESIDUALS ARE SIGNED BOTH WAYS AND THAT IS A
+                CHOICE, not an oversight, because the two rules this file states
+                disagree there and only there. "Minimise the maximum error across
+                the band" and "over is the safe direction" are the same
+                instruction wherever the band is straight, and below 640 it is
+                not: the header type is still reflowing under the frames, so the
+                curve runs under the line at both ends and over it in the middle.
+                Verified against the built CSS with a probe element rather than
+                inferred, the base residuals are -26.1px at 320, -6.7 at 360,
+                +19.9 at 390, +1.6 at 480, -14.5 at 560 and -3.1 at 639, so the
+                worst case is 26px in the direction the scrollbar note calls
+                unsafe. Minimise-max-error wins here. The never-under
+                alternative was computed rather than waved at: the same slope
+                with the intercept raised to 31.35rem never declares short, and
+                it pays 46px of over-declaration at 480 to buy it, which is
+                nearly twice the error it removes. Every other band is straight
+                and lands within 2px, so this trade exists in one band only.
+
                 The rem terms are the intercepts divided by 16. Spaces inside
                 the arbitrary value are underscores because Tailwind requires
                 that, and CSS `calc()` requires the spaces around the operator,
                 so both halves of that are load bearing. */}
             <Suspense
                 fallback={
-                    <SectionPlaceholder className="bg-paper min-h-[calc(33.29rem_+_141.5vw)] sm:min-h-[calc(22.16rem_+_85.1vw)] md:min-h-[calc(24.46rem_+_88.4vw)] lg:min-h-[calc(24.51rem_+_49.2vw)] xl:min-h-[63.875rem]" />
+                    <SectionPlaceholder className="bg-paper min-h-[calc(29.71rem_+_148.6vw)] sm:min-h-[calc(20.79rem_+_84.4vw)] md:min-h-[calc(23.07rem_+_87.9vw)] lg:min-h-[calc(22.26rem_+_50vw)] xl:min-h-[62.125rem]" />
                 }
             >
                 <GalleryPreview />

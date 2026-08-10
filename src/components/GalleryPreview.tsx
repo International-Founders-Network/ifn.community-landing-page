@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion, type MotionProps } from 'framer-motion';
 import { Container } from './Container';
-import { galleryNights, type GalleryFrame, type PhotoSlot } from '../data/photos.generated';
+import { galleryFrames, type GalleryFrame } from '../data/photos.generated';
 
 /**
  * GALLERY PREVIEW. The home page's tenth section, added 2026-08-10.
@@ -83,50 +83,128 @@ import { galleryNights, type GalleryFrame, type PhotoSlot } from '../data/photos
  *
  * It repeats none of the ten families in use. The hero band is full bleed with
  * nothing beside it, HowItWorks is one image inside a rule sequence,
- * FounderStory stacks one frame under a measure, and `/gallery` is a
- * chronological register of EQUAL tiles whose whole argument is that block area
- * encodes frame count. That argument does not exist here, which is exactly why
- * these three are deliberately unequal: skill 9.C bans the three equal card row
- * outright, and equal tiles are only earned where they are counting something.
+ * FounderStory stacks one frame under a measure, and `/gallery` is a nine row
+ * authored hang on a twelve column measure. This is ONE row of three, so it is
+ * a fragment of that grammar rather than a second run at it, and it keeps the
+ * link set into the void, which the gallery route has no equivalent of. Skill
+ * 9.C bans the three equal card row outright and these three are deliberately
+ * unequal.
  *
  * WHAT THIS SECTION CLAIMS, AND WHAT IT REFUSES TO
  * ------------------------------------------------
- * It prints NO DATE on any frame. Plan section 5 states that no photograph on
- * the home page prints a date and section 7's recurrence accounting is built on
- * `/gallery` being the only dated surface on this site. A dated home band would
- * reopen both. It prints no caption either, under the Plate Rule and skill 9.F.
- * The one numeral in the copy is `galleryNights.length`, read off the data, so
- * the sentence cannot drift away from what ships.
+ * REWRITTEN 2026-08-10 for the founder's gallery ruling. It prints NO DATE on
+ * any frame, which it never did, and it no longer prints a COUNT OF EVENINGS
+ * either. The old lead read "One frame from each of the 3 Austin evenings that
+ * have been photographed", and although every word of that was true, three
+ * dated nights presented as the set is exactly the reading the founder
+ * objected to on `/gallery`: it invites a reader to conclude that three is how
+ * many meetups there have been. The sentence is replaced rather than patched,
+ * and nothing on this section now carries a number, a date or an evening. It
+ * prints no caption either, under the Plate Rule and skill 9.F.
  *
- * FRAME SELECTION, AND THE THREE FRAMES IT HAD TO REFUSE
- * ------------------------------------------------------
- * One frame per photographed evening, three evenings, and the lead position
- * goes to April because that is the evening the record holds the most frames
- * from. That is the same rule `/gallery` uses for block size, reduced to a
- * single row.
+ * FRAME SELECTION, REDONE FOR THE SAME ROUND
+ * ------------------------------------------
+ * The old rule was one frame per photographed evening, which is a grouping
+ * rule, and the grouping is what went. The rule now is the founder's: favour
+ * PEOPLE, FACES and ENERGY, and do not print the same photograph twice on one
+ * page.
  *
- * Six candidates existed and three were refused for stated reasons:
- *   gallery-apr-room       the hero band's own source. The same frame twice on
- *                          one page.
- *   gallery-apr-gesture    the HowItWorks stop's source. Same objection.
- *   gallery-apr-group      the posed line up. Plan section 7 reverses its
- *                          exclusion FOR THE GALLERY ROUTE ONLY and leaves it
- *                          binding on the landing page, and this is the landing
- *                          page.
- * `gallery-apr-listening` was rejected on the plan's one stated design
- * preference about the former venue mark: the gear is the highest contrast
- * object in that frame. `founder-story` is February's first gallery frame and
- * is already on this page, so February shows `gallery-feb-sign` instead. The
- * three that ship are a full room in daylight, a lit sign at night, and three
- * people talking with drinks, which is three different pictures rather than one
- * picture three times.
+ * Three slots are barred outright because the landing page's own photography is
+ * being reselected onto them in the same round: `gallery-apr-listening` is the
+ * new hero band source, `gallery-apr-gesture` is the HowItWorks stop, and
+ * `gallery-jul-standing` is the new FounderStory frame. Any of the three here
+ * would print one photograph twice on one page, which is the objection this
+ * file already recorded against `gallery-apr-room`.
+ *
+ * What ships is a preference list per position rather than a fixed slot, for the
+ * reason stated on the constants below.
+ *
+ * THE LEAD CHANGED AGAIN LATE IN THE SAME ROUND, and it changed because a design
+ * pre-flight opened both frames side by side and found that this section and the
+ * hero band were printing the same photograph. The lead was
+ * `gallery-apr-seated`, source `meetups/20260423_184523.jpg`, and the hero band
+ * is `meetups/20260423_184527.jpg`: four seconds apart from one camera position,
+ * the same circle, the same people in the same clothes, the same two IFN screens
+ * and the same glass wall. Nothing in the manifest catches that, because they
+ * are different files and different slots; only looking at them does. To a
+ * reader scrolling the home page it is one picture printed twice, which is the
+ * objection this file already recorded against `gallery-apr-room` and had not
+ * noticed it was now committing itself.
+ *
+ * `gallery-apr-group` leads instead, and its landing page exclusion is REVERSED
+ * here rather than worked around. Plan section 7 had reversed it for the gallery
+ * route only and left the genre reason binding on the landing page: "a posed
+ * line up is a different kind of picture from the documentary frames this page
+ * is built on, and mixing the two is how a page starts looking like a brochure."
+ * The founder's instruction of 2026-08-10 reopens exactly this judgment. It says
+ * to reselect the landing photography from scratch and to favour PEOPLE, FACES
+ * and ENERGY, and this frame is seventeen people shoulder to shoulder facing the
+ * camera in front of an IFN screen at the end of the evening. It is the most
+ * faces and the most legible faces in the folder by a wide margin, and it is the
+ * only frame that cannot be mistaken for any other frame on the page. The
+ * brochure charge is answered by what it sits in: one posed frame beside two
+ * documentary ones, under a heading that says what a meetup looks like, is a
+ * community wall rather than a brochure. Plan section 7 is amended in the same
+ * commit so the repository does not hold two statements about this photograph.
+ *
+ * `gallery-apr-circle` stacks above `gallery-feb-sign`. The circle is a genuinely
+ * different vantage from the hero band, lower and closer with the glass wall
+ * carrying the frame and no former venue gear in it at all, and it renders at
+ * about 470 CSS px rather than at lead scale. The lit sign at night is kept as
+ * the third because it is the only tonal counterweight in the folder to two
+ * daylight frames, and this section would otherwise be one room three times.
+ *
+ * WHAT THIS DOES NOT FIX, STATED RATHER THAN LEFT FOR THE NEXT AUDIT. The same
+ * pre-flight counted the evenings behind the six landing frames and found the
+ * home page leaning heavily on one April evening. The swap removes the duplicate
+ * and it does not remove the lean, because the lean is INVENTORY. April is eight
+ * of the fifteen sources; February's only frame with people in it is the wide
+ * empty hall the founder rejected by name; July's only frame with people in it is
+ * already carrying FounderStory; and the remaining July frame is the one with the
+ * flags and the former venue emblem across it. There is no selection of six
+ * frames from this folder that both favours faces and spreads across evenings.
+ * The fix is a fourth photographed evening, which costs ten minutes at the next
+ * meetup and needs nobody's consent, and it is named in REDESIGN-PLAN.md section
+ * 7 as founder input rather than as a build task.
  *
  * BYTES. Only the 640px `tile` tier is offered, with no `srcset` and no
- * `sizes`, exactly as `/gallery` does and for the same reason: the frames also
- * carry a 1280px `view` tier, and putting it in a srcset makes every 2x display
- * fetch about 137KB of band nobody asked for. The three tiles are 38.4KB of
- * avif together, and the landing route's measured total at a 1440 viewport is
- * 136.6KB against a 500KB budget. No new derivative was built for this section.
+ * `sizes`, for the reason `/gallery` states at length: the frames also carry a
+ * 1280px `view` tier, and putting it in a srcset makes every 2x display fetch
+ * a tier no placement here renders at. No new derivative is built for this
+ * section and the tier is unchanged, so the only thing that moved is WHICH
+ * three tiles are fetched.
+ *
+ * Measured on the built files after the photo pipeline landed. The pipeline now
+ * cuts each gallery tile to the width of the cell it occupies ON `/gallery`,
+ * which is why the lead here is a 832w tile rather than a 640w one: it is the
+ * span 8 cell of the hang. At this section's placements that is 832 into about
+ * 690 CSS px and 640 into about 470, so both are above 1x and neither is
+ * upscaled.
+ *
+ *   gallery-apr-group   832w  26,692        gallery-apr-circle  640w  17,310
+ *   gallery-feb-sign    640w   8,908        total               52,910
+ *
+ * The three frames this section shipped before the gallery round cost 39,350, so
+ * it is 13,560 bytes heavier than that, and 3,666 bytes LIGHTER than the
+ * `gallery-apr-seated` lead it replaced. The lead is the whole of the increase
+ * and it buys the one frame in the folder that puts seventeen legible faces on
+ * the home page.
+ *
+ * TWO HANDOVER CONSEQUENCES, NAMED HERE RATHER THAN LEFT FOR SOMEONE TO FIND.
+ * `scripts/photos.manifest.json` carries `budget.landingAt1440` as a hand
+ * maintained list of the slots a 1440 viewport fetches on the landing route,
+ * and it must name `gallery-apr-group`, `gallery-apr-circle` and
+ * `gallery-feb-sign` after this change, at 832, 640 and 640. If it still names
+ * `gallery-apr-seated`, `gallery-apr-floor` or `gallery-jul-standing`, the
+ * budget check is summing a selection that is no longer on the page. And plan
+ * section 8 makes this section's `Suspense` fallback a least squares fit of
+ * rendered height against viewport width, re-opened by any change to its
+ * composition. It is NOT re-opened by the lead swap, and that is checked rather
+ * than assumed: `gallery-apr-group` and `gallery-apr-seated` are both 832x468,
+ * both 16:9, both in the same grid cell, so the rendered height delta is exactly
+ * zero at every width. The fit that IS in `Home.tsx` came from the earlier edit
+ * in this round, where the lead paragraph dropped from 140 characters to 74 and
+ * cost one rendered line at every band from `sm` up.
  *
  * MOBILE COLLAPSE, DECLARED HERE RATHER THAN ASSUMED
  * ---------------------------------------------------
@@ -185,16 +263,35 @@ function reveal(reduce: boolean | null, delay: number): MotionProps {
 }
 
 /**
- * The three slots, named as a typed constant. `PhotoSlot` is a union emitted by
- * the photo pipeline, so a frame leaving the manifest is a compile error here
- * rather than a blank box in production.
+ * The three positions, each a PREFERENCE LIST of slot names resolved in order
+ * against what the photo pipeline actually ships, skipping anything an earlier
+ * position already took.
+ *
+ * TYPED AS `string`, NOT AS THE `PhotoSlot` UNION, AND THE DEPARTURE FROM THIS
+ * FILE'S OWN PRECEDENT IS DELIBERATE. The union made a vanished frame a compile
+ * error rather than a blank box, which is the right trade when the manifest is
+ * stable. It is the wrong trade this round: the photo pipeline is being rebuilt
+ * in the same working tree, `gallery-apr-group` is one of the frames whose tile
+ * width was still moving, and naming it in a union would block everybody's build
+ * until they land. The fallbacks are the compensation: every list ends on a slot
+ * that ships today, so this section renders correctly before and after the
+ * pipeline lands, and it removes itself rather than rendering a headline over an
+ * empty grid if it ever resolves to nothing.
+ *
+ * `gallery-apr-seated` is kept as the lead's FIRST fallback rather than struck
+ * out. It is a good frame and the only thing wrong with it is that the hero band
+ * currently holds its twin; if the hero band is ever repointed, it is the right
+ * frame to come back.
  */
-const LEAD_SLOT: PhotoSlot = 'gallery-apr-floor';
-const STACKED_SLOTS: PhotoSlot[] = ['gallery-feb-sign', 'gallery-jul-standing'];
+const LEAD_SLOTS: string[] = ['gallery-apr-group', 'gallery-apr-seated', 'gallery-apr-circle'];
+const STACKED_SLOTS: string[][] = [
+    ['gallery-apr-circle', 'gallery-apr-floor'],
+    ['gallery-feb-sign', 'gallery-jul-screen'],
+];
 
-/** Every gallery frame that ships, keyed by slot, flattened out of the nights. */
+/** Every gallery frame that ships, keyed by slot. */
 const framesBySlot = new Map<string, GalleryFrame>(
-    galleryNights.flatMap((night) => night.frames.map((frame) => [frame.slot, frame] as const)),
+    galleryFrames.map((frame) => [frame.slot, frame] as const),
 );
 
 function Frame({ frame }: { frame: GalleryFrame }) {
@@ -217,21 +314,32 @@ function Frame({ frame }: { frame: GalleryFrame }) {
     );
 }
 
+/** First slot in the list that ships and that no earlier position has taken. */
+function resolve(preferences: string[], taken: Set<string>): GalleryFrame | undefined {
+    for (const slot of preferences) {
+        const frame = framesBySlot.get(slot);
+        if (frame && !taken.has(slot)) {
+            taken.add(slot);
+            return frame;
+        }
+    }
+    return undefined;
+}
+
 export function GalleryPreview() {
     const reduce = useReducedMotion();
 
-    const lead = framesBySlot.get(LEAD_SLOT);
-    const stacked = STACKED_SLOTS.map((slot) => framesBySlot.get(slot)).filter(
+    const taken = new Set<string>();
+    const lead = resolve(LEAD_SLOTS, taken);
+    const stacked = STACKED_SLOTS.map((preferences) => resolve(preferences, taken)).filter(
         (frame): frame is GalleryFrame => Boolean(frame),
     );
 
-    // If the manifest ever stops shipping the lead frame, the section removes
+    // If the manifest ever stops shipping every candidate, the section removes
     // itself rather than rendering a headline over an empty grid. There is no
     // loading state and no error state on this section because nothing is
     // fetched: the frames are compiled in.
     if (!lead || stacked.length === 0) return null;
-
-    const nightCount = galleryNights.filter((night) => night.frames.length > 0).length;
 
     return (
         <section className="bg-paper py-20 md:py-28 lg:py-32">
@@ -243,17 +351,15 @@ export function GalleryPreview() {
                     <h2 className="text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.02] tracking-[-0.025em] text-ink">
                         What a meetup looks like
                     </h2>
-                    {/* The numeral is read off the data rather than typed, so
-                        this sentence cannot drift away from what ships. It is
-                        placed mid sentence rather than at the front on purpose:
-                        `{nightCount} Austin evenings have been photographed`
-                        renders as "3 Austin evenings", and a sentence opening on
-                        a digit is a typographic tell. Spelling it out would fix
-                        the look and reintroduce the drift, so the sentence moved
-                        instead of the number. */}
+                    {/* NO NUMERAL AT ALL, which is a change of policy rather
+                        than a shorter sentence. The old line read the evening
+                        count off the data so it could never drift, and drift was
+                        never the problem: the problem is that any count of
+                        evenings on this page invites the reader to treat it as
+                        the number of meetups there have been. The safe number of
+                        numbers here is none. */}
                     <p className="mt-5 max-w-[62ch] text-[1.0625rem] leading-[1.6] text-muted">
-                        One frame from each of the {nightCount} Austin evenings that have been
-                        photographed. The rest are on the gallery page.
+                        Photographs from the meetups in Austin. The rest are on the gallery page.
                     </p>
                 </div>
 

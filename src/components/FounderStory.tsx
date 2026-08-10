@@ -43,28 +43,60 @@ import { photos } from '../data/photos.generated';
  * said so in as many words. The founder overrode that: photography goes into
  * the middle third of the page, which otherwise runs about 6000px from here to
  * the FAQ with no image, no colour field and no change of scale. The override
- * is recorded rather than absorbed, and two things about it are named here
- * rather than left for a reader to discover.
+ * is recorded rather than absorbed, and so is the reselection that followed it.
  *
- * First, the frame is `meetups/20260226_184622.jpg`, which plan section 7 lists
- * as **still excluded** on a composition judgment that never depended on
- * consent ("honest and self-defeating at the same time"). The photo pipeline
- * reselected it for this slot on the argument that this section is not a
- * marketing frame: it is headed "The meetups came first" and it says IFN began
- * as a room and everything else came afterwards, and this is the earliest dated
- * frame in the folder. That argument is reasonable and it is still a shipped
- * page disagreeing with a binding document, so the plan is what has to be
- * updated, not quietly this file.
+ * THE FRAME WAS RESELECTED ON 2026-08-10 AND THE OLD ARGUMENT MUST NOT COME
+ * BACK.
+ * ---------------------------------------------------------------------------
+ * This slot used to carry `meetups/20260226_184622.jpg`, a wide February hall
+ * holding six distant people among rows of empty chairs, and the argument for
+ * it was written into this file at length: an empty room is what "the meetups
+ * came first" looks like, and the earliest dated frame in the folder belongs
+ * under the earliest sentence. **The founder has rejected that argument in
+ * terms.** The frame does not show the faces of members and is largely a big
+ * empty event hall, and no reader ever got the "before it filled up" reading,
+ * because nothing on this page dates a photograph. Rendered at this slot's own
+ * 904 CSS px it carries no readable face at all: the nearest person is about
+ * 40px tall and turned away. Do not revive the argument in another form, and do
+ * not reach for that frame again on the grounds that it is the oldest one. It
+ * is a gallery frame now and nothing else.
  *
- * Second, the frame ships uncaptioned, like the hero band and the HowItWorks
- * stop, so a reader cannot know it is the February room. Against a first
- * paragraph that says "a room full of international founders", a sparse room
- * with rows of empty chairs can read as a thin turnout rather than as a
- * beginning. A `--muted` date line under the frame would fix that and would
- * stay inside the Plate Rule, but plan section 7 states that no caption on this
- * page prints a date, and a date here is markable under the accent licence,
- * which would put a second mark in this section. So it ships uncaptioned and
- * the tension is handed to whoever owns the frame.
+ * The frame is `meetups/20260723_190939.jpg`: three people standing mid
+ * conversation with drinks, one of them speaking with a raised hand, under
+ * white LED light with an IFN meetup slide on the screen behind them. Measured
+ * off the 904 CSS px render rather than estimated, their heads are about 130px
+ * for the two nearest and about 95px for the one standing furthest back, so
+ * this is the first version of this section in which a reader can see who the
+ * room is made of.
+ * The crop is `{left 300, top 452, width 3200, height 1800}`, which is 16:9,
+ * the ratio this slot has always been, so nothing in the placement below moved
+ * and no tier ladder changed. `top 452` is 2252 minus 1800 and is therefore
+ * forced. `left 300` is the one chosen value and it is load bearing rather than
+ * cosmetic: a fourth person stands in the background at the far left of the
+ * uncropped frame, the crop removes him, and the alt text's count is true of
+ * the crop and false of the source. Checked by rendering both through the build
+ * pipeline and counting, not by reading the box.
+ *
+ * WHAT THIS FRAME IS NOT DOING, said plainly because the heading invites the
+ * question. July is the LATEST evening in the folder and it now sits under a
+ * heading that reads "The meetups came first". It carries no date and no
+ * caption, here or anywhere on this page, so it makes no chronological claim in
+ * either direction: the origin claim is carried by the first sentence of the
+ * prose beside it and by nothing else. This slot's job is to show what the room
+ * is, not when it was. The consequence is that the home page's evenings are now
+ * April (hero band, HowItWorks) and July, not April and February, and February
+ * reaches the reader only through the gallery. REDESIGN-PLAN.md sections 5 and
+ * 7 both still say this slot supplies February as the home page's second
+ * evening, and both need amending; that is handed over rather than done here,
+ * because the plan is not this component's file.
+ *
+ * The tension the old comment handed on is closed rather than inherited. It
+ * warned that an uncaptioned sparse room reads as a thin turnout against a
+ * first paragraph promising "a room full of international founders", and it
+ * asked whoever owned the frame to resolve it. A photograph of three people
+ * talking makes no claim about turnout at all, so there is nothing left for a
+ * caption to fix: the Plate Rule, the no-dates rule and the one-mark-per-
+ * section budget all hold with nothing traded for any of them.
  *
  * WHY IT IS STACKED IN THE PROSE COLUMN RATHER THAN SET BESIDE THE TEXT
  * --------------------------------------------------------------------
@@ -393,6 +425,20 @@ export function FounderStory() {
                         bytes land and this section contributes zero CLS. Alt text
                         is the manifest's, hand written, naming no individual and
                         no venue.
+
+                        THE CROP IS FIXED ACROSS BREAKPOINTS, so "is a face cut
+                        by it" is one question and not four: this slot carries no
+                        art directed per width crop, and the `<img>` is `h-auto
+                        w-full` with no `object-fit`, so every viewport renders
+                        the same pixels at a different size. The placements are
+                        328px at 360 (container `px-4`), 576px at 768 (the
+                        `max-w-[36rem]` cap), and 904px at both 1024 and 1440,
+                        because the `lg` grid stops growing at 904. All four were
+                        rendered through the build pipeline with the july-2026
+                        grade: no face touches any edge of the crop, and all
+                        three heads stay legible at the 328px phone placement,
+                        which is the size that decides whether the swap was worth
+                        making.
 
                         The 0.18 delay is the fourth step of the section's 60ms
                         stagger (0, 0.06, 0.12, 0.18), so the photograph arrives

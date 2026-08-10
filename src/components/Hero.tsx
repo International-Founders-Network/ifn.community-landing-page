@@ -31,6 +31,16 @@ const heroBand = photos['hero-band'];
  * is same origin and requested in no-cors mode, and naming it here would make
  * the preload miss the <img>'s own request.
  *
+ * The href is looked up BY WIDTH rather than by position in the ladder. It used
+ * to be `derivatives[2]`, which happened to be the 1440 tier and would silently
+ * become some other tier the moment the manifest's output list for this slot
+ * gained or lost a row. That list is edited by the photo pipeline, not by this
+ * component, and it was edited this round, so an index into it is a silent
+ * failure waiting on someone else's file. The lookup falls back to the widest
+ * tier if 1440 ever leaves the ladder, which is a correct preload rather than a
+ * crash. It is also only the fallback target: every browser that understands
+ * `imagesrcset` picks from the srcset below and ignores this value entirely.
+ *
  * STATED TENSION, not hidden. Plan section 7 makes the preload conditional on
  * measurement, because at 1366x768 the band sits below the fold and the request
  * competes with the Archivo preload that gates the TEXT LCP. The brief overrides
@@ -39,7 +49,11 @@ const heroBand = photos['hero-band'];
  * and index.html is not this component's file. The exact line is handed to the
  * integrator in the delivery notes.
  */
-preload(heroBand.derivatives[2].avif, {
+const heroBandPreloadHref =
+    heroBand.derivatives.find((tier) => tier.width === 1440)?.avif ??
+    heroBand.derivatives[heroBand.derivatives.length - 1].avif;
+
+preload(heroBandPreloadHref, {
     as: 'image',
     type: 'image/avif',
     imageSrcSet: heroBand.avif,
@@ -331,6 +345,38 @@ export function Hero({ onJoinClick }: HeroProps) {
                 Full bleed, edge to edge, breaking the poster's gutter. It is a
                 real documentary photograph of a real IFN evening, replacing a
                 div and CSS globe medallion that skill 9.E bans outright.
+
+                THE FRAME WAS RESELECTED ON 2026-08-10 AND NOTHING IN THIS FILE
+                MOVED FOR IT. The band used to be
+                `meetups/20260423_184515.jpg`; it is now
+                `meetups/20260423_184527.jpg`, the same room minutes apart, at
+                the same crop box `{left 0, top 585, width 4000, height 1667}`
+                and the same 2.4:1 ratio, so the swap is a manifest edit and
+                this component is unchanged by it. The reason is the founder's
+                instruction to favour people, faces and energy: rendered at
+                1440x600 through the build pipeline, `184515` gives roughly its
+                lower left quarter to empty chairs, a backpack on the floor and
+                bare concrete, while `184527` fills that space with the group
+                and puts about nine faces in legible range, six of them still
+                legible at the 768px placement. Plan section 7's own design
+                preference on this slot survives the swap and was rechecked by
+                rendering rather than argued: the brightest objects in the band
+                are still the two IFN meetup screens and the daylight through
+                the glass wall, and the former venue gear is smaller and lower
+                in the frame than it was in `184515`, where it was the dominant
+                graphic left of centre. Section 7's hero row still names
+                `184515` and needs amending; that is handed over rather than
+                edited here.
+
+                THE CROP IS FIXED ACROSS BREAKPOINTS. There is no per width art
+                direction in this slot and the image is `h-auto w-full` with no
+                `object-fit`, so 360, 768, 1024 and 1440 render the same pixels
+                at 150, 320, 427 and 600 CSS px tall. No face is cut by any edge
+                of the crop at any of them. What does change with width is
+                legibility, and it is stated rather than glossed: at 360 the
+                band reads as a full room of people rather than as individual
+                faces, which is the honest ceiling for a 2.4:1 full bleed band
+                on a phone and is true of every candidate frame in the folder.
 
                 THE PLATE RULE: no type sits on it, ever, and no caption sits over
                 it. Its derivation is a measurement rather than a preference, an
