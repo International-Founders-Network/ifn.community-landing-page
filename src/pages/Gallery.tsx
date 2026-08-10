@@ -177,13 +177,16 @@ import { galleryFrames, type GalleryFrame } from '../data/photos.generated';
  * cells reach 1.64x, which is the coverage the previous equal grid shipped at
  * its widest tile.
  *
- * THE THREE PHONE CLASSES ADD NO TIER AND NO BYTE. The widest phone cell is the
- * bleed class at 382px at a 390 viewport, and the smallest tile this pipeline
- * builds is 640px, so every phone cell is already covered above 1.6x by the
- * tile it was going to fetch anyway. A pre-flight suggested "one extra tile
- * tier" alongside the bleed; there is nothing for it to do, and adding one
- * would re-open the 272,765 against 286,720 budget line for no rendered
- * difference.
+ * THE THREE PHONE CLASSES ADD NO TIER AND NO BYTE, and the coverage is stated
+ * at the TOP of the band rather than at 390, because the top of the band is
+ * where it binds. At 390 the classes are 382, 358 and 304 against tiles of 640
+ * and up, which is 1.67x or better. At 639, the last width before the twelve
+ * column grid takes over, the container gives 607 and the classes are 631, 607
+ * and 516; the worst cell in the set is a 640px tile into 607 CSS px, which is
+ * 1.05x. Every phone cell is at or above 1x across the whole band and the worst
+ * case is 1.05x at 639. A pre-flight suggested "one extra tile tier" alongside
+ * the bleed; there is nothing for it to do, and adding one would re-open the
+ * 272,765 against 286,720 budget line for no rendered difference.
  *
  * Measured on the built avif tiles rather than estimated, by summing the files
  * on disk, and cross checked against the pipeline's own `galleryTileBytesAvif`
