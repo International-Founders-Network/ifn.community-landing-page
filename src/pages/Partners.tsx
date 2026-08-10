@@ -176,11 +176,10 @@ export function Partners() {
                     ))}
                 </motion.div>
 
-                <p className="mt-10 max-w-2xl text-sm text-muted leading-relaxed">
-                    <span className="font-bold text-muted">Disclosure:</span> Yani Partners was founded
-                    by the same people who run IFN. It is not an outside company recommending us, and we
-                    would rather tell you that here than have you find it out later.
-                </p>
+                {/* The Yani Partners related-party disclosure was removed here on
+                    2026-08-10 at the founder's direction. PRODUCT.md was updated
+                    in the same commit so the repo does not mandate a sentence the
+                    page no longer prints. */}
             </Container>
 
             <Container className="text-center">

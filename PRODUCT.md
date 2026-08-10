@@ -73,7 +73,11 @@ Terminology: "IFN" and "International Founders Network" are used interchangeably
 **Real and citable today:**
 
 - **Six-plus months of monthly IFN meetups in Austin** — a provable, datable operating history. This is the strongest asset and the honest answer to "is this real?"
-- **Three named partner relationships**, already in `src/data/partnersData.ts`: Station Austin (venue), Reuneo (speed-networking format), Yani Partners (fractional CTO / technology, founded by the same team behind IFN — a disclosure that must stay attached to the claim).
+- **Three named partner relationships**, already in `src/data/partnersData.ts`: Station Austin (venue), Reuneo (speed-networking format), Yani Partners (fractional CTO / technology).
+
+  **On the Yani Partners related-party disclosure.** An earlier version of this line required a disclosure, that Yani Partners was founded by the same team behind IFN, to stay attached to the claim wherever it appeared. That disclosure was removed from both `PartnersStrip` and `/partners` on 2026-08-10 at the founder's direction, and this line was updated in the same commit so the repo does not mandate a sentence the site no longer prints.
+
+  The underlying fact has not changed, and it is recorded here rather than dropped: Yani Partners shares founders with IFN, and the site lists it among the partners without saying so. Anyone reinstating or re-removing the sentence should treat that as a founder decision, not an engineering one.
 - **An attendee/subscriber list of roughly 100–300 people.** Real and countable. Large enough to cite honestly, not large enough to lead with as a scale claim.
 - **Real member testimonials exist on LinkedIn** and are collectible from actual members on request. This is the sourcing path for genuine social proof — future work needing quotes goes here, it does not invent them.
 

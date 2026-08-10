@@ -47,48 +47,6 @@ const step: Variants = {
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
 };
 
-/**
- * THE MARK (plan section 2, behaviour 2 in section 6).
- *
- * Accent type plus a 3px accent rule, licensed only to a phrase a reader can
- * check against something on this page. Exactly one is used in this section,
- * on the standing disclosure, which is the most checkable sentence here.
- *
- * The wrapper is `inline-block` and `whitespace-nowrap` on purpose. An
- * absolutely positioned rule inside a plain `inline` element resolves against a
- * containing block assembled from that inline's fragment boxes, so a phrase
- * that wraps gets a rule of browser-dependent width. One fragment, one rule.
- * The nowrap is safe at the size it is used: the marked phrase is 27
- * characters, which at the 17px body size and Archivo's 0.529em average advance
- * is about 243px, inside the 288px of content a 320px viewport leaves.
- *
- * The rule is a transform animation, so under reduced motion Framer Motion
- * applies the target instantly and the mark is simply drawn. If it never draws
- * at all, the phrase is still marked by colour and weight, so no meaning is
- * carried by the animation alone.
- *
- * Contrast, both modes, on this section's `--band` ground: accent type 6.393
- * light and 5.011 dark, the 3px rule the same numbers against a 3.0 non-text
- * floor. Accent against the surrounding `--ink` body text measures 2.547 light
- * and 3.256 dark, which is why the mark is never colour alone: the rule and the
- * weight step are the non-colour differentiators. This phrase is not a link, so
- * the underline rule that governs links is not what is doing the work here.
- */
-function Mark({ children }: { children: React.ReactNode }) {
-    return (
-        <span className="relative inline-block font-semibold whitespace-nowrap text-accent">
-            {children}
-            <motion.span
-                aria-hidden="true"
-                className="absolute inset-x-0 -bottom-[0.14em] block h-[3px] origin-left bg-accent"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true, amount: 0.6 }}
-                transition={{ duration: 0.26, ease: EASE }}
-            />
-        </span>
-    );
-}
 
 /**
  * ARTWORK, AND THE HONEST GAP.
@@ -275,21 +233,17 @@ export function PartnersStrip() {
                         their way onto it.
                     </motion.p>
 
-                    {/* PRODUCT.md requires this disclosure to travel with the
-                        Yani Partners claim wherever the claim appears, not only
-                        on /partners. Reproduced verbatim and unshortened, at
-                        body scale rather than as a footnote, because it is the
-                        point of the section. This carries the section's single
-                        mark. */}
-                    <motion.p
-                        variants={step}
-                        className="mt-8 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-ink"
-                    >
-                        <span className="font-bold">Disclosure:</span> Yani Partners was founded by{' '}
-                        <Mark>the same people who run IFN</Mark>. It is not an outside company
-                        recommending us, and we would rather tell you that here than have you find
-                        it out later.
-                    </motion.p>
+                    {/* The Yani Partners related-party disclosure was removed here
+                        on 2026-08-10 at the founder's direction, and PRODUCT.md
+                        was updated in the same commit so the two do not
+                        contradict each other.
+
+                        This section now carries NO accent mark. That is
+                        compliant rather than a gap: REDESIGN-PLAN.md section 2
+                        makes the mark licence a cap, not a quota, and a section
+                        with zero marks passes while a section with an
+                        unevidenced mark does not. Do not relicense the mark onto
+                        another phrase here to fill the space. */}
 
                     {/* The marks are not links. Two of the three partners have a
                         website in the data and one does not, so linking the row
