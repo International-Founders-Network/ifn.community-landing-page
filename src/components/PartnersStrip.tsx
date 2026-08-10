@@ -94,11 +94,13 @@ function Mark({ children }: { children: React.ReactNode }) {
  * ARTWORK, AND THE HONEST GAP.
  *
  * Only one of the three partners has vendored artwork in this repository.
- * `Icons.tsx` renders the other two by hotlinking `google.com/s2/favicons`,
- * which sends every visitor's IP to a third party, depends on an endpoint IFN
- * does not control, and puts a 16px favicon where a logo belongs. That is the
- * same class of third-party request this repo already removed from the hero, so
- * it is not carried forward here.
+ * `Icons.tsx` used to render the other two by hotlinking
+ * `google.com/s2/favicons`, which sent every visitor's IP to a third party,
+ * depended on an endpoint IFN does not control, and put a 16px favicon where a
+ * logo belongs. That is the same class of third-party request this repo already
+ * removed from the hero, so it was never carried forward here, and as of
+ * 2026-08-10 both hotlinked components are deleted at the source and /partners
+ * reserves its slots the same way this file does.
  *
  * The three ways out of that are: hotlink (banned above), draw a mark for them
  * (skill 4.8 permits a generated monogram only for INVENTED brands, and these
@@ -106,6 +108,15 @@ function Mark({ children }: { children: React.ReactNode }) {
  * slot honestly. This file reserves the slot: a dashed 1px `--rule` box at the
  * exact dimensions the artwork has to fit, carrying the partner's name and the
  * word "pending".
+ *
+ * WHICH PARTNER GETS ARTWORK IS DATA, NOT A NAME TEST. This component used to
+ * ask `partner.id === 'yani-partners'`. It now asks whether `partner.logo` is
+ * set in `src/data/partnersData.ts`, so real artwork arrives by dropping a file
+ * into `public/partners/` and adding one `logo` key, with no edit to this file
+ * and none to /partners. That field also carries the mark's intrinsic
+ * dimensions and its `form`, which is what lets one rule size a round emblem
+ * and a horizontal lockup differently without either one being measured by
+ * hand here.
  *
  * The name inside the box is identification, not categorisation. Skill 4.8
  * bans the second (no "hosting", no "payments", no "Venue Partner") and
@@ -132,28 +143,46 @@ function Mark({ children }: { children: React.ReactNode }) {
 const RESERVED_SLOT = 'h-14 w-[12rem]';
 
 function PartnerMark({ partner }: { partner: Partner }) {
-    if (partner.id === 'yani-partners') {
-        /* The one vendored file. It is a full-colour circular emblem carrying
-           its own cream ground, so it reads on both page grounds without a
-           per-mode variant: the teal ring measures 8.014 against `--band` in
-           light mode, and in dark mode the ring falls to 1.845 while the cream
-           disc one step inside it measures 15.151, so the object is always
-           perceivable, by its edge in light and by its field in dark. A
-           logotype is exempt from WCAG contrast in any case; these are measured
-           because "it looks fine" is not a measurement.
+    if (partner.logo) {
+        /* Today the only vendored file is the Yani Partners emblem. It is a
+           full-colour circular mark carrying its own cream ground, so it reads
+           on both page grounds without a per-mode variant: the teal ring
+           measures 8.014 against `--band` in light mode, and in dark mode the
+           ring falls to 1.845 while the cream disc one step inside it measures
+           15.151, so the object is always perceivable, by its edge in light and
+           by its field in dark. A logotype is exempt from WCAG contrast in any
+           case; these are measured because "it looks fine" is not a
+           measurement.
 
-           Rendered at 64px against the 56px reserved boxes, which is the
-           "sized by eye" instruction in plan section 5: a circular emblem reads
-           optically smaller than a horizontal lockup at the same pixel height.
-           Width and height are explicit and match the file's 1:1 intrinsic
-           ratio, so this contributes nothing to CLS. */
+           An emblem renders at 64px against the 56px reserved boxes, which is
+           the "sized by eye" instruction in plan section 5: a circular emblem
+           reads optically smaller than a horizontal lockup at the same pixel
+           height. A lockup therefore takes the reserved slot's 56px height and
+           its 192px maximum width, so a real mark arrives at the same height and
+           within the same bound as the placeholder it replaces. It is not
+           stretched to fill that width: a 2:1 mark renders 112px wide and the
+           flex row closes up around it, because padding a logo out to a box is
+           how a logo stops looking like itself. Neither form is scaled by the
+           viewport either, for the same reason.
+
+           Width and height come from the data and are the artwork's intrinsic
+           dimensions, so the box is reserved at the right ratio before the file
+           loads and this contributes nothing to CLS. The rendered size is set
+           by the classes below, so declaring the true 2000 x 2000 rather than a
+           rounded 128 x 128 changes no pixel: both are 1:1 and both are
+           overridden to 64px by `h-16 w-16`. */
+        /* Two whole literal class strings rather than fragments assembled at
+           runtime: Tailwind resolves utilities by scanning source text, so a
+           class built by string surgery is not in the source to be found and
+           would not be generated. */
+        const sizing = partner.logo.form === 'emblem' ? 'h-16 w-16' : 'h-14 w-auto max-w-[12rem]';
         return (
             <img
-                src="/partners/yani-partners-logo.png"
+                src={partner.logo.src}
                 alt={partner.name}
-                width={128}
-                height={128}
-                className="h-16 w-16 flex-none object-contain"
+                width={partner.logo.width}
+                height={partner.logo.height}
+                className={`${sizing} flex-none object-contain`}
                 loading="lazy"
                 decoding="async"
             />

@@ -281,12 +281,33 @@ Archivo's tabular lining figures through `tabular-nums`.
   2 lines; 84px at 1920, 2 lines; 44px at 360, 5 lines.
 - **Section headline:** `leading 1.02`, `tracking -0.025em`, `wght 500` with the
   emphasised phrase at `800`. Size is set per section against that section's
-  job, and the range that shipped runs `clamp(1.875rem, 4.2vw, 3rem)` at the
+  job, and **eight of the nine are a `clamp()`**, so the page runs one fluid type
+  scale. The range runs `clamp(1.875rem, 4.2vw, 3rem)` at the
   quietest (ValueProps) to `clamp(2.25rem, 4.6vw, 4rem)` at the loudest
-  (FinalCTA, the page's second-largest type). EventsPreview is deliberately the
-  smallest of the nine at `text-3xl md:text-4xl`, because a founder deciding
-  whether to come needs the date at display scale before the sentence explaining
-  what the date is.
+  (FinalCTA, the page's second-largest type). EventsPreview and ResourcesPreview
+  share the family's smallest cap, `clamp(2rem, 4vw, 3rem)`, which is FAQ's
+  value reused rather than a tenth number. EventsPreview being quietest is the
+  point: a founder deciding whether to come needs the date at display scale
+  before the sentence explaining what the date is.
+
+  **Corrected 2026-08-10.** This paragraph previously specified EventsPreview at
+  `text-3xl md:text-4xl`, and ResourcesPreview shipped the same pair. Both are
+  fixed-step utilities that cap at 36px against 48 to 72px everywhere else, so
+  two of the nine headlines were off the scale the rest of the page runs on.
+  Both are now on the clamp. `text-3xl` and `text-4xl` are retired from section
+  headlines; if either reappears above a section headline it is a regression.
+
+  **The ninth headline is the one exception and it is named rather than left to
+  be discovered.** FounderStory sets `text-[2.125rem] md:text-[2.75rem]`, a fixed
+  pair resolving to 34px and 44px, with the same `-0.025em` tracking and 1.02
+  leading as the rest. It is not a `clamp()` and it is the only section headline
+  that steps at a breakpoint instead of scaling. It is quieter than the clamp
+  family's floor at desktop (44px against ValueProps' 48px cap) and louder at
+  360px (34px against that clamp's 30px floor). Bringing it onto
+  `clamp(1.875rem, 4.2vw, 3rem)` is a one-line change; it also changes the
+  section's rendered height, so it requires re-measuring the `Suspense` fallback
+  in `Home.tsx` in the same commit. Left as-is deliberately rather than
+  overlooked.
 - **Lead paragraph:** 18px, `leading 1.6`, `--muted` or `--ink` by section.
 - **Body:** 17px (`1.0625rem`), `wght 400`, `leading 1.6`, measure capped at
   62ch. Declared on the element that carries the 17px, because `ch` resolves
@@ -310,7 +331,7 @@ is permitted on the wordmark and nowhere else.
 and line-height at or below 1.02, and the h1 takes 0.95.
 
 **The Eyebrow Budget.** At most one eyebrow per three sections. The home page has
-nine sections and a budget of three; it uses two, on the Hero
+ten sections and a budget of four; it uses two, on the Hero
 ("Monthly meetups in Austin, Texas") and on PartnersStrip ("Who we work with").
 An eyebrow is a small uppercase tracked label sitting **above a section
 headline**. A label inside a box, a datum inside a date block, a footer column
@@ -331,20 +352,24 @@ this page, and the ones that exist organize real content: one spine in
 HowItWorks, one hairline over the FounderStory rail, one per FAQ cluster, one
 per events index row.
 
-### The nine layout families
+### The ten layout families
 
-The Section-Layout-Repetition ban is the hardest rule on a nine-section page, so
+The Section-Layout-Repetition ban is the hardest rule on a ten-section page, so
 each family is recorded by its geometry rather than by a label, and the two
-closest neighbours are told apart explicitly.
+closest neighbours are told apart explicitly. The tenth arrived on 2026-08-10
+and is numbered `6a` so that the nine references elsewhere in this file and in
+`REDESIGN-PLAN.md` to "section 9", meaning the accent field, keep pointing at
+the accent field.
 
 | # | Section | Family | The geometry that makes it distinct | Ground |
 |---|---|---|---|---|
 | 1 | Hero | Poster stack over a full-bleed photographic band | h1 runs the full measure as a three-weight ladder inside its own `clamp(1rem, 6vw, 6.5rem)` gutter, then the band breaks the container edge to edge | `--paper` |
 | 2 | ValueProps `#mentorship` | Staircased statements in open space | 12-col grid, four rows whose column-start walks 1, 3, 2, 4 at spans 7 / 8 / 7 / 8, so both edges are ragged. No rules, no containers, no icons | `--paper` |
 | 3 | HowItWorks | Single-rule sequence with unequal stops | One 2px `--rule` spine across the container with three ticks, stops at `1fr 2fr 1fr`, only the wide middle stop carries an image | `--band` |
-| 4 | FounderStory | Prose measure with a hanging gutter rail | Two tracks at `minmax(0,36rem) minmax(0,17rem)`, both capped so surplus width falls off the right edge; the rail hangs beside the prose on grid row 2, never beside the headline | `--paper` |
+| 4 | FounderStory | Prose measure with a hanging gutter rail | Two tracks at `minmax(0,36rem) minmax(0,17rem)`, both capped so surplus width falls off the right edge; the rail hangs beside the prose on grid row 2, never beside the headline; the photograph sits on grid row 3 **starting in column 1**, stacked under the prose on the same left spine and spanning both tracks to 56.5rem | `--paper` |
 | 5 | EventsPreview `#events` | Masthead plus ruled register | One datum at display scale (`clamp(2.75rem, 7vw, 4.5rem)`, `tnum`, accent, arrow) over a baseline row of its supporting facts, then a compact index of up to four dates, one hairline per row | `--paper` |
 | 6 | PartnersStrip `#partners` | Logo baseline with running prose | Three marks on one optical baseline at unequal heights and wide gaps, one 65ch paragraph beneath, nothing printed under any individual mark, and deliberately no hairline under the row | `--band` |
+| 6a | GalleryPreview | Unequal frame set with the link set into the void | A lead frame across 7 of 12 columns and the other two stacked in the remaining 5, the stacked column deliberately the taller of the two so the section's one link sits in the space the lead frame does not fill and closes level with the far column's bottom edge. No frame rule, no caption, no date, no eyebrow | `--paper` |
 | 7 | ResourcesPreview `#resources` | Horizontal scroll-snap rail | Panels at unequal widths cycling 24rem / 19rem / 21rem on a native snap rail that bleeds to the container edge, grounds alternating `--paper` and `--band` on a cycle keyed off the last stage panel so the `--band` terminal panel is always the first tint after a `--paper` one, each panel's focusable link carried on its stage name, filter chips above as a second snap row | `--paper` |
 | 8 | FAQ `#faq` | Clustered disclosure register | Eight rows in three named clusters, **one** hairline per cluster and space between rows inside a cluster | `--band` |
 | 9 | FinalCTA | Full-bleed accent field | The page's one colour block, edge to edge, content distributed head to foot across a full-height ground | `--accent-plate` |
@@ -357,9 +382,42 @@ groups. They are also different section grounds and different interaction
 models.
 
 **Exactly one section is an image-plus-text split** (HowItWorks, section 3), so
-the zigzag alternation cap of two consecutive splits is not approached. The Hero
-band is full-bleed rather than a split, and no other section carries a
-photograph.
+the zigzag alternation cap of two consecutive splits is not approached. Four
+home sections carry photography, six frames between them, and only one of the
+four is a split, which is the distinction that keeps the cap uncontested:
+
+- **Hero** puts its frame in a full-bleed band under the poster stack. Nothing
+  sits beside it.
+- **HowItWorks** is the split: the image occupies the wide middle stop of a
+  three-stop row with text either side of it.
+- **FounderStory** stacks. The frame is on grid row 3, starting in column 1,
+  directly under the prose on the same left spine, spanning both tracks to
+  `56.5rem`. It was `36rem` until 2026-08-10, when a design pre-flight measured
+  it at 42 percent of the section width with 640px of empty ground beside it and
+  called it decoration in a gap; the manifest gained a 1920 tier in the same
+  edit so the wider placement still has 2.12x device pixels behind it. A stack
+  under a measure is not a split at either width.
+- **GalleryPreview** is three frames beside each other with no text between
+  them. An image set is not an image opposite a paragraph, so it does not move
+  the split count either. This is the check to re-run if a seventh photograph is
+  ever added: two splits in a row is the last legal state.
+
+### The eleventh family, on its own route
+
+`/gallery` is a **chronological register of dated sheets** and is deliberately
+none of the ten above. Each evening opens on a full-measure 1px `--rule`
+hairline carrying its date on the left and its frame count on the right, one
+baseline; beneath it that evening's frames sit as equal tiles on a 1 / 2 / 3
+track grid that **stops where that evening's photographs stop**. Tiles are one
+size everywhere, so each evening's block size is its frame count drawn to scale
+and the unequal weight of the nights is legible before a number is read. No cell
+is ever rendered empty to square off a row; the ragged right edge is the
+composition.
+
+It is not skill 9.C's banned "three equal feature cards": those are content
+containers standing in for a layout, and these are photographs at their own
+aspect ratio with no card, no border radius, no body copy and no per-tile
+heading.
 
 ### Named rules
 
@@ -486,6 +544,13 @@ Fixed, 64px at rest plus a 1px `--rule` bottom edge, flat, solid `--paper`, one
 line at `lg`, no transparent state, no backdrop blur, no height change on
 scroll, and therefore no scroll listener. One action at the right edge.
 
+**The bar is full.** Five links plus the action already squeeze at exactly
+768px, which is why the gaps step down at `md` rather than a link being dropped.
+A sixth primary link breaks the one-line-at-desktop rule, so a new route reaches
+readers through the footer and through the one on-page link that belongs to it.
+`/gallery` is the worked example: it sits in the footer's Community group and is
+linked once from EventsPreview, under the same label in both places.
+
 ### The modal
 
 `--paper` surface, `--band` field fills, a 1px `--rule` border, over a
@@ -530,17 +595,43 @@ agreement. The hero's cycling word contains "Immigrant".
 
 ## Photography
 
-Real documentary photography only. Two frames ship on the home page, both from
-one April meetup, separated by subject and scale rather than by date: a full room
-seen from behind the back row in the hero band at 2.4:1, and one conversation at
-close range in the HowItWorks middle stop at 1093:874.
+Real documentary photography only. **Three frames ship on the home page and ten
+on `/gallery`**, drawn from the same fifteen consent-cleared sources.
+
+Home page, in reading order:
+
+| Slot | Ratio | What it is |
+|---|---|---|
+| Hero band, full bleed | 2.4:1 | A full room from behind the back row, April |
+| HowItWorks middle stop | 1093:874 | One conversation at close range, April |
+| FounderStory, under the prose at the full 56.5rem grid | 16:9 | A February room with a handful of people in it and the chairs still empty |
+| GalleryPreview, lead frame at 7 of 12 columns | 16:9 | The room seen from the front past a laptop, April |
+| GalleryPreview, stacked | 16:9 | The IFN sign lit at night with two reflections in the window glass, February |
+| GalleryPreview, stacked | 16:9 | Three people talking with drinks, July |
+
+The six are separated by subject, by scale and by date: three April frames, two
+February and one July. The FounderStory frame is chosen for the sentence it
+stands under ("the meetups came first"), not despite being sparse. A room early
+in its life is what that sentence looks like.
+
+**The last three arrived on 2026-08-10 and the reason is measured, not
+aesthetic.** A design pre-flight found 5,649px of the built page, 47 percent of
+the document, running with no photograph in it from the last frame to the
+closing accent field, with all three frames sitting in the first 41 percent.
+`GalleryPreview` takes the longest such run to 3,320px, 25 percent. The three
+frames it renders are the 640px gallery tiles, already built, so the section
+added no derivative to the repository. It prints **no date**, because `/gallery`
+is the only dated photographic surface on this site and the home page's
+recurrence claim is carried by copy.
 
 - Derivatives are built at build time by `scripts/build-photos.mjs` from
   `assets/photos-source/` (which stays outside `public/`) against a checked-in
   manifest, and delivered as AVIF plus WebP through `<picture>` with `srcset`
   and `sizes`. Sources are never published.
 - **Every `<img>` carries explicit `width` and `height`.** Verified on the
-  rendered page: three images, zero missing dimensions.
+  rendered pages: seven images on `/` (the six photographs plus the one real
+  vendored partner mark) and ten on `/gallery`, zero missing dimensions on
+  either.
 - Alt text is written by hand per photograph and describes the room. It **names
   no individual**, because consent to appear in a photograph is not consent to
   be named in markup, and it **names no venue**, because the venue is stated by
@@ -548,11 +639,27 @@ close range in the HowItWorks middle stop at 1093:874.
 - Grade is baked in at build: per-night white balance, saturation to about 0.55,
   black point lifted 4%, white point pulled to 92%. No duotone, no heavy
   stylisation. The amateurness of these photographs is the credibility.
+- **Weight, measured rather than budgeted.** The home page at a 1440 viewport at
+  1x fetches **136.6KB** of AVIF (hero band 47.8KB at the 1440 tier, middle stop
+  18.8KB at 640, FounderStory 31.7KB at 960 since its placement widened to
+  904 CSS px, and the three GalleryPreview tiles at 8.7, 16.3 and 13.4KB)
+  against a 500KB page budget, and the hero band clears its own 110KB cap at
+  47.8KB. The gallery grid renders the 640px tile tier ONLY, which is 155.1KB of
+  AVIF for all ten frames against a 256KB manifest budget; the 1280px `view`
+  tier is fetched only when a reader opens a frame. **The list of slots that
+  sums to the page figure lives in the manifest** under `budget.landingAt1440`,
+  because the runner used to name them in JavaScript and went stale twice in one
+  day, both times by printing PASS on a short total.
 
-**These photographs do not prove recurrence.** Neither prints a date and both
-come from one evening. Recurrence is carried by one sentence of copy and by
-nothing else. The events index is upcoming-only and can never evidence past
-recurrence.
+**The gallery is the first surface on this site that displays dated evidence of
+recurrence, and it is still narrow.** It shows three separately dated evenings
+with their dates printed as headings: February, April and July 2026. That is
+three nights, not "monthly since February", and the page says so in its own
+words ("a record of the nights that were photographed rather than of every
+night"). The claim of monthly recurrence is still carried by one sentence of
+copy, and the events index remains upcoming-only and can never evidence past
+recurrence. What changed is that the copy is no longer alone; what has not
+changed is that the photographs cannot carry the claim on their own.
 
 ## Dark mode
 
@@ -639,3 +746,6 @@ the following reappears in a review, it is a regression and not a revival.
 | The hand-rolled CSS globe medallion and `GlobeIcon` | The hero photographic band | A globe is a stock idea of internationalism. A photograph of the actual room is evidence. |
 | Google Fonts `<link>` | Self-hosted `@font-face` with `font-display: swap` | One fewer render-blocking third-party request. |
 | Em-dashes and en-dashes | Periods, commas, colons, parentheses, hyphens | Zero across `src/` and `index.html`, and it is a pass condition. |
+| `google.com/s2/favicons` as a partner mark, and the `SA` / `R` initials fallback behind it | A labelled reserved slot per partner until real artwork is vendored into `public/partners/` | The hotlink sent every visitor's IP to a third party on page load. The initials fallback was worse in kind, not better: a generated mark is only permitted for an invented brand, and putting drawn initials on a real company misrepresents it more quietly than a favicon did. Both surfaces now switch on `partner.logo`, so real artwork is one data field and zero component edits. |
+| `text-3xl md:text-4xl` on a section headline | A `clamp()` on the shared ladder | Two of the nine headlines capped at 36px against 48 to 72px everywhere else, so the page ran two type scales. |
+| A two-tier membership grid with two published prices | One centred plate with one published price | The second price is a warm-lead price sent by email and is not public. The shape was what invited a second public figure, so the shape went with the value. |

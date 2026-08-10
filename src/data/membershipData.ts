@@ -6,43 +6,38 @@ export interface MembershipBenefit {
     included: string[];
 }
 
-export interface MembershipTier {
-    id: string;
-    price: string;
-    name: string;
-    who: string;
-}
-
 /**
- * Confirmed annual pricing: the single source of truth for every surface.
- * $149/year is the public price; $99/year is the price for people already on
- * the IFN attendee list. Both are billed once a year. Do not present any other
- * figure, and do not imply monthly billing.
+ * The one published annual price, and the single source of truth for every
+ * surface that prints a figure. Billed once a year. Do not present any other
+ * number on any public page, and do not imply monthly billing.
+ *
+ * THE PRIVATE PRICE, RECORDED HERE ON PURPOSE SO NOBODY "RESTORES" IT.
+ * A second annual price of $99 exists. It is a warm-lead price the founder
+ * sends by email to roughly forty selected people, and it is deliberately not
+ * public: it is not a constant here, it is not a tier, it is not rendered on
+ * any page, and it must not be reintroduced as any of those. There used to be
+ * a `MEMBERSHIP_PRICE_ATTENDEE` export and a two-entry `MEMBERSHIP_TIERS`
+ * array feeding a two-card price grid on `/membership`; both were removed for
+ * this reason. A page that publishes a second, lower price is also a page that
+ * invites every reader to ask for it. This comment is the only place in `src/`
+ * that carries the figure, and comments are stripped by the production
+ * minifier, so it does not ship.
  */
 export const MEMBERSHIP_PRICE_STANDARD = '$149';
-export const MEMBERSHIP_PRICE_ATTENDEE = '$99';
 
-export const MEMBERSHIP_TIERS: MembershipTier[] = [
-    {
-        id: 'founding',
-        price: MEMBERSHIP_PRICE_STANDARD,
-        name: 'Founding Member',
-        who: 'For founders joining IFN for the first time.',
-    },
-    {
-        id: 'attendee',
-        price: MEMBERSHIP_PRICE_ATTENDEE,
-        name: 'Already on the IFN list',
-        who: 'If you have been to an IFN meetup, or you are on the attendee list, this is your price.',
-    },
-];
+/**
+ * The public tier name, confirmed in PRODUCT.md. There is exactly one, and it
+ * is not a "starting at" or an introductory rate: no surface may imply that
+ * the price moves, because nothing on record says it does.
+ */
+export const MEMBERSHIP_TIER_NAME = 'Founding Member';
 
 /**
  * NOT IN USE. DO NOT WIRE THIS TO A BUTTON.
  *
  * This link resolves to a different product ("IFN Pro", $79 per month) than the
- * $149 / $99 annual membership this site advertises, so anyone completing
- * checkout would be charged the wrong amount on the wrong billing period.
+ * $149 annual membership this site advertises, so anyone completing checkout
+ * would be charged the wrong amount on the wrong billing period.
  *
  * It is kept here so that swapping in the correct Stripe Payment Link is a
  * one-line change. Until that link arrives, `/membership` routes to `/contact`

@@ -1,7 +1,7 @@
 # admin-dashboard Specification
 
 ## Purpose
-The hidden `/admin` dashboard — Google OAuth restricted to a server-side email allowlist, gating a live view of contact/join/event-signup submissions and a static internal product-roadmap reference.
+The hidden `/admin` dashboard. Google OAuth restricted to a server-side email allowlist, gating a live view of contact/join/event-signup submissions and a static internal product-roadmap reference.
 
 ## Requirements
 ### Requirement: Admin dashboard is not publicly linked

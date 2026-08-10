@@ -13,6 +13,34 @@ The Netlify Functions in `netlify/functions/` use `CREATE TABLE IF NOT EXISTS` l
 All schema changes should be documented in `db/migrations/`.
 
 - `00_initial_schema.sql`: Contains the current production-ready schema.
+- `01_qr_links.sql`: Schema for the QR code generator in `apps/qr`.
+- `02_event_venue_station_austin.sql`: **Data** migration, not schema. Rewrites
+  the two historical `Capital Factory` values in `events.location_name` to
+  `Station Austin, 701 Brazos St, Austin, TX 78701, USA`, which is byte for byte
+  what `src/data/events.json` carries. Reported unapplied by the founder on
+  2026-08-10, not verified from this repo. Confirm with the `curl` check in
+  `AGENTS.md` rather than trusting that date.
+
+Nothing applies migrations automatically. Run `02_*` deliberately, against a
+database you name on the command line:
+
+```sh
+DATABASE_URL='<connection string>' node scripts/fix-event-venue.mjs          # preview, writes nothing
+DATABASE_URL='<connection string>' node scripts/fix-event-venue.mjs --apply  # writes
+```
+
+The runner reads the `.sql` file and sends its text verbatim, so the migration
+and the thing you actually execute cannot drift apart. It is safe to run twice:
+the update matches two exact old strings and writes a value that equals neither,
+so the second run touches zero rows. Any other string containing "Capital
+Factory" is left alone and reported, so an unrecorded variant gets a human
+decision instead of a blanket overwrite. No connection string is stored in this
+repo; the deployed functions use `NETLIFY_DATABASE_URL` and the runner accepts
+either variable name.
+
+Why this matters at deploy time, how to spot the symptom on the live site, and
+why a re-sync from Luma can undo it are written up in `AGENTS.md` under
+**Deployment**, in "The live `events` rows can contradict the deployed copy".
 
 ## ⚡ Tables
 

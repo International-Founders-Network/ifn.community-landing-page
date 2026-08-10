@@ -78,10 +78,11 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
             title: 'Come to a meetup',
             body: (
                 <>
-                    We meet in person in Austin once a month at Station Austin. The
-                    speed-networking part is run with <Mark reduce={reduce}>Reuneo</Mark>, so you
-                    are paired into short one-to-one conversations rather than left to introduce
-                    yourself to strangers on your own.
+                    We meet in person once a month in{' '}
+                    <Mark reduce={reduce}>downtown Austin</Mark>, at the address on the next
+                    meetup listing below. The speed-networking part is run by our format
+                    partner, so you are paired into short one-to-one conversations rather than
+                    left to introduce yourself to strangers on your own.
                 </>
             ),
         },
@@ -263,10 +264,43 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
  *
  * The accent is licensed to exactly three roles on this page, and this is the
  * first: accent type plus a 3px accent rule under a phrase that is checkable
- * against a named artifact ON THIS PAGE. "Reuneo" qualifies as a named partner:
- * it appears in the partners section further down, so a reader can check it
- * without leaving the page. It is also the only such phrase in this section, so
- * the section spends one of the two marks the density rule allows per viewport.
+ * against a named artifact ON THIS PAGE.
+ *
+ * THE MARK WAS RELICENSED ON 2026-08-10 AND THE OLD LICENCE MUST NOT COME BACK.
+ * It used to sit on the format partner's company name, which qualified because
+ * PartnersStrip prints that name further down the page. The founder has since
+ * ruled that the two partner names appear only on the partner surfaces (the
+ * home PartnersStrip, /partners, and partnersData.ts), so that phrase is gone
+ * from this section and its licence went with it.
+ *
+ * The mark now sits on "downtown Austin", and its artifact is the events feed:
+ * `EventsPreview.tsx:355` prints `featured.location_name` from
+ * `src/data/events.json`, and all ten rows carry "701 Brazos St, Austin, TX
+ * 78701", so a reader can check the phrase two sections further down without
+ * leaving the page. It is the only marked phrase in this section, so the
+ * section spends one of the two marks the density rule allows per viewport.
+ *
+ * The sentence says "the next meetup listing" in the singular ON PURPOSE. Only
+ * the FEATURED event on this page prints its venue; the "Also on the calendar"
+ * index rows below it print dates and titles and no address at all. A plural
+ * "every event listing" would be a claim this page falsifies four rows further
+ * down, so it is not made here. (`/events` is a different surface: `EventCard`
+ * prints `location_name` on every card there.)
+ *
+ * "downtown Austin" is the footprint audit's own derived vocabulary rather than
+ * a phrase from the founder's brief, and the audit flagged it for a single
+ * founder veto across six files. If it is vetoed, the whole phrase goes, not
+ * just the word "downtown", and the fallback that needs no new vocabulary is to
+ * mark "once a month", which the dated index two sections below checks just as
+ * directly.
+ *
+ * STANDING CONDITION. The bundled feed's last row is dated 2026-12-25. If the
+ * feed ever resolves empty, `EventsPreview` renders its empty state, this mark
+ * loses its artifact, and the correct fix is to DELETE the mark, not to
+ * relicense it a second time. The accent licence in REDESIGN-PLAN.md section 2
+ * is a cap and not a quota: a section with zero marks is compliant, a section
+ * with an unevidenced mark is exactly the defect plan section 4.2 exists to
+ * stop.
  *
  * The mark is emphasis, not a link, so the G183 link rule does not reach it,
  * and it never depends on colour alone in any case: the 3px rule is a

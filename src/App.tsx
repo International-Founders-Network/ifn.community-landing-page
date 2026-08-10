@@ -15,6 +15,7 @@ const Contact = lazy(() => import('./pages/Contact').then(module => ({ default: 
 const Blog = lazy(() => import('./pages/Blog').then(module => ({ default: module.Blog })));
 const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ default: module.Playbooks })));
 const Events = lazy(() => import('./pages/Events').then(module => ({ default: module.Events })));
+const Gallery = lazy(() => import('./pages/Gallery').then(module => ({ default: module.Gallery })));
 const Newsletter = lazy(() => import('./pages/Newsletter').then(module => ({ default: module.Newsletter })));
 const Membership = lazy(() => import('./pages/Membership').then(module => ({ default: module.Membership })));
 const Mentorship = lazy(() => import('./pages/Mentorship').then(module => ({ default: module.Mentorship })));
@@ -43,6 +44,13 @@ const ROUTE_TITLES: Record<string, string> = {
     '/partners': `Partners | ${SITE_NAME}`,
     '/contact': `Contact us | ${SITE_NAME}`,
     '/events': `Monthly meetups in Austin | ${SITE_NAME}`,
+    // Added with the /gallery route. Derived from that page's own h1
+    // ("Photographs from the meetups") and set in the sentence case every other
+    // entry in this map uses. It is not optional: RouteTitle falls through to
+    // "Page not found" for any path that is neither in this map nor in
+    // COMING_SOON_PATHS, so a missing entry actively mistitles the page and
+    // breaks REDESIGN-PLAN.md section 8, checklist item 12.
+    '/gallery': `Meetup photographs | ${SITE_NAME}`,
     '/resources': `Founder resources | ${SITE_NAME}`,
     '/membership': `Membership | ${SITE_NAME}`,
     '/code-of-conduct': `Code of conduct | ${SITE_NAME}`,
@@ -139,6 +147,13 @@ function App() {
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/playbooks" element={<Playbooks />} />
                         <Route path="/events" element={<Events />} />
+                        {/* ADDED, not moved. Every existing route, slug and
+                            anchor id is untouched; /gallery collides with none
+                            of them. It sits beside /events because the two are
+                            the same subject seen forwards and backwards: the
+                            dates that are coming, and the evenings that were
+                            photographed. */}
+                        <Route path="/gallery" element={<Gallery />} />
                         <Route path="/resources" element={<ResourcesHub />} />
                         <Route path="/newsletter" element={<Newsletter />} />
                         <Route path="/membership" element={<Membership />} />

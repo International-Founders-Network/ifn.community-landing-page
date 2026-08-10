@@ -54,7 +54,13 @@ import { Container } from './Container';
    MARKED
    - Row 2, "put in your calendar". The artifact is the dated meetup feed in
      EventsPreview (`#events`) further down this same page. A reader can scroll
-     to it and check.
+     to it and check. RE-CHECKED when the named venue was taken out of this
+     row's body: the artifact is the feed's DATES, not its venue string, so
+     removing the partner name from the sentence removes nothing the mark was
+     pointing at. The mark stands.
+   - Row 3's artifact is a denial, which by construction has no artifact to
+     lose. It is unaffected for the same reason, stated so the pair is checked
+     rather than assumed.
    - Row 3, "There is no matching system here". A denial of something IFN does
      not offer, which plan section 2 names as the most checkable sentence there
      is.
@@ -241,9 +247,13 @@ function Mark({ children, reduce }: MarkProps) {
 
 /* ---------------------------------------------------------------------------
    CONTENT. Every claim below is checked against PRODUCT.md "Evidence on Hand":
-   one monthly in-person meetup in Austin (six-plus months of it), Station
-   Austin as venue, Reuneo running the speed-networking format, a member
-   channel, a resource library, and one members-only call a month.
+   one monthly in-person meetup in Austin (six-plus months of it), a venue
+   partner, a partner running the speed-networking format, a member channel, a
+   resource library, and one members-only call a month. The partners are named
+   in that record and in the three partner surfaces (the home PartnersStrip,
+   /partners, partnersData.ts); they are deliberately not named here. Do not
+   re-import the names into this file to "restore" the provenance: the
+   provenance is the PRODUCT.md pointer on the line above.
 
    The four statements and their bodies are the SHIPPED strings, carried
    verbatim per plan section 5. Nothing here is new copy. The only edits in
@@ -281,7 +291,7 @@ export function ValueProps() {
                     A meetup you can <Mark reduce={reduce}>put in your calendar</Mark>
                 </>
             ),
-            body: 'One a month, in person, at Station Austin. Not a conference circuit, and not a network of chapters in other cities. Every date is published openly on Luma and Meetup, so you can see the history before you commit to anything.',
+            body: 'One a month, in person, in downtown Austin. Not a conference circuit, and not a network of chapters in other cities. Every date is published openly on Luma and Meetup, so you can see the history before you commit to anything.',
         },
         {
             place: 'md:col-start-2 md:col-span-7',

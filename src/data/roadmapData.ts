@@ -13,7 +13,7 @@ export const ROADMAP_TIERS: RoadmapTier[] = [
     {
         tier: 'Paid Membership',
         stage: 'v2 (now)',
-        includes: 'Private Slack/Discord, informal resource library, monthly office hours. $99-$149/yr',
+        includes: 'Private Slack/Discord, informal resource library, monthly office hours. $149/yr',
     },
     {
         tier: 'IFN Pro',

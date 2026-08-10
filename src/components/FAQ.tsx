@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from './Container';
 import { cn } from '../lib/cn';
-import { MEMBERSHIP_PRICE_ATTENDEE, MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
+import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 const MEETUP_URL = 'https://www.meetup.com/international-founders-network-austin/';
@@ -156,17 +156,52 @@ interface FaqCluster {
 /**
  * Every answer here has to survive a member asking "is that actually true?".
  * What is claimed: a monthly in-person Austin meetup with six-plus months of
- * history, Station Austin as venue partner, Reuneo as format partner, listings
- * on Luma and Meetup, free attendance, and a paid membership at the price
- * `/membership` charges. Nothing else. See PRODUCT.md, "Evidence on Hand".
+ * history, a venue partner and a format partner (neither named on this
+ * surface, see below), listings on Luma and Meetup, free attendance, and a paid
+ * membership at the one published price. Nothing else. See PRODUCT.md,
+ * "Evidence on Hand".
  *
- * **No answer copy changed in this phase.** Not one word was added, removed or
- * reordered inside any answer or any question. What changed is grouping and
- * order: the eight entries are now three clusters, and two phrases that were
- * already in the text are wrapped in `<Mark>`. Nothing outside this file
- * depends on the order, checked rather than assumed: `id` is consumed only as a
- * React key, there is no FAQ JSON-LD anywhere in the tree, and the section
- * anchor `#faq` sits on the `<section>` and does not move.
+ * **THE TWO PARTNER NAMES ARE DELIBERATELY ABSENT, DO NOT PUT THEM BACK.** The
+ * founder capped the named partner footprint: the venue partner's name and the
+ * format partner's name may appear only on the home `PartnersStrip` section, on
+ * `/partners`, and in `src/data/partnersData.ts`, which is where to read them.
+ * Everywhere else, including this file, they are generic descriptors. Two
+ * answers here used to carry them and now read "our venue partner" and "our
+ * format partner", which are the exact approved phrases. This comment does not
+ * spell the names either, on purpose: the cap is verified by grepping the tree
+ * for them, and a guard that prints what it is guarding against would show up
+ * as the very hit it exists to prevent, in the one file most likely to be
+ * checked first. There is one protected exception in the tree and it is not in
+ * this file: `src/data/events.json` sets `location_name` to the street address
+ * of the venue and `EventsPreview` prints it, because an event listing that
+ * will not name its venue is broken. That is why the `where` answer can point a
+ * reader at the listings instead of naming the building itself: the address is
+ * one hop away, on the page and in the feed, as a fact rather than as a partner
+ * credit.
+ *
+ * **THE SECOND MEMBERSHIP PRICE IS DELIBERATELY ABSENT TOO, AND THAT IS THE
+ * EASIER ONE TO "FIX" BACK IN.** Only `MEMBERSHIP_PRICE_STANDARD` is published,
+ * here and on every other public surface. A second, lower annual price exists;
+ * the founder sends it by email to roughly forty selected people and it is not
+ * public. It is not an export, not a tier and not rendered anywhere, so there
+ * is no constant in this file to reach for. The `fee` answer below used to
+ * print both figures side by side and now prints one. If a future reader finds
+ * `/membership` and this section disagreeing, the resolution is never to add
+ * the lower figure here: it is that the lower figure does not belong on a page.
+ * The answer must also not hint that a cheaper price exists, so no "starting
+ * at", no "from", no "ask us about a discount".
+ *
+ * **What else changed, and what did not.** Grouping and order were set in the
+ * previous phase: the eight entries are three clusters, and two phrases already
+ * in the text are wrapped in `<Mark>`. Nothing outside this file reads that
+ * order, checked rather than assumed: `id` is consumed only as a React key,
+ * there is no FAQ JSON-LD anywhere in the tree, and the section anchor `#faq`
+ * sits on the `<section>` and does not move. This phase edits prose inside
+ * three answers (`meetup`, `where`, `fee`) and nothing else. No question text
+ * moved, no entry was added, removed or reordered, and neither marked answer
+ * (`visas`, `austin`) was touched, so the note above on `linkStyles` still
+ * holds: no marked answer contains a link, and the 3px accent mark and the 1px
+ * rule underline are still never asked to be told apart inside one paragraph.
  *
  * **The three cluster names and the deck.** The deck below promises "what IFN
  * is, what it costs, and what it does not do", and the clusters answer it in
@@ -200,7 +235,7 @@ const CLUSTERS: FaqCluster[] = [
                 answer: (
                     <>
                         IFN meets once a month, in person, in Austin. The center of the evening is structured
-                        one-to-one networking run with Reuneo, our format partner: you are paired with one
+                        one-to-one networking run with our format partner: you are paired with one
                         person at a time for a short conversation, then paired again. Nobody has to walk up to
                         a circle of strangers and introduce themselves. Around that there is open conversation
                         with founders who have already worked through the problem you are on now.
@@ -245,7 +280,7 @@ const CLUSTERS: FaqCluster[] = [
                 question: 'Where is it held, and how do I register?',
                 answer: (
                     <>
-                        Station Austin hosts us. They are our venue partner. Each meetup is published with its
+                        Our venue partner hosts us in Austin. Each meetup is published with its
                         date, start time and address on{' '}
                         <a href={LUMA_CALENDAR_URL} target="_blank" rel="noopener noreferrer" className={linkStyles}>
                             Luma<span className="sr-only"> (opens in a new tab)</span>
@@ -275,10 +310,9 @@ const CLUSTERS: FaqCluster[] = [
                     <>
                         The meetups are free to attend. You never need to be a member to walk in. Membership is
                         a separate, optional layer:{' '}
-                        <strong className="font-semibold tabular-nums">{MEMBERSHIP_PRICE_STANDARD} a year</strong>, or{' '}
-                        <strong className="font-semibold tabular-nums">{MEMBERSHIP_PRICE_ATTENDEE} a year</strong>{' '}
-                        if you already come to the meetups or are on our list. It adds the private member channel on
-                        Slack/Discord, the resource library, and monthly members-only office hours.{' '}
+                        <strong className="font-semibold tabular-nums">{MEMBERSHIP_PRICE_STANDARD} a year</strong>. It
+                        adds the private member channel on Slack/Discord, the resource library, and monthly
+                        members-only office hours.{' '}
                         <Link to="/membership" className={linkStyles}>
                             See what membership includes
                         </Link>

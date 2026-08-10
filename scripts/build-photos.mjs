@@ -125,6 +125,35 @@ async function validateSlot(slot, manifest, sourceRoot) {
     problems.push(`${where}: fallbackWidth ${slot.fallbackWidth} is not one of the output widths`)
   }
 
+  // A slot may additionally appear in the gallery. The grouping is DATA, not
+  // layout: which night a frame belongs to is a fact about the photograph, so it
+  // is declared here and emitted, rather than left for a component to hardcode.
+  if (slot.gallery !== undefined) {
+    const g = slot.gallery
+    const nights = manifest.galleryNights ?? []
+    if (!nights.some((night) => night.date === g.night)) {
+      problems.push(`${where}: gallery.night "${g.night}" is not declared in the top level galleryNights list`)
+    }
+    // The two widths are separated on purpose and the separation is the whole
+    // loading strategy. tileWidth is the ONLY tier the grid ever names, so a
+    // high density phone cannot pull the large view into a grid of twelve
+    // thumbnails; viewWidth is fetched on interaction and never before.
+    for (const key of ['tileWidth', 'viewWidth']) {
+      if (!widths.includes(g[key])) {
+        problems.push(`${where}: gallery.${key} ${g[key]} is not one of the output widths`)
+      }
+    }
+    if (g.tileWidth >= g.viewWidth) {
+      problems.push(`${where}: gallery.tileWidth ${g.tileWidth} must be smaller than gallery.viewWidth ${g.viewWidth}`)
+    }
+    if (g.tileWidth !== slot.fallbackWidth) {
+      problems.push(
+        `${where}: gallery.tileWidth ${g.tileWidth} must equal fallbackWidth ${slot.fallbackWidth}, ` +
+          `because the jpeg is written at the fallback tier only and the tile is the element that needs it.`,
+      )
+    }
+  }
+
   // The tree is at zero em dash and en dash characters and stays there. Alt text
   // is visible to assistive technology, so it is held to the same rule. The two
   // characters are written as escapes on purpose: a literal pair here would make
@@ -227,9 +256,85 @@ function tsString(value) {
   return JSON.stringify(value)
 }
 
+/**
+ * The gallery, emitted as grouped data.
+ *
+ * Three dated evenings is the one piece of evidence for recurrence that this
+ * page can actually show, and it only reads as evidence if the frames stay
+ * grouped by the night they were taken on. Emitting a flat map and asking a
+ * component to hardcode the grouping would move a fact about the photographs
+ * into a layout file, where the next edit silently breaks it.
+ *
+ * `tile` and `view` are separate objects carrying ONE url each rather than one
+ * srcset carrying every tier. That is deliberate and it is the loading policy:
+ * a twelve tile grid whose srcset offers a 1280 tier will fetch 1280 on any
+ * phone with a device pixel ratio of 2, which is the whole gallery at four
+ * times the necessary weight. The grid can only name `tile`; `view` exists for
+ * the enlarged view and is fetched on interaction.
+ */
+function generateGallery(built, manifest, publicPath) {
+  const nights = manifest.galleryNights ?? []
+  if (nights.length === 0) return null
+
+  const groups = nights.map((night) => {
+    const frames = built
+      .filter(({ slot }) => slot.gallery?.night === night.date)
+      .map(({ slot, files }) => {
+        const tier = (width) => slot.outputs.find((out) => out.width === width)
+        const tile = tier(slot.gallery.tileWidth)
+        const view = tier(slot.gallery.viewWidth)
+        const bytes = (width, format) =>
+          files.find((file) => file.width === width && file.format === format)?.bytes ?? 0
+        return {
+          slot: slot.name,
+          alt: slot.alt,
+          tile,
+          view,
+          tileBytesAvif: bytes(tile.width, 'avif'),
+          bytesTotal: files.reduce((sum, file) => sum + file.bytes, 0),
+        }
+      })
+    return { ...night, frames }
+  })
+
+  const rendered = groups
+    .filter((group) => group.frames.length > 0)
+    .map((group) => {
+      const url = (name, width, ext) => tsString(`${publicPath}/${name}-${width}w.${ext}`)
+      const frames = group.frames.map((frame) =>
+        [
+          `      {`,
+          `        slot: ${tsString(frame.slot)},`,
+          `        alt: ${tsString(frame.alt)},`,
+          `        tile: { width: ${frame.tile.width}, height: ${frame.tile.height},`,
+          `          src: ${url(frame.slot, frame.tile.width, 'jpg')},`,
+          `          avif: ${url(frame.slot, frame.tile.width, 'avif')},`,
+          `          webp: ${url(frame.slot, frame.tile.width, 'webp')} },`,
+          `        view: { width: ${frame.view.width}, height: ${frame.view.height},`,
+          `          avif: ${url(frame.slot, frame.view.width, 'avif')},`,
+          `          webp: ${url(frame.slot, frame.view.width, 'webp')} },`,
+          `      },`,
+        ].join('\n'),
+      )
+      return [
+        `  {`,
+        `    date: ${tsString(group.date)},`,
+        `    label: ${tsString(group.label)},`,
+        `    tileBytesAvif: ${group.frames.reduce((sum, frame) => sum + frame.tileBytesAvif, 0)},`,
+        `    frames: [`,
+        ...frames,
+        `    ],`,
+        `  },`,
+      ].join('\n')
+    })
+
+  return { groups, source: rendered.join('\n') }
+}
+
 function generateTypeScript(built, manifest) {
   const publicPath = manifest.publicPath.replace(/\/$/, '')
   const slotNames = built.map(({ slot }) => slot.name)
+  const gallery = generateGallery(built, manifest, publicPath)
 
   const entries = built.map(({ slot, files }) => {
     const byWidth = slot.outputs.map((out) => ({
@@ -318,6 +423,82 @@ export type Photo = {
 export const photos: Record<PhotoSlot, Photo> = {
 ${entries.join('\n')}
 }
+${gallery ? galleryTypeScript(gallery) : ''}`
+}
+
+function galleryTypeScript(gallery) {
+  return `
+/**
+ * THE GALLERY, GROUPED BY THE EVENING EACH FRAME WAS TAKEN ON.
+ *
+ * Nights are in chronological order and frames are in the order the manifest
+ * declares them. The grouping is data rather than layout on purpose: three
+ * separately dated evenings is the only evidence of recurrence this site owns
+ * that is not a sentence of copy, and it only reads as evidence while the
+ * frames stay attached to their date.
+ *
+ * LOADING POLICY, WHICH THIS SHAPE ENFORCES RATHER THAN SUGGESTS
+ * -------------------------------------------------------------
+ * \`tile\` and \`view\` are separate, and each carries exactly ONE url per format
+ * rather than a srcset of every tier. A grid of a dozen thumbnails whose srcset
+ * offers the large tier will fetch the large tier on any device with a pixel
+ * ratio of 2, which is the entire gallery at roughly four times the weight it
+ * needs. So:
+ *
+ *   - The grid renders \`tile\` ONLY. No srcset, no sizes, nothing to negotiate.
+ *   - \`view\` is for the enlarged view and is fetched on interaction. Never put
+ *     a \`view\` url in the grid.
+ *   - Do NOT reach into \`photos[frame.slot]\` for a grid tile, and in particular
+ *     do not use \`photos[frame.slot].sizes\`. That string describes the slot's
+ *     placement on the LANDING PAGE, not its size in this grid, and the two
+ *     differ: \`founder-story\` appears in both, and its \`sizes\` of
+ *     "(max-width: 1023px) 100vw, 576px" against the full srcset in \`photos\`
+ *     makes a 2x display fetch the 1280 tier for a 380px thumbnail. Everything
+ *     the grid needs is on this object.
+ *   - Every tile except those in the first night takes \`loading="lazy"\`.
+ *     Give the first night's tiles \`loading="lazy"\` too if the gallery route
+ *     opens scrolled to the top of a heading rather than to the grid.
+ *
+ * Intended shape at the call site:
+ *
+ *   <picture>
+ *     <source type="image/avif" srcSet={frame.tile.avif} />
+ *     <source type="image/webp" srcSet={frame.tile.webp} />
+ *     <img src={frame.tile.src} width={frame.tile.width} height={frame.tile.height}
+ *          alt={frame.alt} loading="lazy" decoding="async" />
+ *   </picture>
+ */
+
+export type GalleryImage = {
+  width: number
+  height: number
+  avif: string
+  webp: string
+}
+
+export type GalleryFrame = {
+  slot: PhotoSlot
+  /** Hand written, describes the room, names no individual and no venue. */
+  alt: string
+  /** Grid thumbnail. One tier. Carries the jpeg fallback for the <img>. */
+  tile: GalleryImage & { src: string }
+  /** Enlarged view. Fetched on interaction, never in the grid. */
+  view: GalleryImage
+}
+
+export type GalleryNight = {
+  /** ISO date of the evening these frames were taken on. */
+  date: string
+  /** Human label for the group heading. */
+  label: string
+  frames: GalleryFrame[]
+  /** Bytes of this night's avif tiles, measured at build. */
+  tileBytesAvif: number
+}
+
+export const galleryNights: GalleryNight[] = [
+${gallery.source}
+]
 `
 }
 
@@ -359,7 +540,6 @@ function report(built, manifest, args) {
       ?.files.find((file) => file.width === width && file.format === format)
 
   const hero = find('hero-band', 1440, 'avif')
-  const middle = find('how-it-works-middle', 640, 'avif')
 
   console.log('')
   console.log('  budget, measured')
@@ -371,14 +551,71 @@ function report(built, manifest, args) {
         (hero.bytes > cap ? `  (over by ${formatBytes(hero.bytes - cap)})` : ''),
     )
   }
-  if (hero && middle) {
-    const total = hero.bytes + middle.bytes
+
+  // Every photographic slot on the landing route is summed here, and the LIST
+  // IS DATA rather than JavaScript. The previous version carried a comment
+  // saying exactly this while still naming three slots by hand, and it went
+  // stale twice in one round: once when `founder-story` arrived and once when
+  // that slot's placement widened from 576 to 904 CSS px and moved the tier a
+  // 1440 viewport selects from 640 to 960. A stale list here fails by printing
+  // PASS on a short total, so a missing manifest row is reported as MISSING and
+  // the whole line is suppressed rather than quietly summed without it.
+  const landing = manifest.budget.landingAt1440 ?? []
+  const resolved = landing.map((row) => ({ row, file: find(row.slot, row.width, 'avif') }))
+  const missing = resolved.filter(({ file }) => !file)
+  if (missing.length > 0) {
+    console.log(
+      `    page total at 1440 viewport 1x  MISSING  (no avif built for ${missing
+        .map(({ row }) => `${row.slot} @ ${row.width}w`)
+        .join(', ')})`,
+    )
+  } else if (resolved.length > 0) {
+    const total = resolved.reduce((sum, { file }) => sum + file.bytes, 0)
     const cap = manifest.budget.totalAt1440ViewportBytes
     const verdict = total <= cap ? 'PASS' : 'MISS'
     console.log(
       `    page total at 1440 viewport 1x  ${formatBytes(total).padStart(9)}  against ${formatBytes(cap)}   ${verdict}`,
     )
-    console.log('      (hero band 1440w avif plus the middle stop 640w avif, the tiers a 1440 viewport selects)')
+    for (const { row, file } of resolved) {
+      console.log(`      ${`${row.slot} ${row.width}w`.padEnd(34)}${formatBytes(file.bytes).padStart(9)}   ${row.why}`)
+    }
+  }
+
+  // The gallery is a separate route, so it is a separate budget. What a visitor
+  // pays on arrival is the avif tiles and nothing else: the enlarged views are
+  // fetched on interaction and most visitors never open one.
+  const galleryBuilt = built.filter(({ slot }) => slot.gallery !== undefined)
+  if (galleryBuilt.length > 0) {
+    const nights = manifest.galleryNights ?? []
+    console.log('')
+    console.log('  gallery route, measured per night')
+    let tileTotal = 0
+    let diskTotal = 0
+    for (const night of nights) {
+      const frames = galleryBuilt.filter(({ slot }) => slot.gallery.night === night.date)
+      if (frames.length === 0) continue
+      const tiles = frames.reduce(
+        (sum, { slot, files }) =>
+          sum + (files.find((f) => f.width === slot.gallery.tileWidth && f.format === 'avif')?.bytes ?? 0),
+        0,
+      )
+      const disk = frames.reduce((sum, { files }) => sum + files.reduce((s, f) => s + f.bytes, 0), 0)
+      tileTotal += tiles
+      diskTotal += disk
+      console.log(
+        `    ${night.date}  ${String(frames.length).padStart(2)} frames   tiles avif ${formatBytes(tiles).padStart(9)}` +
+          `   all derivatives on disk ${formatBytes(disk).padStart(9)}`,
+      )
+    }
+    const cap = manifest.budget.galleryTilesAvifBytes
+    if (cap !== undefined) {
+      const verdict = tileTotal <= cap ? 'PASS' : 'MISS'
+      console.log(
+        `    gallery grid, first paint       ${formatBytes(tileTotal).padStart(9)}  against ${formatBytes(cap)}   ${verdict}`,
+      )
+      console.log('      (every avif tile in the grid. Enlarged views are excluded: they load on interaction.)')
+    }
+    console.log(`    gallery derivatives on disk     ${formatBytes(diskTotal).padStart(9)}`)
   }
   console.log('')
 }

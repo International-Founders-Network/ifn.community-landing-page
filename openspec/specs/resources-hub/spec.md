@@ -1,7 +1,7 @@
 # resources-hub Specification
 
 ## Purpose
-The `/resources` directory — audience/stage-segmented, filterable, searchable. Page shell (Phase 1) is complete; per-segment content (Phases 2-4) is an ongoing rollout, tracked in `BACKLOG.md`.
+The `/resources` directory: audience/stage-segmented, filterable, searchable. Page shell (Phase 1) is complete; per-segment content (Phases 2-4) is an ongoing rollout, tracked in `BACKLOG.md`.
 
 ## Requirements
 ### Requirement: Visitors can browse resources by audience and stage

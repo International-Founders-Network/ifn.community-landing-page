@@ -13,11 +13,28 @@ export function About() {
 
     // Every fact below is checkable: the venue, the format partner, the cadence,
     // and who runs it. See PRODUCT.md "Evidence on Hand" before adding to this list.
+    //
+    // The two partners are described rather than named, because the founder's
+    // rule keeps those names on the three partner surfaces only (the home
+    // PartnersStrip, /partners, partnersData.ts). This panel is headed "Four
+    // things you can check", so describing the venue instead of naming it can
+    // only be done by pointing at where the fact IS printed: `EventCard.tsx`
+    // renders `event.location_name` on /events and `EventsPreview` prints the
+    // same string on the home page, and that string carries the street address.
+    // The "Where" row below says so, so the row stays checkable.
+    //
+    // The row says "the address is on every event listing" and deliberately not
+    // "the full address". `EventCard.tsx:214` renders that string inside a
+    // `line-clamp-1` with no `title`, so in a narrow metadata column it can be
+    // shown clipped, and a promise of the FULL address would be a claim this
+    // file has not measured. "Every" holds because all ten rows in the current
+    // feed carry `location_name`, not by construction: the render is guarded by
+    // `{event.location_name && ...}`.
     const facts = [
         {
             label: 'Where',
-            value: 'Station Austin',
-            detail: 'Our venue partner, in Austin, Texas.',
+            value: 'Downtown Austin',
+            detail: 'At our venue partner. The address is on every event listing.',
         },
         {
             label: 'How often',
@@ -27,7 +44,7 @@ export function About() {
         {
             label: 'What happens',
             value: 'Introductions, not mingling',
-            detail: 'We use a structured one-to-one format run with our partner Reuneo, so you leave having actually spoken with a few people.',
+            detail: 'We use a structured one-to-one format run with our format partner, so you leave having actually spoken with a few people.',
         },
         {
             label: 'Who runs it',

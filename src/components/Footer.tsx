@@ -28,6 +28,15 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
         heading: 'Community',
         links: [
             { name: 'Monthly Meetups', href: '/events' },
+            // The gallery goes in THIS group and not in a fifth one. The nav
+            // below renders `md:grid-cols-4` against exactly four groups, so a
+            // fifth heading would wrap a lone column onto its own row on every
+            // one of the eighteen routes. It belongs beside the meetups in any
+            // case: it is a record of the evenings, not a resource.
+            //
+            // The label is byte for byte the label used on the home page, in
+            // EventsPreview. One label per intent, and both render on `/`.
+            { name: 'Meetup Photographs', href: '/gallery' },
             { name: 'Membership', href: '/membership' },
             { name: 'Code of Conduct', href: '/code-of-conduct' },
         ],
@@ -130,7 +139,7 @@ export function Footer() {
          * becomes the section 9 accent field, `--rule` against `--accent-plate`
          * measures 1.736 light and 1.573 dark and the plan bans any hairline
          * terminating on that field. Whoever builds the plate owns this edge.
-         * On the other sixteen routes the hairline is the mechanism, because
+         * On the other seventeen routes the hairline is the mechanism, because
          * ground tone alone between the two surfaces is only 1.103.
          */
         <footer className="border-t border-rule bg-paper">
@@ -153,8 +162,20 @@ export function Footer() {
                             parts: visas, U.S. banking, unfamiliar funding rules, and building a
                             network from zero.
                         </p>
+                        {/*
+                         * The venue partner is described rather than named. The
+                         * partner names live on the three partner surfaces only
+                         * (the home PartnersStrip, /partners, partnersData.ts)
+                         * plus the factual event address printed from the events
+                         * feed. This line renders on all eighteen routes, which
+                         * is exactly the footprint the founder asked to shrink.
+                         *
+                         * No place name here on purpose: the paragraph directly
+                         * above this one already says "moved to Austin, Texas",
+                         * and both sit in the same column of the same block.
+                         */}
                         <p className="max-w-sm text-sm text-muted">
-                            Six-plus months of monthly meetups, hosted at Station Austin.
+                            Six-plus months of monthly meetups, hosted by our venue partner.
                         </p>
                     </div>
 
@@ -214,7 +235,7 @@ export function Footer() {
                  * `sm:gap-8`, so roughly 417px that will not compress. Against the
                  * ~720px the container gives at 768px, the copyright block is left
                  * about 149px short of its natural width and wraps to two lines
-                 * across the whole 768 to 920px band, on all seventeen routes. It
+                 * across the whole 768 to 920px band, on all eighteen routes. It
                  * never overflows (its own min-content is ~142px), so this is
                  * crowding rather than a break, and holding the split until `lg`
                  * gives the metadata its own row until there is genuinely room for

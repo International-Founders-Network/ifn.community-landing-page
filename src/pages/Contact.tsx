@@ -177,9 +177,18 @@ export function Contact() {
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-ink">Come to a meetup</h3>
+                                        {/*
+                                         * Venue described, not named. The partner
+                                         * names stay on the three partner surfaces
+                                         * only. "Downtown Austin" is carried here
+                                         * rather than dropped because the item
+                                         * directly above says IFN has no public
+                                         * office, so where the meetup happens is
+                                         * new information rather than a repeat.
+                                         */}
                                         <p className="text-muted">
-                                            One in-person meetup a month, hosted at Station Austin. Dates and sign-up
-                                            are published on Luma.
+                                            One in-person meetup a month, hosted by our venue partner in downtown
+                                            Austin. Dates and sign-up are published on Luma.
                                         </p>
                                         <a
                                             href={LUMA_CALENDAR_URL}

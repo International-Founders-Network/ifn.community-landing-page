@@ -170,7 +170,7 @@
    colour, so the construction inverts itself when the nine rows below swap.
    Writing a reversal on top of that swap inverts it twice: the outer layer
    becomes `--paper`, which in dark mode is #131311, which IS the page ground,
-   at 1.000. Every focus indicator on all seventeen routes would collapse to a
+   at 1.000. Every focus indicator on all eighteen routes would collapse to a
    single 2px line. An earlier draft of the plan specified that reversal and it
    was a bug. The layers contrast with each other at 17.965 in both modes.
 

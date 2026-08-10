@@ -3,7 +3,11 @@ import { Check } from 'lucide-react';
 import { Container } from '../components/Container';
 import { ButtonLink } from '../components/ButtonLink';
 import { Emphasis } from '../components/Emphasis';
-import { MEMBERSHIP_BENEFITS, MEMBERSHIP_TIERS } from '../data/membershipData';
+import {
+    MEMBERSHIP_BENEFITS,
+    MEMBERSHIP_PRICE_STANDARD,
+    MEMBERSHIP_TIER_NAME,
+} from '../data/membershipData';
 
 export function Membership() {
     const container = {
@@ -84,29 +88,28 @@ export function Membership() {
                             What it costs
                         </h2>
                         <p className="text-lg text-muted leading-relaxed mb-10">
-                            Two prices, depending on whether we have already met you.
+                            Membership runs for a full year.
                         </p>
 
-                        <div className="grid sm:grid-cols-2 gap-6 text-left">
-                            {MEMBERSHIP_TIERS.map((tier) => (
-                                <div
-                                    key={tier.id}
-                                    className="p-8 rounded-2xl border border-rule bg-paper flex flex-col gap-3"
-                                >
-                                    <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
-                                        {tier.name}
-                                    </h3>
-                                    <p className="text-4xl font-bold text-ink tracking-tight">
-                                        {tier.price}
-                                        <span className="text-base font-semibold text-muted"> / year</span>
-                                    </p>
-                                    <p className="text-muted leading-relaxed">{tier.who}</p>
-                                </div>
-                            ))}
+                        {/* One price plate, not a tier grid: this was a `grid sm:grid-cols-2` and
+                            only one price is public. See membershipData.ts for the standing rule.
+                            There is no multi-column layout left in this block, so the plate is a
+                            single centred column at every width and nothing collapses.
+                            The 1px `--rule` border is mandatory rather than decorative, per
+                            REDESIGN-PLAN section 4.2: `--band` against `--paper` is 1.103:1, so
+                            ground tone alone cannot make a plate perceivable. */}
+                        <div className="mx-auto max-w-sm p-8 rounded-2xl border border-rule bg-paper flex flex-col gap-3 text-left">
+                            <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
+                                {MEMBERSHIP_TIER_NAME}
+                            </h3>
+                            <p className="text-4xl font-bold text-ink tracking-tight tabular-nums">
+                                {MEMBERSHIP_PRICE_STANDARD}
+                                <span className="text-base font-semibold text-muted"> / year</span>
+                            </p>
                         </div>
 
                         <p className="mt-6 text-sm text-muted leading-relaxed">
-                            Both prices cover a full year and are charged once. IFN does not take equity in your
+                            The price covers a full year and is charged once. IFN does not take equity in your
                             company, and you do not need to be a member to come to a meetup.
                         </p>
 
@@ -121,8 +124,7 @@ export function Membership() {
                             <p className="mt-6 mx-auto max-w-xl text-muted leading-relaxed">
                                 Membership is arranged by hand while we finish setting up online payment. Send a
                                 message through the contact form and a person from the IFN team will reply with a
-                                payment link and confirm which of the two prices applies to you. It helps if you
-                                mention whether you have already been to an IFN meetup.
+                                payment link for the price above.
                             </p>
                         </div>
                     </div>

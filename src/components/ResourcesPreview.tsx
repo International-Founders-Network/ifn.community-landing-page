@@ -247,19 +247,60 @@ export function ResourcesPreview() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.35 }}
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="max-w-[62ch]"
                 >
-                    {/* Headline scale, not Display: Display is reserved for the
-                        page <h1>, and every sibling section on Home uses this. */}
-                    <h2 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
+                    {/* HEADLINE SCALE. Display is reserved for the page <h1>, and
+                        every sibling section on Home is a clamp. This one was
+                        not: it ran `text-3xl md:text-4xl` and capped at 36px
+                        against 48px to 64px everywhere else, so the page shipped
+                        two type scales and claimed one.
+
+                        It takes `clamp(2rem, 4vw, 3rem)`, which is FAQ's value
+                        verbatim and the same one EventsPreview now takes, so this
+                        change adds no new number to the scale. The family's
+                        larger caps were tested and rejected on the break rather
+                        than on taste: at 3.5rem (HowItWorks' cap) the second line
+                        collapses to "explains to you", which is a worse line than
+                        the one below.
+
+                        MEASURE, AND WHY THE WRAPPER LOST ITS CAP. `text-[clamp()]`
+                        sets font-size only, so the 62ch that used to sit on this
+                        wrapper was resolved in the wrapper's inherited 16px, or
+                        568.4px. At 48px this headline is 1087.3px on one line, so
+                        inside 568.4px it broke into THREE lines ending on the
+                        orphan "you". The cap therefore moves off the wrapper and
+                        onto each element, which is the shape ValueProps already
+                        uses: 26ch on the headline in the headline's own ch, 62ch
+                        on the body beneath it. Computed from the real glyph
+                        advances in `public/fonts/archivo-variable-latin.woff2` at
+                        `wght 700` with the -0.025em tracking included:
+
+                          360px   font 32.00px  measure 328.0px (container bound)
+                                  3 lines, unchanged from before this edit
+                          768px   font 32.00px  measure 495.0px
+                                  2 lines: "Written guides for the parts" /
+                                           "nobody explains to you"
+                          1366px  font 48.00px  measure 742.6px   same 2 lines
+                          1920px  font 48.00px  measure 742.6px   same 2 lines
+
+                        LEADING IS NOW EXPLICIT AND HAS TO BE. `text-3xl` and
+                        `text-4xl` carried Tailwind's paired line-heights (2.25rem
+                        and 2.5rem); an arbitrary font-size does not, so without
+                        this the line box would inherit the body's 1.6 and the
+                        headline would set at 76.8px of leading at 48px.
+                        `leading-[1.02]` is the section-headline value in plan
+                        section 4.3 and is what every sibling section declares.
+
+                        Colour is untouched: `--ink` on `--paper`, 17.965 in both
+                        modes (plan section 4.2). */}
+                    <h2 className="max-w-[26ch] text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.02] tracking-[-0.025em] text-ink">
                         Written guides for the parts nobody explains to you
                     </h2>
-                    <p className="mt-6 text-lg leading-relaxed text-muted">
+                    <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
                         Guides, templates and checklists, sorted by the kind of founder you are
                         and the stage you have reached, written in the order the questions come
                         up in Austin.
                     </p>
-                    <p className="mt-5 text-lg font-semibold leading-relaxed text-ink">
+                    <p className="mt-5 max-w-[62ch] text-lg font-semibold leading-relaxed text-ink">
                         <Mark>None of it is published yet.</Mark>
                     </p>
                 </motion.div>

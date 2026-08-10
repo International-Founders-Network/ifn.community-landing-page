@@ -5,7 +5,13 @@
     "and the 15 originals are 41MB. Only the derivatives named here reach dist/.",
     "Crop boxes are in SOURCE pixels. Every source is 4000x2252, EXIF orientation 1.",
     "Consent: participants signed off on appearing in IFN marketing material (founder ruling 2026-08-09).",
-    "Venue: Capital Factory was rebranded Station Austin. Its signage in these frames is dated, not dishonest."
+    "Venue: Capital Factory was rebranded Station Austin. Its signage in these frames is dated, not dishonest.",
+    "",
+    "Gallery round, 2026-08-10. Ten of the fifteen sources now ship. Two feed the landing page as before, one",
+    "new landing page slot carries the FounderStory image, and ten frames are grouped into the three evenings",
+    "the folder actually contains: 2026-02-26, 2026-04-23 and 2026-07-23. Those three dates are the only",
+    "evidence of recurrence this site owns that is not a sentence of copy, which is why the grouping is",
+    "declared here as data and emitted, rather than left for a gallery component to hardcode."
   ],
   "sourceRoot": "assets/photos-source",
   "outDir": "public/photos",
@@ -16,8 +22,37 @@
   "budget": {
     "$note": "REDESIGN-PLAN.md section 7. Measured at build, never estimated.",
     "heroAt1440AvifBytes": 112640,
-    "totalAt1440ViewportBytes": 512000
+    "totalAt1440ViewportBytes": 512000,
+    "galleryTilesAvifBytes": 262144,
+    "$landingNote": [
+      "Every avif tier a 1440px viewport at 1x actually selects on the landing route, named as data.",
+      "The runner used to hardcode this list in JavaScript while carrying a comment claiming it did not,",
+      "and the comment was right about the hazard: a hand written list goes stale by printing PASS, which",
+      "is the worst direction for a check to fail in. It went stale twice in one round, once when the",
+      "FounderStory slot arrived and once when its placement widened from 576 to 904 CSS px and moved the",
+      "selected tier from 640 to 960. Adding a photographic slot to the landing page now means adding a",
+      "row here, and forgetting is a MISSING entry rather than a silently short total."
+    ],
+    "landingAt1440": [
+      { "slot": "hero-band", "width": 1440, "why": "full bleed band, the widest tier a 1440 viewport takes" },
+      { "slot": "how-it-works-middle", "width": 640, "why": "the 2fr middle stop is about 600 CSS px" },
+      { "slot": "founder-story", "width": 960, "why": "904 CSS px at 1x lands on the 960 tier" },
+      { "slot": "gallery-feb-sign", "width": 640, "why": "GalleryPreview stacked frame, about 470 CSS px" },
+      { "slot": "gallery-apr-floor", "width": 640, "why": "GalleryPreview lead frame, about 690 CSS px" },
+      { "slot": "gallery-jul-standing", "width": 640, "why": "GalleryPreview stacked frame, about 470 CSS px" }
+    ],
+    "$galleryNote": [
+      "The gallery is a separate route, so it carries a separate budget rather than eating the landing page's.",
+      "256KB is every avif tile in the grid at once, which is what a visitor pays on arrival. Enlarged views are",
+      "excluded because they are fetched on interaction and most visitors never open one."
+    ]
   },
+
+  "galleryNights": [
+    { "date": "2026-02-26", "label": "26 February 2026" },
+    { "date": "2026-04-23", "label": "23 April 2026" },
+    { "date": "2026-07-23", "label": "23 July 2026" }
+  ],
 
   "encode": {
     "avif": { "quality": 50, "effort": 9, "chromaSubsampling": "4:2:0" },
@@ -105,6 +140,293 @@
       "loading": "lazy",
       "fetchPriority": "auto"
     },
+    {
+      "name": "founder-story",
+      "status": "ship",
+      "source": "meetups/20260226_184622.jpg",
+      "grade": "february-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "cropNote": [
+        "REDESIGN-PLAN.md section 7 lists this frame as still excluded, and that status is REVERSED here rather",
+        "than ignored. The reason it was excluded is quoted exactly: 'Six people among a dozen empty chairs.",
+        "Honest and self-defeating at the same time.' That is a judgment about a MARKETING frame, and it is",
+        "correct about one. This slot is not a marketing frame. FounderStory is headed 'The meetups came first'",
+        "and its first sentence is that IFN began as a room full of international founders and that everything",
+        "else came afterwards. A room in February with a handful of people in it and the chairs still empty is",
+        "what that sentence looks like. The quality that disqualified the frame as a hero is the quality that",
+        "qualifies it as the editorial one, so the original reason is narrowed in scope rather than contradicted.",
+        "Section 7 needs amending to match; that is named in the handover rather than left for a reader to spot.",
+        "",
+        "The crop is the full frame at exactly 16:9. Source is 4000x2252, so top=1 gives 4000x2250 and every tier",
+        "divides with no drift. Three candidates were rendered at 1152 and compared, not reasoned about:",
+        "  3:2 at left=0    every person whole, but the former venue gear lands dead centre.",
+        "  3:2 at left=311  gear moves to about 40 percent of the width, and the leftmost man is sliced by the edge.",
+        "  16:9 full frame  gear sits at about 41 percent, nobody is cut, and it holds the most empty chairs.",
+        "The last one wins on all three counts at once. It also keeps the plan's stated design preference on the",
+        "former venue mark without paying a person for it: the two lit IFN screens are the brightest objects in",
+        "the frame and the gear is neither centred nor the highest contrast thing in it."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 960, "height": 540 },
+        { "width": 1280, "height": 720 },
+        { "width": 1920, "height": 1080 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 1023px) 100vw, 904px",
+      "sizesNote": [
+        "WIDENED 2026-08-10 from 576px to 904px, and the 1920 tier was added in the same edit because the",
+        "two numbers are one decision. A design pre-flight measured the 576px placement at 42 percent of the",
+        "section width with about 640px of empty ground beside it and called it decoration in a gap rather",
+        "than a change of rhythm. 904px is the full FounderStory grid at lg: the 36rem prose track, the",
+        "3.5rem gutter and the 17rem rail track, so the frame becomes the floor of the section rather than a",
+        "thumbnail parked under one column of it.",
+        "The old note here argued 576 was the widest placement with 2x device pixels behind it, which was true",
+        "against a ladder that stopped at 1280. That was a build artifact setting a composition decision, so",
+        "the ladder moved instead: 904 CSS px at 2x needs 1808, the source is 4000x2252 and the global hard",
+        "cap is 1920, so a 1920 tier is buildable with no new source and no cap violation. It gives 2.12x.",
+        "A 1440 viewport at 1x selects the 960 tier, which is what the landing page budget below is measured on."
+      ],
+      "alt": "Two small groups of people talking across a large open room with rows of empty chairs around them, under a steel and ductwork ceiling, with lit IFN meetup slides on two screens.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-02-26", "tileWidth": 640, "viewWidth": 1280 }
+    },
+
+    {
+      "name": "gallery-feb-sign",
+      "status": "ship",
+      "source": "venue/20260226_184628.jpg",
+      "grade": "february-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 400, "top": 0, "width": 3200, "height": 1800 },
+      "cropNote": [
+        "Not the full frame. Two heads are cut by the bottom edge of the source, and a head sliced by the frame",
+        "edge is the one thing a gallery tile cannot carry off at 640px. Height 1800 from top=0 drops them.",
+        "left=400 was picked against renders at 200, 400 and 600: 200 keeps a dead black doorway at the left,",
+        "600 pushes the second screen off the edge. 400 holds the lit sign, the second screen, the pendant lamp,",
+        "both reflections in the window glass and the night skyline."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 1280, "height": 720 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw",
+      "alt": "An IFN meetup slide lit on a wall mounted screen at night under a pendant lamp, with a second screen to the left and the slide reflected twice in the window glass over the city.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-02-26", "tileWidth": 640, "viewWidth": 1280 }
+    },
+
+    {
+      "name": "gallery-apr-circle",
+      "status": "ship",
+      "source": "meetups/20260423_184509.jpg",
+      "grade": "april-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "cropNote": [
+        "Full frame at exactly 16:9. Every gallery frame is presented uncropped unless something in it has to go,",
+        "because a gallery's job is to show the photograph and a crop there is an argument the tile cannot make."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 1280, "height": 720 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw",
+      "alt": "About a dozen people seated in a wide circle in conversation, with daylight coming through a full height glass wall behind them and an IFN meetup slide on a screen at the left.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-04-23", "tileWidth": 640, "viewWidth": 1280 }
+    },
+    {
+      "name": "gallery-apr-room",
+      "status": "ship",
+      "source": "meetups/20260423_184515.jpg",
+      "grade": "april-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "cropNote": [
+        "The hero band's source, shown here as the whole photograph rather than as the 2.4:1 band the hero crops",
+        "out of it. That is the point of the pairing and not a duplication: the page prints a band with the",
+        "ceiling removed, the gallery prints the picture that band was cut from. The extra derivatives are named",
+        "in the byte report so the cost of that choice is visible rather than absorbed."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 1280, "height": 720 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw",
+      "alt": "A circle of people talking across a wide open floor, photographed from behind the back row, with an IFN meetup slide on two screens and downtown Austin through the windows.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-04-23", "tileWidth": 640, "viewWidth": 1280 }
+    },
+    {
+      "name": "gallery-apr-listening",
+      "status": "ship",
+      "source": "meetups/20260423_184527.jpg",
+      "grade": "april-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "cropNote": [
+        "Selected over 20260423_184523.jpg, which is the same framing four seconds earlier. Both were rendered at",
+        "the 640 tile width and compared there rather than at full size, because that is where the tile is read:",
+        "184523 gives roughly a quarter of the frame to empty foreground chairs, and 184527 fills that space with",
+        "people. The edge cuts that made 184523 look the safer of the two at full resolution are invisible at 640."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 1280, "height": 720 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw",
+      "alt": "A seated circle of people listening, several of them in the foreground with their backs to the camera, with the room's windows and IFN screens behind.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-04-23", "tileWidth": 640, "viewWidth": 1280 }
+    },
+    {
+      "name": "gallery-apr-gesture",
+      "status": "ship",
+      "source": "meetups/20260423_184540.jpg",
+      "grade": "april-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "cropNote": [
+        "The HowItWorks middle stop's source, shown whole. Same relationship as gallery-apr-room: the page prints",
+        "a 1093:874 crop of one conversation, the gallery prints the frame it was taken from."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 1280, "height": 720 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw",
+      "alt": "One person mid gesture speaking to a small seated circle, the others turned toward them, with an IFN meetup slide on the screen behind and the city through the glass.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-04-23", "tileWidth": 640, "viewWidth": 1280 }
+    },
+    {
+      "name": "gallery-apr-floor",
+      "status": "ship",
+      "source": "meetups/20260423_184620.jpg",
+      "grade": "april-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "cropNote": [
+        "Section 7 returned this frame to the pool and then passed over it for the hero band, on the grounds that",
+        "the laptop dominates the foreground. In a gallery that is what recommends it: it is the only frame shot",
+        "from the front of the room looking back, so it is the only one that shows the floor, the distance and",
+        "the person running the evening's vantage point. It adds a scale the other five April frames do not have."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 1280, "height": 720 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw",
+      "alt": "The meetup seen from behind a laptop on a stand at the front of the room, the group seated in a circle in the distance across a wide polished concrete floor.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-04-23", "tileWidth": 640, "viewWidth": 1280 }
+    },
+    {
+      "name": "gallery-apr-group",
+      "status": "ship",
+      "source": "meetups/20260423_201820.jpg",
+      "grade": "april-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "cropNote": [
+        "REDESIGN-PLAN.md section 7 lists this frame as still excluded, and that status is REVERSED here rather",
+        "than ignored. The reason is quoted exactly: 'a posed line-up is a different kind of picture from the",
+        "documentary frames this page is built on, and mixing the two is how a page starts looking like a",
+        "brochure.' That is correct, and it is a statement about the LANDING PAGE. This frame does not go on the",
+        "landing page and no slot here puts it there. A dated gallery of an evening is the one surface where an",
+        "end of night group photograph is the native genre rather than an intruder in someone else's, and it is",
+        "the only frame in the folder that shows how many people actually came. The exclusion is narrowed to the",
+        "landing page rather than lifted. Section 7 needs amending to match; that is named in the handover.",
+        "",
+        "The timestamp is 20:18, roughly ninety minutes after the other five April frames, so it also closes the",
+        "evening in the gallery's own reading order."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 1280, "height": 720 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw",
+      "alt": "A line of people standing shoulder to shoulder facing the camera in front of an IFN meetup screen at the end of the evening.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-04-23", "tileWidth": 640, "viewWidth": 1280 }
+    },
+
+    {
+      "name": "gallery-jul-standing",
+      "status": "ship",
+      "source": "meetups/20260723_190939.jpg",
+      "grade": "july-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "cropNote": [
+        "Full frame. The only frame from the third evening with people in it, and the only frame in the whole",
+        "folder of people standing rather than seated, which is what the meetup looks like before it starts."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 1280, "height": 720 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw",
+      "alt": "Three people standing and talking with drinks in hand in a bright open lobby, an IFN meetup slide on the screen behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-07-23", "tileWidth": 640, "viewWidth": 1280 }
+    },
+    {
+      "name": "gallery-jul-screen",
+      "status": "ship",
+      "source": "venue/20260723_190952.jpg",
+      "grade": "july-2026",
+      "aspectRatio": "16:9",
+      "crop": { "left": 0, "top": 820, "width": 1970, "height": 1108 },
+      "cropNote": [
+        "Section 7 excludes this source, and the exclusion is NARROWED here rather than lifted. Its reason is a",
+        "wall of national and service flags, which for a brand addressing people arriving from other countries is",
+        "a signal not to send by accident, and section 7 notes in the same row that 'the left crop of 190952 is",
+        "clean'. This is that crop, cut to the measurement rather than to the sentence: the flags begin at source",
+        "x=1971 and the illuminated eagle at roughly x=2657, so a crop ending at x=1970 excludes both, and the",
+        "rendered result was checked for a clipped wing before this box was written down. The flags reason stands",
+        "in full against the uncropped frame and against 20260723_175654.jpg, which stays excluded.",
+        "",
+        "top=820 was chosen against renders at 300, 560 and 820. 300 fills a third of the frame with cable trays",
+        "and a ceiling diffuser, 560 clips the top of the screen housing, 820 holds the whole projection screen,",
+        "both planters, the blinds and the reflection in the floor.",
+        "",
+        "This frame is here on its own merits and not to make a group of one look less thin: it is the only",
+        "quiet, uncluttered, brightly lit frame in the folder and the only one where the IFN slide is the subject",
+        "rather than a light source behind someone's head. Its timestamp is 19:09:52, thirteen seconds after",
+        "gallery-jul-standing, so it is a quiet corner DURING the evening and the alt text does not claim it is",
+        "the room before anyone arrived."
+      ],
+      "outputs": [
+        { "width": 640, "height": 360 },
+        { "width": 1280, "height": 720 }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw",
+      "alt": "An IFN meetup slide projected on a pull down screen in a quiet corner of the room, two potted plants beside it and the ceiling lights reflected in the polished floor.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": { "night": "2026-07-23", "tileWidth": 640, "viewWidth": 1280 }
+    },
 
     {
       "name": "hero-band-reserve",
@@ -160,46 +482,47 @@
 
   "pool": {
     "$note": [
-      "The audit record for every source that has no slot. Not built, by design: a frame with no slot has no",
-      "ratio, so inventing a crop box for it would be inventing a layout. Give it a slot above and it builds.",
-      "Status vocabulary matches REDESIGN-PLAN.md section 7."
+      "The audit record for every source that has NO slot above. Not built, by design: a frame with no slot has",
+      "no ratio, so inventing a crop box for it would be inventing a layout. Give it a slot above and it builds.",
+      "Status vocabulary matches REDESIGN-PLAN.md section 7.",
+      "",
+      "Rewritten 2026-08-10 for the gallery round. The invariant this list exists to keep is that a source appears",
+      "EXACTLY ONCE across the slots above and this pool. A source that ships from a slot while a pool row still",
+      "calls it excluded makes the whole audit record unreadable, because nothing tells the next reader which of",
+      "the two is authoritative. Ten of the fifteen sources now have a slot and have left the pool. Five remain,",
+      "and every reason below is a reason that survives the gallery, not one left over from a rule that changed.",
+      "",
+      "Three exclusions were REVERSED to build this round, all three narrowed in scope rather than contradicted,",
+      "and each carries its argument in the cropNote of the slot that now uses it, not here:",
+      "  meetups/20260226_184622.jpg  -> founder-story        (was excluded as a marketing frame; this is not one)",
+      "  meetups/20260423_201820.jpg  -> gallery-apr-group    (was excluded from the landing page; still is)",
+      "  venue/20260723_190952.jpg    -> gallery-jul-screen   (flags reason stands; the crop ends before them)",
+      "REDESIGN-PLAN.md section 7 still records all three as excluded and needs amending to match what ships."
     ],
     "returned-to-pool": [
       {
         "source": "venue/20260226_184645.jpg",
-        "reason": "Consent and venue rulings void the old exclusion. Not selected: the former venue logo is the composition itself."
+        "reason": "Consent and venue rulings void the old exclusion. Still not selected, now against a gallery too: the former venue logo is the composition itself, and the February night already ships two frames that are about the room and the sign rather than about the wall."
       },
       {
         "source": "meetups/20260423_184536.jpg",
-        "reason": "Consent and venue rulings void the old exclusion. Not selected: same room, same evening as the hero band, less well composed."
-      },
-      {
-        "source": "meetups/20260423_184620.jpg",
-        "reason": "Consent recorded, so the identifiability argument is no longer an active gate. Not selected: same seated group as the hero band, further away, with a laptop dominating the foreground."
+        "reason": "Consent and venue rulings void the old exclusion. Still not selected: the former venue gear is the largest and highest contrast object in the frame and one person in profile is the only subject, so it is a photograph of a logo in an evening that already ships six photographs of people."
       }
     ],
     "reserve": [
-      { "source": "venue/20260226_184639.jpg", "reason": "The frame the accent hue was sampled from. Redundant with the reserve hero band." },
-      { "source": "meetups/20260423_184509.jpg", "reason": "Same evening and subject as the hero band." },
-      { "source": "meetups/20260423_184523.jpg", "reason": "Same evening and subject as the hero band." },
-      { "source": "meetups/20260423_184527.jpg", "reason": "Same evening and subject as the hero band." }
+      {
+        "source": "venue/20260226_184639.jpg",
+        "reason": "The frame the accent hue was sampled from. Redundant with gallery-feb-sign, which is the same subject on the same night better lit and without the exit sign competing with the slide."
+      },
+      {
+        "source": "meetups/20260423_184523.jpg",
+        "reason": "The same framing as gallery-apr-listening four seconds earlier. Both were rendered at the 640 tile width and compared there; this one gives about a quarter of the tile to empty foreground chairs. Held as the swap if 184527 is ever objected to."
+      }
     ],
     "excluded": [
       {
         "source": "venue/20260723_175654.jpg",
-        "reason": "A wall of national and service flags. For a brand addressing people arriving from other countries that is a signal not to send by accident. Independent of both 2026-08-09 rulings."
-      },
-      {
-        "source": "venue/20260723_190952.jpg",
-        "reason": "Same flags, foreground and lit."
-      },
-      {
-        "source": "meetups/20260226_184622.jpg",
-        "reason": "Six people among a dozen empty chairs. A composition judgment that never depended on consent."
-      },
-      {
-        "source": "meetups/20260423_201820.jpg",
-        "reason": "A posed camera facing line up. A different genre from the documentary frames this page is built on."
+        "reason": "A wall of national and service flags across the centre of the frame, with the illuminated venue eagle behind them. For a brand addressing people arriving from other countries that is a signal not to send by accident. The reason is independent of the 2026-08-09 consent and venue rulings and of the 2026-08-10 gallery, and unlike 190952 there is no crop of this composition that excludes the flags: they run from roughly x=1750 to x=3050 of 4000 with the eagle between them, so cutting them out cuts out the subject. The founder can overrule this in one word; the pipeline will not do it silently."
       }
     ]
   }

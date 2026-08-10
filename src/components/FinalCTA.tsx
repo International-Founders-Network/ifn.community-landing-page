@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from './Button';
 import { Container } from './Container';
-import { MEMBERSHIP_PRICE_ATTENDEE, MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
+import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
 
 /**
  * SECTION 9. The page's one colour block (REDESIGN-PLAN.md section 5, row 9).
@@ -22,10 +22,9 @@ import { MEMBERSHIP_PRICE_ATTENDEE, MEMBERSHIP_PRICE_STANDARD } from '../data/me
  * for" label (a mechanical eyebrow, and the budget of 3 is already spent by the
  * hero and PartnersStrip), the italic `Emphasis` word, and the second action.
  *
- * WHAT STAYED: all four commitment titles AND all four detail strings, verbatim
- * and character for character. An audit caught a draft dropping the details.
- * "Hosted at Station Austin" is correct and settled. The headline is preserved.
- * The lead paragraph is preserved verbatim too: the founder's copy delegation
+ * WHAT STAYED: all four commitments, each still a title AND a detail string. An
+ * audit caught a draft dropping the details. The headline is preserved. The
+ * lead paragraph is preserved verbatim too: the founder's copy delegation
  * of 2026-08-09 covers the HERO subtext only, so nothing here licenses a cut,
  * and the clause naming visas, bank paperwork and a first hire abroad is the
  * only place on this field where the reader sees their own problem named.
@@ -59,18 +58,47 @@ import { MEMBERSHIP_PRICE_ATTENDEE, MEMBERSHIP_PRICE_STANDARD } from '../data/me
  * not at `lg` because at a 1024px viewport a column is about 216px wide and the
  * longest detail string runs to four lines, which ragged the row.
  */
+/**
+ * THE FOUR COMMITMENTS, and the two that were rewritten on 2026-08-10.
+ *
+ * Items two and three used to name the venue company and the format company.
+ * The founder has ruled that those two names appear only on the partner
+ * surfaces (the home PartnersStrip, /partners, and `partnersData.ts`), so both
+ * items now use the approved generic descriptors and neither loses a fact:
+ *
+ *   2. "Hosted at <venue company>" became "Hosted by our venue partner". Only
+ *      the title moved. The detail is the shipped string's second sentence,
+ *      unchanged, and it was deliberately NOT widened while it was in reach:
+ *      the sentence it belongs to is preserved copy and its scope is not this
+ *      round's to expand. It points at the events feed, where `EventCard`
+ *      prints `location_name` on every card on /events and `EventsPreview`
+ *      prints it for the featured meetup on this page, all ten rows carrying
+ *      "701 Brazos St, Austin, TX 78701". FLAG, PRE-EXISTING, NOT INTRODUCED
+ *      HERE: the home page's "Also on the calendar" index rows print no
+ *      address, so "every event listing" is exact on /events and loose about
+ *      this page. Left as shipped rather than edited on our own say-so.
+ *   3. "Run with <format company>: you are paired ..." lost four words at the
+ *      front. The rest of the string is verbatim, which matters because the
+ *      description of what happens in the room is the substance of the item and
+ *      the vendor name never carried it.
+ *
+ * REDESIGN-PLAN.md section 5 still quotes the outgoing title, naming the venue
+ * company, in its FinalCTA row and in its list of four verbatim items. That is
+ * stale by founder decision rather than by drift; the plan needs the same edit,
+ * and this comment deliberately does not reproduce the name here.
+ */
 const PROOF = [
     {
         title: 'Every month, in person',
         detail: 'More than six months of monthly meetups, all of them in Austin.',
     },
     {
-        title: 'Hosted at Station Austin',
-        detail: 'Our venue partner. The address is on every event listing.',
+        title: 'Hosted by our venue partner',
+        detail: 'The address is on every event listing.',
     },
     {
         title: 'Structured one-to-one networking',
-        detail: 'Run with Reuneo: you are paired for short conversations, one person at a time.',
+        detail: 'You are paired for short conversations, one person at a time.',
     },
     {
         title: 'Free to attend',
@@ -245,19 +273,36 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         ))}
                     </motion.ul>
 
-                    {/* Prices are imported, never typed. Only the attendee rate
-                        is printed here: the standard rate is already in the
-                        fourth commitment above, verbatim, and printing it twice
-                        on one screen reads as a page that cannot keep its own
-                        figures straight. No checkout is designed and
-                        STRIPE_PAYMENT_LINK is wired to nothing. */}
+                    {/* ONE PRICE IS PUBLIC, AND IT IS NOT PRINTED HERE.
+                        `MEMBERSHIP_PRICE_STANDARD` appears once on this field,
+                        in the fourth commitment above, verbatim; printing it
+                        twice on one screen reads as a page that cannot keep its
+                        own figures straight, so this note carries no figure at
+                        all.
+
+                        `MEMBERSHIP_PRICE_ATTENDEE` USED TO CLOSE THIS SENTENCE
+                        AND MUST NOT COME BACK. On 2026-08-10 the founder ruled
+                        that the second rate is not public: it goes by email to a
+                        selected list and appears on no public surface. The
+                        import was dropped with the clause. Do not replace it
+                        with a teaser either. "Discounts available", "ask about
+                        member rates" or "special pricing for regulars" would
+                        advertise the existence of a price the founder is
+                        choosing not to publish, which is the same disclosure
+                        wearing a different coat. The sentence says nothing about
+                        a second price because there is nothing to say here.
+
+                        Prices are imported, never typed. No checkout is designed
+                        and STRIPE_PAYMENT_LINK is wired to nothing; a real
+                        payment gateway is a next-iteration item, and the
+                        "request your membership link" route through /contact is
+                        untouched by this edit. */}
                     <motion.p
                         variants={REVEAL_LAST}
                         className="mt-14 max-w-[62ch] text-[0.9375rem] leading-[1.55]"
                     >
                         Membership is the paid layer and it is optional: the private member
-                        channel, the resource library and monthly office hours.{' '}
-                        {MEMBERSHIP_PRICE_ATTENDEE} a year if you already come to the meetups.
+                        channel, the resource library and monthly office hours.
                     </motion.p>
                 </motion.div>
             </Container>

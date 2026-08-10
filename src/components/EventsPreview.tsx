@@ -206,11 +206,56 @@ export function EventsPreview() {
     return (
         <section className="bg-paper py-24 md:py-32" id="events">
             <Container>
-                <div className="max-w-[65ch]">
-                    <h2 className="text-3xl font-semibold leading-[1.02] tracking-[-0.025em] text-ink md:text-4xl">
+                <div>
+                    {/* HEADLINE SCALE. This section used to opt out of the page's
+                        type scale with `text-3xl md:text-4xl`, which capped at
+                        36px while six sibling sections ran a clamp topping out
+                        between 48px and 64px. One page cannot argue that it is
+                        one type system and then run two.
+
+                        IT TAKES THE FAMILY'S SMALLEST CAP, `clamp(2rem, 4vw, 3rem)`,
+                        which is FAQ's value verbatim rather than a seventh
+                        number, and that choice is the whole point: this is the
+                        one section on the page whose headline must stay
+                        subordinate to another object in its own band. The
+                        featured date below runs `clamp(2.75rem, 7vw, 4.5rem)`
+                        and the design audit called it the best object on the
+                        page, so the headline is sized to yield to it. Resolved
+                        against the date at the four measured widths:
+
+                          360px   32.00px headline vs 44.00px date  (date 1.38x)
+                          768px   32.00px           vs 53.76px      (date 1.68x)
+                          1366px  48.00px           vs 72.00px      (date 1.50x)
+                          1920px  48.00px           vs 72.00px      (date 1.50x)
+
+                        The desktop gap narrows from 2.00x to 1.50x and that is
+                        stated rather than hidden. The date keeps three further
+                        axes of dominance that the headline does not touch: it is
+                        `wght 700` against this line's 600, it is `--accent`
+                        (7.054 light, 5.517 dark on `--paper`) against `--ink`,
+                        and it carries the 3px accent rule. Nothing here is
+                        raised above or level with it.
+
+                        MEASURE. The 65ch cap moves off this wrapper and onto the
+                        paragraph, so the headline carries its own measure in its
+                        own ch, which is what ValueProps and PartnersStrip already
+                        do. 26ch is ValueProps' value. Line counts were computed
+                        from the real glyph advances in
+                        `public/fonts/archivo-variable-latin.woff2` at `wght 600`
+                        with the -0.025em tracking included: the string sets at
+                        539.3px on one line at 48px against a 717.6px measure, so
+                        it is one line at 768px and above and two at 360px ("The
+                        next meetup in" / "Austin"), which is what it already did.
+                        The cap is inert at all four widths and is kept for the
+                        case the arithmetic does not model: `font-display: swap`
+                        paints a fallback face first, and 717.6px of measure
+                        absorbs a wider fallback where the old 595.9px sat much
+                        closer to the line. That is a layout-shift argument, not
+                        a wrapping one. */}
+                    <h2 className="max-w-[26ch] text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.02] tracking-[-0.025em] text-ink">
                         The next meetup in Austin
                     </h2>
-                    <p className="mt-5 text-lg leading-relaxed text-muted">
+                    <p className="mt-5 max-w-[65ch] text-lg leading-relaxed text-muted">
                         One meetup a month, in person. Open to anyone building a company here, and
                         to the investors, attorneys and operators who work with founders crossing
                         borders. You do not need to be a member to attend.
@@ -409,6 +454,25 @@ export function EventsPreview() {
                     </p>
                 )}
 
+                {/* ONE ACTION, and the gallery link that stood beside it is
+                    DELETED as of 2026-08-10 rather than kept.
+
+                    That link existed because this section was the only place a
+                    home page reader could reach `/gallery` from, and the
+                    comment that stood here argued at length that a tenth home
+                    section was not worth its cost. A design pre-flight then
+                    measured the built page and found the middle third still
+                    flat over 5,649px, which is the failure the photography
+                    round existed to fix, so the section was built after all and
+                    sits two sections below this one. `GalleryPreview.tsx`
+                    carries the whole argument, including the part where the
+                    cost this comment named was real and was paid on purpose.
+
+                    With that section on the page, a second link to the same
+                    route four thousand pixels above it is redundancy rather
+                    than emphasis, and it would put three links to `/gallery` on
+                    one document counting the footer. This section is the
+                    meetups. The action it keeps is its own. */}
                 <div className="mt-12">
                     <ButtonLink to="/events" variant="outline" size="lg">
                         See all meetups
