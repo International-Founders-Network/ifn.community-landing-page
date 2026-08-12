@@ -176,22 +176,34 @@ export function Footer() {
                             hiring, fundraising, and building a network from zero.
                         </p>
                         {/*
-                         * The venue partner is described rather than named. The
-                         * partner names live on the three partner surfaces only
+                         * THE VENUE PARTNER IS NO LONGER REFERRED TO HERE AT
+                         * ALL, which retires this note's original subject rather
+                         * than satisfying it. The line used to read "Six-plus
+                         * months of monthly meetups, hosted by our venue
+                         * partner", and the rule it was obeying was that the two
+                         * partner names live only on the three partner surfaces
                          * (the home PartnersStrip, /partners, partnersData.ts)
                          * plus the factual event address printed from the events
-                         * feed. This line renders on all eighteen routes, which
-                         * is exactly the footprint the founder asked to shrink.
+                         * feed, so this line described the partner instead of
+                         * naming it. It now mentions no partner in any form,
+                         * which satisfies that cap trivially. The cap itself is
+                         * unchanged and still binds every other surface.
                          *
-                         * No place name here on purpose: the paragraph directly
-                         * above this one already names Austin ("starting in
-                         * Austin", previously "moved to Austin, Texas"), and
-                         * both sit in the same column of the same block. The
-                         * wording above changed in the repositioning; the reason
-                         * this line stays place-free did not.
+                         * TWO OTHER THINGS WENT WITH THAT WORDING. The
+                         * "six-plus months" count is gone from the footer, so
+                         * the recurrence claim now lives only in `ValueProps`
+                         * and `FinalCTA` on the home page; and the line now
+                         * names Austin, which the note here previously forbade
+                         * on the grounds that the paragraph above already did.
+                         * That guard is deliberately dropped: this line is the
+                         * footer's only remaining statement of what IFN runs,
+                         * it renders on all eighteen routes, and on the
+                         * seventeen that are not the landing page it is worth
+                         * more than the repetition costs.
                          */}
                         <p className="max-w-sm text-sm text-muted">
-                            Six-plus months of monthly meetups, hosted by our venue partner.
+                            Monthly meetups in Austin, with practical resources and optional
+                            membership.
                         </p>
                     </div>
 

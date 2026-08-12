@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import type { MotionProps } from 'framer-motion';
 import { Container } from './Container';
 
@@ -213,26 +214,103 @@ const rowMotion: MotionProps = {
 /** Children of a group: they take their state from the parent, not a viewport. */
 const childMotion: MotionProps = { variants: row };
 
-/* THE `Mark` COMPONENT AND ITS `markMotion` VARIANT WERE DELETED HERE, and the
-   deletion is mechanical rather than a design decision of this file's making.
-   Row 2's title was the section's last call site, and the founder's copy edit
-   replaced that title ("A meetup you can put in your calendar") with one that
-   makes no checkable claim ("A monthly place to meet the network"). With no
-   call site the component is unreachable and eslint fails the build on it,
-   which is exactly what happened to PartnersStrip's own `Mark` in 6990b9c when
-   its single marked phrase was removed.
+/**
+ * THE MARK, REINSTATED. It was deleted one commit ago, when the founder's copy
+ * edit took away row 2's marked title and left the component with no call site.
+ * The next founder pass put four marks into this section, so it is back, and
+ * the round trip is recorded rather than hidden because the deletion note said
+ * to copy it back from `HowItWorks.tsx` if a marked phrase ever returned. That
+ * is what happened, and that file is where this construction came from.
+ *
+ * IT IS NOW USED IN HEADINGS RATHER THAN IN BODY COPY, WHICH CHANGED TWO
+ * DETAILS OF IT. The version deleted last commit carried `pb-[0.18em]` and
+ * `leading-[1.15]`, both tuned for a phrase sitting inside a 1.6 body
+ * paragraph. Every call site now is an `h2` or an `h3` at `leading-[1.02]` or
+ * `[1.12]`, where an inline-block that forces its own 1.15 line height makes
+ * the heading's line box taller and can move the rule off the words it marks.
+ * So the rule is absolutely positioned at `-bottom-1` instead, contributing no
+ * height at all, which is the shape `HowItWorks` and `Hero` both use.
+ *
+ * DESCENDERS, MEASURED PER PHRASE RATHER THAN ASSUMED, because an absolutely
+ * positioned rule has no reserve to fall back on. "Built for founders", "meet
+ * the network" and "Resources" carry no descender at all. "been through"
+ * carries the `g` of "through", and it is the one that decides this value.
+ * Clearance between the bottom of that `g` and the top of the rule, read off a
+ * rendered page rather than derived:
+ *
+ *   360px   font 22px   1.6px
+ *   768px   font 25px   1.5px
+ *   1024px  font 32px   1.8px
+ *   1366px  font 32px   1.8px
+ *   1920px  font 32px   1.8px
+ *
+ * It clears at every width and it clears by less than two pixels, so this is a
+ * real constraint and not a comfortable one. `-bottom-1` is the largest offset
+ * that still reads as a mark on the phrase rather than as a rule floating under
+ * it, and 1.5px is the price. RE-MEASURE BEFORE MARKING ANY PHRASE HERE THAT
+ * CONTAINS A `p`, `q`, `y` OR `j`: those hang lower than `g` in Archivo and
+ * would land on the rule at these offsets. A phrase with no descender at all
+ * has roughly 8px of slack and is always safe.
+ *
+ * `whitespace-nowrap` is deliberately NOT set, unlike the version FAQ used to
+ * carry. These phrases sit in headings that are meant to wrap, and a nowrap
+ * phrase inside a wrapping heading pushes the whole phrase to the next line and
+ * wrecks the rag. The trade is that a phrase breaking across two lines would
+ * render its rule under the full block width; that is why the line counts for
+ * all four marked headings were measured at eight widths rather than eyeballed.
+ *
+ * THE OBSERVER WATCHES THE PHRASE, NEVER THE BAR. This file used to do the
+ * opposite, driving the rule with `whileInView` plus `viewport: { amount: 0.5 }`
+ * on the bar itself. The reason for the change is the one the FAQ's own Mark
+ * recorded before it was deleted, and it is a real hazard rather than a
+ * stylistic preference: at rest the bar is `scaleX(0)`, a transformed element
+ * reports a zero-area rect to `IntersectionObserver`, and a 0.5 threshold
+ * against zero area is a threshold there is no reason to expect any engine to
+ * satisfy. The phrase always has real area, so observing it cannot fail that
+ * way in any engine.
+ *
+ * HONEST ABOUT THE EVIDENCE, because the temptation is to claim a caught bug.
+ * A rendered check did show one of these four marks undrawn, but that check
+ * jumped the viewport between two scroll positions and the row in question was
+ * off-screen at both, so it never should have drawn and the run proves nothing
+ * about the bar-observer version. Re-run with a gradual scroll, ALL FOUR draw
+ * under either construction, at 900px and 1200px viewport heights. So this is
+ * a change made on the mechanism rather than on a reproduction.
+ *
+ * What is not in doubt is the cost of the failure if it ever does happen.
+ * `--accent` against surrounding `--ink` measures 2.547 in light mode, under
+ * G183's 3.0 floor, so an undrawn rule leaves a phrase whose emphasis is
+ * carried by hue alone, which is the exact thing the 3px rule exists to
+ * prevent. A silent, intermittent, engine-dependent failure of that kind is
+ * worth designing out even without a reproduction in hand.
+ *
+ * `animate` with an explicit value rather than a variant label, for the second
+ * reason the deleted FAQ component recorded: a label that silently fails to
+ * resolve leaves the child at its CSS default, `scaleX(1)`, which IS the drawn
+ * state, so a broken mark and a working mark would look identical after
+ * scroll-in. `animate={{ scaleX: drawn ? 1 : 0 }}` has no such state.
+ * `initial={false}` so first paint takes the animate value without animating,
+ * which is what makes the reduced-motion branch render drawn and at rest with
+ * no observer involved at all.
+ */
+function Mark({ children, reduce }: { children: React.ReactNode; reduce: boolean }) {
+    const phraseRef = useRef<HTMLSpanElement>(null);
+    const inView = useInView(phraseRef, { once: true, amount: 0.6 });
+    const drawn = reduce || inView;
 
-   DO NOT REINSTATE IT BY FINDING SOMETHING ELSE TO MARK. The obvious candidate
-   is sitting right there in row 2's new body, "published openly on Luma and
-   Meetup", which the events feed further down this page would check perfectly
-   well. Marking it is still forbidden: REDESIGN-PLAN.md section 2 makes the
-   licence a CAP AND NOT A QUOTA, this repo has now twice recorded that a
-   section with zero marks passes, and relicensing a mark onto a different
-   phrase to keep a count up is the precise defect section 4.2 exists to stop.
-
-   If a future edit gives this section a genuinely checkable phrase that wants
-   marking, copy the component back from `HowItWorks.tsx`, which still carries
-   the same construction with its documentation intact. */
+    return (
+        <span ref={phraseRef} className="relative inline-block text-accent">
+            {children}
+            <motion.span
+                aria-hidden="true"
+                className="absolute -bottom-1 left-0 block h-[3px] w-full origin-left bg-accent"
+                initial={false}
+                animate={{ scaleX: drawn ? 1 : 0 }}
+                transition={reduce ? { duration: 0 } : { duration: 0.26, ease: EASE }}
+            />
+        </span>
+    );
+}
 
 /* ---------------------------------------------------------------------------
    CONTENT. Every claim below is checked against PRODUCT.md "Evidence on Hand":
@@ -287,22 +365,34 @@ export function ValueProps() {
     const statements: Statement[] = [
         {
             place: 'md:col-start-1 md:col-span-7',
-            title: 'Founders who have been through it before',
+            title: (
+                <>
+                    Founders who have <Mark reduce={reduce}>been through</Mark> it before
+                </>
+            ),
             body: 'You will meet founders who have opened a U.S. bank account, worked through a visa, incorporated here, or made a first hire across borders. The perspective comes from someone who has been through it, not from a search result.',
         },
         {
             place: 'md:col-start-3 md:col-span-8',
-            title: 'A monthly place to meet the network',
+            title: (
+                <>
+                    A monthly place to <Mark reduce={reduce}>meet the network</Mark>
+                </>
+            ),
             body: 'Once a month in downtown Austin, founders, operators, investors and advisors meet in the same room. Every date is published openly on Luma and Meetup, so you can see the history before you commit to anything.',
         },
         {
             place: 'md:col-start-2 md:col-span-7',
-            title: 'Introductions from someone who knows you both',
+            title: 'Introductions through people who know your work',
             body: 'Introductions happen the ordinary way: you meet someone at a meetup, they know the investor, the attorney or the first engineer you need, and they say so. A warm introduction from a founder who has worked with you is worth more than a list.',
         },
         {
             place: 'md:col-start-4 md:col-span-8',
-            title: 'Notes and templates you can use the same week',
+            title: (
+                <>
+                    <Mark reduce={reduce}>Resources</Mark> you can use the same week
+                </>
+            ),
             body: 'The resource library covers immigration paperwork, U.S. banking, first hires, raising here and getting a product into the U.S. market, written from the questions founders actually bring us. Membership adds a private member channel and a members-only call each month.',
         },
     ];
@@ -318,11 +408,17 @@ export function ValueProps() {
                         {...(reduce ? {} : childMotion)}
                         className="max-w-[26ch] text-[clamp(1.875rem,4.2vw,3rem)] font-medium leading-[1.02] tracking-[-0.025em] text-ink"
                     >
-                        Built for founders starting from{' '}
+                        <Mark reduce={reduce}>Built for founders</Mark> starting from{' '}
                         {/* Emphasis is a weight step inside one family, per plan
-                            section 4.3. Never a second family, never italic, and
-                            never colour: the accent is licensed to checkable
-                            phrases and "zero" is not one. */}
+                            section 4.3. Never a second family and never italic.
+                            "zero" stays a WEIGHT step and does not become a
+                            mark: the accent is licensed to checkable phrases and
+                            "zero" is not one, which was this comment's original
+                            point and survives the founder's mark landing on the
+                            opening phrase of the same heading. The two devices
+                            now sit in one line, which is legible precisely
+                            because they are different devices rather than two
+                            shades of the same one. */}
                         <span className="font-extrabold">zero</span> in a new country
                     </motion.h2>
 

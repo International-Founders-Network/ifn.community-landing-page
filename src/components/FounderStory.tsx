@@ -168,37 +168,45 @@ import { photos } from '../data/photos.generated';
  * follows and the photograph sits below both. Nothing here is focusable, so the
  * only reading order that exists is the DOM one and it matches.
  *
- * THE MARK
- * --------
- * Section 2 licenses the accent to a phrase "checkable against a named artifact
- * on this page". Exactly one phrase in this section takes it: the `<dt>`
- * "Hosted by our venue partner", and it is checkable twice over without leaving
- * the page. `PartnersStrip` names which partner is the venue in its running
- * prose, and `EventsPreview` prints the featured meetup's `location_name`
- * straight from the feed, which is the street address. It is accent type plus a
- * 3px accent rule, which is both halves of the mark rather than colour alone,
- * so the 2.547 light and 3.256 dark reading of accent against surrounding ink
- * body copy (WCAG 1.4.1, technique G183) is never the mechanism carrying
- * meaning.
+ * THE MARK, AND WHY THERE ISN'T ONE ANY MORE
+ * ------------------------------------------
+ * This section carried exactly one marked phrase: the `<dt>` "Hosted by our
+ * venue partner", in accent type under a 3px accent rule. It was licensed twice
+ * over without leaving the page, by `PartnersStrip` naming which partner is the
+ * venue and by `EventsPreview` printing the featured meetup's street address
+ * from the feed.
  *
- * **Standing condition on this mark, and it is a deletion instruction rather
- * than a relicensing one.** The bundled events snapshot's last row is dated
- * 2026-12-25. `EventsPreview` filters to upcoming dates only, so once that date
- * passes and no newer rows arrive the section renders its empty state and stops
- * printing an address. The `PartnersStrip` half of the licence would survive
- * that, but the half that makes the phrase concrete would not. The correct fix
- * at that point is to DELETE the mark, not to hunt for a third artifact: the
- * accent licence is a cap and not a quota, a section with zero marks is
- * compliant, and a section with an unevidenced mark is exactly the defect plan
- * section 4.2 was rewritten to stop.
+ * THE FOUNDER'S HIGHLIGHT AUDIT REMOVED IT, and the licence is not the reason.
+ * The audit fixed the page's complete list of marked phrases at five, all of
+ * them in `Hero` and `ValueProps`; nothing in this file is on that list. The
+ * fact survives and is retitled to "Hosted in downtown Austin", which drops the
+ * partner reference the mark was hanging off and states the same thing as a
+ * plain fact. The `marked` field, the conditional `<dt>` branch and
+ * `markVariants` all went with it, because a boolean nothing sets is dead code
+ * and eslint says so.
  *
- * Two phrases were considered and rejected, recorded so the licence stays
- * countable rather than felt:
- *   - "more than six months of monthly meetups" is NOT marked. Section 7 states
- *     that recurrence is carried by copy alone: the events index is upcoming
- *     only and no photograph on this page prints a date. Marking a claim this
- *     page cannot evidence is exactly what the licence forbids, and it is not
- *     changed by the photograph arriving, since the frame carries no date.
+ * THE STANDING CONDITION THAT USED TO LIVE HERE IS DISCHARGED, not lost. It
+ * said: the bundled events snapshot's last row is dated 2026-12-25, and once
+ * that date passes with no newer rows, `EventsPreview` renders its empty state,
+ * stops printing an address, and the mark loses the half of its licence that
+ * made it concrete; at that point DELETE the mark rather than hunting for a
+ * third artifact. The mark is already deleted, so that trap is closed. The rule
+ * behind it still governs every other section: the accent licence is a cap and
+ * not a quota, a section with zero marks is compliant, and a section with an
+ * unevidenced mark is exactly the defect plan section 4.2 was rewritten to
+ * stop.
+ *
+ * Two phrases were considered for the mark and rejected before it was removed
+ * altogether. Both records are kept, because both explain something about the
+ * copy rather than only about the accent:
+ *   - "more than six months of monthly meetups" was NOT marked, because section
+ *     7 states that recurrence is carried by copy alone: the events index is
+ *     upcoming only and no photograph on this page prints a date, so this page
+ *     cannot evidence the claim. **That claim has since left this section
+ *     entirely.** The founder's copy edit cut it from the opening paragraph and
+ *     from the rail's first fact, which now reads "Monthly meetups in Austin"
+ *     with no count. It survives elsewhere on the page, in `ValueProps` and in
+ *     `FinalCTA`; if it is ever reinstated here, it still may not be marked.
  *   - The Yani Partners shared founders disclosure was the second candidate.
  *     THE WHOLE QUESTION IS NOW MOOT AND THE SENTENCE IS GONE FROM THIS FILE.
  *     See the note below on why.
@@ -237,26 +245,27 @@ import { photos } from '../data/photos.generated';
 interface Fact {
     title: string;
     detail: string;
-    /**
-     * True on the one `<dt>` that carries the accent mark. See the note above
-     * for why this fact and not the other two.
-     */
-    marked?: boolean;
 }
+
+/* The `marked?: boolean` field is gone from `Fact`, and with it the one `<dt>`
+   that rendered in `--accent` under a 3px rule. The founder's highlight audit
+   set the page's complete list of marked phrases and this rail's is not on it.
+   The fact itself survives, retitled: "Hosted by our venue partner" is now
+   "Hosted in downtown Austin", in `--ink` like its two neighbours. See the
+   deletion note in the header comment. */
 
 const record: Fact[] = [
     {
         title: 'Every month, in person',
-        detail: 'More than six months of monthly meetups in Austin, with every date published on Luma and Meetup.',
+        detail: 'Monthly meetups in Austin, with every date published openly on Luma and Meetup.',
     },
     {
-        title: 'Hosted by our venue partner',
-        detail: 'A fixed home for the meetup in the middle of the Austin startup community.',
-        marked: true,
+        title: 'Hosted in downtown Austin',
+        detail: 'A regular place to gather in the middle of the Austin startup community.',
     },
     {
         title: 'Structured one-to-one networking',
-        detail: 'Our format partner pairs founders into short conversations, so nobody spends the meetup standing alone.',
+        detail: 'Founders are paired for short conversations, so nobody spends the meetup standing alone.',
     },
 ];
 
@@ -310,20 +319,12 @@ const railVariants = {
     },
 } as const;
 
-/**
- * Delay 0.5 is measured against the parent above rather than guessed. The
- * parent starts at 0.12 and runs 0.5 on `cubic-bezier(0.16, 1, 0.3, 1)`, which
- * is heavily front loaded: it passes 0.85 opacity by about t=0.30 and is
- * visually settled well before t=0.5. So the rule is drawn onto a fact the
- * reader is already looking at, which is the whole point of the gesture.
- */
-const markVariants = {
-    hidden: { scaleX: 0 },
-    shown: {
-        scaleX: 1,
-        transition: { duration: 0.26, delay: 0.5, ease: [0.16, 1, 0.3, 1] },
-    },
-} as const;
+/* `markVariants` was deleted here with the rail's mark. It drove the 3px rule
+   from `scaleX(0)` on a 0.5s delay, timed so the rule was drawn onto a fact the
+   reader was already looking at rather than racing its own parent's fade. That
+   timing argument is the reusable part and is preserved in `ValueProps.tsx`,
+   which still runs a mark on the same easing. `railVariants` above is
+   untouched: it drives the whole `<dl>` and never depended on the mark. */
 
 export function FounderStory() {
     const reduce = useReducedMotion();
@@ -364,18 +365,16 @@ export function FounderStory() {
                         className="max-w-[62ch] space-y-7 text-[1.0625rem] leading-[1.6] text-ink lg:col-start-1 lg:row-start-2"
                     >
                         <p>
-                            IFN began as a room full of international founders in Austin, and it has met every month
-                            for more than six months. The membership, the resource library and this website came
-                            afterwards, built out of what people kept asking for in that room: how to handle a visa
-                            while running a company, how to open a U.S. bank account, how to raise from investors who
-                            have never heard of your last company, how to rebuild a professional network from nothing.
+                            IFN began as a room full of international founders in Austin. The membership, the resource
+                            library and this website came afterwards, built out of what people kept asking for in that
+                            room: how to handle a visa while running a company, how to open a U.S. bank account, how to
+                            raise from investors who have never heard of your last company, how to rebuild a
+                            professional network from nothing.
                         </p>
                         <p>
                             We are a small, founder-run organization, so we would rather show you what already exists
-                            than describe a plan. Our venue partner hosts the meetups in downtown Austin, and our
-                            format partner runs the structured one-to-one networking. The monthly evening is the part
-                            that has been running longest, and it is the reason the rest of this exists rather than the
-                            whole of what we do.
+                            than describe a plan. We host the meetups in downtown Austin, and the rest of IFN is built
+                            from the questions founders keep bringing into the room.
                         </p>
                     </motion.div>
 
@@ -396,35 +395,8 @@ export function FounderStory() {
                     >
                         {record.map((fact) => (
                             <div key={fact.title}>
-                                <dt
-                                    className={
-                                        fact.marked
-                                            ? 'text-base font-bold leading-[1.35] tracking-tight text-accent'
-                                            : 'text-base font-bold leading-[1.35] tracking-tight text-ink'
-                                    }
-                                >
-                                    {fact.marked ? (
-                                        // `inline-block` shrink wraps the rule to
-                                        // the phrase rather than to the column, so
-                                        // the mark reads as a mark and not as a
-                                        // divider. The rule is a real element
-                                        // rather than a pseudo element because a
-                                        // pseudo element cannot be driven by
-                                        // framer-motion, and it is `aria-hidden`
-                                        // because it carries no information the
-                                        // words do not already carry.
-                                        <span className="inline-block">
-                                            {fact.title}
-                                            <motion.span
-                                                aria-hidden="true"
-                                                className="mt-[0.3em] block h-[3px] bg-accent"
-                                                style={{ transformOrigin: 'left' }}
-                                                variants={reduce ? undefined : markVariants}
-                                            />
-                                        </span>
-                                    ) : (
-                                        fact.title
-                                    )}
+                                <dt className="text-base font-bold leading-[1.35] tracking-tight text-ink">
+                                    {fact.title}
                                 </dt>
                                 <dd className="mt-2 text-[0.9375rem] leading-[1.6] text-muted">{fact.detail}</dd>
                             </div>

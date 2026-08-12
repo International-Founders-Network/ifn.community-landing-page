@@ -86,9 +86,8 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
             title: 'Come to a meetup',
             body: (
                 <>
-                    We meet in person once a month in{' '}
-                    <Mark reduce={reduce}>downtown Austin</Mark>, at the address on the next
-                    meetup listing below. The speed-networking part is run by our format
+                    We meet in person once a month in downtown Austin, at the address on the
+                    next meetup listing below. The speed-networking part is run by our format
                     partner, so you are paired into short one-to-one conversations rather than
                     left to introduce yourself to strangers on your own.
                 </>
@@ -280,72 +279,24 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
     );
 }
 
-/**
- * THE MARK (plan section 2, and section 6 behaviour 2).
- *
- * The accent is licensed to exactly three roles on this page, and this is the
- * first: accent type plus a 3px accent rule under a phrase that is checkable
- * against a named artifact ON THIS PAGE.
- *
- * THE MARK WAS RELICENSED ON 2026-08-10 AND THE OLD LICENCE MUST NOT COME BACK.
- * It used to sit on the format partner's company name, which qualified because
- * PartnersStrip prints that name further down the page. The founder has since
- * ruled that the two partner names appear only on the partner surfaces (the
- * home PartnersStrip, /partners, and partnersData.ts), so that phrase is gone
- * from this section and its licence went with it.
- *
- * The mark now sits on "downtown Austin", and its artifact is the events feed:
- * `EventsPreview.tsx:355` prints `featured.location_name` from
- * `src/data/events.json`, and all ten rows carry "701 Brazos St, Austin, TX
- * 78701", so a reader can check the phrase two sections further down without
- * leaving the page. It is the only marked phrase in this section, so the
- * section spends one of the two marks the density rule allows per viewport.
- *
- * The sentence says "the next meetup listing" in the singular ON PURPOSE. Only
- * the FEATURED event on this page prints its venue; the "Also on the calendar"
- * index rows below it print dates and titles and no address at all. A plural
- * "every event listing" would be a claim this page falsifies four rows further
- * down, so it is not made here. (`/events` is a different surface: `EventCard`
- * prints `location_name` on every card there.)
- *
- * "downtown Austin" is the footprint audit's own derived vocabulary rather than
- * a phrase from the founder's brief, and the audit flagged it for a single
- * founder veto across six files. If it is vetoed, the whole phrase goes, not
- * just the word "downtown", and the fallback that needs no new vocabulary is to
- * mark "once a month", which the dated index two sections below checks just as
- * directly.
- *
- * STANDING CONDITION. The bundled feed's last row is dated 2026-12-25. If the
- * feed ever resolves empty, `EventsPreview` renders its empty state, this mark
- * loses its artifact, and the correct fix is to DELETE the mark, not to
- * relicense it a second time. The accent licence in REDESIGN-PLAN.md section 2
- * is a cap and not a quota: a section with zero marks is compliant, a section
- * with an unevidenced mark is exactly the defect plan section 4.2 exists to
- * stop.
- *
- * The mark is emphasis, not a link, so the G183 link rule does not reach it,
- * and it never depends on colour alone in any case: the 3px rule is a
- * non-colour indicator that survives a reader who cannot see the hue. Accent
- * type on this ground measures 6.393 light and 5.011 dark, and the rule
- * measures the same against the same ground.
- *
- * The draw is the one animation on this page that carries meaning rather than
- * polish: it enacts a hand marking the checkable part of a sentence. Under
- * reduced motion `initial` is `false`, so the rule mounts at full width and no
- * transform is written at all.
- */
-function Mark({ children, reduce }: { children: React.ReactNode; reduce: boolean | null }) {
-    return (
-        <span className="relative inline-block whitespace-nowrap font-semibold text-accent">
-            {children}
-            <motion.span
-                aria-hidden="true"
-                className="absolute -bottom-1 left-0 h-[3px] w-full origin-left bg-accent"
-                initial={reduce ? false : { scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true, amount: 0.6 }}
-                transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
-            />
-        </span>
-    );
-}
+/* THE `Mark` COMPONENT WAS DELETED HERE, with its 53 lines of licence
+   documentation, and the phrase it wrapped ("downtown Austin") is now plain
+   text in step 2 above. The founder's highlight audit set the page's complete
+   list of marked phrases, and it holds five, all of them in `Hero` and
+   `ValueProps`. Nothing in this section is on that list, so this section
+   carries no mark, and with no call site left the component was unreachable
+   and eslint failed the build on it.
+
+   THE SENTENCE DID NOT CHANGE, only its emphasis. "We meet in person once a
+   month in downtown Austin, at the address on the next meetup listing below"
+   still says exactly what it said, and it is still true of the events feed
+   further down this page, which prints the featured meetup's street address
+   from `src/data/events.json`. The claim kept its evidence; it lost its
+   underline.
+
+   WHAT WENT WITH THE COMPONENT, so it is not mourned as a loss: a standing
+   condition saying that if the events feed ever resolved empty the mark must
+   be DELETED rather than relicensed onto another phrase. That instruction is
+   now moot here, and the general rule behind it is recorded in `ValueProps`
+   and in REDESIGN-PLAN.md section 2. The construction itself survives in
+   `ValueProps.tsx` and `Hero.tsx` if this section ever needs it back. */
