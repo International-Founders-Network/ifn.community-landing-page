@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from './Container';
@@ -28,13 +28,12 @@ const MEETUP_URL = 'https://www.meetup.com/international-founders-network-austin
  * non-text floor on its own. `--rule` measures 3.682 light and 3.638 dark on
  * `--band` at rest and promotes to `--ink` at 16.281 and 16.318 on hover.
  *
- * THIS SECTION NO LONGER HAS MARKS AT ALL, so the paragraph that used to sit
- * here is retired rather than corrected. It read that the two marked phrases
- * carried a 3px `--accent` rule and that no marked answer contained a link, so
- * a 1px `--rule` underline and a 3px `--accent` mark were never asked to be
- * told apart inside one paragraph. With zero marks that is now trivially and
- * permanently true, and the underline below is the only line-like device in
- * this section. See the deletion note further down.
+ * The two marked phrases in this section carry a 3px `--accent` rule, and no
+ * marked answer contains a link. That is checked rather than assumed: the two
+ * marks live in the `visas` and `austin` answers, and neither of those answers
+ * has an anchor in it. So the page never sets a 1px `--rule` underline and a
+ * 3px `--accent` mark inside the same paragraph, and the two devices are never
+ * asked to be told apart at close range.
  *
  * Focus ring: the plan's two-layer construction, 2px `--paper` inner plus 2px
  * `--ink` outer, identical on every ground and in both modes. Tailwind's
@@ -60,30 +59,76 @@ const MEETUP_URL = 'https://www.meetup.com/international-founders-network-austin
 const linkStyles =
     'font-medium text-ink underline decoration-rule decoration-1 underline-offset-4 transition-colors hover:decoration-ink focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
 
-/* THE `Mark` COMPONENT WAS DELETED HERE, with the 30 lines documenting its
-   32-character wrap cap and its `useInView`-on-the-phrase correctness
-   argument. The founder's highlight audit fixed the page's complete list of
-   marked phrases at five, all in `Hero` and `ValueProps`, and this section's
-   two are not among them.
+/**
+ * The mark. REDESIGN-PLAN.md motion behaviour 2, and the only animation in this
+ * section that carries meaning rather than sequence.
+ *
+ * A 3px `--accent` rule under a phrase, drawn left to right over 260ms the
+ * first time it enters view. On `--band` it measures 6.393 in light and 5.011
+ * in dark, both against a 3.0 non-text floor. The marked words themselves stay
+ * `--ink`: the mark is the rule, never the colour, so it cannot be confused
+ * with the accent-as-type role the plan measures at 2.547 against surrounding
+ * body copy.
+ *
+ * `whitespace-nowrap` is load bearing and it caps how long a marked phrase may
+ * be. The bar is absolutely positioned against this wrapper, so if the phrase
+ * wrapped to a second line the bar would render under line two spanning the
+ * full block width, which is visibly broken. The cap is computed at the
+ * NARROWEST measure rather than the comfortable one: below `lg` the answer runs
+ * full width, so at a 320px viewport `Container`'s `px-4` leaves 288px, and at
+ * 17px body with the plan's 0.529em advance that is 8.99px per character, so
+ * **32 characters**. Both shipped marks are checked against it below.
+ *
+ * `-bottom-0.5` puts the bar 2px below the inline-block's box, which is roughly
+ * 2.75px clear of an Archivo descender at 17px/1.6 and still 1.75px above the
+ * next line box's ascender top. Both clearances were computed rather than
+ * eyeballed, because "Not as a professional service" contains a `p`.
+ *
+ * Reduced motion resolves to the drawn resting state explicitly, via
+ * `useReducedMotion`, rather than relying on `MotionConfig reducedMotion="user"`
+ * alone. `MotionConfig` would disable the transform and leave the element at its
+ * `initial` until the viewport observer fires; naming the resting state here
+ * means the mark is drawn whether or not that observer ever runs.
+ */
+function Mark({ children }: { children: ReactNode }) {
+    const reduce = useReducedMotion();
+    const phraseRef = useRef<HTMLSpanElement>(null);
+    const inView = useInView(phraseRef, { once: true, amount: 0.6 });
+    const drawn = reduce || inView;
 
-   BOTH SENTENCES SURVIVE WORD FOR WORD. "Not as a professional service" and
-   "the in-person part of IFN is Austin only" are still the opening clauses of
-   their answers, still in the "What IFN does not do" cluster, still the first
-   thing a reader meets on opening either one. Only the accent underline is
-   gone. That matters more here than anywhere else on the page, because the
-   first of those two is the sentence keeping this site's promise not to
-   overpromise immigration, legal or financial guidance, and a highlight audit
-   is not allowed to weaken it. It has not: an underline was removed, a denial
-   was not.
-
-   ONE INVARIANT THIS DELETION RETIRES, recorded because the note on
-   `linkStyles` above still refers to it. The page used to have to guarantee
-   that no marked answer contained a link, so that a 1px `--rule` underline and
-   a 3px `--accent` mark were never asked to be told apart inside one
-   paragraph. With no marks in this section that constraint is now
-   unconditionally satisfied, and a future edit adding a link to either answer
-   can no longer break it. If a mark ever returns here, the constraint returns
-   with it. */
+    return (
+        // `useInView` on the PHRASE rather than `whileInView` on the bar, and
+        // this is a correctness choice on two counts rather than a style one.
+        //
+        // The observer target has to be the phrase: at rest the bar is
+        // `scaleX(0)`, which renders a zero-area box, and an
+        // IntersectionObserver's handling of a zero-area target is not something
+        // to bet a visible design element on. The phrase always has real area.
+        //
+        // And the bar is driven by an explicit `animate` value rather than by a
+        // variant label inherited from a parent, because a label that silently
+        // fails to resolve leaves the child at its CSS default, `scaleX(1)`,
+        // which IS the drawn state. That failure is invisible in exactly the
+        // direction that matters: a broken mark and a working mark would look
+        // identical after scroll-in. `animate={{ scaleX: drawn ? 1 : 0 }}` has
+        // no such state.
+        //
+        // `initial={false}` so the first paint takes the animate value without
+        // animating: under reduced motion `drawn` is already true at mount, so
+        // the mark renders drawn and at rest with no observer involved at all,
+        // which is what REDESIGN-PLAN.md behaviour 2 asks for.
+        <span ref={phraseRef} className="relative inline-block whitespace-nowrap">
+            {children}
+            <motion.span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 -bottom-0.5 h-[3px] origin-left bg-accent"
+                initial={false}
+                animate={{ scaleX: drawn ? 1 : 0 }}
+                transition={reduce ? { duration: 0 } : { duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+            />
+        </span>
+    );
+}
 
 interface FaqEntry {
     id: string;
@@ -147,21 +192,24 @@ interface FaqCluster {
  * at", no "from", no "ask us about a discount".
  *
  * **What else changed, and what did not.** Grouping and order were set in an
- * earlier phase: the eight entries are three clusters. Nothing outside this
- * file reads that order, checked rather than assumed: `id` is consumed only as
- * a React key, there is no FAQ JSON-LD anywhere in the tree, and the section
- * anchor `#faq` sits on the `<section>` and does not move.
+ * earlier phase: the eight entries are three clusters, and two phrases already
+ * in the text are wrapped in `<Mark>`. Nothing outside this file reads that
+ * order, checked rather than assumed: `id` is consumed only as a React key,
+ * there is no FAQ JSON-LD anywhere in the tree, and the section anchor `#faq`
+ * sits on the `<section>` and does not move.
  *
- * The repositioning pass edited prose inside three answers (`meetup`, `visas`,
+ * The repositioning pass edits prose inside three answers (`meetup`, `visas`,
  * `austin`). No question text moved, no entry was added, removed or reordered,
- * and no cluster was renamed.
- *
- * The highlight audit that followed removed both `<Mark>` wrappers and the
- * component with them. NO SENTENCE CHANGED IN THAT PASS: "Not as a professional
- * service" and "the in-person part of IFN is Austin only" are byte for byte
- * what they were, and only the accent underline around the first few words of
- * each is gone. The 32-character wrap cap those two phrases were measured
- * against retires with the component that computed it.
+ * and no cluster was renamed. TWO OF THE THREE ARE THE MARKED ANSWERS, which
+ * the previous pass deliberately did not touch, so the invariant it was
+ * protecting is re-checked here rather than inherited: **neither marked answer
+ * gained a link.** `visas` and `austin` still contain no anchor of any kind, so
+ * the page still never sets a 1px `--rule` underline and a 3px `--accent` mark
+ * inside one paragraph, and the two devices are still never asked to be told
+ * apart at close range. **Neither marked PHRASE was reworded**: "Not as a
+ * professional service" is still 29 characters and "Austin only" is still 11,
+ * both under the 32-character wrap cap computed in `Mark`. Only the prose
+ * around them moved.
  *
  * **WHY THIS CLUSTER SURVIVED A BRIEF THAT ASKED FOR ITS OPPOSITE.** The
  * repositioning asks for confident "what founders get" phrasing in place of
@@ -318,7 +366,8 @@ const CLUSTERS: FaqCluster[] = [
                 question: 'Can IFN help with visas, U.S. banking, or incorporating?',
                 answer: (
                     <>
-                        Not as a professional service. Nobody at IFN is an immigration lawyer, an
+                        {/* 29 characters, under the 32-character wrap cap computed in `Mark`. */}
+                        <Mark>Not as a professional service</Mark>. Nobody at IFN is an immigration lawyer, an
                         accountant or a banker, and nothing we publish is legal or financial advice. What you
                         get is the next best thing: people in the room who have already been through the same
                         visa process, opened the same accounts and registered the same kind of company, telling
@@ -333,8 +382,10 @@ const CLUSTERS: FaqCluster[] = [
                 question: 'I am not in Austin. Is IFN useful to me?',
                 answer: (
                     <>
-                        We would rather say this plainly: the in-person part of IFN is Austin
-                        only. There are no other chapters, and we are not opening any right
+                        {/* 11 characters. The full clause "the in-person part of IFN is Austin only"
+                            runs 39 and would wrap below 360px, so the mark takes the denial itself. */}
+                        We would rather say this plainly: the in-person part of IFN is{' '}
+                        <Mark>Austin only</Mark>. There are no other chapters, and we are not opening any right
                         now. Everything else works from anywhere: the member channel, the resource library and
                         the monthly office-hours call are all remote. The in-person evenings are the strongest
                         part of IFN, and they happen here.
@@ -386,24 +437,20 @@ const CLUSTERS: FaqCluster[] = [
  * pushed the triggers to `<h4>`. Grouping is added semantics; it does not get to
  * move a heading level the plan names.
  *
- * **Mark budget: zero, and this section is the reason that sentence needs
- * explaining.** It used to be two, one per denial answer, stated in those terms
- * because the READER, not the layout, decided how many marks were on screen
- * here, which was true of no other section: both marked answers were the only
- * two entries in the "What IFN does not do" cluster, so the only way to get two
- * marks into one viewport was to deliberately open both adjacent denials.
- *
- * The founder's highlight audit set the page's complete list of marked phrases
- * and neither of this section's two is on it, so the budget is now zero and the
- * reader-controlled density question disappears with it. That is compliant
- * rather than a gap, on the rule this repo has now applied four times over:
- * REDESIGN-PLAN.md section 2 makes the licence a cap and not a quota.
- *
- * Do not restore a mark here to "balance" the page. One candidate was already
- * considered and cut on density grounds when the budget was two: `different`
- * opens "Two things, and you can check both", which is the most explicitly
- * checkable sentence in the section. It stays unmarked, and now so does
- * everything else.
+ * **Mark budget: two, one per denial answer, one per answer maximum.** Stated in
+ * those terms because the reader, not the layout, decides how many marks are on
+ * screen here, which is true of no other section. The containment is what makes
+ * two safe against section 4's two-marks-per-viewport density rule: both marked
+ * answers are the only two entries in the "What IFN does not do" cluster, so the
+ * only way to put two marks in one viewport is to deliberately open both
+ * adjacent denials, and two is the licence rather than a breach of it. Every
+ * other answer carries zero, both default-open entries are unmarked, so the
+ * section's at-rest state carries no accent at all and the first mark a reader
+ * ever sees is one they asked for. One further mark was a genuine candidate and
+ * was cut for density: `different` opens "Two things, and you can check both",
+ * which is the most explicitly checkable sentence in the section, but marking it
+ * would have put a third mark in a cluster four rows above the other two with no
+ * structural guarantee about what is co-visible.
  *
  * No eyebrow. The plan's budget is 2 of 3 and both are spent on Hero and
  * PartnersStrip. No section numbers, no decorative dots, no icons on the rows.
@@ -686,10 +733,9 @@ function FAQItem({
                     characters and too narrow for five-sentence answers. At 1024px
                     and above it is 550px, or 61.2 characters. So the indent starts
                     at `lg`, where it fits, and the 65ch cap below governs the
-                    full-width case (80.1 characters unaided at 767px). There used
-                    to be a third measure here, a 32 character cap on a marked
-                    phrase computed against the full-width case at 320px; it
-                    retired with this section's marks. */}
+                    full-width case (80.1 characters unaided at 767px). The 32
+                    character cap on a marked phrase in `Mark` is computed against
+                    that full-width case at 320px, not against this one. */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 lg:gap-x-6">
                     <div className="max-w-[65ch] pb-10 text-[1.0625rem] leading-[1.6] text-ink lg:col-span-7 lg:col-start-6">
                         {answer}

@@ -73,55 +73,6 @@ const WORDS = ['International', 'Global', 'Immigrant'] as const;
 
 const WORD_INTERVAL_MS = 3000;
 
-/**
- * THE HERO'S MARK, AND WHY IT IS NOT THE SAME COMPONENT THE OTHER SECTIONS USE.
- *
- * Accent type plus a 3px accent rule, the page's standard mark construction.
- * Two things about it are specific to this file and neither is cosmetic.
- *
- * 1. IT IS DRIVEN BY `animate`, NEVER BY `whileInView`. The load-bearing comment
- *    on the entrance wrapper below bans `whileInView` anywhere in the hero,
- *    because this subtree is the largest contentful paint of the whole site and
- *    a viewport observer that never fires leaves its target at `initial`
- *    forever. Every other Mark in this codebase is a `whileInView` component
- *    and not one of them could be reused here without importing that failure
- *    mode into the LCP element. `initial` plus `animate` runs on mount, with no
- *    observer involved at all.
- *
- * 2. THE ANIMATED PROPERTY IS scaleX AND NOTHING ELSE. Same ban, second half:
- *    no opacity, no clip-path, no mask anywhere above the band. A rule that
- *    fails to draw is a rule at `scaleX(0)`, which is an invisible underline
- *    under a word that still reads correctly. A rule that fails to fade in
- *    would be the same, but opacity composites down the ancestor chain and the
- *    ban exists because that has already broken this component twice.
- *
- * GEOMETRY. The rule is absolutely positioned, so it adds no height and cannot
- * change the h1's line count: measured at eight widths, the h1 box is identical
- * to the pixel with and without it. `whitespace-nowrap` is inert on a single
- * word and is kept so the construction matches its siblings. There is no
- * descender reserve because "Succeed" has no descender, and `-bottom-1` clears
- * the baseline at every size the clamp produces; a phrase with a `g` or a `y`
- * would need the `pb-[0.18em]` reserve the other Marks carry.
- *
- * The word sits on the LAST line of the headline at every width from 320 up, so
- * the rule never lands between two lines of an h1 set at `leading-[0.95]`.
- * Check that again before marking any other word in this headline.
- */
-function Mark({ children, reduce }: { children: React.ReactNode; reduce: boolean }) {
-    return (
-        <span className="relative inline-block whitespace-nowrap text-accent">
-            {children}
-            <motion.span
-                aria-hidden="true"
-                className="absolute -bottom-1 left-0 block h-[3px] w-full origin-left bg-accent"
-                initial={reduce ? false : { scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.26, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            />
-        </span>
-    );
-}
-
 export function Hero({ onJoinClick }: HeroProps) {
     const prefersReducedMotion = useReducedMotion();
     const [index, setIndex] = useState(0);
@@ -228,32 +179,13 @@ export function Hero({ onJoinClick }: HeroProps) {
                         </p>
 
                         {/* THE WEIGHT LADDER (plan section 4.3).
-                            Three rungs, no italic: `wght 300` on the cycling
-                            word, `500` on the line, `800` on "Founders". That is
-                            IFN's own event slide, which sets International light
-                            against Founders black, and it is why italic is
-                            retired here: it clipped the descender on "Immigrant"
-                            and it carried emphasis in a hue, which a colourblind
-                            reader cannot see.
-
-                            THE LADDER IS NOW THREE RUNGS PLUS A MARK, and the
-                            distinction matters because this comment used to read
-                            "no italic and no colour". "Succeed" carries the
-                            accent mark at the founder's direction. It does not
-                            break the colourblind argument above, and that is the
-                            whole reason the mark is a construction rather than a
-                            hue: the 3px rule under the word is a non-colour
-                            indicator measuring 7.054 against `--paper` in both
-                            modes, so a reader who cannot see the accent still
-                            sees the mark. Strip the colour entirely and the
-                            emphasis survives. That was never true of the italic
-                            this ladder retired.
-
-                            THE CYCLING WORD IS STILL UNMARKED AND UNCOLOURED,
-                            which is the rule stated at `WORDS` above: a mark
-                            means "checkable", and how a founder names their own
-                            origin is not a checkable fact. Do not move the mark
-                            onto it.
+                            Three rungs, no italic and no colour: `wght 300` on
+                            the cycling word, `500` on the line, `800` on
+                            "Founders". That is IFN's own event slide, which sets
+                            International light against Founders black, and it
+                            is why italic is retired here: it clipped the
+                            descender on "Immigrant" and it carried emphasis in a
+                            hue, which a colourblind reader cannot see.
 
                             Measured, not asserted: clamp resolves to 81.96px at
                             1366 and the headline sets in 2 lines with every one
@@ -356,8 +288,8 @@ export function Hero({ onJoinClick }: HeroProps) {
                                     </AnimatePresence>
                                 </span>
                             </span>{' '}
-                            <span className="font-extrabold">Founders</span> Connect, Grow, and{' '}
-                            <Mark reduce={Boolean(prefersReducedMotion)}>Succeed</Mark>
+                            <span className="font-extrabold">Founders</span> Connect, Grow, and
+                            Succeed
                         </h1>
 
                         {/* THE 7fr / 5fr SPLIT.

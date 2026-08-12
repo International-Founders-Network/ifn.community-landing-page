@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useId, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -178,18 +178,46 @@ const PANEL_WIDTHS = [
  */
 const isTintedPanel = (index: number, stageCount: number) => (stageCount - 1 - index) % 2 === 1;
 
-/* THE `Mark` COMPONENT WAS DELETED HERE, along with the 23 lines of licence
-   documentation that argued why this section's one mark belonged in the header
-   rather than inside the rail. The founder's highlight audit set the page's
-   complete list of marked phrases and none of them is in this file, so the
-   component lost its only call site and eslint failed the build on it. The
-   phrase it wrapped is still in the copy above, unchanged, without the accent.
-
-   The argument it carried is worth one sentence in case a mark ever returns
-   here: a `whileInView` rule placed in a panel past the horizontal fold stays
-   at `scaleX(0)` until the reader scrolls sideways, so anything marked in this
-   section has to sit in the header where it is on screen with the headline,
-   never in the rail. The construction itself survives in `ValueProps.tsx`. */
+/**
+ * The accent mark (plan section 2, licence role 1; plan section 6, behaviour 2).
+ *
+ * Accent type plus a 3px accent rule drawn left to right under the phrase. The
+ * licence permits it only on a phrase a reader can check against something on
+ * this page, and it is used exactly ONCE in this section, on a denial. That
+ * keeps the section inside the density rule of no more than two marks plus the
+ * wordmark period in any one viewport.
+ *
+ * It sits in the section header rather than inside the rail on purpose: a
+ * `whileInView` rule that lives in a panel past the horizontal fold would stay
+ * at `scaleX(0)` until the reader scrolls sideways, so the honesty would be
+ * hidden behind an interaction. Here it is on screen with the headline.
+ *
+ * Reduced motion: `MotionConfig reducedMotion="user"` in `App.tsx` disables
+ * transform animations and resolves the element straight to its target, so the
+ * rule renders full width with no draw. The bottom padding on the wrapper is
+ * descender clearance, and it is still required after the marked phrase
+ * changed: it used to clear the `p` and `y` of "published yet", and it now
+ * clears the `g` of "being" in "being built now". Check this again if the
+ * phrase is ever reworded, because a phrase with no descender would make the
+ * reserve look arbitrary and a phrase with one and no reserve puts a 3px rule
+ * through it.
+ */
+function Mark({ children }: { children: ReactNode }) {
+    const reduceMotion = useReducedMotion();
+    return (
+        <span className="relative inline-block pb-1.5 text-accent">
+            {children}
+            <motion.span
+                aria-hidden="true"
+                className="absolute bottom-0 left-0 right-0 block h-[3px] origin-left bg-accent"
+                initial={reduceMotion ? false : { scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+            />
+        </span>
+    );
+}
 
 export function ResourcesPreview() {
     const segments = Object.values(RESOURCES_DATA);
@@ -301,24 +329,22 @@ export function ResourcesPreview() {
                         and raising here, sorted by the kind of founder you are and the stage you
                         have reached, in the order the questions actually come up.
                     </p>
-                    {/* THE MARK IS GONE FROM THIS LINE AND THE SENTENCE IS
-                        UNCHANGED. The founder's highlight audit fixed the page's
-                        complete list of marked phrases at five, all of them in
-                        `Hero` and `ValueProps`, and "being built now" is not on
-                        it. The line keeps its weight (`font-semibold`) and its
-                        position directly under the lead, so it is still the
-                        third thing read in this section; it simply no longer
-                        carries the accent.
-
-                        This is the section's honesty line, so what it says still
-                        has to survive the check recorded at the top of this
-                        file: no entry in `resourcesData.ts` carries a `link`,
-                        and "being prepared for publication" asserts that nothing
-                        is published yet. Removing an underline does not touch
-                        that. */}
+                    {/* THE MARK MOVED WITH THE WORDING, WHICH IS A REWORDING OF
+                        THE MARKED CLAIM AND NOT A RELICENSING OF THE MARK ONTO A
+                        DIFFERENT ONE. The distinction is the whole licence, so
+                        it is spelled out: the phrase was "Being written now" and
+                        is now "being built now", which asserts the same fact
+                        about the same object, checkable against the same
+                        artifacts inside this same component (every stage panel
+                        prints "Being written", and the terminal panel prints the
+                        counted total for the selected path). Had the founder's
+                        new copy dropped the claim instead of restating it, the
+                        correct move would have been to delete the mark and the
+                        `Mark` component with it, which is what ValueProps had to
+                        do in this same edit. */}
                     <p className="mt-5 max-w-[62ch] text-lg font-semibold leading-relaxed text-ink">
-                        The library is being built now from questions founders bring to IFN. The
-                        first guides are being prepared for publication.
+                        The library is <Mark>being built now</Mark> from questions founders bring
+                        to IFN. The first guides are being prepared for publication.
                     </p>
                 </motion.div>
 

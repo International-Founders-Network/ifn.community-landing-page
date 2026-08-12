@@ -274,12 +274,40 @@ export function Footer() {
                         <p>© {currentYear} IFN Global LLC. All rights reserved.</p>
 
                         {/*
-                         * The heart is deliberately NOT accent coloured any more.
-                         * The accent is licensed to the mark, the primary action
-                         * fill and the wordmark period, and the mark may only
-                         * attach to a phrase a reader can check against a named
-                         * artifact. "Built with love from Austin" is not one, so
-                         * the glyph inherits `--muted` at 6.601 on `--paper`.
+                         * THE HEART IS ACCENT COLOURED AGAIN, AT THE FOUNDER'S
+                         * DIRECTION, and this comment used to argue the opposite
+                         * at length: that the accent is licensed to the mark, the
+                         * primary action fill and the wordmark period, that a
+                         * mark may only attach to a phrase a reader can check
+                         * against a named artifact, and that "Built with love
+                         * from Austin" is not one, so the glyph should inherit
+                         * `--muted`.
+                         *
+                         * That argument was applying the MARK licence to
+                         * something that is not a mark. A mark is accent type
+                         * plus a 3px accent rule under a checkable phrase; this
+                         * is a 14px glyph standing in for a word in a sentence
+                         * about the people who built the site. It makes no claim,
+                         * so there is nothing for a reader to check and the
+                         * licence has no purchase on it. Treating it as a fourth
+                         * accent role is the honest reading rather than a breach
+                         * of the other three.
+                         *
+                         * CONTRAST, AND WHY THE COLOUR IS SAFE HERE. `--accent`
+                         * measures 7.054 against `--paper` in light and 5.517 in
+                         * dark, both well clear of the 4.5 text floor and the 3.0
+                         * non-text floor, and BETTER than the `--muted` 6.601 it
+                         * replaces in light mode. The glyph is `aria-hidden` with
+                         * an `sr-only` "love" beside it, so the colour is never
+                         * the only thing carrying the word: strip the hue
+                         * entirely and the sentence still reads "Built with love
+                         * from Austin" to every reader, sighted or not. That is
+                         * the same test the mark has to pass, and this passes it
+                         * more easily because the word is literally in the DOM.
+                         *
+                         * `fill-current` is kept, so the glyph fills with whatever
+                         * `text-accent` sets rather than carrying a second colour
+                         * value that could drift from the token.
                          */}
                         <p className="flex items-center gap-1.5 sm:border-l sm:border-rule sm:pl-4">
                             <span>Built with</span>
@@ -287,7 +315,7 @@ export function Footer() {
                                 size={14}
                                 strokeWidth={1.5}
                                 aria-hidden="true"
-                                className="fill-current"
+                                className="fill-current text-accent"
                             />
                             <span className="sr-only">love</span>
                             <span>from Austin</span>
