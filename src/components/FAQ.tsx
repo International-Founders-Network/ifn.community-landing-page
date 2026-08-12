@@ -191,17 +191,46 @@ interface FaqCluster {
  * The answer must also not hint that a cheaper price exists, so no "starting
  * at", no "from", no "ask us about a discount".
  *
- * **What else changed, and what did not.** Grouping and order were set in the
- * previous phase: the eight entries are three clusters, and two phrases already
+ * **What else changed, and what did not.** Grouping and order were set in an
+ * earlier phase: the eight entries are three clusters, and two phrases already
  * in the text are wrapped in `<Mark>`. Nothing outside this file reads that
  * order, checked rather than assumed: `id` is consumed only as a React key,
  * there is no FAQ JSON-LD anywhere in the tree, and the section anchor `#faq`
- * sits on the `<section>` and does not move. This phase edits prose inside
- * three answers (`meetup`, `where`, `fee`) and nothing else. No question text
- * moved, no entry was added, removed or reordered, and neither marked answer
- * (`visas`, `austin`) was touched, so the note above on `linkStyles` still
- * holds: no marked answer contains a link, and the 3px accent mark and the 1px
- * rule underline are still never asked to be told apart inside one paragraph.
+ * sits on the `<section>` and does not move.
+ *
+ * The repositioning pass edits prose inside three answers (`meetup`, `visas`,
+ * `austin`). No question text moved, no entry was added, removed or reordered,
+ * and no cluster was renamed. TWO OF THE THREE ARE THE MARKED ANSWERS, which
+ * the previous pass deliberately did not touch, so the invariant it was
+ * protecting is re-checked here rather than inherited: **neither marked answer
+ * gained a link.** `visas` and `austin` still contain no anchor of any kind, so
+ * the page still never sets a 1px `--rule` underline and a 3px `--accent` mark
+ * inside one paragraph, and the two devices are still never asked to be told
+ * apart at close range. **Neither marked PHRASE was reworded**: "Not as a
+ * professional service" is still 29 characters and "Austin only" is still 11,
+ * both under the 32-character wrap cap computed in `Mark`. Only the prose
+ * around them moved.
+ *
+ * **WHY THIS CLUSTER SURVIVED A BRIEF THAT ASKED FOR ITS OPPOSITE.** The
+ * repositioning asks for confident "what founders get" phrasing in place of
+ * "what we are not", and it was applied that way in ValueProps and HowItWorks,
+ * where the denials were about product shape and cost nothing to invert. It is
+ * NOT applied here and the exception is in the same brief: it also says not to
+ * overpromise legal, immigration or financial guidance. "Not as a professional
+ * service" is the sentence that keeps that promise. Inverting it into something
+ * warmer is the one edit on this page that could do real harm to a reader
+ * making a visa decision, so the cluster, its name, and both denials stay.
+ *
+ * A DRAFT OF THE `austin` ANSWER WENT FURTHER THAN THAT AND WAS PULLED BACK.
+ * It closed on "plenty of members are not in Austin" and "introductions travel
+ * further than the room does", and it dropped the admission that the in-person
+ * evenings are the strongest part of IFN. Both additions are claims about reach
+ * and about membership geography that nothing in PRODUCT.md's Evidence on Hand
+ * supports, and they sat two clauses after a marked denial in the one cluster
+ * whose entire job is to be checkable. The admission is restored and the
+ * unevidenced half is gone. The rule this cluster runs on is the one at the top
+ * of this comment: every sentence has to survive a member asking "is that
+ * actually true?", and a sentence that merely sounds generous does not qualify.
  *
  * **The three cluster names and the deck.** The deck below promises "what IFN
  * is, what it costs, and what it does not do", and the clusters answer it in
@@ -234,11 +263,12 @@ const CLUSTERS: FaqCluster[] = [
                 question: 'What happens at a meetup?',
                 answer: (
                     <>
-                        IFN meets once a month, in person, in Austin. The center of the evening is structured
-                        one-to-one networking run with our format partner: you are paired with one
-                        person at a time for a short conversation, then paired again. Nobody has to walk up to
-                        a circle of strangers and introduce themselves. Around that there is open conversation
-                        with founders who have already worked through the problem you are on now.
+                        The center of the evening is structured one-to-one networking run with our format
+                        partner: you are paired with one person at a time for a short conversation, then
+                        paired again, so you never have to walk up to a circle of strangers. Around that
+                        there is open conversation with founders who have already worked through whatever
+                        you are on now, whether that is a visa, a bank account, a first hire or a first
+                        raise.
                     </>
                 ),
                 defaultOpen: true,
@@ -341,8 +371,9 @@ const CLUSTERS: FaqCluster[] = [
                         accountant or a banker, and nothing we publish is legal or financial advice. What you
                         get is the next best thing: people in the room who have already been through the same
                         visa process, opened the same accounts and registered the same kind of company, telling
-                        you plainly what happened to them. Members also get a resource library of notes and
-                        templates on immigration, U.S. banking and hiring, written out of those conversations.
+                        you plainly what happened to them, and an introduction to the attorney or accountant
+                        they used. Members also get a resource library of notes and templates on immigration,
+                        U.S. banking, hiring and raising here, written out of those conversations.
                     </>
                 ),
             },
@@ -355,9 +386,9 @@ const CLUSTERS: FaqCluster[] = [
                             runs 39 and would wrap below 360px, so the mark takes the denial itself. */}
                         We would rather say this plainly: the in-person part of IFN is{' '}
                         <Mark>Austin only</Mark>. There are no other chapters, and we are not opening any right
-                        now. Membership works from anywhere (the member channel, the library and the monthly
-                        office-hours call are all remote), but the meetups are the strongest part of IFN, and
-                        they happen here.
+                        now. Everything else works from anywhere: the member channel, the resource library and
+                        the monthly office-hours call are all remote. The in-person evenings are the strongest
+                        part of IFN, and they happen here.
                     </>
                 ),
             },

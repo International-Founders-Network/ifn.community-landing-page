@@ -23,11 +23,28 @@ import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
  * hero and PartnersStrip), the italic `Emphasis` word, and the second action.
  *
  * WHAT STAYED: all four commitments, each still a title AND a detail string. An
- * audit caught a draft dropping the details. The headline is preserved. The
- * lead paragraph is preserved verbatim too: the founder's copy delegation
- * of 2026-08-09 covers the HERO subtext only, so nothing here licenses a cut,
- * and the clause naming visas, bank paperwork and a first hire abroad is the
- * only place on this field where the reader sees their own problem named.
+ * audit caught a draft dropping the details.
+ *
+ * THE HEADLINE AND THE LEAD ARE NO LONGER PRESERVED, AND THE REASON THEY WERE
+ * IS SPENT. This comment used to say both were carried verbatim because "the
+ * founder's copy delegation of 2026-08-09 covers the HERO subtext only, so
+ * nothing here licenses a cut". A later founder brief licenses exactly this
+ * cut: it asks that the page close by inviting founders into the network and to
+ * the next gathering, rather than by asking for one meetup's attendance.
+ *
+ *   headline  "Come to one meetup in Austin."
+ *          -> "Join the network. Meet us in Austin."
+ *   lead      opened on "Once a month, ..." and closed on "Come once and
+ *             decide from there", so both ends of the page's closing argument
+ *             were about the event. It now opens on the reader's own problem
+ *             and closes on the network, with the gathering as the meeting
+ *             point rather than the offer.
+ *
+ * The one requirement carried forward unchanged is the clause naming visas,
+ * bank paperwork and a first hire abroad. It is still the only place on this
+ * field where the reader sees their own problem named, and a first U.S. raise
+ * is added to it, because the brief puts fundraising on the journey and this
+ * field had no room for it anywhere else.
  *
  * EVERY MARK ON THIS FIELD IS `--on-plate`, NEVER `--on-accent`.
  * `--accent-plate` is theme invariant (#A81B36 in both modes) and `--on-accent`
@@ -180,11 +197,18 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         section 4.3). Never a second family, never italic, and
                         never colour here: `--accent` on `--accent-plate` is the
                         same value, so an accent mark on this field measures
-                        1.000 and disappears. From 1024px up the measure cap
-                        breaks the line after "in", which sets "Austin." alone
-                        on the second line at 800. */}
+                        1.000 and disappears.
+
+                        THE TWO SENTENCE FORM IS WHAT KEEPS THE OLD LINE BREAK
+                        WORKING RATHER THAN AN ACCIDENT OF IT. The `lg:max-w-[62%]`
+                        cap used to break after "in", setting "Austin." alone on
+                        the second line at 800. The rewrite keeps "in" as the
+                        last word before the bold span for exactly that reason,
+                        so the closing frame still lands on one heavy word on its
+                        own line. Re-measured after the change rather than
+                        assumed. */}
                     <h2 className="text-[clamp(2.25rem,4.6vw,4rem)] font-medium leading-[1.02] tracking-[-0.025em] lg:max-w-[62%]">
-                        Come to one meetup in <span className="font-extrabold">Austin.</span>
+                        Join the network. Meet us in <span className="font-extrabold">Austin.</span>
                     </h2>
 
                     {/* 52ch, not the 65ch cap: at 1280px the h2's 62% measure
@@ -193,9 +217,10 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         column instead of a statement standing over a measure.
                         52ch is about 551px, which stages them. */}
                     <p className="mt-8 max-w-[52ch] text-lg leading-[1.55] md:text-xl">
-                        Once a month, founders who moved here to build meet in the same room:
-                        people working through the same visa questions, the same bank paperwork,
-                        the same first hire in another country. Come once and decide from there.
+                        Founders who moved here to build are working through the same things you
+                        are: the same visa questions, the same bank paperwork, the same first hire
+                        in another country, the same first raise in a market that has never heard
+                        of them. Join the network, and meet them at the next one.
                     </p>
 
                     {/* ONE action. "Join the community" is the settled label for

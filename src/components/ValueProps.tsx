@@ -48,8 +48,8 @@ import { Container } from './Container';
    THE ACCENT LICENCE, APPLIED (plan section 2).
 
    The accent may mark only a phrase that is checkable against a named artifact
-   on this page. Two of the four rows below qualify and two do not, so two
-   marks ship, not four.
+   on this page. Exactly ONE of the four rows below qualifies and carries a
+   mark. It used to be two.
 
    MARKED
    - Row 2, "put in your calendar". The artifact is the dated meetup feed in
@@ -57,17 +57,26 @@ import { Container } from './Container';
      to it and check. RE-CHECKED when the named venue was taken out of this
      row's body: the artifact is the feed's DATES, not its venue string, so
      removing the partner name from the sentence removes nothing the mark was
-     pointing at. The mark stands.
-   - Row 3's artifact is a denial, which by construction has no artifact to
-     lose. It is unaffected for the same reason, stated so the pair is checked
-     rather than assumed.
-   - Row 3, "There is no matching system here". A denial of something IFN does
-     not offer, which plan section 2 names as the most checkable sentence there
-     is.
+     pointing at. RE-CHECKED AGAIN when this row's body dropped its two
+     "not a..." clauses in the repositioning: the sentence that carries the
+     published dates is untouched, so the artifact is untouched. The mark
+     stands.
 
    NOT MARKED
    - Row 1 asserts who is in the room. True, and nothing on this page is a
      named artifact a reader can check it against.
+   - Row 3 USED TO CARRY THE SECTION'S SECOND MARK, on the denial "There is no
+     matching system here", and BOTH THE DENIAL AND ITS MARK ARE GONE. Do not
+     restore either. The repositioning brief that produced this edit asks for
+     confident "what founders get" phrasing in place of "what we are not", and
+     that sentence was the clearest instance of it on the page: it spent the
+     row's opening clause telling the reader about a product IFN does not have.
+     The row now describes the introduction a founder actually receives.
+     Deleting the mark with it is the correct move rather than a loss, and the
+     rule is the one PartnersStrip already had to apply for the same reason in
+     6990b9c: REDESIGN-PLAN.md section 2 makes the licence a CAP AND NOT A
+     QUOTA. A section with fewer marks passes. A mark relicensed onto another
+     phrase to keep the count up is the exact defect section 4.2 exists to stop.
    - Row 4's artifact would be ResourcesPreview's topic panels, which are owned
      by another section and whose final topics this component cannot inspect.
      Marking a claim against an artifact you have not read is the same move the
@@ -78,14 +87,25 @@ import { Container } from './Container';
 
    Plan section 2 says "ValueProps carries four marks" while plan section 5
    says "exactly one clause in each is marked, and only the checkable one" and
-   then names exactly two. That is an inconsistency inside the plan. It is
-   resolved here in favour of the licence, which is the rule the other sentence
-   was counting against. Do not "restore" the missing two.
+   then names exactly two. That is an inconsistency inside the plan, and this
+   file now satisfies neither number. It is resolved in favour of the licence,
+   which is the rule both of those sentences were counting against. Do not
+   "restore" the missing three.
 
-   DENSITY: two marks in a section taller than one viewport, against the rule
-   of no more than two marks plus the wordmark period per viewport. Rows 2 and
-   3 are adjacent, so a tall desktop viewport can hold both. That is at the
-   limit and inside it.
+   THE PLAN DOCUMENT NOW CONTRADICTS THIS FILE IN TWO NAMED PLACES, AND THE
+   CONTRADICTION IS THE PLAN'S TO FIX RATHER THAN THIS COMPONENT'S.
+   `REDESIGN-PLAN.md:301` still reads "The four shipped claims survive
+   verbatim" and still cites "There is no matching system here" as a marked
+   phrase. Both were true when written and neither is true now. They are
+   printed here so the next reader who greps the plan for authority finds this
+   note first and does not reinstate a deleted denial as a bug fix. Amending
+   the plan is handed over, on the same rule this repo already applies six
+   times over: the plan is not this component's file.
+
+   DENSITY: one mark in a section taller than one viewport, against a ceiling
+   of two marks plus the wordmark period per viewport. It was previously at
+   that ceiling, because rows 2 and 3 are adjacent and a tall desktop viewport
+   can hold both. It is now comfortably inside it.
 
    WHY THE 3px RULE IS THE MECHANISM AND THE HUE IS NOT. Computed with the WCAG
    relative luminance formula, `--accent` against the surrounding `--ink` body
@@ -255,17 +275,34 @@ function Mark({ children, reduce }: MarkProps) {
    re-import the names into this file to "restore" the provenance: the
    provenance is the PRODUCT.md pointer on the line above.
 
-   The four statements and their bodies are the SHIPPED strings, carried
-   verbatim per plan section 5. Nothing here is new copy. The only edits in
-   this file are structural: the mark wraps an existing phrase, it does not
-   replace one.
+   THE FOUR STATEMENTS AND THE LEAD WERE REWRITTEN IN THE REPOSITIONING, and
+   this comment used to say the opposite ("the SHIPPED strings, carried
+   verbatim per plan section 5. Nothing here is new copy"). That is no longer
+   true and the claim is retired rather than left standing. Every fact in them
+   still traces to the Evidence on Hand list above; what changed is which fact
+   leads and how much of the section is spent on the event.
+
+   WHAT MOVED, so the next reader can see the shape of the edit:
+   - The lead no longer opens on the meetup. It opens on the founder's own
+     problem and closes on the meetup as the evidence that IFN is real. The
+     order is the whole point: the schedule is proof of the community, not the
+     product.
+   - Row 2 lost "Not a conference circuit, and not a network of chapters in
+     other cities." Both were true and both were denials, and the one fact
+     inside them (Austin only, no chapters) is stated positively here and
+     answered in full by the FAQ's `austin` entry, which is where a reader who
+     actually needs it goes.
+   - Row 3 lost its denial and its mark. See the licence note above.
+   - Row 4 widened past immigration/banking/hiring to name fundraising and
+     U.S. market entry, which the brief puts at the centre of the journey and
+     which `resourcesData.ts` already carries paths for.
 
    The hero's relocated proof claim, "Six months of monthly meetups, in
-   person", lands in this section per plan section 5, and it is already here:
-   the preserved lead's first sentence reads "IFN meets in person in Austin
-   every month, and has done so for more than six months." No new string was
-   invented to receive it. Integrator: confirm this once Hero lands rather than
-   adding a second copy of the claim.
+   person", lands in this section per plan section 5, and it is still here: the
+   lead's LAST sentence now reads "and it has met in Austin every month for
+   more than six months". It moved from the first sentence to the last in this
+   edit and was not duplicated. Integrator: confirm there is exactly one copy
+   of the claim in this section rather than adding another.
    -------------------------------------------------------------------------- */
 
 type Statement = {
@@ -282,7 +319,7 @@ export function ValueProps() {
         {
             place: 'md:col-start-1 md:col-span-7',
             title: 'Founders who solved it before you',
-            body: 'You will meet founders who have opened a U.S. bank account, worked through a visa, or made a first hire here. The answer comes from someone who has done it, not from a search result.',
+            body: 'You will meet founders who have opened a U.S. bank account, worked through a visa, incorporated here, or made a first hire across borders. The answer comes from someone who has done it, not from a search result.',
         },
         {
             place: 'md:col-start-3 md:col-span-8',
@@ -291,22 +328,17 @@ export function ValueProps() {
                     A meetup you can <Mark reduce={reduce}>put in your calendar</Mark>
                 </>
             ),
-            body: 'One a month, in person, in downtown Austin. Not a conference circuit, and not a network of chapters in other cities. Every date is published openly on Luma and Meetup, so you can see the history before you commit to anything.',
+            body: 'One a month, in person, in downtown Austin: the place the rest of this runs on. Every date is published openly on Luma and Meetup, so you can see the history before you commit to anything.',
         },
         {
             place: 'md:col-start-2 md:col-span-7',
-            title: 'Introductions that come from meeting people',
-            body: (
-                <>
-                    <Mark reduce={reduce}>There is no matching system here</Mark>. Introductions happen the ordinary
-                    way: you meet someone at a meetup, they know the person you need, and they say so.
-                </>
-            ),
+            title: 'Introductions from someone who knows you both',
+            body: 'Introductions happen the ordinary way: you meet someone at a meetup, they know the investor, the attorney or the first engineer you need, and they say so. A warm introduction from a founder who has worked with you is worth more than a list.',
         },
         {
             place: 'md:col-start-4 md:col-span-8',
             title: 'Notes and templates you can use the same week',
-            body: 'The resource library covers immigration paperwork, U.S. banking, and first hires (written from the questions founders actually bring to the meetups). Membership adds a private member channel and a members-only call each month.',
+            body: 'The resource library covers immigration paperwork, U.S. banking, first hires, raising here and getting a product into the U.S. market, written from the questions founders actually bring us. Membership adds a private member channel and a members-only call each month.',
         },
     ];
 
@@ -333,10 +365,10 @@ export function ValueProps() {
                         {...(reduce ? {} : childMotion)}
                         className="mt-6 max-w-[62ch] text-[1.0625rem] leading-[1.6] text-muted"
                     >
-                        IFN meets in person in Austin every month, and has done so for more than six months. Whether you
-                        moved here last year or are still planning the move, the same problems come up: visas, U.S.
-                        banking, funding rules nobody explained to you, and a professional network that does not exist
-                        yet.
+                        Whether you moved here last year or are still planning the move, the same problems come up:
+                        visas, U.S. banking, incorporating, hiring across borders, funding rules nobody explained to
+                        you, and a professional network you are building from nothing. IFN is where founders work
+                        through them together, and it has met in Austin every month for more than six months.
                     </motion.p>
                 </motion.div>
 

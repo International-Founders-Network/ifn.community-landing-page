@@ -258,7 +258,7 @@ export function EventsPreview() {
                     <p className="mt-5 max-w-[65ch] text-lg leading-relaxed text-muted">
                         One meetup a month, in person. Open to anyone building a company here, and
                         to the investors, attorneys and operators who work with founders crossing
-                        borders. You do not need to be a member to attend.
+                        borders. Free to attend, whether or not you are a member.
                     </p>
                 </div>
 

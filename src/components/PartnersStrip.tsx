@@ -225,12 +225,11 @@ export function PartnersStrip() {
                         variants={step}
                         className="mt-14 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-ink md:mt-16"
                     >
-                        Station Austin is the venue the meetups are held in. Reuneo runs the speed
-                        networking that pairs founders into one-to-one conversations in place of
-                        standing-around small talk. Yani Partners provides fractional CTO and
-                        technology help for founders and small teams. These are working
-                        relationships rather than paid placements: nobody on this page bought
-                        their way onto it.
+                        Station Austin hosts the meetups. Reuneo runs the speed networking that
+                        pairs founders into one-to-one conversations. Yani Partners provides
+                        fractional CTO and technology help for founders and small teams. These are
+                        working relationships rather than paid placements: nobody on this page
+                        bought their way onto it.
                     </motion.p>
 
                     {/* The Yani Partners related-party disclosure was removed here

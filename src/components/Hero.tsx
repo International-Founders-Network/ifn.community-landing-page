@@ -157,8 +157,25 @@ export function Hero({ onJoinClick }: HeroProps) {
                             DISCRETE INTERACTIVE controls, and an eyebrow is
                             neither, so a rounded-full eyebrow would be the one
                             object on the page breaking the shape lock. */}
+                        {/* REPOSITIONED. This used to read "Monthly meetups in
+                            Austin, Texas", which spent the page's first line on
+                            the event schedule. The eyebrow now names the reader
+                            instead of the calendar: the meetup is how this
+                            community gathers, not what it is. Austin moves down
+                            into the subtext, and the schedule keeps its own
+                            section further down the page.
+
+                            THREE DOCUMENTS STILL QUOTE THE OLD STRING AS THE
+                            SHIPPED ONE: `REDESIGN-PLAN.md:266`, its audit table
+                            at `REDESIGN-PLAN.md:589`, and `DESIGN.md:335`. All
+                            three use it to count this page's eyebrow budget,
+                            and THE COUNT IS UNAFFECTED, because this is still
+                            one eyebrow in the same slot and PartnersStrip still
+                            holds the other. Only the words changed. Amending
+                            those files is handed over rather than done here;
+                            the plan is not this component's file. */}
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                            Monthly meetups in Austin, Texas
+                            For international founders building in the U.S.
                         </p>
 
                         {/* THE WEIGHT LADDER (plan section 4.3).
@@ -176,7 +193,20 @@ export function Hero({ onJoinClick }: HeroProps) {
                             1920; 44px and 5 lines at 360, with document
                             scrollWidth equal to viewport width at 360 and 390,
                             so the slot cannot force horizontal overflow the way
-                            the retired min-w-[240px] floor did. */}
+                            the retired min-w-[240px] floor did.
+
+                            THE TAIL SURVIVED THE REPOSITIONING BY FOUNDER
+                            DECISION, AND THAT IS WORTH ONE LINE SO IT IS NOT
+                            REOPENED AS AN OVERSIGHT. The brief behind the rest
+                            of this page's copy asks for concrete language in
+                            place of "Connect, Grow, and Succeed", and a
+                            replacement was measured across seven candidates at
+                            the eight widths above and then not taken. The
+                            headline stays as shipped; the eyebrow above and the
+                            subtext below carry the repositioning instead. Every
+                            number in this comment is therefore the original
+                            measurement, still current, rather than a re-measured
+                            one. */}
                         <h1 className="mt-6 text-ink font-medium text-[clamp(2.75rem,6vw,5.25rem)] leading-[0.95] tracking-[-0.025em]">
                             Where{' '}
                             {/* THE SLOT.
@@ -289,23 +319,68 @@ export function Hero({ onJoinClick }: HeroProps) {
                             button goes full width. */}
                         <div className="lg:grid lg:grid-cols-12">
                             <div className="lg:col-span-7">
-                                {/* SUBTEXT. 19 words, 112 characters, 2 rendered
-                                    lines at both 1366 and 1920. It replaces a
-                                    33 word, 186 character, 3 line string under
-                                    the founder's delegation of 2026-08-09.
+                                {/* SUBTEXT. It still answers "ask who?", which is
+                                    the one requirement carried forward from the
+                                    line before it: "founders who have already
+                                    done it" is the sentence's only piece of
+                                    reassurance, and a shorter line that drops it
+                                    buys a word count with the offer.
 
-                                    It still answers "ask who?", which is the one
-                                    requirement carried forward: "the founders who
-                                    have already solved it" is the sentence's only
-                                    piece of reassurance and a shorter line that
-                                    drops it buys a word count with the offer.
+                                    THE LENGTH IS A CEILING SET BY A FOUNDER
+                                    DECISION, NOT BY TASTE, AND THE REPOSITIONING
+                                    BRIEF PUSHED AGAINST IT. This slot once held a
+                                    33 word, 186 character, 3 line string, and the
+                                    founder's copy delegation of 2026-08-09 cut it
+                                    to 19 words and 112 characters precisely to get
+                                    it to 2 lines. The brief that produced this
+                                    rewrite supplied a 210 character direction,
+                                    which is longer than the string that was
+                                    already rejected once. It is deliberately NOT
+                                    taken verbatim: the sense is kept and the
+                                    length is held near the standing cap, which
+                                    is the reading that honours both instructions.
+
+                                    What the widened list buys: fundraising and
+                                    market entry now sit beside visas, banking and
+                                    hiring, so the hero names the whole journey
+                                    rather than three of its problems, and
+                                    "introductions" is the one word carrying the
+                                    part of IFN that is not an answer. Austin
+                                    survives as the closing clause rather than as
+                                    the subject, so the meetup reads as where this
+                                    starts and not as what it is.
+
+                                    RE-MEASURED RATHER THAN ASSUMED, AND THE
+                                    WORDING WAS CUT TWICE TO LAND IT. 129
+                                    characters against the outgoing 112. Rendered
+                                    line counts, new against old:
+
+                                      360   4 lines  (was 3)
+                                      390   4 lines  (was 3)
+                                      768   2 lines  (was 2)
+                                      1024  2 lines  (was 2)
+                                      1366  2 lines  (was 2)
+                                      1920  2 lines  (was 2)
+
+                                    So the 2 line target the founder's cut was
+                                    made to hit is held at every width from 768
+                                    up, and the cost is one extra line on a
+                                    phone. Two longer drafts were measured and
+                                    rejected on this table rather than on taste:
+                                    both ran to 3 lines at 1024, which is the
+                                    width where this column is narrowest relative
+                                    to its type size. "Market entry" was the
+                                    clause dropped to buy it back; it survives in
+                                    ValueProps and in the FAQ, where there is
+                                    measure for it.
 
                                     --ink rather than --muted: this is primary
                                     body copy, not a caption, and it measures
                                     17.965 on --paper in both modes. */}
                                 <p className="mt-6 max-w-[65ch] text-lg leading-relaxed text-ink">
-                                    Visas, U.S. banking, hiring across borders. Once a month in
-                                    Austin, ask the founders who have already solved it.
+                                    Visas, U.S. banking, hiring, fundraising. Practical answers and
+                                    introductions from founders who have done it, starting in
+                                    Austin.
                                 </p>
 
                                 <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">

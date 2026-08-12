@@ -60,8 +60,16 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
 
     // The join form asks for four things (name, work email, LinkedIn, stage).
     // See JoinModal.tsx. There is no founder profile and no matching engine, so
-    // these steps describe the meetup as it actually runs. Copy is preserved
-    // verbatim from the shipped section; only the presentation changed.
+    // these steps describe what actually runs.
+    //
+    // THE COPY IS NO LONGER THE SHIPPED STRINGS. This comment used to end
+    // "Copy is preserved verbatim from the shipped section; only the
+    // presentation changed", which the repositioning made false. Steps 1 and 2
+    // are materially unchanged; step 3 was widened, because it was the one
+    // stop on the route that described staying on a mailing list and it is
+    // actually where the network, the introductions and the library live. The
+    // three stops now read as sign up, meet people, keep the relationship,
+    // which is the founder journey rather than the event lifecycle.
     const steps = [
         {
             key: 'sign-up',
@@ -91,7 +99,9 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
             title: 'Keep the conversations going',
             body: (
                 <>
-                    Stay on the list for the next meetup, or take up membership for the private
+                    The useful part usually happens after the evening ends: an introduction to
+                    someone who has raised here, a founder who will read your offer letter, an
+                    answer to the question you could not search for. Membership adds the private
                     member channel, the resource library, and a members-only call each month.
                 </>
             ),
@@ -102,10 +112,20 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
     // stacked lines so the middle-dot separator chain retires with it. No
     // bullets and no dots: skill 9.F rations the middle dot and bans decorative
     // dots outright, and three short lines need no separator at all.
+    //
+    // TWO OF THE THREE WERE DENIALS AND ARE NOT ANY MORE. They read "No pitch
+    // deck required" and "No introduction needed", which told a reader what
+    // they would not be asked for instead of what they would get. The
+    // repositioning brief asks for the positive form wherever it is available,
+    // and it is available here: the facts underneath (nothing to prepare,
+    // nobody to know first, free) are unchanged and all three are still
+    // checkable. "Free to attend" is the same claim FinalCTA's fourth
+    // commitment and the FAQ's `fee` answer both make, so the three surfaces
+    // agree.
     const reassurances = [
-        'No pitch deck required',
-        'No introduction needed',
-        'Come to one meetup and decide',
+        'Free to attend',
+        'Open to anyone building here',
+        'Come once and decide',
     ];
 
     // Plan section 6, behaviour 3: y 16px plus opacity, 60ms stagger, once,
@@ -132,13 +152,14 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
                     >
                         {/* Emphasis is a weight step inside Archivo, never a second
                             family and never colour alone (plan section 4.3). */}
-                        <span className="font-medium">What actually </span>
-                        <span className="font-extrabold">happens</span>
+                        <span className="font-medium">What you actually </span>
+                        <span className="font-extrabold">get</span>
                     </h2>
                     <p className="mt-6 text-lg leading-relaxed text-muted">
-                        There is no application to pass, no profile to fill in, and no equity to
-                        give up. You sign up, you come to a meetup, and you decide from there
-                        whether the rest of it is worth paying for.
+                        Sign up, meet founders working through the same things you are, and keep
+                        the ones worth keeping. Everything after that (the member channel, the
+                        library, the monthly call) is optional, and you decide from there whether
+                        it is worth paying for.
                     </p>
                 </motion.div>
 

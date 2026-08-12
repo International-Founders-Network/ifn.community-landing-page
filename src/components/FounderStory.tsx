@@ -195,16 +195,9 @@ import { photos } from '../data/photos.generated';
  *     only and no photograph on this page prints a date. Marking a claim this
  *     page cannot evidence is exactly what the licence forbids, and it is not
  *     changed by the photograph arriving, since the frame carries no date.
- *   - The Yani Partners shared founders disclosure is NOT marked here even
- *     though a standing disclosure is markable, for two reasons. Section 5
- *     assigns that mark to PartnersStrip, where the disclosure is reproduced
- *     verbatim, and one claim takes one marked phrase. And the clause sits mid
- *     paragraph in a 62ch measure, where a 3px rule under a phrase that can
- *     break across lines is either unreliable (an absolutely positioned rule
- *     inside a fragmented inline box) or wrecks the rag (`inline-block`, which
- *     cannot break at all). A `<dt>` is a block box, so its rule is exact at
- *     every width. Section 4.4 deletes uncomputable contrast cases rather than
- *     mitigating them; this is the same move applied to geometry.
+ *   - The Yani Partners shared founders disclosure was the second candidate.
+ *     THE WHOLE QUESTION IS NOW MOOT AND THE SENTENCE IS GONE FROM THIS FILE.
+ *     See the note below on why.
  *
  * WHY NO PARTNER IS NAMED IN THIS SECTION
  * ---------------------------------------
@@ -219,10 +212,22 @@ import { photos } from '../data/photos.generated';
  * address belongs and is the reason the mark above still has something to point
  * at.
  *
+ * THE HEADING ABOVE WAS FALSE UNTIL THIS EDIT, AND THAT IS WORTH RECORDING.
+ * This section went on naming Yani Partners in its second paragraph, and
+ * printing the shared-founders disclosure with it, while the comment directly
+ * above claimed no partner was named here. Commit 6990b9c removed that
+ * disclosure at the founder's direction from "both surfaces that printed it",
+ * PartnersStrip and /partners; there were three, and this was the one it
+ * missed. The sentence is now gone from here too, so the founder's decision
+ * holds across every surface and the heading above is true for the first time.
+ * The underlying fact is not lost: PRODUCT.md records that Yani Partners shares
+ * founders with IFN and that the site lists it among the partners without
+ * saying so, as a founder decision rather than an engineering one. Do not
+ * reinstate the sentence here as a bug fix.
+ *
  * Only claims PRODUCT.md lists as citable appear here: six plus months of
- * monthly Austin meetups, a venue partner hosting them, a format partner
- * running the one-to-one networking, and Yani Partners with the shared founders
- * disclosure attached, which is a condition of naming them at all.
+ * monthly Austin meetups, a venue partner hosting them, and a format partner
+ * running the one-to-one networking.
  */
 
 interface Fact {
@@ -347,15 +352,15 @@ export function FounderStory() {
                             IFN began as a room full of international founders in Austin, and it has met every month
                             for more than six months. The membership, the resource library and this website came
                             afterwards, built out of what people kept asking for in that room: how to handle a visa
-                            while running a company, how to open a U.S. bank account, how to rebuild a professional
-                            network from nothing.
+                            while running a company, how to open a U.S. bank account, how to raise from investors who
+                            have never heard of your last company, how to rebuild a professional network from nothing.
                         </p>
                         <p>
                             We are a small, founder-run organization, so we would rather show you what already exists
-                            than describe a plan. Our venue partner hosts the meetups in downtown Austin. Our format
-                            partner runs the structured one-to-one networking format. Yani Partners, our fractional
-                            Chief Technology Officer partner, was founded by the same team behind IFN. We say that plainly,
-                            because you should be able to tell an outside endorsement from our own work.
+                            than describe a plan. Our venue partner hosts the meetups in downtown Austin, and our
+                            format partner runs the structured one-to-one networking. The monthly evening is the part
+                            that has been running longest, and it is the reason the rest of this exists rather than the
+                            whole of what we do.
                         </p>
                     </motion.div>
 

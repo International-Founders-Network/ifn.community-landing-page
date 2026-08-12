@@ -56,8 +56,20 @@ import { cn } from '../lib/cn';
  * version of this file filtered `isComingSoon` entries out and described the
  * survivors as "what the library already holds"; those 15 survivors have no
  * link either, so that framing implied an availability the data does not have.
- * The denial is now stated at the top of the section and carries the accent
- * mark, because a denial is the most checkable sentence on a page.
+ *
+ * THE DENIAL LEADS NO MORE, AND IT IS STILL THERE. The header used to open on
+ * "None of it is published yet.", carrying the accent mark, on the reasoning
+ * that a denial is the most checkable sentence on a page. That reasoning is
+ * sound and the sentence survives; what changed is its position in the line.
+ * The repositioning brief asks that an unpublished library read as one being
+ * written out of real founder questions rather than as an empty state, and the
+ * order of two clauses is the whole difference between those two readings. The
+ * mark moved with the lead onto "Being written now", which is checkable
+ * against MORE of this section than the denial ever was: every stage panel
+ * prints "Being written" and the terminal panel prints the counted total for
+ * the selected path, all inside this component, all on screen. The unpublished
+ * fact is stated in the same sentence and was NOT softened, hedged or moved
+ * off the home page. Do not delete it to tidy the line up.
  */
 
 /**
@@ -170,8 +182,12 @@ const isTintedPanel = (index: number, stageCount: number) => (stageCount - 1 - i
  * Reduced motion: `MotionConfig reducedMotion="user"` in `App.tsx` disables
  * transform animations and resolves the element straight to its target, so the
  * rule renders full width with no draw. The bottom padding on the wrapper is
- * descender clearance, so the rule never lands on the `p` and `y` of
- * "published yet".
+ * descender clearance, and it is still required after the marked phrase
+ * changed: it used to clear the `p` and `y` of "published yet", and it now
+ * clears the `g` of "Being" in "Being written now". Check this again if the
+ * phrase is ever reworded, because a phrase with no descender would make the
+ * reserve look arbitrary and a phrase with one and no reserve puts a 3px rule
+ * through it.
  */
 function Mark({ children }: { children: ReactNode }) {
     const reduceMotion = useReducedMotion();
@@ -296,12 +312,13 @@ export function ResourcesPreview() {
                         Written guides for the parts nobody explains to you
                     </h2>
                     <p className="mt-6 max-w-[62ch] text-lg leading-relaxed text-muted">
-                        Guides, templates and checklists, sorted by the kind of founder you are
-                        and the stage you have reached, written in the order the questions come
-                        up in Austin.
+                        Guides, templates and checklists on visas, banking, incorporating, hiring
+                        and raising here, sorted by the kind of founder you are and the stage you
+                        have reached, in the order the questions actually come up.
                     </p>
                     <p className="mt-5 max-w-[62ch] text-lg font-semibold leading-relaxed text-ink">
-                        <Mark>None of it is published yet.</Mark>
+                        <Mark>Being written now</Mark>, from the questions founders bring us. None
+                        of it is published yet.
                     </p>
                 </motion.div>
 
