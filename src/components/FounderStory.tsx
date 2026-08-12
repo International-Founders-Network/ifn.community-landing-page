@@ -77,13 +77,17 @@ import { photos } from '../data/photos.generated';
  * the crop and false of the source. Checked by rendering both through the build
  * pipeline and counting, not by reading the box.
  *
- * WHAT THIS FRAME IS NOT DOING, said plainly because the heading invites the
- * question. July is the LATEST evening in the folder and it now sits under a
- * heading that reads "The meetups came first". It carries no date and no
- * caption, here or anywhere on this page, so it makes no chronological claim in
- * either direction: the origin claim is carried by the first sentence of the
- * prose beside it and by nothing else. This slot's job is to show what the room
- * is, not when it was. The consequence is that the home page's evenings are now
+ * WHAT THIS FRAME IS NOT DOING, said plainly because the heading used to invite
+ * the question and no longer does. July is the LATEST evening in the folder,
+ * and it used to sit under a heading reading "The meetups came first", which
+ * put the newest photograph under an origin claim. The heading is now "Built
+ * from real founder questions", so the chronological tension this paragraph was
+ * written to defuse has largely gone with it. The defence still holds and is
+ * kept, because the prose beside the frame still opens on the origin: the
+ * photograph carries no date and no caption, here or anywhere on this page, so
+ * it makes no chronological claim in either direction. The origin claim is
+ * carried by the first sentence of that prose and by nothing else. This slot's
+ * job is to show what the room is, not when it was. The consequence is that the home page's evenings are now
  * April (hero band, HowItWorks) and July, not April and February, and February
  * reaches the reader only through the gallery. REDESIGN-PLAN.md sections 5 and
  * 7 both still say this slot supplies February as the home page's second
@@ -338,9 +342,20 @@ export function FounderStory() {
                             wght 800 against a 500 line, which is how the source
                             slide sets "Founders" against "International". Never a
                             second family, never italic, and never colour, because
-                            colour here is reserved for the mark and "first" is not
-                            a checkable phrase. */}
-                        The meetups came <span className="font-extrabold">first</span>
+                            colour here is reserved for the mark and neither this
+                            heading's emphasis nor its predecessor's is a
+                            checkable phrase.
+
+                            THE HEADING CHANGED AND THE EMPHASIS MOVED WITH IT.
+                            It read "The meetups came first", with the weight on
+                            "first". The founder's copy edit replaced it with
+                            "Built from real founder questions". The bold span is
+                            structural rather than decorative, so it was kept and
+                            landed on "questions": it is the operative noun, it
+                            is the last word of the line exactly as "first" was,
+                            and it is the word the rail of facts beside this
+                            prose actually evidences. */}
+                        Built from real founder <span className="font-extrabold">questions</span>
                     </motion.h2>
 
                     {/* Row 2, column 1. The reading measure. */}

@@ -57,19 +57,32 @@ import { cn } from '../lib/cn';
  * survivors as "what the library already holds"; those 15 survivors have no
  * link either, so that framing implied an availability the data does not have.
  *
- * THE DENIAL LEADS NO MORE, AND IT IS STILL THERE. The header used to open on
- * "None of it is published yet.", carrying the accent mark, on the reasoning
- * that a denial is the most checkable sentence on a page. That reasoning is
- * sound and the sentence survives; what changed is its position in the line.
- * The repositioning brief asks that an unpublished library read as one being
- * written out of real founder questions rather than as an empty state, and the
- * order of two clauses is the whole difference between those two readings. The
- * mark moved with the lead onto "Being written now", which is checkable
- * against MORE of this section than the denial ever was: every stage panel
- * prints "Being written" and the terminal panel prints the counted total for
- * the selected path, all inside this component, all on screen. The unpublished
- * fact is stated in the same sentence and was NOT softened, hedged or moved
- * off the home page. Do not delete it to tidy the line up.
+ * THE DENIAL IS GONE FROM THE VISIBLE COPY, BY FOUNDER DECISION, AND THAT IS
+ * THE ONE THING A FUTURE READER OF THIS FILE HAS TO KNOW. The header has been
+ * through three states and the trend is one direction, so it is written out
+ * rather than left to be rediscovered:
+ *
+ *   1. "None of it is published yet."          bare denial, carrying the mark
+ *   2. "Being written now, ... None of it is published yet."
+ *                                              denial demoted to second clause
+ *   3. "The library is being built now from questions founders bring to IFN.
+ *      The first guides are being prepared for publication."
+ *                                              denial replaced by an implication
+ *
+ * State 3 is still TRUE against the data: not one entry in `resourcesData.ts`
+ * carries a `link`, and "being prepared for publication" asserts that nothing
+ * is published. It is the weakest of the three at saying so, and it is the
+ * founder's call rather than a drift this file should quietly correct.
+ *
+ * WHAT WOULD MAKE IT FALSE, so the check is mechanical rather than a matter of
+ * taste. If a `link` ever appears on some entries but not others, this sentence
+ * stops describing the library: part of it would be published and the header
+ * would still say the first guides are being prepared. At that point the copy
+ * has to change, and the honest replacement names the split rather than
+ * averaging over it. The previous version of this file made exactly that
+ * mistake in the other direction, filtering `isComingSoon` entries out and
+ * describing the 15 survivors as "what the library already holds" when none of
+ * them had a link either.
  */
 
 /**
@@ -184,7 +197,7 @@ const isTintedPanel = (index: number, stageCount: number) => (stageCount - 1 - i
  * rule renders full width with no draw. The bottom padding on the wrapper is
  * descender clearance, and it is still required after the marked phrase
  * changed: it used to clear the `p` and `y` of "published yet", and it now
- * clears the `g` of "Being" in "Being written now". Check this again if the
+ * clears the `g` of "being" in "being built now". Check this again if the
  * phrase is ever reworded, because a phrase with no descender would make the
  * reserve look arbitrary and a phrase with one and no reserve puts a 3px rule
  * through it.
@@ -316,9 +329,22 @@ export function ResourcesPreview() {
                         and raising here, sorted by the kind of founder you are and the stage you
                         have reached, in the order the questions actually come up.
                     </p>
+                    {/* THE MARK MOVED WITH THE WORDING, WHICH IS A REWORDING OF
+                        THE MARKED CLAIM AND NOT A RELICENSING OF THE MARK ONTO A
+                        DIFFERENT ONE. The distinction is the whole licence, so
+                        it is spelled out: the phrase was "Being written now" and
+                        is now "being built now", which asserts the same fact
+                        about the same object, checkable against the same
+                        artifacts inside this same component (every stage panel
+                        prints "Being written", and the terminal panel prints the
+                        counted total for the selected path). Had the founder's
+                        new copy dropped the claim instead of restating it, the
+                        correct move would have been to delete the mark and the
+                        `Mark` component with it, which is what ValueProps had to
+                        do in this same edit. */}
                     <p className="mt-5 max-w-[62ch] text-lg font-semibold leading-relaxed text-ink">
-                        <Mark>Being written now</Mark>, from the questions founders bring us. None
-                        of it is published yet.
+                        The library is <Mark>being built now</Mark> from questions founders bring
+                        to IFN. The first guides are being prepared for publication.
                     </p>
                 </motion.div>
 

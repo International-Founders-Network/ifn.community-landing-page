@@ -48,49 +48,47 @@ import { Container } from './Container';
    THE ACCENT LICENCE, APPLIED (plan section 2).
 
    The accent may mark only a phrase that is checkable against a named artifact
-   on this page. Exactly ONE of the four rows below qualifies and carries a
-   mark. It used to be two.
+   on this page. THIS SECTION NOW CARRIES NO MARK AT ALL. It carried two, then
+   one, and the count reached zero in three steps, each recorded so nobody reads
+   the absence as rot:
 
-   MARKED
-   - Row 2, "put in your calendar". The artifact is the dated meetup feed in
-     EventsPreview (`#events`) further down this same page. A reader can scroll
-     to it and check. RE-CHECKED when the named venue was taken out of this
-     row's body: the artifact is the feed's DATES, not its venue string, so
-     removing the partner name from the sentence removes nothing the mark was
-     pointing at. RE-CHECKED AGAIN when this row's body dropped its two
-     "not a..." clauses in the repositioning: the sentence that carries the
-     published dates is untouched, so the artifact is untouched. The mark
-     stands.
+   1. Row 3's mark went with the denial it sat on ("There is no matching system
+      here"), when the repositioning replaced "what we are not" phrasing with a
+      description of the introduction a founder actually receives.
+   2. Row 2's mark ("put in your calendar") went with its title, which the
+      founder's copy edit replaced with "A monthly place to meet the network".
+      The new title makes no checkable claim, so there is nothing left in it to
+      licence.
+   3. With no call site left, the `Mark` component itself was deleted. See the
+      note at its old position further down this file.
 
-   NOT MARKED
+   NONE OF THE FOUR ROWS QUALIFIES NOW, and the near misses are written out so
+   they are not re-litigated one at a time:
    - Row 1 asserts who is in the room. True, and nothing on this page is a
      named artifact a reader can check it against.
-   - Row 3 USED TO CARRY THE SECTION'S SECOND MARK, on the denial "There is no
-     matching system here", and BOTH THE DENIAL AND ITS MARK ARE GONE. Do not
-     restore either. The repositioning brief that produced this edit asks for
-     confident "what founders get" phrasing in place of "what we are not", and
-     that sentence was the clearest instance of it on the page: it spent the
-     row's opening clause telling the reader about a product IFN does not have.
-     The row now describes the introduction a founder actually receives.
-     Deleting the mark with it is the correct move rather than a loss, and the
-     rule is the one PartnersStrip already had to apply for the same reason in
-     6990b9c: REDESIGN-PLAN.md section 2 makes the licence a CAP AND NOT A
-     QUOTA. A section with fewer marks passes. A mark relicensed onto another
-     phrase to keep the count up is the exact defect section 4.2 exists to stop.
+   - Row 2's BODY still says the dates are "published openly on Luma and
+     Meetup", which the dated feed in EventsPreview (`#events`) would check
+     perfectly well. It is deliberately unmarked. The mark that used to live in
+     this row was in its TITLE, and moving it into the body to preserve a count
+     is relicensing, which is the one move the licence forbids outright.
+   - Row 3 no longer contains a denial to mark.
    - Row 4's artifact would be ResourcesPreview's topic panels, which are owned
      by another section and whose final topics this component cannot inspect.
      Marking a claim against an artifact you have not read is the same move the
-     plan disqualified the Marked Copy ledger for, one step smaller. It stays
-     unmarked, and leaving it unmarked also keeps the seam with HowItWorks
-     clean: no viewport containing the end of this section can hold a third
-     mark.
+     plan disqualified the Marked Copy ledger for, one step smaller.
+
+   ZERO IS COMPLIANT AND IS NOT A GAP TO FILL. REDESIGN-PLAN.md section 2 makes
+   the licence a CAP AND NOT A QUOTA: a section with no marks passes, and a
+   section with an unevidenced mark is the exact defect section 4.2 exists to
+   stop. This repo has now applied that rule three times, to PartnersStrip in
+   6990b9c and twice here.
 
    Plan section 2 says "ValueProps carries four marks" while plan section 5
    says "exactly one clause in each is marked, and only the checkable one" and
    then names exactly two. That is an inconsistency inside the plan, and this
    file now satisfies neither number. It is resolved in favour of the licence,
    which is the rule both of those sentences were counting against. Do not
-   "restore" the missing three.
+   "restore" any of them.
 
    THE PLAN DOCUMENT NOW CONTRADICTS THIS FILE IN TWO NAMED PLACES, AND THE
    CONTRADICTION IS THE PLAN'S TO FIX RATHER THAN THIS COMPONENT'S.
@@ -102,21 +100,24 @@ import { Container } from './Container';
    the plan is handed over, on the same rule this repo already applies six
    times over: the plan is not this component's file.
 
-   DENSITY: one mark in a section taller than one viewport, against a ceiling
-   of two marks plus the wordmark period per viewport. It was previously at
-   that ceiling, because rows 2 and 3 are adjacent and a tall desktop viewport
-   can hold both. It is now comfortably inside it.
+   DENSITY: zero marks against a ceiling of two per viewport, so the seam with
+   HowItWorks below is now unconditionally clear. That seam used to need
+   checking, because HowItWorks opens with a mark of its own on "downtown
+   Austin" and a tall viewport can hold the end of this section and the start of
+   that one at the same time.
 
-   WHY THE 3px RULE IS THE MECHANISM AND THE HUE IS NOT. Computed with the WCAG
-   relative luminance formula, `--accent` against the surrounding `--ink` body
-   text measures 2.547 light and 3.256 dark, and against `--muted` it measures
-   1.069 and 1.359. So hue alone cannot be trusted to make a mark perceivable,
-   which is exactly the finding behind the plan's underline-every-link rule.
-   The 3px accent rule is what carries it: 7.054 against `--paper` in light and
-   5.517 in dark, both clear of the 3.0 non-text floor. Two consequences that
-   are followed below: no mark is ever placed inside a `--muted` paragraph, and
-   no meaning anywhere in this section is carried by the mark at all. Strip the
-   colour and the rule and every sentence still reads exactly the same.
+   WHY THE 3px RULE IS THE MECHANISM AND THE HUE IS NOT, kept because it is the
+   reasoning any future mark in this section has to satisfy. Computed with the
+   WCAG relative luminance formula, `--accent` against the surrounding `--ink`
+   body text measures 2.547 light and 3.256 dark, and against `--muted` it
+   measures 1.069 and 1.359. So hue alone cannot be trusted to make a mark
+   perceivable, which is exactly the finding behind the plan's
+   underline-every-link rule. The 3px accent rule is what carries it: 7.054
+   against `--paper` in light and 5.517 in dark, both clear of the 3.0 non-text
+   floor. Two consequences: no mark is ever placed inside a `--muted` paragraph,
+   and no meaning anywhere in this section is carried by a mark at all. Strip
+   the colour and the rule and every sentence still reads exactly the same,
+   which is now trivially true because there is no colour and no rule left.
 
    That 3px rule is the plan's licensed mark rule, not a structural hairline.
    The full-opacity-1px hairline rule in plan section 4.2 governs plate borders
@@ -124,22 +125,28 @@ import { Container } from './Container';
    -------------------------------------------------------------------------- */
 
 /* ---------------------------------------------------------------------------
-   MOTION. Plan section 6, behaviours 2 and 3. Two behaviours, both transform
-   and opacity only, both `whileInView` with `once: true`, no timers, no scroll
-   listeners, no loops, nothing to clean up.
+   MOTION. Plan section 6, behaviour 3 only, twice. Two behaviours, both
+   transform and opacity only, both `whileInView` with `once: true`, no timers,
+   no scroll listeners, no loops, nothing to clean up. It used to read
+   "behaviours 2 and 3"; behaviour 2 is the mark draw and this section no longer
+   has one.
 
    1. Row reveal (`row`): each statement translates y 16px to 0 and fades in as
       it enters. JUSTIFICATION: it reveals the four statements in the reading
       order the staircase already draws, so the sequence the geometry implies is
       the sequence the eye receives.
-   2. Mark draw (`markMotion`): the 3px accent rule scales `scaleX(0)` to
-      `scaleX(1)` from the left over 260ms, 120ms after it enters.
-      JUSTIFICATION: it enacts the page's one idea, a hand marking the checkable
-      part of a sentence in reading order, which is meaning rather than polish.
-   3. Header stagger (`headerGroup`): the headline and the lead share one parent
+   2. Header stagger (`headerGroup`): the headline and the lead share one parent
       and enter 60ms apart. JUSTIFICATION: they genuinely enter together, so a
       stagger there states which of the two is the section's title without
       moving either one.
+
+   THERE USED TO BE A THIRD, the mark draw (`markMotion`), which scaled the 3px
+   accent rule from `scaleX(0)` over 260ms and was the one animation in this
+   section carrying meaning rather than polish. It went with the section's last
+   mark; see the accent licence note above. The count in the first line of this
+   block is two behaviours, not three, and both are still transform and opacity
+   only, both `whileInView` with `once: true`, no timers, no scroll listeners,
+   nothing to clean up.
 
    The rows deliberately do NOT carry an index delay. A row that enters alone,
    which is the normal case on a staircase this tall, would otherwise sit blank
@@ -158,10 +165,12 @@ import { Container } from './Container';
    own here. `useReducedMotion()` is read once below and collapses both
    behaviours to fully static: every motion prop is spread from a constant that
    becomes an empty object, so no element carries an `initial`, a variant label
-   or a viewport observer at all, and `Mark` renders a plain span whose rule is
-   simply drawn rather than animated. Nothing in this
-   section animates at all under reduced motion, and nothing depends on an
-   animation having run in order to be visible.
+   or a viewport observer at all. Nothing in this section animates at all under
+   reduced motion, and nothing depends on an animation having run in order to be
+   visible. (This paragraph used to end by describing `Mark` rendering a plain
+   undrawn rule under reduced motion. That branch is gone with the component,
+   and `reduce` is still read here because the two surviving behaviours need
+   it.)
 
    LCP: this section sits below the fold under the hero, so the ancestor-chain
    opacity ban in plan section 6 does not reach it.
@@ -172,24 +181,6 @@ const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const row = {
     hidden: { opacity: 0, y: 16 },
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
-};
-
-/**
- * The mark draw carries its OWN viewport trigger rather than inheriting the
- * row's, and that is a deliberate belt-and-braces choice rather than an
- * oversight. Variant propagation would reach it (the `motion.span` sits under
- * the row's `motion.li` in the same context tree), but if it ever failed to,
- * the rule would stay at `scaleX(0)` and the mark would simply not exist:
- * `--accent` against the surrounding `--ink` measures 2.547 in light, so the
- * hue cannot carry a mark on its own and the rule is the whole mechanism. A
- * silent failure here deletes a mark rather than degrading it, so it gets an
- * observer of its own, which cannot fail quietly.
- */
-const markMotion: MotionProps = {
-    initial: { scaleX: 0 },
-    whileInView: { scaleX: 1 },
-    viewport: { once: true, amount: 0.5 },
-    transition: { duration: 0.26, delay: 0.12, ease: EASE },
 };
 
 const headerGroup = {
@@ -222,48 +213,26 @@ const rowMotion: MotionProps = {
 /** Children of a group: they take their state from the parent, not a viewport. */
 const childMotion: MotionProps = { variants: row };
 
-type MarkProps = {
-    children: React.ReactNode;
-    /** Passed down rather than re-read per instance so one media query decides. */
-    reduce: boolean;
-};
+/* THE `Mark` COMPONENT AND ITS `markMotion` VARIANT WERE DELETED HERE, and the
+   deletion is mechanical rather than a design decision of this file's making.
+   Row 2's title was the section's last call site, and the founder's copy edit
+   replaced that title ("A meetup you can put in your calendar") with one that
+   makes no checkable claim ("A monthly place to meet the network"). With no
+   call site the component is unreachable and eslint fails the build on it,
+   which is exactly what happened to PartnersStrip's own `Mark` in 6990b9c when
+   its single marked phrase was removed.
 
-/**
- * One marked phrase: accent type plus a 3px accent rule drawn under it.
- *
- * `inline-block` so the rule can be positioned against the phrase's own box.
- * If the phrase does not fit on the remaining line it moves to the next line
- * whole, which reads as a deliberate break rather than as a half-underlined
- * fragment. `pb-[0.18em]` is descender reserve: "put in your calendar" carries
- * a `p` and a `y`, and a rule at the text baseline would cut through both.
- *
- * `leading-[1.15]` is not cosmetic either. An inline-block inherits the line
- * height of whatever it sits in, and the body paragraphs run 1.6, which would
- * make the phrase's own box roughly 8px taller than its glyphs and float the
- * rule away from the words it marks. 1.15 hugs the phrase in both contexts, is
- * the minimum the plan sets for any slot that has to clear a descender, and it
- * changes nothing about the surrounding paragraph's rhythm because an
- * inline-block aligns on its baseline.
- */
-function Mark({ children, reduce }: MarkProps) {
-    return (
-        <span className="relative inline-block pb-[0.18em] leading-[1.15] text-accent">
-            {children}
-            {reduce ? (
-                <span
-                    aria-hidden="true"
-                    className="absolute bottom-0 left-0 block h-[3px] w-full bg-accent"
-                />
-            ) : (
-                <motion.span
-                    aria-hidden="true"
-                    {...markMotion}
-                    className="absolute bottom-0 left-0 block h-[3px] w-full origin-left bg-accent"
-                />
-            )}
-        </span>
-    );
-}
+   DO NOT REINSTATE IT BY FINDING SOMETHING ELSE TO MARK. The obvious candidate
+   is sitting right there in row 2's new body, "published openly on Luma and
+   Meetup", which the events feed further down this page would check perfectly
+   well. Marking it is still forbidden: REDESIGN-PLAN.md section 2 makes the
+   licence a CAP AND NOT A QUOTA, this repo has now twice recorded that a
+   section with zero marks passes, and relicensing a mark onto a different
+   phrase to keep a count up is the precise defect section 4.2 exists to stop.
+
+   If a future edit gives this section a genuinely checkable phrase that wants
+   marking, copy the component back from `HowItWorks.tsx`, which still carries
+   the same construction with its documentation intact. */
 
 /* ---------------------------------------------------------------------------
    CONTENT. Every claim below is checked against PRODUCT.md "Evidence on Hand":
@@ -318,17 +287,13 @@ export function ValueProps() {
     const statements: Statement[] = [
         {
             place: 'md:col-start-1 md:col-span-7',
-            title: 'Founders who solved it before you',
-            body: 'You will meet founders who have opened a U.S. bank account, worked through a visa, incorporated here, or made a first hire across borders. The answer comes from someone who has done it, not from a search result.',
+            title: 'Founders who have been through it before',
+            body: 'You will meet founders who have opened a U.S. bank account, worked through a visa, incorporated here, or made a first hire across borders. The perspective comes from someone who has been through it, not from a search result.',
         },
         {
             place: 'md:col-start-3 md:col-span-8',
-            title: (
-                <>
-                    A meetup you can <Mark reduce={reduce}>put in your calendar</Mark>
-                </>
-            ),
-            body: 'One a month, in person, in downtown Austin: the place the rest of this runs on. Every date is published openly on Luma and Meetup, so you can see the history before you commit to anything.',
+            title: 'A monthly place to meet the network',
+            body: 'Once a month in downtown Austin, founders, operators, investors and advisors meet in the same room. Every date is published openly on Luma and Meetup, so you can see the history before you commit to anything.',
         },
         {
             place: 'md:col-start-2 md:col-span-7',

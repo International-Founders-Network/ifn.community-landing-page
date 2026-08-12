@@ -199,16 +199,29 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         same value, so an accent mark on this field measures
                         1.000 and disappears.
 
-                        THE TWO SENTENCE FORM IS WHAT KEEPS THE OLD LINE BREAK
-                        WORKING RATHER THAN AN ACCIDENT OF IT. The `lg:max-w-[62%]`
-                        cap used to break after "in", setting "Austin." alone on
-                        the second line at 800. The rewrite keeps "in" as the
-                        last word before the bold span for exactly that reason,
-                        so the closing frame still lands on one heavy word on its
-                        own line. Re-measured after the change rather than
-                        assumed. */}
+                        WHERE THE WEIGHT SITS WAS MEASURED, NOT CHOSEN BY EYE,
+                        AND THE RULE IT FOLLOWS IS "THE LAST LINE IS THE HEAVY
+                        ONE". Under the `lg:max-w-[62%]` cap the previous
+                        headline broke after "in" and set "Austin." alone on the
+                        second line at 800. The founder's replacement drops
+                        "Austin" from this line entirely, so the single heavy
+                        word was gone and the question was which words the cap
+                        now puts on the closing line. Rendered at six widths
+                        before the span was placed: from 1024 up the second line
+                        is exactly "founders building here.", so the bold covers
+                        that phrase and the last line is heavy in full. Re-checked
+                        AFTER the span went in, because `wght 800` is wider than
+                        the 500 it replaced and a bolded phrase can push its own
+                        break.
+
+                        The emphasis also moved from a place to the people, which
+                        is what the new sentence is about: "Meet us in Austin"
+                        named where, "Meet the founders building here" names who.
+                        Bolding the trailing "here." instead would have put the
+                        weight back on the place the sentence just demoted. */}
                     <h2 className="text-[clamp(2.25rem,4.6vw,4rem)] font-medium leading-[1.02] tracking-[-0.025em] lg:max-w-[62%]">
-                        Join the network. Meet us in <span className="font-extrabold">Austin.</span>
+                        Join the network. Meet the{' '}
+                        <span className="font-extrabold">founders building here.</span>
                     </h2>
 
                     {/* 52ch, not the 65ch cap: at 1280px the h2's 62% measure
@@ -218,9 +231,9 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         52ch is about 551px, which stages them. */}
                     <p className="mt-8 max-w-[52ch] text-lg leading-[1.55] md:text-xl">
                         Founders who moved here to build are working through the same things you
-                        are: the same visa questions, the same bank paperwork, the same first hire
-                        in another country, the same first raise in a market that has never heard
-                        of them. Join the network, and meet them at the next one.
+                        are: visa questions, bank paperwork, first hires across borders, and first
+                        raises in a market that has never heard of them. Join the network, and meet
+                        them at the next gathering.
                     </p>
 
                     {/* ONE action. "Join the community" is the settled label for

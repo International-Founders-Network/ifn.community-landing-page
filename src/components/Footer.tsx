@@ -156,11 +156,24 @@ export function Footer() {
                             </span>
                             <span className="sr-only">International Founders Network home page</span>
                         </Link>
+                        {/* THIS PARAGRAPH RENDERS ON ALL EIGHTEEN ROUTES, so it
+                            is the one piece of copy on the site that has to
+                            describe IFN without any surrounding context. It used
+                            to open "A community for founders who moved to Austin,
+                            Texas from another country. We meet in person every
+                            month...", which made the monthly meetup the
+                            definition rather than an activity. It now leads with
+                            what IFN is and where it operates, and the meetup is
+                            carried by the line below and by /events.
+
+                            Requested by the founder in the same pass that
+                            recentred the home page, so the footer and the
+                            landing page state the same positioning rather than
+                            disagreeing on every route. */}
                         <p className="max-w-sm leading-relaxed text-ink">
-                            A community for founders who moved to Austin, Texas from another
-                            country. We meet in person every month to work through the practical
-                            parts: visas, U.S. banking, unfamiliar funding rules, and building a
-                            network from zero.
+                            A practical network for international founders building in the U.S.,
+                            starting in Austin. IFN helps founders navigate visas, U.S. banking,
+                            hiring, fundraising, and building a network from zero.
                         </p>
                         {/*
                          * The venue partner is described rather than named. The
@@ -171,8 +184,11 @@ export function Footer() {
                          * is exactly the footprint the founder asked to shrink.
                          *
                          * No place name here on purpose: the paragraph directly
-                         * above this one already says "moved to Austin, Texas",
-                         * and both sit in the same column of the same block.
+                         * above this one already names Austin ("starting in
+                         * Austin", previously "moved to Austin, Texas"), and
+                         * both sit in the same column of the same block. The
+                         * wording above changed in the repositioning; the reason
+                         * this line stays place-free did not.
                          */}
                         <p className="max-w-sm text-sm text-muted">
                             Six-plus months of monthly meetups, hosted by our venue partner.
