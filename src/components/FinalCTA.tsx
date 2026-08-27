@@ -330,11 +330,13 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         wearing a different coat. The sentence says nothing about
                         a second price because there is nothing to say here.
 
-                        Prices are imported, never typed. No checkout is designed
-                        and STRIPE_PAYMENT_LINK is wired to nothing; a real
-                        payment gateway is a next-iteration item, and the
-                        "request your membership link" route through /contact is
-                        untouched by this edit. */}
+                        Prices are imported, never typed. `/membership` now runs a
+                        real Stripe subscription checkout, and `STRIPE_PAYMENT_LINK`
+                        was deleted along with it — it named a different product
+                        ("IFN Pro", $79/mo), so anyone who wired it would have
+                        charged the wrong amount on the wrong period. This section
+                        still links to `/membership` rather than to checkout: the
+                        decision to pay belongs on the page that states the price. */}
                     <motion.p
                         variants={REVEAL_LAST}
                         className="mt-14 max-w-[62ch] text-[0.9375rem] leading-[1.55]"

@@ -32,19 +32,6 @@ export const MEMBERSHIP_PRICE_STANDARD = '$149';
  */
 export const MEMBERSHIP_TIER_NAME = 'Founding Member';
 
-/**
- * NOT IN USE. DO NOT WIRE THIS TO A BUTTON.
- *
- * This link resolves to a different product ("IFN Pro", $79 per month) than the
- * $149 annual membership this site advertises, so anyone completing checkout
- * would be charged the wrong amount on the wrong billing period.
- *
- * It is kept here so that swapping in the correct Stripe Payment Link is a
- * one-line change. Until that link arrives, `/membership` routes to `/contact`
- * and a person from the IFN team sends the payment link by hand.
- */
-export const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/bJedR80XZ5UL6p89EL6oo00';
-
 export const MEMBERSHIP_BENEFITS: MembershipBenefit[] = [
     {
         id: 'community',
