@@ -10,9 +10,36 @@
   publish = "dist"
 
 [build.environment]
-  # Keep the downloaded Chrome inside the repo directory so Netlify's build
-  # cache retains it between deploys instead of re-downloading ~150 MB each time.
-  PUPPETEER_CACHE_DIR = "/opt/build/repo/.cache/puppeteer"
+  # Keep the downloaded Chrome inside the repo directory rather than in the
+  # home directory, so Netlify has a chance to retain it between deploys instead
+  # of re-downloading ~150 MB every time.
+  #
+  # RELATIVE, not absolute. An absolute "/opt/build/repo/..." is correct on
+  # Netlify and wrong everywhere else, which silently breaks `netlify build` and
+  # `netlify dev` on a developer machine. Puppeteer resolves this against the
+  # working directory, and that is the repo root in both places.
+  PUPPETEER_CACHE_DIR = ".cache/puppeteer"
+
+  # Pin the Node major version. It was previously unpinned, which means the
+  # build ran on whatever Netlify's build image defaulted to that week — and a
+  # default bump is a build that breaks on a day nobody touched the repo. 24 is
+  # the version the prerender step was developed and verified against.
+  # .nvmrc carries the same value so local and CI agree.
+  NODE_VERSION = "24"
+
+  # Netlify scans build output for the values of environment variables and fails
+  # the deploy when it finds one, on the assumption that a leaked secret is
+  # always a mistake. For `VITE_`-prefixed variables that assumption is wrong by
+  # design: Vite inlines them into the client bundle at build time, which is the
+  # documented purpose of the prefix. They are public values — a GA4 measurement
+  # ID appears in the page source of every site that uses GA4, and a Google
+  # OAuth client ID is likewise designed to be public (the client SECRET is not,
+  # and is not here).
+  #
+  # Without this, adding VITE_GA4_MEASUREMENT_ID would fail the build with
+  # "Secrets scanning found secrets in build output" and the cause would be
+  # entirely non-obvious.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_GA4_MEASUREMENT_ID,VITE_GOOGLE_CLIENT_ID"
 
 [functions]
   directory = "netlify/functions"
