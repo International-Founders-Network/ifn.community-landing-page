@@ -213,6 +213,39 @@ What fails the build and what does not:
   fails the build. Those are real misconfigurations, and one of them (a price
   with no lookup key) genuinely shipped to test mode and was found by hand.
 
+### Stripe owns what an offer says; the repo owns which offers exist
+
+That split is deliberate. Making the label editable in Stripe is a convenience;
+making the *published set* editable in Stripe would mean one metadata edit could
+publish the non-public warm-lead price. So:
+
+| | Owner |
+| :--- | :--- |
+| Which plans are published | `src/data/plans.json` |
+| Price, currency, interval | Stripe price |
+| Marketing label | Stripe product `metadata.site_label` |
+| Benefit cards | Stripe product `metadata.benefit_N_*` |
+
+The benefit keys per card `N` are `benefit_N_id`, `benefit_N_title`,
+`benefit_N_desc` and `benefit_N_bullets` (pipe-separated). They live in metadata
+rather than `marketing_features` because Stripe caps a feature name at **80
+characters** — every bullet fits, two of them at 78 and 79, but the card
+descriptions are 120–194 and cannot. `marketing_features` still carries the three
+card titles as a human summary inside Stripe's own UI.
+
+Anything Stripe does not carry falls back to `src/data/benefits.json` with a
+build warning, so an unseeded Stripe account still renders real copy.
+
+To seed a Stripe account from the repo's copy — do this once per mode:
+
+```bash
+STRIPE_SECRET_KEY=sk_test_... node scripts/push-offer-to-stripe.mjs          # preview
+STRIPE_SECRET_KEY=sk_test_... node scripts/push-offer-to-stripe.mjs --apply
+```
+
+After that, edit in Stripe. It validates every field against Stripe's limits
+before writing, so a too-long bullet fails locally rather than halfway through.
+
 `npm run check-pricing-drift` compares test and live for every allowlisted key
 and reports any difference in amount, currency or interval. Price ids always
 differ between modes — that is expected, and is why prices are addressed by

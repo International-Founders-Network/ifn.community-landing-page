@@ -30,6 +30,46 @@ const PLANS_PATH = resolve(here, '../src/data/plans.json');
 const OUT_PATH = resolve(here, '../src/data/pricing.generated.ts');
 
 const config = JSON.parse(readFileSync(PLANS_PATH, 'utf8'));
+const fallbackBenefits = JSON.parse(
+    readFileSync(resolve(here, '../src/data/benefits.json'), 'utf8'),
+).benefits;
+
+/** Bullets are stored pipe-separated; see scripts/push-offer-to-stripe.mjs. */
+const SEPARATOR = '|';
+
+/**
+ * Reads the marketing copy a Stripe product carries, if it carries any.
+ *
+ * Stripe owns what an offer SAYS; `plans.json` owns which offers EXIST. That
+ * split is deliberate: making the label editable in Stripe is a convenience,
+ * but making the published set editable in Stripe would mean one metadata edit
+ * could publish the non-public warm-lead price.
+ *
+ * Returns nulls when the product has no copy, so a Stripe account that has not
+ * been seeded yet still builds against the repo's own text.
+ */
+function copyFromProduct(product, slug) {
+    const meta = product?.metadata ?? {};
+    const label = meta.site_label || null;
+
+    const benefits = [];
+    for (let n = 1; meta[`benefit_${n}_title`]; n += 1) {
+        benefits.push({
+            id: meta[`benefit_${n}_id`] || `benefit-${n}`,
+            title: meta[`benefit_${n}_title`],
+            description: meta[`benefit_${n}_desc`] || '',
+            included: (meta[`benefit_${n}_bullets`] || '')
+                .split(SEPARATOR)
+                .map((line) => line.trim())
+                .filter(Boolean),
+        });
+    }
+
+    if (!label) console.warn(`  ⚠ ${slug}: product has no metadata.site_label; using the repo label.`);
+    if (!benefits.length) console.warn(`  ⚠ ${slug}: product carries no benefit metadata; using src/data/benefits.json.`);
+
+    return { label, benefits: benefits.length ? benefits : null };
+}
 const plans = Object.entries(config.plans);
 
 /** "$149", or "$149.50" when the amount is not whole. Never "$149.00". */
@@ -49,6 +89,8 @@ function render(entries, source) {
             ([slug, p]) => `    '${slug}': {
         lookupKey: '${p.lookupKey}',
         label: ${JSON.stringify(p.label)},
+        /** Benefit cards, from the Stripe product's metadata when it carries any. */
+        benefits: ${JSON.stringify(p.benefits, null, 8).replace(/\n/g, '\n    ')},
         /** Display string, e.g. "$149". Formatted from Stripe's minor units. */
         display: ${JSON.stringify(p.display)},
         /** Minor units exactly as Stripe holds them, for anything that must compute. */
@@ -73,9 +115,17 @@ function render(entries, source) {
  * Stripe outage, still produces a site with a real price rather than a blank.
  */
 
+export interface GeneratedBenefit {
+    id: string;
+    title: string;
+    description: string;
+    included: string[];
+}
+
 export interface GeneratedPlan {
     lookupKey: string;
     label: string;
+    benefits: GeneratedBenefit[];
     display: string;
     amountMinor: number;
     currency: string;
@@ -123,6 +173,7 @@ for (const [slug, plan] of plans) {
             lookup_keys: [plan.lookupKey],
             active: true,
             limit: 1,
+            expand: ['data.product'],
         });
         price = list.data[0];
     } catch (error) {
@@ -148,11 +199,14 @@ for (const [slug, plan] of plans) {
         continue;
     }
 
+    const copy = copyFromProduct(price.product, slug);
+
     resolved.push([
         slug,
         {
             lookupKey: plan.lookupKey,
-            label: plan.label,
+            label: copy.label ?? plan.label,
+            benefits: copy.benefits ?? fallbackBenefits,
             display: formatAmount(price.unit_amount, price.currency),
             amountMinor: price.unit_amount,
             currency: price.currency,

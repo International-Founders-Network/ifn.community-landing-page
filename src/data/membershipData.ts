@@ -45,38 +45,11 @@ export const MEMBERSHIP_PRICE_CURRENCY = DEFAULT.currency.toUpperCase();
  */
 export const MEMBERSHIP_TIER_NAME = DEFAULT.label;
 
-export const MEMBERSHIP_BENEFITS: MembershipBenefit[] = [
-    {
-        id: 'community',
-        title: 'Private member channel',
-        description:
-            'A members-only channel on Slack or Discord. Ask your question on a Tuesday instead of holding it until the next meetup, and get an answer from someone who has already been through the same step.',
-        included: [
-            'Ask questions between meetups and get answers from other international founders',
-            'Share introductions, referrals and the names of people who actually helped you',
-            'Open from anywhere: you do not have to be in Austin that month',
-        ],
-    },
-    {
-        id: 'resources',
-        title: 'Resource library',
-        description:
-            'Written notes, templates and checklists built from six months of IFN meetups in Austin: the questions founders brought to the room, and the answers that turned out to work.',
-        included: [
-            'Visa and immigration questions founders raised, and how they were handled',
-            'Opening a U.S. bank account and setting up a U.S. company as a non-citizen',
-            'Hiring and paying people across borders as a small, new company',
-        ],
-    },
-    {
-        id: 'office-hours',
-        title: 'Monthly office hours',
-        description:
-            'One members-only call every month. Bring whatever you are working through and get a direct answer on your own situation.',
-        included: [
-            'One call every month, for members only',
-            'Held by the people who run IFN',
-            'Join from anywhere: the call is online',
-        ],
-    },
-];
+/**
+ * The benefit cards. Read from the Stripe product's metadata when it carries
+ * any, falling back to `benefits.json` when it does not — so an unseeded Stripe
+ * account still renders real copy rather than an empty section.
+ *
+ * Seed Stripe from the fallback with `node scripts/push-offer-to-stripe.mjs`.
+ */
+export const MEMBERSHIP_BENEFITS: MembershipBenefit[] = DEFAULT.benefits;
