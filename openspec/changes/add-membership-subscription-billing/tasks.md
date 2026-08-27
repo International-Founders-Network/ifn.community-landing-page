@@ -33,8 +33,16 @@
 - [x] 5.3 Built `dist/` contains no warm-lead price, no `buy.stripe.com` link, no secret key and no price id
 - [x] 5.4 `/membership` prerenders with the new CTA and renewal copy; "charged once" is gone
 - [x] 5.5 No test file under `netlify/functions/` (a dotted name there blocks the whole deploy)
-- [~] 5.6 **End-to-end test-mode run was done on the `main`-based branch**, not re-run here: real Checkout with card 4242, one `memberships` row from six events (`active`, email captured, `current_period_end` one year out), duplicate delivery idempotent, a stale `active` event failing to revive a cancelled member, and a newer one still applying. The server files are byte-identical, so that evidence carries; **the browser CTA path on this branch has not been clicked against a live Stripe yet.**
-
-## 6. Housekeeping
-
-- [ ] 6.1 Archive this change, merging both deltas into `openspec/specs/`
+- [x] 5.6 **Browser path verified on this branch, 2026-08-27.** `netlify dev` +
+  `stripe listen`, `/membership` loaded in Chrome: single price, "renews annually
+  until you cancel", "Become a member". Clicking it POSTed the plan slug and
+  redirected to a real Stripe Checkout session for $149/yr. Both return states
+  render — `?checkout=success` ("Payment received") and `?checkout=cancelled`
+  ("Nothing was charged"). Six checkout requests served, the only logged failure
+  being the deliberate unknown-plan guard test.
+- [x] 5.7 **Full payment run** was completed on the `main`-based branch, where the
+  server files are byte-identical: real Checkout with card 4242 produced one
+  `memberships` row from six events (`active`, email captured,
+  `current_period_end` one year out); duplicate delivery stayed idempotent; a
+  stale `active` event failed to revive a cancelled member while a newer one
+  still applied.
