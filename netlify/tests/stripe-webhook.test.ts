@@ -221,3 +221,36 @@ describe('webhook field helpers', () => {
         expect(periodEnd(undefined)).toBeNull();
     });
 });
+
+describe('stripe-webhook.ts catalogue events', () => {
+    const catalogueEvent = JSON.stringify({
+        id: 'evt_price_updated',
+        object: 'event',
+        type: 'price.updated',
+        created: Math.floor(Date.now() / 1000),
+        data: { object: { id: 'price_test', object: 'price' } },
+    });
+
+    it('acknowledges a price change without a build hook configured', async () => {
+        delete process.env.NETLIFY_BUILD_HOOK_URL;
+        const res = await handler(
+            makeEvent(catalogueEvent, { signature: sign(catalogueEvent) }),
+            {} as never,
+        );
+        // 200, not an error: a missing hook is a deploy that has not been wired
+        // yet, and a non-2xx would make Stripe redeliver for days.
+        expect(res?.statusCode).toBe(200);
+        expect(JSON.parse(res?.body as string).rebuild).toBe('not-configured');
+    });
+
+    it('never touches the database for a catalogue event', async () => {
+        // NETLIFY_DATABASE_URL is a bogus host in these tests; reaching Postgres
+        // would throw and surface as a 500. A 200 proves it returned first.
+        delete process.env.NETLIFY_BUILD_HOOK_URL;
+        const res = await handler(
+            makeEvent(catalogueEvent, { signature: sign(catalogueEvent) }),
+            {} as never,
+        );
+        expect(res?.statusCode).toBe(200);
+    });
+});

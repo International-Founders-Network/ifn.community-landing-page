@@ -1,5 +1,6 @@
 import { Handler, HandlerEvent } from '@netlify/functions';
 import Stripe from 'stripe';
+import planConfig from '../../src/data/plans.json';
 
 /**
  * Creates a Stripe Checkout Session for the annual IFN membership.
@@ -19,31 +20,30 @@ import Stripe from 'stripe';
  */
 
 /**
- * Published plans: the slug a browser may ask for, mapped to the Stripe
- * **lookup key** that resolves to a real price at request time.
+ * Published plans, read from the shared allowlist in `src/data/plans.json`.
  *
- * WHY LOOKUP KEYS RATHER THAN PRICE IDS.
- * A price id differs between test and live mode, so an id in the repo or in an
- * environment variable only ever works in one of them, and every new product
- * needs another variable set in two places. A lookup key is a name *you* choose
- * and set in BOTH modes, so this one table works everywhere and adding a
- * product is a Stripe change plus one line here — not a deploy plus two
- * dashboard edits.
+ * It lives there rather than here because `scripts/sync-pricing.mjs` needs the
+ * same list to decide which prices the SITE may print. Two copies would let the
+ * site advertise a price it cannot sell, or sell one it does not advertise.
+ * `netlify/functions/events.ts` already imports across this boundary the same way.
  *
- * Repricing never touches this file either: create the new price with
+ * WHY LOOKUP KEYS RATHER THAN PRICE IDS. A price id differs between test and
+ * live mode, so an id in the repo or in an environment variable only ever works
+ * in one of them, and every new product needs another variable set in two
+ * places. A lookup key is a name we choose and set in BOTH modes.
+ *
+ * Repricing never touches this repo: create the new price with
  * `transfer_lookup_key: true` and the next checkout picks it up.
  *
- * THIS TABLE IS THE PUBLISHED-PRICE ALLOWLIST, AND THAT IS LOAD-BEARING.
- * A second, lower annual price exists as a warm-lead price emailed to a
- * selected list. It stays sellable in Stripe and unreachable here simply by not
- * being listed. Do not add it. Adding a slug publishes a price.
+ * THIS LIST IS THE PUBLISHED-PRICE BOUNDARY. The warm-lead price stays sellable
+ * in Stripe and unreachable here by not being listed. Do not add it.
  */
-const PLANS: Record<string, string> = {
-    'founding-member': 'founding_member_annual',
-};
+const PLANS: Record<string, string> = Object.fromEntries(
+    Object.entries(planConfig.plans).map(([slug, plan]) => [slug, plan.lookupKey]),
+);
 
-/** What a request with no plan asks for. There is exactly one public plan. */
-const DEFAULT_PLAN = 'founding-member';
+/** What a request with no plan asks for. */
+const DEFAULT_PLAN = planConfig.defaultPlan;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_EMAIL_LENGTH = 254; // RFC 5321 maximum address length

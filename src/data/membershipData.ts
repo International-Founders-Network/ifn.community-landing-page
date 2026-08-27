@@ -1,3 +1,5 @@
+import { GENERATED_PLANS, GENERATED_DEFAULT_PLAN } from './pricing.generated';
+
 export interface MembershipBenefit {
     id: string;
     title: string;
@@ -7,9 +9,10 @@ export interface MembershipBenefit {
 }
 
 /**
- * The one published annual price, and the single source of truth for every
- * surface that prints a figure. Billed once a year. Do not present any other
- * number on any public page, and do not imply monthly billing.
+ * THE PRICE COMES FROM STRIPE. `scripts/sync-pricing.mjs` runs before every
+ * build, reads the allowlist in `plans.json`, and writes
+ * `pricing.generated.ts`. Change the price in Stripe; nothing here needs
+ * editing, and the two can no longer disagree.
  *
  * THE PRIVATE PRICE, RECORDED HERE ON PURPOSE SO NOBODY "RESTORES" IT.
  * A second annual price of $99 exists. It is a warm-lead price the founder
@@ -19,18 +22,28 @@ export interface MembershipBenefit {
  * a `MEMBERSHIP_PRICE_ATTENDEE` export and a two-entry `MEMBERSHIP_TIERS`
  * array feeding a two-card price grid on `/membership`; both were removed for
  * this reason. A page that publishes a second, lower price is also a page that
- * invites every reader to ask for it. This comment is the only place in `src/`
- * that carries the figure, and comments are stripped by the production
- * minifier, so it does not ship.
+ * invites every reader to ask for it. Pulling from Stripe does not weaken this:
+ * the sync only ever reads the lookup keys listed in `plans.json`, so a price
+ * absent from that list can be neither printed nor bought. This comment is the
+ * only place in `src/` that carries the figure, and comments are stripped by
+ * the production minifier, so it does not ship.
  */
-export const MEMBERSHIP_PRICE_STANDARD = '$149';
+const DEFAULT = GENERATED_PLANS[GENERATED_DEFAULT_PLAN];
+
+/** The published annual price as displayed, e.g. "$149". From Stripe. */
+export const MEMBERSHIP_PRICE_STANDARD = DEFAULT.display;
+
+/** Minor units and currency, for anything that must compute rather than print. */
+export const MEMBERSHIP_PRICE_MINOR = DEFAULT.amountMinor;
+export const MEMBERSHIP_PRICE_CURRENCY = DEFAULT.currency.toUpperCase();
 
 /**
- * The public tier name, confirmed in PRODUCT.md. There is exactly one, and it
- * is not a "starting at" or an introductory rate: no surface may imply that
- * the price moves, because nothing on record says it does.
+ * The public tier name. Deliberately NOT taken from Stripe: the Stripe product
+ * is called "IFN Membership", which is a billing label, while this is the
+ * marketing name the site has committed to. Syncing it would silently rename
+ * the offer on the page the next time someone tidied the Stripe catalogue.
  */
-export const MEMBERSHIP_TIER_NAME = 'Founding Member';
+export const MEMBERSHIP_TIER_NAME = DEFAULT.label;
 
 export const MEMBERSHIP_BENEFITS: MembershipBenefit[] = [
     {

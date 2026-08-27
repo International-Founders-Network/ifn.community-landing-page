@@ -174,12 +174,53 @@ The project is configured for deployment on **Netlify**.
 
 - Push to the main branch to trigger a deploy.
 - Ensure `NETLIFY_DATABASE_URL` is set in the Netlify Dashboard.
+- **Scope the Stripe keys per deploy context.** Live keys on Production only,
+  test keys on deploy previews and branch deploys. A single value for all
+  contexts means every preview takes real money from anyone who clicks Subscribe.
+- To let a price change in Stripe republish the site by itself, create a build
+  hook (Project configuration → Build & deploy → Build hooks), set its URL as
+  `NETLIFY_BUILD_HOOK_URL`, and add `price.created`, `price.updated`,
+  `price.deleted` and `product.updated` to the Stripe webhook endpoint. Without
+  it the site still picks up the current price on the next ordinary deploy.
 - For membership billing, also set `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`
   there (no price id — see above), give the **live** price the same lookup key as
   the test one, and register the live endpoint at
   `https://ifn.community/api/stripe-webhook` for `checkout.session.completed`,
   `customer.subscription.{created,updated,deleted}` and `invoice.payment_failed`.
   The live endpoint's signing secret is not the one `stripe listen` prints.
+
+## 💵 The price comes from Stripe, at build time
+
+`npm run build` starts with `node scripts/sync-pricing.mjs`, which reads the
+published-price allowlist in `src/data/plans.json`, asks Stripe for those lookup
+keys, and writes `src/data/pricing.generated.ts`. `membershipData.ts` re-exports
+it, so **Stripe is the only place a price is edited.** The five surfaces that
+print it — the membership page, the final CTA, two FAQ answers and the JSON-LD
+`Offer` — all follow automatically.
+
+**Why build time rather than the browser.** The price is baked into prerendered
+HTML and into the JSON-LD that answer engines quote. `scripts/prerender.mjs`
+exists because GPTBot, ClaudeBot, PerplexityBot and CCBot do not run JavaScript;
+fetching the price client-side would blank it on exactly the surfaces this repo
+works hardest to fill.
+
+What fails the build and what does not:
+
+- **No `STRIPE_SECRET_KEY`, or Stripe unreachable** → warns loudly and uses the
+  committed `pricing.generated.ts`. A contributor without credentials can still
+  build, and a Stripe outage cannot block a deploy.
+- **A lookup key with no active price, or a price that is not recurring** →
+  fails the build. Those are real misconfigurations, and one of them (a price
+  with no lookup key) genuinely shipped to test mode and was found by hand.
+
+`npm run check-pricing-drift` compares test and live for every allowlisted key
+and reports any difference in amount, currency or interval. Price ids always
+differ between modes — that is expected, and is why prices are addressed by
+lookup key — so only the terms are compared. Run it before going live:
+
+```bash
+STRIPE_TEST_KEY=sk_test_... STRIPE_LIVE_KEY=sk_live_... npm run check-pricing-drift
+```
 
 ## 🗄️ Database & Migrations
 

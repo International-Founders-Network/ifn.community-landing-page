@@ -21,13 +21,29 @@ import Stripe from 'stripe';
  *    only thing this handler does with one is return 400.
  */
 
-/** Events this handler acts on. Anything else is acknowledged and ignored. */
-const HANDLED_EVENTS = new Set([
+/** Subscription lifecycle: these write to `memberships`. */
+const MEMBERSHIP_EVENTS = new Set([
     'checkout.session.completed',
     'customer.subscription.created',
     'customer.subscription.updated',
     'customer.subscription.deleted',
     'invoice.payment_failed',
+]);
+
+/**
+ * Catalogue changes: these touch no data, they rebuild the site.
+ *
+ * The published price is baked into HTML and JSON-LD at build time (see
+ * `scripts/sync-pricing.mjs` for why it cannot be fetched in the browser), so
+ * editing a price in Stripe does not change the site until something rebuilds
+ * it. This is that something: Stripe stays the one place a price is edited, and
+ * the site catches up on its own within a couple of minutes.
+ */
+const CATALOGUE_EVENTS = new Set([
+    'price.created',
+    'price.updated',
+    'price.deleted',
+    'product.updated',
 ]);
 
 function json(statusCode: number, payload: Record<string, unknown>) {
@@ -110,6 +126,34 @@ export async function upsertMembership(
     `;
 }
 
+/**
+ * Pokes the Netlify build hook so the site picks up a new price.
+ *
+ * Returns a status rather than throwing: a failed rebuild must not turn into a
+ * non-2xx, because Stripe would then redeliver the price change for days and we
+ * would rebuild repeatedly for the same edit. The stale price is the smaller
+ * problem, and it is visible in the log.
+ */
+async function requestRebuild(eventType: string): Promise<string> {
+    const hook = process.env.NETLIFY_BUILD_HOOK_URL;
+    if (!hook) {
+        console.warn(`${eventType} received but NETLIFY_BUILD_HOOK_URL is not set; not rebuilding.`);
+        return 'not-configured';
+    }
+    try {
+        const response = await fetch(hook, { method: 'POST' });
+        if (!response.ok) {
+            console.error(`Build hook returned ${response.status} for ${eventType}.`);
+            return 'failed';
+        }
+        console.log(`${eventType}: triggered a Netlify rebuild to republish the price.`);
+        return 'triggered';
+    } catch (error) {
+        console.error(`Build hook request failed for ${eventType}:`, error);
+        return 'failed';
+    }
+}
+
 export function idOf(value: string | { id: string } | null | undefined): string | null {
     if (!value) return null;
     return typeof value === 'string' ? value : value.id;
@@ -151,9 +195,16 @@ export const handler: Handler = async (event: HandlerEvent) => {
         return json(400, { error: 'Invalid signature' });
     }
 
+    // A catalogue change rebuilds the site and touches no data, so it returns
+    // before the database is opened at all.
+    if (CATALOGUE_EVENTS.has(stripeEvent.type)) {
+        const rebuilt = await requestRebuild(stripeEvent.type);
+        return json(200, { received: true, handled: true, rebuild: rebuilt });
+    }
+
     // Acknowledge anything we do not handle. Returning non-2xx would make
     // Stripe retry an event this system will never act on, for days.
-    if (!HANDLED_EVENTS.has(stripeEvent.type)) {
+    if (!MEMBERSHIP_EVENTS.has(stripeEvent.type)) {
         return json(200, { received: true, handled: false });
     }
 
