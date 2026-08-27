@@ -38,12 +38,11 @@ left to contradict the code.
 
 A second annual price ($99) is emailed by hand to roughly forty people.
 
-**State of the baseline, stated plainly:** on `origin/main` that figure is
-public — `MEMBERSHIP_PRICE_ATTENDEE` is an exported constant and `/membership`
-renders it in a two-price grid. The doctrine that it must not be public, and the
-spec scenario asserting it is absent from built `dist/`, live only on the
-unmerged `seo/aeo-analytics-and-crawlability` branch. This change does not fix
-that and does not make it worse: it touches no file under `src/`.
+**State of the baseline, stated plainly:** this branch already removed the
+warm-lead price from the public page — `MEMBERSHIP_PRICE_ATTENDEE` and the
+two-price grid are gone, and only a comment in `membershipData.ts` records that
+the second price exists. On `origin/main` that is still not true, which is
+precisely why the page half of this work could not land there.
 
 What this change does guarantee is the Stripe side of the same rule. The
 warm-lead cohort may have its own Stripe Price, but neither its amount nor its
