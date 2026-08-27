@@ -1,0 +1,10 @@
+{
+  "_comment": "THE PUBLISHED-PRICE ALLOWLIST. Shared, on purpose, by netlify/functions/checkout.ts (what a visitor may buy) and scripts/sync-pricing.mjs (what the site may print). One file so the two can never disagree: a price the site advertises but cannot sell, or sells but does not advertise, are both bugs this shape makes impossible. The same cross-boundary import that netlify/functions/events.ts already does with events.json. ADDING A SLUG PUBLISHES A PRICE — the non-public warm-lead price stays sellable in Stripe and invisible here simply by never being listed.",
+  "plans": {
+    "founding-member": {
+      "lookupKey": "founding_member_annual",
+      "label": "Founding Member"
+    }
+  },
+  "defaultPlan": "founding-member"
+}

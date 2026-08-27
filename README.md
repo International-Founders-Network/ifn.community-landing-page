@@ -44,7 +44,30 @@ International Founders Network (IFN) is a global ecosystem for founders to conne
 
    ```bash
    NETLIFY_DATABASE_URL="your-neon-dev-connection-string"
+
+   # Membership subscription billing. TEST-mode values locally: a live secret
+   # key here charges real cards from your laptop.
+   STRIPE_SECRET_KEY="sk_test_..."
+   STRIPE_WEBHOOK_SECRET="whsec_..."    # from `stripe listen`, see below
    ```
+
+   **There is no price id here, on purpose.** Prices are resolved by Stripe
+   **lookup key** at request time — see the `PLANS` table at the top of
+   `netlify/functions/checkout.ts`, which maps a public plan slug to a lookup
+   key. Set the same lookup key on the price in **both test and live mode** and
+   one code path serves both; a price id only ever works in one of them, and each
+   new product would need another variable set in two places.
+
+   The price must be **recurring** (yearly). `checkout.ts` checks this and logs
+   which price is wrong, because a one-time price in a subscription-mode session
+   fails in a way that reads like a bad API key.
+
+   `PLANS` is also the published-price allowlist. The warm-lead price stays
+   sellable in Stripe and unreachable from the site simply by not being listed —
+   adding a slug publishes a price.
+
+   No publishable key is needed: Checkout is redirect-based, so the browser never
+   talks to Stripe directly and no Stripe value is bundled into `src/`.
 
 3. **Run Development Server**:
    To test both frontend and backend (Netlify Functions), run:
@@ -54,6 +77,19 @@ International Founders Network (IFN) is a global ecosystem for founders to conne
    ```
 
    Plain `npm run dev` / `vite` only serves the frontend — `/api/*` calls will fail without `netlify dev`.
+
+   To exercise the Stripe webhook, run this alongside it in a second terminal:
+
+   ```bash
+   stripe listen --forward-to localhost:8888/api/stripe-webhook
+   ```
+
+   Use the port `netlify dev` actually prints — it does not always get 8888, and
+   a listener pointed at the wrong port fails silently. It prints its own
+   `whsec_...`, which differs from the deployed endpoint's; put that one in
+   `.env` while testing. The webhook **cannot** be verified on a Netlify deploy
+   preview — previews are blocked before build on Git-contributor identity (see
+   `AGENTS.md`) — so local is the only place end-to-end verification happens.
 
 4. **Run Checks**:
 
@@ -138,6 +174,86 @@ The project is configured for deployment on **Netlify**.
 
 - Push to the main branch to trigger a deploy.
 - Ensure `NETLIFY_DATABASE_URL` is set in the Netlify Dashboard.
+- **Scope the Stripe keys per deploy context.** Live keys on Production only,
+  test keys on deploy previews and branch deploys. A single value for all
+  contexts means every preview takes real money from anyone who clicks Subscribe.
+- To let a price change in Stripe republish the site by itself, create a build
+  hook (Project configuration → Build & deploy → Build hooks), set its URL as
+  `NETLIFY_BUILD_HOOK_URL`, and add `price.created`, `price.updated`,
+  `price.deleted` and `product.updated` to the Stripe webhook endpoint. Without
+  it the site still picks up the current price on the next ordinary deploy.
+- For membership billing, also set `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`
+  there (no price id — see above), give the **live** price the same lookup key as
+  the test one, and register the live endpoint at
+  `https://ifn.community/api/stripe-webhook` for `checkout.session.completed`,
+  `customer.subscription.{created,updated,deleted}` and `invoice.payment_failed`.
+  The live endpoint's signing secret is not the one `stripe listen` prints.
+
+## 💵 The price comes from Stripe, at build time
+
+`npm run build` starts with `node scripts/sync-pricing.mjs`, which reads the
+published-price allowlist in `src/data/plans.json`, asks Stripe for those lookup
+keys, and writes `src/data/pricing.generated.ts`. `membershipData.ts` re-exports
+it, so **Stripe is the only place a price is edited.** The five surfaces that
+print it — the membership page, the final CTA, two FAQ answers and the JSON-LD
+`Offer` — all follow automatically.
+
+**Why build time rather than the browser.** The price is baked into prerendered
+HTML and into the JSON-LD that answer engines quote. `scripts/prerender.mjs`
+exists because GPTBot, ClaudeBot, PerplexityBot and CCBot do not run JavaScript;
+fetching the price client-side would blank it on exactly the surfaces this repo
+works hardest to fill.
+
+What fails the build and what does not:
+
+- **No `STRIPE_SECRET_KEY`, or Stripe unreachable** → warns loudly and uses the
+  committed `pricing.generated.ts`. A contributor without credentials can still
+  build, and a Stripe outage cannot block a deploy.
+- **A lookup key with no active price, or a price that is not recurring** →
+  fails the build. Those are real misconfigurations, and one of them (a price
+  with no lookup key) genuinely shipped to test mode and was found by hand.
+
+### Stripe owns what an offer says; the repo owns which offers exist
+
+That split is deliberate. Making the label editable in Stripe is a convenience;
+making the *published set* editable in Stripe would mean one metadata edit could
+publish the non-public warm-lead price. So:
+
+| | Owner |
+| :--- | :--- |
+| Which plans are published | `src/data/plans.json` |
+| Price, currency, interval | Stripe price |
+| Marketing label | Stripe product `metadata.site_label` |
+| Benefit cards | Stripe product `metadata.benefit_N_*` |
+
+The benefit keys per card `N` are `benefit_N_id`, `benefit_N_title`,
+`benefit_N_desc` and `benefit_N_bullets` (pipe-separated). They live in metadata
+rather than `marketing_features` because Stripe caps a feature name at **80
+characters** — every bullet fits, two of them at 78 and 79, but the card
+descriptions are 120–194 and cannot. `marketing_features` still carries the three
+card titles as a human summary inside Stripe's own UI.
+
+Anything Stripe does not carry falls back to `src/data/benefits.json` with a
+build warning, so an unseeded Stripe account still renders real copy.
+
+To seed a Stripe account from the repo's copy — do this once per mode:
+
+```bash
+STRIPE_SECRET_KEY=sk_test_... node scripts/push-offer-to-stripe.mjs          # preview
+STRIPE_SECRET_KEY=sk_test_... node scripts/push-offer-to-stripe.mjs --apply
+```
+
+After that, edit in Stripe. It validates every field against Stripe's limits
+before writing, so a too-long bullet fails locally rather than halfway through.
+
+`npm run check-pricing-drift` compares test and live for every allowlisted key
+and reports any difference in amount, currency or interval. Price ids always
+differ between modes — that is expected, and is why prices are addressed by
+lookup key — so only the terms are compared. Run it before going live:
+
+```bash
+STRIPE_TEST_KEY=sk_test_... STRIPE_LIVE_KEY=sk_live_... npm run check-pricing-drift
+```
 
 ## 🗄️ Database & Migrations
 
