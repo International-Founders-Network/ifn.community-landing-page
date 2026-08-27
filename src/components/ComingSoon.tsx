@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Container } from './Container';
@@ -88,25 +87,22 @@ export function ComingSoon({
     titleBefore,
     titleAccent,
     titleAfter,
-    documentTitle,
     lead,
     detail,
     actions,
 }: ComingSoonProps) {
-    useEffect(() => {
-        const previousTitle = document.title;
-        document.title = documentTitle;
-
-        const robots = document.createElement('meta');
-        robots.name = 'robots';
-        robots.content = 'noindex, follow';
-        document.head.appendChild(robots);
-
-        return () => {
-            document.title = previousTitle;
-            robots.remove();
-        };
-    }, [documentTitle]);
+    /**
+     * The title and the `noindex` this component used to inject itself are now
+     * set by <Head> (src/components/Head.tsx) from the ROUTE_SEO entry for each
+     * of these six paths. Two independent writers for one tag was a real
+     * hazard, not a tidiness question: Head must be able to REMOVE a stale
+     * `noindex` when the visitor navigates from a placeholder route to an
+     * indexable one, and it can only safely remove tags it owns.
+     *
+     * `documentTitle` is still accepted as a prop and still passed by all six
+     * pages; it is no longer applied here. Removing it from the prop type is a
+     * separate change across seven files and is deliberately not bundled in.
+     */
 
     return (
         <Container size="md" className="pt-32 pb-24">

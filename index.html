@@ -80,36 +80,52 @@
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFBFA" />
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131311" />
 
-  <title>International Founders Network | Austin, Texas</title>
+  <title>International Founders Network | Founder Community in Austin, Texas</title>
   <meta name="description"
-    content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
+    content="A community for international and immigrant founders in Austin, Texas. Monthly in-person meetups at Station Austin, a founder resource library, and a paid membership." />
 
-  <!-- No <link rel="canonical"> here on purpose: netlify.toml rewrites /* to
-       this same index.html and nothing updates the head per route, so a
-       hard-coded canonical would declare every route a duplicate of "/". The
-       og:url below has the same single-value limitation, but a stale og:url
-       only affects the URL shown in a share card. -->
+  <!-- CANONICAL, DESCRIPTION AND OPEN GRAPH ARE NOW PER ROUTE.
+
+       This block used to carry a comment explaining that no canonical could
+       live here, because netlify.toml rewrites /* to this one file and nothing
+       updated the head per route, so a hard-coded canonical would have declared
+       all twenty routes duplicates of "/". That reasoning was correct for the
+       architecture it described, and that architecture is gone.
+
+       Two things replaced it. src/components/Head.tsx sets the title,
+       description, canonical and og:* from the ROUTE_SEO table in
+       src/data/seo.ts on every route change, which keeps client-side navigation
+       correct. scripts/prerender.mjs then renders each indexable route in real
+       Chrome at build time and writes dist/<route>/index.html, so the tags are
+       baked into static HTML — which is the only copy that non-rendering
+       crawlers and social unfurlers ever read.
+
+       The values below are therefore the DEFAULTS, and they are what a route
+       with no prerendered file would fall back to. Keep them describing the
+       homepage. Do not add a canonical here: the prerender injects a correct
+       per-route one, and a hard-coded tag would be a second, competing
+       canonical on every page. -->
 
   <!-- Open Graph. Shared links should carry the Austin reality, not a bare URL. -->
   <meta property="og:site_name" content="International Founders Network" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ifn.community/" />
-  <meta property="og:title" content="International Founders Network | Austin, Texas" />
+  <meta property="og:title" content="International Founders Network | Founder Community in Austin, Texas" />
   <meta property="og:description"
-    content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
-  <meta property="og:image" content="https://ifn.community/logo.png" />
-  <meta property="og:image:width" content="1024" />
-  <meta property="og:image:height" content="364" />
-  <meta property="og:image:alt" content="The International Founders Network wordmark: IFN." />
+    content="A community for international and immigrant founders in Austin, Texas. Monthly in-person meetups at Station Austin, a founder resource library, and a paid membership." />
+  <meta property="og:image" content="https://ifn.community/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The IFN wordmark above the words: Founders who came from somewhere else. Monthly meetups in Austin, Texas." />
   <meta property="og:locale" content="en_US" />
 
   <!-- Twitter / X card. No @handle is claimed here because none is verified. -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="International Founders Network | Austin, Texas" />
+  <meta name="twitter:title" content="International Founders Network | Founder Community in Austin, Texas" />
   <meta name="twitter:description"
-    content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
-  <meta name="twitter:image" content="https://ifn.community/logo.png" />
-  <meta name="twitter:image:alt" content="The International Founders Network wordmark: IFN." />
+    content="A community for international and immigrant founders in Austin, Texas. Monthly in-person meetups at Station Austin, a founder resource library, and a paid membership." />
+  <meta name="twitter:image" content="https://ifn.community/og-image.png" />
+  <meta name="twitter:image:alt" content="The IFN wordmark above the words: Founders who came from somewhere else. Monthly meetups in Austin, Texas." />
 </head>
 
 <body>

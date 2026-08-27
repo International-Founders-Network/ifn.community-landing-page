@@ -583,20 +583,18 @@ export function Admin() {
      * None of this is access control. That is the signed, httpOnly session
      * cookie checked server-side on every /api/admin-* request.
      */
-    useEffect(() => {
-        const previousTitle = document.title;
-        document.title = 'Admin | International Founders Network';
-
-        const robots = document.createElement('meta');
-        robots.name = 'robots';
-        robots.content = 'noindex, nofollow';
-        document.head.appendChild(robots);
-
-        return () => {
-            document.title = previousTitle;
-            robots.remove();
-        };
-    }, []);
+    /**
+     * Title and `noindex` are set by <Head> from the ROUTE_SEO '/admin' entry.
+     * The real access control for this page is server-side (Google sign-in plus
+     * an allowlist, verified in every /api/admin-* function) and is unaffected
+     * by anything in the document head.
+     *
+     * One deliberate difference from what this effect used to send: Head emits
+     * `noindex, follow` where this sent `noindex, nofollow`. The netlify.toml
+     * header for /admin still sends `noindex, nofollow`, and the HTTP header is
+     * the directive a crawler actually acts on, so the stricter form is not
+     * lost.
+     */
 
     useEffect(() => {
         fetch('/api/auth-me', { credentials: 'same-origin' })

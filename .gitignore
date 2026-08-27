@@ -33,3 +33,6 @@ dist-ssr
 
 # Ephemeral agent worktrees
 .claude/worktrees/
+
+# Puppeteer Chrome, downloaded at build time (see netlify.toml)
+.cache/

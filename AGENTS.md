@@ -108,6 +108,71 @@ If the Luma event records themselves still say Capital Factory, the next sync
 writes it back into the JSON and the contradiction returns from the other
 direction. Correct the venue in Luma as well as in the database.
 
+## The site is prerendered. Do not treat it as a pure SPA any more
+
+`npm run build` is now `tsc -b && vite build && node scripts/prerender.mjs`. The
+last step drives a real headless Chrome over the built output and writes
+`dist/<route>/index.html` for each of the eleven indexable routes. This exists
+because every URL previously returned the same 3.3 KB empty `<div id="root">`,
+which Google renders but GPTBot, ClaudeBot, PerplexityBot, CCBot and every
+social unfurler do not.
+
+Consequences worth knowing before you change anything here:
+
+- **`src/data/seo.ts` is the source of truth for routes.** Adding a `<Route>` in
+  `App.tsx` without adding a `ROUTE_SEO` entry means the page is not
+  prerendered, not in `sitemap.xml`, and not in `llms.txt`. The sitemap and the
+  prerender list are both generated from that one table by the `ifn-seo-assets`
+  plugin in `vite.config.ts`, so they cannot drift from each other — but they
+  can drift from `App.tsx`, and nothing catches that automatically.
+- **`src/components/Head.tsx` is the ONLY writer of title, description,
+  canonical, `og:*` and JSON-LD.** The duplicate head-management effects that
+  used to live in `ComingSoon.tsx` and `Admin.tsx` were removed. A second writer
+  breaks Head's ability to remove a stale `noindex` on client-side navigation.
+- **The build needs Chrome.** `netlify.toml` runs
+  `npx puppeteer browsers install chrome` before the build and pins
+  `PUPPETEER_CACHE_DIR` so the download is cached between deploys. Locally, run
+  it once if the prerender fails to launch.
+- **A failed route fails the build, on purpose.** A route that does not
+  prerender falls back to the empty shell, which is exactly the state this
+  machinery exists to eliminate, and it would do so silently.
+
+### The catch-all returns 404 now, and the order of that change mattered
+
+`netlify.toml`'s `/*` rule is `status = 404`, not `200`. Previously every
+nonexistent URL — and every missing asset — answered 200 with the HTML shell.
+The six placeholder routes and `/admin` are listed as explicit `status = 200`
+rewrites **before** the catch-all, because they are not prerendered and would
+otherwise answer 404 while rendering fine.
+
+`public/_headers` sets `immutable` caching on `/assets/*` and `/fonts/*`. **That
+file could not safely exist until the soft-404 was fixed.** While the catch-all
+returned 200, a stale hashed chunk request got an HTML body with a 200; marking
+that `immutable` would have pinned an HTML document at a `.js` URL for a year
+with no revalidation and no recovery short of clearing site data. If you ever
+revert the catch-all to 200, delete `public/_headers` in the same commit.
+
+### robots.txt no longer disallows anything, and that is the fix
+
+`Disallow:` and `X-Robots-Tag: noindex` on the same path cancel each other out:
+a compliant crawler never fetches a disallowed URL, so it never reads the
+noindex, and the page can be indexed as a URL-only result that nothing can then
+remove. Crawling is allowed everywhere so the noindex headers in `netlify.toml`
+can actually be obeyed. `/admin` access control was never robots.txt's job and
+is unaffected.
+
+### Event JSON-LD is deliberately absent
+
+`src/data/structuredData.ts` emits Organization, WebSite, WebPage, BreadcrumbList,
+Offer and FAQPage — but no `Event`, which would be the most valuable type on an
+events-driven site. `src/data/events.json` is regenerated from Luma by
+`.github/workflows/sync-events.yml` on the 1st and 15th, and Luma still says
+Capital Factory while the site says Station Austin. `scripts/update-events.js`
+now rewrites the two known-stale venue strings on the way in, but that is a
+stopgap: **fix the venue on the Luma records**, then add Event markup. Marking
+up a venue that contradicts the rendered page is a structured-data policy
+violation, not merely untidy.
+
 ## Database schema is intentionally defined twice
 
 `db/migrations/*.sql` is the documented schema history. Each Netlify Function also runs its own `CREATE TABLE IF NOT EXISTS` at request time (idempotent, so the app works even against an empty database). These two can drift silently, so if you change a table's shape, update both, or at least check `db/README.md` for the current convention before assuming one is authoritative.

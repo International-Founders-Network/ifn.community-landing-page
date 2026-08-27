@@ -7,6 +7,7 @@ import { Emphasis } from '../components/Emphasis';
 import { useEvents } from '../hooks/useEvents';
 import { EventCard, ExternalActionLink, type Event } from '../components/EventCard';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
+import { trackEvent } from '../lib/analytics';
 
 type WhenFilter = 'upcoming' | 'this-month' | 'past';
 type PlaceFilter = 'all' | 'austin' | 'elsewhere';
@@ -257,6 +258,7 @@ function SignupForm() {
 
             if (response.ok) {
                 setStatus('success');
+                trackEvent('event_signup');
                 setMessage(data.message);
                 setEmail('');
             } else {

@@ -4,6 +4,7 @@ import { X, Check, ArrowUpRight, AlertCircle } from 'lucide-react';
 import { Button } from './Button';
 import { ButtonLink } from './ButtonLink';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
+import { trackEvent } from '../lib/analytics';
 
 interface JoinModalProps {
     isOpen: boolean;
@@ -236,6 +237,12 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
         }
 
         setStep('success');
+        // The top of the funnel the site could not previously see. Only the
+        // fact of a submission is sent; no name, email or LinkedIn URL ever
+        // reaches GA4, which is both a privacy requirement and a Google terms
+        // requirement (personally identifiable information in event parameters
+        // is a violation that can get a property purged).
+        trackEvent('join_submit');
     };
 
     return (

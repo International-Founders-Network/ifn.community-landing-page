@@ -3,18 +3,100 @@
 User-agent: *
 Allow: /
 
-# Internal admin dashboard. Access is enforced server-side by Google sign-in
-# plus an allowlist (netlify/functions/_lib/auth.ts); this only keeps the URL
-# out of search results.
-Disallow: /admin
+# NOTHING IS DISALLOWED HERE ANY MORE, AND THAT IS THE FIX RATHER THAN AN
+# OVERSIGHT.
+#
+# This file used to Disallow /admin and the six placeholder routes, while
+# netlify.toml sent `X-Robots-Tag: noindex` on those same paths. The two
+# directives cancelled each other out. A compliant crawler does not fetch a
+# Disallowed URL, so it never received the response carrying the noindex — the
+# header was unreadable by design. The practical result is the opposite of what
+# was intended: if any of those URLs is discovered from an external link (and
+# this file itself publicly enumerated all seven), Google can index it as a
+# URL-only result showing "No information is available for this page", and the
+# only signal that would remove it sits behind the block.
+#
+# Crawling is now allowed everywhere so that the noindex headers can actually be
+# read and obeyed. netlify.toml sends them on all seven paths, bare and globbed.
+# Access control for /admin was never robots.txt's job and is unaffected: it is
+# enforced server-side by Google sign-in plus an allowlist, verified in every
+# /api/admin-* function.
 
-# Placeholder routes with no content yet. Also sent as X-Robots-Tag in
-# netlify.toml, which is what non-JS crawlers actually honour.
-Disallow: /blog
-Disallow: /careers
-Disallow: /chapters
-Disallow: /mentorship
-Disallow: /newsletter
-Disallow: /playbooks
+# ---------------------------------------------------------------------------
+# AI AND ANSWER-ENGINE CRAWLERS
+#
+# Named explicitly and allowed, deliberately.
+#
+# IFN's discovery problem is not that too many machines read the site — it is
+# that answer engines could not read it at all. Until the prerender step landed,
+# every URL returned an empty <div id="root">, and none of these agents execute
+# JavaScript. Naming them and allowing them is the clearest available signal
+# that this content is meant to be cited when someone asks an assistant "what
+# founder communities are there in Austin" or "where do immigrant founders in
+# the US find each other" — which is exactly the query this site should win.
+#
+# Google-Extended deserves a note because it is the one that is easy to get
+# wrong: it does NOT affect Google Search ranking or crawling at all. It governs
+# only whether content may be used to ground Gemini and AI Overviews responses.
+# Disallowing it would remove IFN from AI Overviews while changing nothing about
+# blue-link search, which would be a pure loss here.
+# ---------------------------------------------------------------------------
 
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# The sitemap is now a real file. It is generated at build time by the
+# `ifn-seo-assets` plugin in vite.config.ts from the ROUTE_SEO table in
+# src/data/seo.ts, so it cannot drift from the routes the app actually serves.
+#
+# It previously did not exist. This line pointed at it anyway, and the SPA
+# catch-all answered the URL with the HTML shell and HTTP 200 — so Search
+# Console did not report a missing sitemap, it reported a parse error on a
+# sitemap that appeared to exist, which is both harder to notice and a worse
+# signal to send.
 Sitemap: https://ifn.community/sitemap.xml

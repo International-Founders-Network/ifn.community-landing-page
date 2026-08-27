@@ -5,6 +5,7 @@ import { Button } from '../components/Button';
 import { Emphasis } from '../components/Emphasis';
 import { Mail, MapPin, CalendarDays, Send, CheckCircle2, ArrowUpRight } from 'lucide-react';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
+import { trackEvent } from '../lib/analytics';
 
 /** Verified in src/data/socialLinks.ts. Luma is IFN's source of record for meetup dates. */
 
@@ -108,6 +109,7 @@ export function Contact() {
 
             hasSubmittedRef.current = true;
             setIsSuccess(true);
+            trackEvent('contact_submit');
             setFormData({ name: '', email: '', phone: '', company: '', message: '' });
         } catch (error) {
             // Never surface error.message. It carries strings like "Failed to fetch",

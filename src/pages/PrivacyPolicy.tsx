@@ -104,8 +104,13 @@ export function PrivacyPolicy() {
                                 policies, not this one.
                             </li>
                             <li>
-                                <strong className="text-ink">Google Fonts</strong> serves the typefaces
-                                this site uses, which means your browser contacts Google when a page loads.
+                                <strong className="text-ink">Google Analytics</strong> counts visits to
+                                this site. It is switched off until you allow it: nothing is stored on your
+                                device and no cookie is set unless you choose &ldquo;Allow analytics&rdquo;.
+                                Even then, we never send it your name, your email address, or anything you
+                                typed into a form. If you choose &ldquo;No thanks&rdquo;, we still receive an
+                                anonymous count of the page being viewed, with nothing stored on your device
+                                and nothing that could identify you.
                             </li>
                         </ul>
                         <p className={`mt-4 ${BODY}`}>
@@ -122,7 +127,30 @@ export function PrivacyPolicy() {
                     </section>
 
                     <section>
-                        <h2 className={SECTION_HEADING}>6. Your choices</h2>
+                        <h2 className={SECTION_HEADING}>6. Cookies and analytics</h2>
+                        <p className={BODY}>
+                            This site sets no cookies of its own. The only cookies that can ever be set here
+                            belong to Google Analytics, and they are set only after you choose
+                            &ldquo;Allow analytics&rdquo; in the banner at the bottom of the page. Until you
+                            do, Google Analytics runs in a mode that stores nothing on your device.
+                        </p>
+                        <p className={`mt-4 ${BODY}`}>
+                            We use it to answer one question: which pages people find useful. We do not use
+                            it to build a profile of you, and advertising and personalisation signals are
+                            switched off permanently rather than being offered as a choice, because this site
+                            carries no advertising.
+                        </p>
+                        <p className={`mt-4 ${BODY}`}>
+                            You can change your mind at any time by clearing this site&rsquo;s data in your
+                            browser, which makes the banner appear again. Your browser&rsquo;s
+                            &ldquo;Do Not Track&rdquo; or tracking-protection settings are also respected by
+                            the ad blockers most people already use, and nothing on this site tries to work
+                            around them.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 className={SECTION_HEADING}>7. Your choices</h2>
                         <p className={BODY}>
                             You can ask us what we hold about you, ask us to correct it, or ask us to delete
                             it. Write to{' '}
@@ -134,7 +162,7 @@ export function PrivacyPolicy() {
                     </section>
 
                     <section>
-                        <h2 className={SECTION_HEADING}>7. Changes to this page</h2>
+                        <h2 className={SECTION_HEADING}>8. Changes to this page</h2>
                         <p className={BODY}>
                             If we change how we handle your information, we will update this page and change the
                             date at the top.
