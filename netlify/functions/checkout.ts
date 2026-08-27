@@ -65,19 +65,49 @@ function json(statusCode: number, payload: Record<string, unknown>) {
 }
 
 /**
- * The site's own origin, for the post-checkout redirects. `URL` is set by
- * Netlify to the production URL and `DEPLOY_PRIME_URL` to the branch/preview
- * URL; falling back to the request's own host keeps `netlify dev` working.
+ * The site's own origin, for the post-checkout redirects.
+ *
+ * VALIDATE, DO NOT TRUST. `netlify dev` synthesises `DEPLOY_PRIME_URL` from the
+ * branch name, so a branch containing a slash — `feat/membership-stripe-redesign`
+ * — produces `https://feat/membership-stripe-redesign--site-name.netlify.app`,
+ * whose host is literally `feat`. Stripe accepts that URL happily and then
+ * redirects a paying member into nowhere. It was caught only by reading a real
+ * session's `success_url` back out of Stripe; nothing about the local page looked
+ * wrong, because the failure happens after the reader leaves the site.
+ *
+ * So each candidate must parse, be http(s), and have a host that could actually
+ * resolve. The request's own host is the last resort and the one that is always
+ * right locally.
  */
-function siteOrigin(event: HandlerEvent): string {
-    const configured = process.env.DEPLOY_PRIME_URL || process.env.URL;
-    if (configured) return configured.replace(/\/$/, '');
-
-    const host = event.headers?.host;
-    if (host) {
-        const proto = host.startsWith('localhost') || host.startsWith('127.0.0.1') ? 'http' : 'https';
-        return `${proto}://${host}`;
+export function isUsableOrigin(candidate: string): boolean {
+    let url: URL;
+    try {
+        url = new URL(candidate);
+    } catch {
+        return false;
     }
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') return false;
+
+    // A bare label like "feat" is never a real host. Anything routable is either
+    // dotted or localhost.
+    const host = url.hostname;
+    return host.includes('.') || host === 'localhost';
+}
+
+function siteOrigin(event: HandlerEvent): string {
+    const host = event.headers?.host;
+    const fromRequest = host
+        ? `${host.startsWith('localhost') || host.startsWith('127.0.0.1') ? 'http' : 'https'}://${host}`
+        : '';
+
+    for (const candidate of [process.env.DEPLOY_PRIME_URL, process.env.URL, fromRequest]) {
+        if (candidate && isUsableOrigin(candidate)) return candidate.replace(/\/$/, '');
+    }
+
+    // Every candidate was malformed or absent. Production is the safe guess:
+    // it is a real host, so the reader lands on a real page rather than a
+    // browser error, even if it is not the deploy they started from.
+    console.error('No usable site origin; falling back to the production URL.');
     return 'https://ifn.community';
 }
 
