@@ -369,3 +369,82 @@ control. Highest return per hour, and none of it is code:
   resident monthly program; this is the easiest high-value backlink you have.
 - Ask **Reunio** and **Yani Partners** for reciprocal links — you already list
   them on `/partners`.
+
+---
+
+## Part 5 — production readiness beyond SEO
+
+Checked against the live site and the Netlify project, not from a generic
+checklist. Split into what is now handled and what is still a decision for you.
+
+### 5.1 Already correct — no action
+
+| | |
+|---|---|
+| HTTPS + certificate | Valid, auto-renewing |
+| `http://` → `https://` | 301, working |
+| `www` → apex | 301, working |
+| Database credentials | `NETLIFY_DATABASE_URL` (+ unpooled) set |
+| Admin auth | `ADMIN_ALLOWED_EMAILS`, `ADMIN_SESSION_SECRET` set; enforced server-side in every `/api/admin-*` function |
+| Functions | All 8 bundle cleanly |
+
+### 5.2 Fixed on this branch
+
+- **Security headers.** The site sent exactly one — HSTS, in its weakest form.
+  Added `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`,
+  `Permissions-Policy`, and upgraded HSTS with `includeSubDomains` (verified
+  safe: `qr.` and `www.` are the only subdomains that resolve, both already
+  HTTPS). `preload` deliberately left off — it is close to irreversible.
+- **Node version pinned** to 24 via `.nvmrc` and `NODE_VERSION`. It was
+  unpinned, so the build ran on whatever the build image defaulted to that week.
+- **`SECRETS_SCAN_OMIT_KEYS`** set for the two `VITE_` variables. Without it,
+  adding `VITE_GA4_MEASUREMENT_ID` **would have failed your build** with
+  "secrets scanning found secrets in build output" — Vite inlines `VITE_`
+  values into the bundle by design, and Netlify's scanner cannot tell that apart
+  from a leak. This one is worth knowing about because the cause is unguessable.
+- **Visitor PII removed from function logs.** `contact.ts` was writing
+  `{ name, email, company }` and `event-signup.ts` was writing the email address
+  into Netlify's function logs — a third-party store, readable by anyone with
+  project access, disclosed nowhere in the privacy policy, and duplicating data
+  already in Postgres under the deletion promise the policy makes.
+
+### 5.3 Still open — your call
+
+**Content Security Policy.** Documented in `public/_headers`, not enabled. The
+sha256 hash of the inline theme script is computed and a starting policy is
+written out. It is off because a wrong CSP breaks the site silently for real
+visitors while passing every check you would think to run. Deploy it as
+`Content-Security-Policy-Report-Only` first, watch the console on `/admin` and
+`/gallery` specifically, then enforce.
+
+**No rate limiting on public POST endpoints.** `/api/contact`, `/api/join` and
+`/api/event-signup` accept unlimited submissions with no throttle, captcha or
+honeypot. Nothing stops a script filling your database with junk and, since each
+writes to Postgres, that is both a data-quality and a cost problem. Cheapest
+credible fix is a honeypot field plus a per-IP limit in the function; Netlify
+also has built-in rate limiting on paid plans.
+
+**The events table is empty.** Verified: `/api/events` returns a byte-identical
+copy of the bundled `src/data/events.json`, which is the fallback path — so the
+Postgres table has zero rows. Worth knowing because `AGENTS.md` recommends
+fixing the venue by running a SQL migration against that table, and **that
+advice is moot**: there is nothing in the table to fix. Luma → `events.json` is
+the only path that matters.
+
+**No error tracking or uptime monitoring.** A function throwing 500s in
+production is currently invisible unless someone reports it. Sentry has a free
+tier; Netlify deploy notifications (Site configuration → Notifications) at
+minimum will tell you when a build fails, which now matters more because the
+build has a new failure mode in the prerender step.
+
+**No database backups configured** that I can see from here. Neon has
+point-in-time restore depending on plan — worth confirming it is on, since the
+membership and contact records are the only copy.
+
+**Deploy previews and search.** Netlify sends `X-Robots-Tag: noindex` on deploy
+previews by default. Confirm it on your first preview rather than assume, since
+an indexed preview URL competes with production for the same content:
+
+```sh
+curl -sI "$PREVIEW/" | grep -i x-robots-tag   # want: noindex
+```

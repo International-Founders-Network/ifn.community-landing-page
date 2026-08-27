@@ -28,7 +28,16 @@ export const handler: Handler = async (event: HandlerEvent) => {
             };
         }
 
-        console.log('Received contact message:', { name, email, company });
+        /**
+         * Deliberately logs no visitor data. This previously wrote
+         * `{ name, email, company }` into Netlify's function logs, which is a
+         * third-party log store with its own retention, readable by anyone with
+         * access to the Netlify project, and disclosed nowhere in the privacy
+         * policy. The submission is already persisted to Postgres, where it is
+         * covered by the deletion promise the policy makes — so the log line
+         * added an undisclosed second copy and no operational value.
+         */
+        console.log('Received contact message');
 
         // Create table if not exists (Idempotent)
         await sql`
