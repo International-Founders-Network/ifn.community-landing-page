@@ -164,6 +164,17 @@ export function Membership() {
                 </motion.div>
             </Container>
 
+            {/* THE PURCHASE BLOCK IS HIDDEN AFTER A SUCCESSFUL CHECKOUT, and that is
+                not tidiness. It ends in a live "Become a member" button, and Stripe
+                does not deduplicate subscriptions by customer: a member who just
+                paid, scrolled down and clicked it would be charged a second time and
+                hold two subscriptions. Restating the price under a "payment
+                received" notice is also its own small lie, because the price is not
+                what they paid — sales tax is added at checkout.
+
+                `cancelled` deliberately keeps the block: that reader has not paid and
+                came back to decide. */}
+            {checkoutResult !== 'success' && (
             <section className="bg-band py-20">
                 <Container>
                     <div className="max-w-3xl mx-auto text-center">
@@ -242,6 +253,7 @@ export function Membership() {
                     </div>
                 </Container>
             </section>
+            )}
         </div>
     );
 }
