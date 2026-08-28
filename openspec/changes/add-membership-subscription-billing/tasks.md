@@ -46,3 +46,9 @@
   `current_period_end` one year out); duplicate delivery stayed idempotent; a
   stale `active` event failed to revive a cancelled member while a newer one
   still applied.
+
+## 6. Housekeeping
+
+- [ ] 6.1 Archive this change once merged, folding both deltas into `openspec/specs/`
+      (`membership-page` modified, `membership-billing` added). Per `AGENTS.md`,
+      specs are never deleted after shipping.

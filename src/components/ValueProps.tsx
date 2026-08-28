@@ -365,11 +365,7 @@ export function ValueProps() {
     const statements: Statement[] = [
         {
             place: 'md:col-start-1 md:col-span-7',
-            title: (
-                <>
-                    Founders who have <Mark reduce={reduce}>been through</Mark> it before
-                </>
-            ),
+            title: 'Founders who have been through it before',
             body: 'You will meet founders who have opened a U.S. bank account, worked through a visa, incorporated here, or made a first hire across borders. The perspective comes from someone who has been through it, not from a search result.',
         },
         {
@@ -384,16 +380,16 @@ export function ValueProps() {
         {
             place: 'md:col-start-2 md:col-span-7',
             title: 'Introductions through people who know your work',
-            body: 'Introductions happen the ordinary way: you meet someone at a meetup, they know the investor, the attorney or the first engineer you need, and they say so. A warm introduction from a founder who has worked with you is worth more than a list.',
+            body: 'Introductions happen: you meet someone at a meetup, they know the investor, the attorney or the first engineer you need, and they say so. A warm introduction from a founder who has worked with you is worth more than a list.',
         },
         {
             place: 'md:col-start-4 md:col-span-8',
-            title: (
+            title: 'Resources you can use the same week',
+            body: (
                 <>
-                    <Mark reduce={reduce}>Resources</Mark> you can use the same week
+                    The resource library covers immigration paperwork, U.S. banking, first hires, raising here and getting a product into the U.S. market, <Mark reduce={reduce}>written from the questions</Mark> founders actually bring us. Membership adds a private member channel and a members-only call each month.
                 </>
-            ),
-            body: 'The resource library covers immigration paperwork, U.S. banking, first hires, raising here and getting a product into the U.S. market, written from the questions founders actually bring us. Membership adds a private member channel and a members-only call each month.',
+            )
         },
     ];
 

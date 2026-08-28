@@ -57,11 +57,14 @@ function PartnerLogo({ partner }: { partner: Partner }) {
            whatever height its ratio gives it instead of being squashed into a
            square box. `object-contain` never crops.
 
-           The retired `rounded-full` is not carried over and nothing changes by
-           its absence: the one vendored file is a centred disc occupying a
-           1420px bounding box inside a 2000px canvas, so at 40px the artwork
-           has a 14.2px radius inside a 20px inscribed clip circle and the clip
-           removed zero opaque pixels.
+           The retired `rounded-full` is not carried over, and its absence now
+           matters more than it did when it was dropped. It was safe then because
+           the sole vendored file was a centred disc occupying a 1420px bounding
+           box inside a 2000px canvas, so at 40px the artwork had a 14.2px radius
+           inside a 20px inscribed clip circle and the clip removed zero opaque
+           pixels. It would not be safe now: the Station Austin lockup is 2.18:1,
+           and a circular clip would take the ends off the wordmark. Do not
+           reinstate it.
 
            `width`/`height` come from the data and fix the aspect ratio so the
            box is reserved before the file loads. */

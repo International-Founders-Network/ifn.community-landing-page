@@ -29,6 +29,17 @@ These are the master to-do list for going live. Nothing charges anyone until the
 
 ### 🟡 Follow-ups, not blockers
 
+- [ ] **Pre-production environment at `test.ifn.community`.** Deferred 2026-08-28; the plan is recorded so it does not need re-deriving.
+
+  **Shape: a SECOND Netlify site from this same repo**, deploying a `staging` branch, not a branch subdomain on the existing site. Netlify's automatic branch subdomains require Netlify-managed DNS, and `ifn.community` is served by GoDaddy (`domaincontrol.com`), so that route means migrating the whole zone including MX. A separate site is the better fit regardless, because what pre-prod most needs here is **environment isolation**: its own `STRIPE_SECRET_KEY` (test), its own `STRIPE_WEBHOOK_SECRET` from a second test-mode Stripe endpoint at `test.ifn.community/api/stripe-webhook`, its own build hook, and `NETLIFY_DATABASE_URL` pointed at a Neon **dev branch**. A staging site sharing production's database or live keys is production wearing a different hostname.
+
+  Setup: create the `staging` branch → new Netlify site from the same repo on that branch → add `test.ifn.community` in the new site → CNAME `test` → `<site>.netlify.app` at GoDaddy → set the env vars above. No application code change is needed for checkout: `isTrustedHost` in `netlify/functions/checkout.ts` already accepts `*.ifn.community`, so post-checkout return URLs resolve correctly.
+
+  **The one thing that needs code, and the one that will bite:** a custom-domain staging site is **not** automatically `noindex`ed. Deploy previews are (Netlify adds `x-robots-tag: noindex`; confirmed on deploy-preview-5), but a real subdomain is not. A fully prerendered copy of the site at `test.ifn.community` is duplicate content competing with production, which would undo a good part of the SEO work. `SITE_URL` is hardcoded to `https://ifn.community` so canonicals on staging already point home, but a canonical is a hint, not a directive. The fix is a build step emitting a site-wide `X-Robots-Tag: noindex` when a `SITE_ENV=staging` variable is set — it cannot be a `[context.*]` block in `netlify.toml`, because on the staging site `staging` *is* the production context, and both sites share this repo's `netlify.toml` and `public/_headers`. **Do not pair it with `Disallow: /`** — `public/robots.txt` already documents why: a crawler that cannot fetch the page never receives the noindex.
+
+  Also worth knowing: the Free plan's 300 build minutes are shared across sites, and these builds run 45–80s plus a Chrome download. Netlify's password protection would be the cleaner staging guard but is a paid feature.
+
+
 - [ ] **Give the `memberships` table a reader.** Rows land in Postgres with nothing consuming them, so "IFN knows who is a member" is only half true. The natural home is a Memberships tab on `/admin`, behind the Google sign-in and allowlist that `admin-submissions.ts` already enforces.
 - [ ] **Self-serve cancellation / Stripe billing portal.** Members currently cancel by asking a person.
 - [ ] **Decide what a lapsed member loses.** Nothing enforces entitlement: the private channel, resource library and office hours are all granted and revoked by hand. `status` and `current_period_end` make that decidable, but nothing acts on them.

@@ -79,8 +79,28 @@ export const PARTNERS: Partner[] = [
         category: 'Venue Partner',
         description: 'The center of gravity for entrepreneurs in Texas, hosting IFN meetups and connecting our community with Austin\'s broader startup ecosystem.',
         website: 'https://stationaustin.org',
-        /* TODO(founder): no vendored artwork yet. Add the file to
-           public/partners/ and a `logo` key here, per the header above. */
+        /* The official lockup, copied byte-for-byte from STATION Austin's own
+           logo kit (`SVG/STATIONAustinTM Logo Orange.svg`), not redrawn.
+           Single-colour #ED512F on a transparent ground, so one file serves both
+           modes: 3.164 on `--band` in light and 4.686 in dark.
+
+           WHY ORANGE AND NOT THE YELLOW THE KIT ALSO SHIPS. The yellow variant
+           (#FFBB00) measures 1.487 against the light `--band` #F0F0EC, which is
+           not "low contrast", it is invisible. It reads well in dark mode only,
+           and this field carries one `src`, so a per-mode choice would mean
+           changing the interface and both surfaces. Orange is the only variant
+           in the kit that survives both grounds unchanged, at the identical
+           geometry. Do not swap it back to yellow without also adding a
+           per-mode `src`.
+
+           866.66 x 397.98 intrinsic (the kit's viewBox), rounded to whole pixels
+           here because these values only fix the 2.18:1 aspect ratio. */
+        logo: {
+            src: '/partners/station-austin-logo.svg',
+            width: 867,
+            height: 398,
+            form: 'lockup',
+        },
     },
     {
         id: 'reuneo',
@@ -88,8 +108,48 @@ export const PARTNERS: Partner[] = [
         category: 'Speed-Networking Partner',
         description: 'Powers the speed-networking format at IFN meetups, pairing founders into quality 1-1 connections in place of standing-around small talk.',
         website: 'https://reuneo.app',
-        /* TODO(founder): no vendored artwork yet. Add the file to
-           public/partners/ and a `logo` key here, per the header above. */
+        /* Reuneo publishes no logo kit, so this is their own brand mark taken
+           once from the site icon at https://reuneo.com/assets/web_svg_3.svg and
+           VENDORED HERE. Vendored is the whole point: the ban in the header is
+           on hotlinking a favicon at request time, which sends every visitor's
+           IP to a third party. Copying the file once, by hand, and serving it
+           from `public/` sends nobody anywhere.
+
+           It is a PNG rather than an SVG because the source only looks like
+           vector art: that 537 KB `.svg` is a 3840 x 1427 base64 RASTER plus a
+           second raster serving as its alpha mask via `feColorMatrix`, wrapped
+           in `<svg>`. Shipping it would cost 537 KB to draw a 64px mark and
+           would still be a bitmap. Recombining colour and mask into one RGBA
+           image, cropping to the icon and trimming the transparent margin gives
+           376 x 512 at 47 KB.
+
+           TRANSPARENCY IS THE WHOLE JOB HERE and it is easy to get wrong. The
+           first attempt rasterised the wrapper with `qlmanage`, which composites
+           onto opaque white; every pixel came back alpha 255 and the mark shipped
+           as a white tile on the cream `--band` well, which would have been
+           glaring in dark mode. If this file is ever regenerated, sample a corner
+           pixel and confirm alpha is 0 before believing it.
+
+           THE SOURCE SPRITE ALSO CONTAINS THE WORDMARK, deliberately not used.
+           The 3840px raster is the full lockup; the site's own `clipPath` keeps
+           only the left 1110px, which is the icon, and that clip is honoured
+           here. Two reasons to keep it that way: the wordmark is near-black and
+           would disappear on the dark ground, and it reads "reunio" rather than
+           the "Reuneo" this file prints beside it, so shipping it would put a
+           visible contradiction on the page.
+
+           Two-tone blue on a transparent ground with a near-black outline, so it
+           holds its own on both page grounds without a per-mode variant: the
+           outline carries it in light, the blue fill in dark.
+
+           If Reuneo ever publishes a real logo kit, replace the file and leave
+           this entry's shape alone. */
+        logo: {
+            src: '/partners/reuneo-logo.png',
+            width: 376,
+            height: 512,
+            form: 'emblem',
+        },
     },
     {
         id: 'yani-partners',

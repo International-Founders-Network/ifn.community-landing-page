@@ -51,8 +51,12 @@ const step: Variants = {
 /**
  * ARTWORK, AND THE HONEST GAP.
  *
- * Only one of the three partners has vendored artwork in this repository.
- * `Icons.tsx` used to render the other two by hotlinking
+ * All three partners now have vendored artwork, so the reserved slot below
+ * currently renders for nobody. It stays because it is the mechanism for the
+ * NEXT partner, not a leftover from this one, and because the reasoning it
+ * carries is what keeps a future gap from being filled the wrong way.
+ *
+ * `Icons.tsx` used to render two of the three by hotlinking
  * `google.com/s2/favicons`, which sent every visitor's IP to a third party,
  * depended on an endpoint IFN does not control, and put a 16px favicon where a
  * logo belongs. That is the same class of third-party request this repo already
@@ -102,15 +106,23 @@ const RESERVED_SLOT = 'h-14 w-[12rem]';
 
 function PartnerMark({ partner }: { partner: Partner }) {
     if (partner.logo) {
-        /* Today the only vendored file is the Yani Partners emblem. It is a
-           full-colour circular mark carrying its own cream ground, so it reads
-           on both page grounds without a per-mode variant: the teal ring
-           measures 8.014 against `--band` in light mode, and in dark mode the
-           ring falls to 1.845 while the cream disc one step inside it measures
-           15.151, so the object is always perceivable, by its edge in light and
-           by its field in dark. A logotype is exempt from WCAG contrast in any
-           case; these are measured because "it looks fine" is not a
+        /* Every mark here is chosen to read on both page grounds from ONE file,
+           because this field carries one `src`. A logotype is exempt from WCAG
+           contrast; these are measured anyway, because "it looks fine" is not a
            measurement.
+
+           Yani Partners: full-colour circular mark carrying its own cream
+           ground. The teal ring measures 8.014 against `--band` in light, and in
+           dark the ring falls to 1.845 while the cream disc one step inside it
+           measures 15.151, so the object is always perceivable, by its edge in
+           light and by its field in dark.
+
+           Station Austin: the kit's orange (#ED512F) lockup, 3.164 light and
+           4.686 dark. The kit also ships a yellow that is the nicer mark and is
+           unusable here at 1.487 in light. See partnersData.ts.
+
+           Reuneo: two-tone blue with a near-black outline on a transparent
+           ground, carried by its outline in light and its fill in dark.
 
            An emblem renders at 64px against the 56px reserved boxes, which is
            the "sized by eye" instruction in plan section 5: a circular emblem
