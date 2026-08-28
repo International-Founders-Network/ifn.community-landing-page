@@ -94,19 +94,49 @@ export function isUsableOrigin(candidate: string): boolean {
     return host.includes('.') || host === 'localhost';
 }
 
+/**
+ * Hosts we will send a payer back to. The request's own Host header is the most
+ * accurate signal of where the reader actually is — it is the only one that
+ * distinguishes a deploy preview from production — but it is also client-
+ * supplied, so it is accepted only against this list rather than on trust.
+ */
+export function isTrustedHost(hostname: string): boolean {
+    return (
+        hostname === 'ifn.community' ||
+        hostname.endsWith('.ifn.community') ||
+        hostname.endsWith('.netlify.app') ||
+        hostname === 'localhost' ||
+        hostname === '127.0.0.1'
+    );
+}
+
 function siteOrigin(event: HandlerEvent): string {
     const host = event.headers?.host;
     const fromRequest = host
         ? `${host.startsWith('localhost') || host.startsWith('127.0.0.1') ? 'http' : 'https'}://${host}`
         : '';
 
-    for (const candidate of [process.env.DEPLOY_PRIME_URL, process.env.URL, fromRequest]) {
+    // The request host comes FIRST, when it is one of ours.
+    //
+    // Netlify does not reliably expose DEPLOY_PRIME_URL to the function runtime,
+    // so on a deploy preview the old order fell through to `URL` — production —
+    // and a payer testing a preview was returned to ifn.community instead of the
+    // preview they started on. Confirmed on deploy-preview-5: the session came
+    // back with success_url https://ifn.community/membership?checkout=success.
+    if (fromRequest && isUsableOrigin(fromRequest)) {
+        try {
+            if (isTrustedHost(new URL(fromRequest).hostname)) return fromRequest;
+        } catch {
+            // fall through to the environment
+        }
+    }
+
+    for (const candidate of [process.env.DEPLOY_PRIME_URL, process.env.URL]) {
         if (candidate && isUsableOrigin(candidate)) return candidate.replace(/\/$/, '');
     }
 
-    // Every candidate was malformed or absent. Production is the safe guess:
-    // it is a real host, so the reader lands on a real page rather than a
-    // browser error, even if it is not the deploy they started from.
+    // Every candidate was absent, malformed, or an untrusted host. Production is
+    // the safe guess: a real page rather than a browser error.
     console.error('No usable site origin; falling back to the production URL.');
     return 'https://ifn.community';
 }

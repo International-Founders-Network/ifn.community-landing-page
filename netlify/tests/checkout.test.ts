@@ -149,3 +149,22 @@ describe('checkout.ts return URL', () => {
         expect(await originFor({ DEPLOY_PRIME_URL: 'https://feat', URL: undefined }, '')).toBe(400);
     });
 });
+
+describe('checkout.ts trusted return hosts', () => {
+    it('accepts our own hosts', async () => {
+        const { isTrustedHost } = await import('../functions/checkout');
+        for (const h of ['ifn.community', 'qr.ifn.community', 'deploy-preview-5--incandescent-dusk-aa82c2.netlify.app', 'localhost']) {
+            expect(isTrustedHost(h), h).toBe(true);
+        }
+    });
+
+    it('rejects a host an attacker could put in a Host header', async () => {
+        const { isTrustedHost } = await import('../functions/checkout');
+        // The Host header is client-supplied. Without this list, a crafted
+        // request could produce a session that returns the payer to someone
+        // else's site after they had paid.
+        for (const h of ['evil.example.com', 'ifn.community.evil.com', 'netlify.app.evil.com', 'notifn.community']) {
+            expect(isTrustedHost(h), h).toBe(false);
+        }
+    });
+});
