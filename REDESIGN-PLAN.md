@@ -1,213 +1,688 @@
-# Landing page redesign plan
+# REDESIGN PLAN: The Sign
 
-**Branch:** `design/landing-redesign` · **Worktree:** `../ifn-landing-redesign`
-**Baseline commit:** `2e8ea80` (the remediated site, after both audit rounds and the final integration pass)
-**Mode:** Redesign, full overhaul. New visual language over preserved content and IA.
-
-> No em-dash character appears in this document or in any copy it specifies. The
-> design skill bans it outright as the single most recognisable machine-writing
-> tell, and specimen copy has to model the rule it is written under.
+Branch `design/landing-redesign-v2`. Replaces the previous plan entirely (the "Arrivals" concept, git history has it). Scope: the home page and the token layer it sits on. Mode: redesign-overhaul. Content and information architecture preserved.
 
 ---
 
 ## 1. Design read and dials
 
-**Reading this as:** a community and event landing page for trust-shopping
-international founders in Austin, with a wayfinding and documentary language,
-leaning toward Tailwind v4 plus Geist over Inter and restrained scroll-reveal
-motion.
+**Reading this as:** redesign-overhaul of a community and event landing page for international founders trust-shopping in Austin, plus the lawyers and banks deciding whether to sponsor, with a signage language taken from IFN's own event slide, leaning toward Tailwind v4 CSS custom-property tokens, self-hosted Archivo, and transform-only motion.
 
-| Dial | Value | Why this value |
+| Dial | Value | Reasoning |
 |---|---|---|
-| `DESIGN_VARIANCE` | **9** | Overhaul pushes it up, and layout asymmetry carries no accessibility cost. This is where the visual ambition lives. |
-| `MOTION_INTENSITY` | **5** | Overhaul pushes up, the audience pulls down. Trust-shopping readers in a second language are not here to be impressed by movement. Motivated reveals only. |
-| `VISUAL_DENSITY` | **3** | Airy. Inherited from the outgoing system's one genuinely good instinct, its generosity of space. |
-
-The two modifiers conflicted. Resolution: variance is free, motion is not, so
-variance takes the ambition and motion stays disciplined.
+| `DESIGN_VARIANCE` | **7** | The outgoing build reads as 4 (six of nine sections are the same bordered-card grid). Overhaul adds +2, and I am claiming 7 rather than 8 because I will print the geometry that delivers it: a 7fr/5fr hero, staircased column starts at 1/3/2/4 in section 2, unequal 1fr/2fr/1fr stops in section 3, a 62ch measure against a gutter rail in section 4, and an asymmetric page gutter of `clamp(1rem, 6vw, 6.5rem)`. That is offset-and-fractional, which is what 7 means. It is not masonry and it is not chaos, because a reader working in a second language needs a predictable reading path more than a surprising one. Two of the five judged concepts declared 8 or 9 and specified a 6. I would rather under-declare and deliver. |
+| `MOTION_INTENSITY` | **4** | Overhaul default would be 6. The trust-first row of the skill's own dial table says 2 to 3 for this audience. Four is the honest midpoint and it is what actually ships: six behaviours, all transform or opacity, no pinning, no scrub, no parallax, no loops. The largest contentful element on this site is legally barred from opacity gating by a measured audit finding, which caps how much entrance choreography is even available. |
+| `VISUAL_DENSITY` | **3** | Inherits the one good instinct of the outgoing "Long Table" system, generosity of space. Sections run `py-28 md:py-36`. The single local density spike is the events index in section 5, and there the density is information a founder needs. |
 
 ---
 
-## 2. The point of view: Arrivals
+## 2. The point of view
 
-Everyone in this audience has stood in an arrivals hall reading signs in a second
-language, looking for the right exit. They landed knowing their product and not
-knowing the terrain. IFN is the person waiting past customs who already knows
-where to go.
+**IFN already prints a sign and stands under it every month. The website has never once looked at it.**
 
-That gives two design languages that are earned rather than decorative:
+In the photographs from all three documented nights, on screens and on a projector, the same slide is up: a saturated blue-violet ground, `IFN.` small at top left, a date and an arrow at top right, `International` set light, `Founders` set enormous and black, `Network` set medium, a four-item metadata row along the bottom, and exactly one word in red script. I opened the files and read it. The ground is measured, not eyeballed: sampling the bright field of the slide away from the type returns `#8189CE` at hue 233.8 and saturation 44.0% in `venue/20260226_184628.jpg`, and `#C7D4FD` at hue 225.6 in `meetups/20260423_184515.jpg`. It is a good piece of design and it is the only piece of visual identity IFN owns that was made for the room the meetup actually happens in.
 
-**Wayfinding.** Transit and airport signage: maximum contrast, generous scale,
-directional, unambiguous. Signage is designed for stressed people reading a
-second language, which is the exact constraint `PRODUCT.md` names as a product
-requirement. The aesthetic and the accessibility requirement are the same thing
-here, which is rare and worth building on.
+A sign is the correct object for this brand for a reason that is not aesthetic. The audience's stated problem, in `PRODUCT.md` line 11, is that they arrive knowing their product and not knowing the terrain, and line 108 makes plain-language legibility a product requirement rather than a style preference because most readers are working in a second language. Signage is the discipline of making a stranger certain, at a glance, that they are in the right room. The aesthetic requirement and the accessibility requirement are the same object here, which is rare, and it is why this direction can be maximal about scale and contrast without becoming decoration.
 
-**Documentary.** Real, unretouched photographs of real meetups. This is the
-warmth, and it answers "is this actually real?" in a way that no sentence can.
+**Inside the sign, one rule: the red marks only what you can check.**
 
-Those two halves resolve the brand tension `PRODUCT.md` states explicitly: keep
-the genuine informal identity of the meetup that worked, and add a professional
-layer that makes it fundable. Signage is the professional layer. Documentary is
-the community. This is the brand strategy made visual, not a mood board.
+This is the second half, and it is the part that makes the accent do work instead of looking nice. On the slide, exactly one word is red and it is the human one. On the page, the accent is licensed to three roles and no others:
 
-**Why not just polish the outgoing system.** "The Long Table" was navy structure
-plus rationed amber. It was coherent, but it was also indistinguishable from any
-competent B2B startup site, and its central colour pairing could not pass contrast
-in the role it was assigned. Retiring it is the point of an overhaul.
+1. **The mark.** Accent type plus a 3px accent rule under the phrase, applied only to a phrase that is checkable against a named artifact on this page: a date in the events feed, a named partner, a photograph on this page, a standing disclosure, or a denial of something IFN does not offer. A denial is the most checkable sentence there is, which is why the FAQ's limits copy is markable and a marketing adjective never is.
+2. **The primary action.** Accent fill, paper label.
+3. **The wordmark period**, unchanged from the shipped lockup.
+
+Error states carry no accent at all. That is deliberate and it is stated in the token rules below.
+
+**Density rule, so the licence is countable rather than felt:** one marked phrase per claim, and **no viewport ever holds more than two marks plus the wordmark period**. The nav is fixed, so the period is always on screen and is always one of them. ValueProps carries four marks, one per staircased row, across a section taller than one viewport, which is how it stays inside the rule.
+
+**And one deliberate exception, named rather than discovered.** Section 9 is a full viewport of accent, which marks nothing. That is the single place on the page where the red stops being a mark and becomes a field. It is placed last on purpose: the reader has spent nine sections seeing exactly one red thing at a time, always attached to something they could check, and the closing frame is entirely that colour. It reads as arrival at the thing all the marks were pointing to. Anywhere else on the page it would read as inconsistency, which is why it happens once and at the end.
+
+**Why this is earned rather than decorative.** `PRODUCT.md` line 100 states the surviving product principle after two integrity audits: "Provable beats impressive. Every claim on every surface must survive a member asking 'is that actually true?'" A design system whose one colour is licensed only to checkable claims turns that principle into a mechanical constraint. A fabricated claim cannot be styled, because there is nothing to point the mark at. It also resolves the brand tension `PRODUCT.md` line 68 calls "the brand": the monochrome grotesque and the ruled structure are the professional layer a sponsor can back, and the single red mark is the human hand inside it, which is exactly the role the red script word plays on the real slide.
+
+And it fixes the audited inversion at the root. The page leads with a specific Austin date and a photograph of a specific Austin room, not with a globe. The hand-rolled CSS globe medallion, the dashed rings and the hand-drawn `GlobeIcon` are deleted outright.
+
+### Answering the strongest argument against this direction
+
+The sharpest charge levelled at the concept this plan is built on was that the derivation does not survive its own inventory: the slide supplies monochrome, a heavy grotesque, a date with an arrow and one red mark, and the system that got built out of it was hairlines, mono metadata, flat surfaces and fractional grids, none of which are on the screen in any photograph. The slide's actual charisma, its gradient-filled `Founders`, its script word and its poster scale, all got discarded, and then the slide got credited for the result.
+
+That charge was correct and this plan changes three things because of it.
+
+- **Poster scale is kept, not reduced to a 68px headline in a narrow column.** The hero h1 is a three-weight ladder at `clamp(2.75rem, 6vw, 5.25rem)` running to the page gutter, which is the slide's construction at the slide's proportions.
+- **The script word's job is kept, in a form that scales and passes contrast.** A script face on the page would be a second family and a Tell. The mark is that gesture translated: one red thing per view, marking the human, checkable part. The mechanism differs, the role is identical, and the role is what was being borrowed.
+- **The mono metadata layer is cut entirely.** There is no mono face on this page. The slide has no mono. Numerals in the events index use Archivo's tabular lining figures. That removes a repeated device that had become a tic in the source concept, saves 25 to 45KB, and is more faithful, not less.
+
+What I cannot bring across is the gradient fill on `Founders`. A gradient-filled display headline is banned outright by the skill (Section 9.A, no excessive gradient text for large headers), and it is also the single most common AI tell in display type. So the slide's tonal drama becomes weight and scale drama instead.
+
+**The violet ground is discarded too, and that is the same charge again, so it gets the same answer.** The slide's ground is not white and this plan does not pretend otherwise: it measures `#8189CE` at hue 233.8 in the February frame and `#C7D4FD` at hue 225.6 in the April one. Those two readings are 8 degrees of hue and 23 points of HSL lightness apart, which is the same problem the accent has in section 4.1 and for the same reason. These are photographs of an emissive screen under mixed tungsten in one case and daylight in the other, so a ground value is no more recoverable from these files than the red is, and unlike the red there is no second frame that narrows it. The difference is that the red gets carried across as a hue family because its **role** is recoverable even when its value is not, and the violet has no role to carry: it is the slide's page, and the page's ground on this site is set by the paper family for reasons that are measured in section 4.2 rather than borrowed. So the honest accounting is that the sign supplies monochrome plus one red **after** two deliberate subtractions, the gradient and the ground, and this plan does not get to credit the slide for a monochrome system the slide does not have.
+
+**Residual risk, stated plainly: the shipped page is more austere than the slide it derives from.** If the founder sees the two side by side and misses the shine, the honest answer is that the page has to survive being read at 360px in a second language and the slide does not.
 
 ---
 
-## 3. Visual system
+## 3. Why the other four directions lost
 
-### 3.1 Palette, with measured contrast
+**Contact Sheet (ranked 2, the photographic direction).** The best single idea in the whole set came from here and I took it, so this is not a dismissal. It measured a real thing instead of asserting one: it composited an ink scrim over the worst real pixel inside the type zone of an actual candidate photograph and found that the alpha which reaches AAA erases the picture. From that it derived the Plate Rule, no type over any photograph, ever. That is a design rule falling out of a number and it is worth ten that fall out of a mood board. What killed the direction as a whole is that it stakes the entire page on the photographs and then, by its own selection, ships a hero contact sheet of five frames of which four are empty rooms, one of which contains a US flag and a Texas flag in the same document that refuses a different frame for exactly that reason. When a concept applies its own rule to one slot and abandons it in the most prominent slot on the site, the rule is decorating the design rather than governing it. It also specified nine sections at declared variance 8 and never declared a single sub-768px collapse. **Updated 2026-08-09:** that same frame also carries an illuminated Capital Factory eagle, and an earlier draft of this paragraph counted the eagle as part of the charge. Under the venue ruling recorded in section 10 the eagle is dated signage rather than a contradiction, so it is struck from the charge. The two national and state flags are not, and they carry the inconsistency on their own, as do the four empty rooms, the declared variance 8 and the missing mobile collapse. The ranking is unchanged.
 
-One accent, locked across the whole page. Every value below is computed, not
-estimated.
+**Out Loud (ranked 3, the typographic direction).** Scored the highest single number in the whole judged set, an 8 from the buildability lens, and it deserved it: every claim it made about this codebase was true and specifically characterised, and its emphasis system, carrying headline emphasis on a variable width axis rather than a hue, is a structural fix rather than a repaint. I took that reasoning. It lost on its own boldest move. To feed a justified specimen block it lifted the hero lead's first sentence downpage, leaving the most-read string on the site reading "Once a month in Austin, you can ask about any of it out loud, with founders who have solved it" with no antecedent anywhere above the fold for either pronoun. A direction whose whole thesis is that plain language for second-language readers is the design cannot open by stranding two pronouns to make room for the layout. Underneath that, the strategic argument does not hold either: `PRODUCT.md`'s plain-language requirement is a vocabulary constraint about idiom and unexpanded acronyms, satisfied by copy this project already ships. Setting preserved copy at poster scale advances it by nothing.
 
-| Token | Value | Role |
-|---|---|---|
-| `ink` | `#0F1115` | Ground for dark surfaces, and all body text on paper. Off-black, never `#000`. Warm-neutral so it does not read as the retired navy. |
-| `paper` | `#FAFAF7` | Default page ground. Off-white, never `#fff`. |
-| `arrivals` | `#0B7A53` | The single accent. Green as in cleared, arrived, go. |
+**Marked Copy (ranked 4, the wildcard).** Contains the single most valuable move in the competition and I grafted it wholesale: an accent licensed only to grounds carrying a verifiable fact, so a fabricated claim literally cannot be styled. It also contributed the shape-as-wayfinding rule that this plan adopts. It lost on its centrepiece. It nominated a full-bleed monospace ledger of "every meetup in the feed" as the page's stopping moment and called it buildable today with zero new data. I read `src/data/events.json`. It holds Vol. 03 through Vol. 12 dated 2026-03-26 through 2026-12-25; today is 2026-08-09, so five of the ten rows are calendar entries that have not happened. An artefact whose entire rhetorical job is to let volume numbering imply operating history without IFN asserting anything would have printed five scheduled dates as things that occurred. That is fabrication by layout, on the exact axis two integrity audits existed to protect. Two of its four columns are also dead: `location_name` is the identical string on all ten rows and every `registrations` entry is `[{}]`, which `normalizeRegistrations` drops. The idea survives; the section it was demonstrated in does not.
 
-| Pairing | Ratio | Requirement | Verdict |
+**The Circle (ranked 5, the human direction).** Earned the best accessibility score in the set, and its boldest move is an argument worth recording even though I am not taking it: a page for international founders should not cycle "International / Global / Immigrant" as if the reader's origin were a swappable label. That is a real reading and the founder should hear it. The direction lost on execution against the files, and **the two founder rulings of 2026-08-09 have since knocked out most of the photographic half of that charge, so it is restated here rather than left standing on a dead premise.** Its designated 70dvh closer is `venue/20260226_184645.jpg`; I opened it and the CAPITAL FACTORY gear sits dead centre as the highest-contrast object in the frame. I read that as a contradiction against adjacent copy saying "Hosted at Station Austin"; it is not one, because the venue rebranded and the gear is the same room under its former name. Its designated April frame, `meetups/20260423_184536.jpg`, is described as needing a crop to remove "the single bottom-right profile"; there are in fact three identifiable people there, which is a factual correction to the concept and stands, but with consent granted it is no longer a disqualification. What survives untouched is the finding the direction never reckoned with at all: `App.tsx` renders one `Navbar` and one `Footer` around an `Outlet` shared by seventeen routes (eighteen since `/gallery` landed on 2026-08-10), so making the home page dark by default would have put a dark shell around sixteen pages still carrying 436 hardcoded `slate-` utilities. That finding is independent of both rulings, it is the reason Phase 1 below ships light only, and the ranking stands on it.
+
+---
+
+## 4. Visual system
+
+### 4.1 Palette
+
+Two grounds per mode, no more. Every neutral is locked to hue 60 so warm and cool greys cannot mix. Saturation on the neutrals runs 3.2% to 11.8%, which puts the paper family nowhere near the banned premium-consumer cream ramp (`#f5f1ea` measures HSL S **35.5%**, `#faf7f1` measures **47.4%**, both at hue 38 to 40).
+
+| Token | Light | Dark | Role |
 |---|---|---|---|
-| `ink` on `paper` (body) | **18.07:1** | 4.5:1 | AAA |
-| `arrivals` on `paper` (body text) | **5.12:1** | 4.5:1 | Pass |
-| `arrivals` on `ink` (large text) | **3.53:1** | 3:1 | Pass |
-| white label on `arrivals` fill | **5.35:1** | 4.5:1 | Pass |
+| `--paper` | `#FBFBFA` | `#131311` | Page ground. In dark mode the light value becomes the type colour and vice versa. |
+| `--band` | `#F0F0EC` | `#1D1D1A` | The only second surface per mode. Recessed sections, plate fills, form field fills. |
+| `--ink` | `#131311` | `#FBFBFA` | All body and display type. |
+| `--muted` | `#5B5B55` | `#A5A59C` | Secondary type: captions, helper text, placeholders, the events index metadata. |
+| `--rule` | `#7C7C74` | `#75756D` | Every 1px structural hairline and every plate border. |
+| `--edge` | `#6E6E67` | `#82827A` | Control boundaries: input borders, secondary-button strokes. |
+| `--accent` | `#A81B36` | `#E85C77` | The mark, the primary action fill, the wordmark period. Hue 348.5 light, 348.4 dark, so it reads as one colour across modes. |
+| `--accent-press` | `#93132C` | `#EF7389` | `:hover` and `:active` on accent fills and accent links. |
+| `--on-accent` | `#FBFBFA` | `#131311` | The only label colour on an accent **fill** (`--accent`, `--accent-press`). Per-mode, because the fill is per-mode. |
+| `--accent-plate` | `#A81B36` | `#A81B36` | Deliberately theme-invariant. The section 9 field is the same object in both modes. |
+| `--on-plate` | `#FBFBFA` | `#FBFBFA` | Theme-invariant. **Every mark on the `--accent-plate`**: type, the pill fill in section 9, the better focus-ring layer. |
+| `--scrim` | `#131311` at 60% | `#131311` at 60% | Theme-invariant. The `JoinModal` backdrop, and the only alpha composite left on the page. |
 
-That last row is the one that matters. Welcome Amber could not carry a legible
-label on its own fill (2.80:1), could not carry text on white (2.80:1), and
-needed two separate correction tokens this session to limp through. `#0B7A53`
-works in all three roles unmodified. **The accent is chosen partly because it
-passes, which is how it should have been chosen the first time.**
+**Why `--on-plate` exists as a fourth accent token rather than being folded into `--on-accent`.** The plate is theme-invariant and the accent fill is not, so one label token cannot serve both. `--on-accent` is per-mode because it follows a per-mode fill: on the dark fill `#E85C77` it must be dark, and `#131311` on `#E85C77` measures **5.517**. Put that same per-mode token on the theme-invariant plate and dark mode resolves it to `#131311` on `#A81B36`, which measures **2.547** and puts the page's entire closing frame below even the 3:1 large-text floor. The obvious repair is to lock `--on-accent` to `#FBFBFA` in both modes, and it is wrong: `#FBFBFA` on the dark accent fill `#E85C77` measures **3.256**, so locking the token fixes the plate by breaking the fill. Two grounds that do not move together need two label tokens. Rule, stated once and applied everywhere below: **anything that sits on the `--accent-plate` is theme-invariant, because the plate is.**
 
-Rejected candidates, for the record: Signal Green `#109D6B` fails as body on
-paper (3.32:1); Transit Blue `#1D4ED8` fails as large text on ink (2.82:1).
+**The `JoinModal` surfaces, named because they were the last unnamed grounds on the page.** The scrim is `--scrim`, a theme-invariant `#131311` at 60%, replacing the shipped `bg-slate-900/60 backdrop-blur-sm` (the blur goes with it, under the flat-material rule). The modal surface is `--paper`, its field fills are `--band`, and it carries a 1px border. That border is not decoration: composited per channel in sRGB gamma space, the scrim over the light page ground resolves to `#70706E` and the modal's `--paper` surface reads **4.793** against it, so in light mode the modal boundary is carried by tone as well. In dark mode the scrim over `#131311` resolves to `#131311`, so the surface reads **1.000** against its own backdrop and the tone carries nothing at all. The border is the mechanism there.
 
-### 3.2 Type
+**The border token is `--ink`, not `--rule`, and this paragraph is corrected on 2026-08-10 rather than left standing.** Five places in this section said `--rule` and quoted 4.063 / 4.005 / 3.865; `JoinModal.tsx:336` has always shipped `border border-ink bg-paper`. **The shipped code is right and this document was wrong**, which is the opposite of the usual direction and is why the correction is written out. The discriminator is that a modal border has TWO sides, the surface inside it and the scrim outside it, and it has to clear 3:1 against both. Recomputed:
 
-| Role | Face | Note |
-|---|---|---|
-| Display and body | **Geist** | OFL, free, self-hostable. Large x-height, unambiguous terminals, a signage grotesque without costume. |
-| Data and board | **Geist Mono** | Dates, times, the departure board, numerals. |
-| Wordmark only | **MuseoModerno** | Unchanged. `PRODUCT.md` lists it as an existing brand asset. |
+| Border token | vs the modal `--paper` surface | vs `--scrim` over `--paper` | vs `--scrim` over `--band` | clears 3.0 on both sides |
+|---|---|---|---|---|
+| `--rule`, light | 4.063 | **1.180** | **1.270** | no |
+| `--ink`, light | 17.965 | 3.748 | 3.483 | yes |
+| `--rule`, dark | 4.005 | 4.005 | 3.865 | yes |
+| `--ink`, dark | 17.965 | 17.965 | 17.337 | yes |
 
-Inter is retired. It was defensible on legibility grounds and I defended it twice
-this session, but Geist meets the same legibility bar with an actual point of
-view, and self-hosting it also removes the render-blocking Google Fonts request
-that survived both audits.
+A `--rule` border in light mode measures 1.180 against the scrim it is drawn on top of, which is invisible, and the rows below quoted only its inner side. `--ink` is the only token in the palette that clears both sides in both modes. **No contrast row fails either way**, because the light mode boundary is separately carried by tone at 4.793; what failed was the document's account of which token was doing the work. Rows corrected below.
 
-Emphasis inside a headline is **italic or weight of the same family**. Never a
-second family, never a colour swap as the only signal.
+Both modes clear 3:1 at the modal boundary by two independent means, which is stated rather than assumed. Because the modal ground is `--paper`, error text inside it lands on `--paper` at **17.965** and takes the same `--ink` treatment plus 3px `--ink` rule as every other error on the page, with no accent.
 
-### 3.3 Shape, surface, motion
+The accent hue is IFN's, recovered by measurement rather than chosen by eye. I sampled the 300 most saturated red pixels of the script word in two independent February frames: `venue/20260226_184628.jpg` returns `#8B0337` at hue 337.1, `venue/20260226_184639.jpg` returns `#84051F` at hue 347.7. These are photographs of an emissive screen under mixed tungsten, so the exact value is not recoverable from the files and I am not going to pretend it is. The hue family is the brand's; the shipped value was picked by contrast sweep inside that family and sits at hue 348.5, saturation 72.3%, under the 80% ceiling.
 
-- **Radius: zero.** Signage does not have rounded corners. This is the sharpest
-  break from the outgoing system and it does most of the work of making the page
-  feel like a different product. One system, applied everywhere, no exceptions.
-- **Rules over cards.** Hairlines and space group content. Cards appear only
-  where elevation carries real meaning, which on this page is almost nowhere.
-- **Motion at 5:** scroll-reveal stagger on section entry via Motion's
-  `whileInView` (skill Section 5.C), and exactly one motivated flourish, the
-  departure board resolving its next date on load. No marquee, no parallax, no
-  scroll hijack, no GSAP. Everything degrades through the `MotionConfig
-  reducedMotion="user"` wrapper already in `App.tsx`.
-- **Dark mode: build it.** The site is light-only today, which the skill treats
-  as a mandatory gap for a consumer-facing page. `ink` and `paper` swap roles;
-  `arrivals` holds. CSS custom properties, one strategy, set once at the root.
+### 4.2 Measured contrast
 
----
+Every row below was computed with the WCAG relative-luminance formula (`c/12.92` below 0.03928 else `((c+0.055)/1.055)^2.4`, then `0.2126R + 0.7152G + 0.0722B`, then `(Lmax+0.05)/(Lmin+0.05)`), against **both** grounds in **both** modes. Alpha composites are done per channel in sRGB gamma space, which is what browsers do. **Sixty-seven rows: 33 light and 28 dark that pass, plus 6 that fail and the rule each failure produces.** The light count moved from 31 on 2026-08-10, when the `JoinModal` border correction above replaced one row with three: a border has an inner and an outer side and one row could only ever describe one of them. The counts are stated separately because an earlier draft said "forty-four rows, including the four that fail" while the tables held 44 passing rows and 4 failing ones, so the total was 48 and the word "including" made it 44. A contrast table whose own row count is off by four is not a document anyone should trust the other numbers in, which is the whole reason this section exists.
 
-## 4. Section architecture
+**Light mode**
 
-Nine sections. The current page runs five of them as card grids, which is the
-real reason it reads as competent rather than striking. The skill wants at least
-four distinct layout families across eight sections. This plan has eight.
-
-| # | Section | Layout family | What changes |
+| Pairing | Ratio | Requirement | Result |
 |---|---|---|---|
-| 1 | Hero | Full-bleed media, overlaid asymmetric type | Replaces the CSS glass sphere with the wide room photo. Headline at signage scale, two lines maximum, one primary action. |
-| 2 | Partners | Horizontal proof strip | Logos only, no category labels under them. Moves directly under the hero where a trust strip belongs. |
-| 3 | What it is for | Asymmetric editorial, two columns of unequal weight | Stops being a card grid. Text and one photo, offset. |
-| 4 | What actually happens | Horizontal numbered sequence | The Reuneo pairing, as a signage route rather than three equal cards. |
-| 5 | The meetups came first | Full-bleed split, media left | Two photos from visibly different nights, side by side. The strongest available proof of a recurring meetup. |
-| 6 | Next meetup | **Departure board** | Monospace, time-ordered, ruled. Dates, venue, the one live action. This component comes out of the concept rather than being applied to it. |
-| 7 | Resources | Index directory | A directory board, not cards. |
-| 8 | Questions | Disclosure list | Quiet. Unchanged in behaviour, restyled. |
-| 9 | Come to one | Full-bleed media, single action | One photo, one sentence, one button. |
+| `--ink` body and display on `--paper` | **17.965** | 4.5 body, 7 AAA target | pass |
+| `--ink` on `--band` | **16.281** | 4.5 | pass |
+| `--muted` secondary and captions on `--paper` | **6.601** | 4.5 | pass |
+| `--muted` on `--band` (the darker ground) | **5.982** | 4.5 | pass |
+| `--muted` as input placeholder on the `--band` field fill | **5.982** | 4.5 | pass |
+| `--muted` as form helper text on `--paper` | **6.601** | 4.5 | pass |
+| `--accent` as marked type on `--paper` | **7.054** | 4.5 | pass |
+| `--accent` as marked type on `--band` | **6.393** | 4.5 | pass |
+| `--on-accent` label on `--accent` fill | **7.054** | 4.5 | pass |
+| `--accent-press` fill, `--on-accent` label | **8.557** | 4.5 | pass |
+| `--accent` fill boundary vs `--paper` | **7.054** | 3.0 non-text | pass |
+| `--accent` fill boundary vs `--band` | **6.393** | 3.0 | pass |
+| 3px `--accent` mark rule vs `--paper` | **7.054** | 3.0 | pass |
+| 3px `--accent` mark rule vs `--band` | **6.393** | 3.0 | pass |
+| `--rule` 1px hairline and plate border vs `--paper` | **4.063** | 3.0 | pass |
+| `--rule` vs `--band` | **3.682** | 3.0 | pass |
+| `--edge` input and secondary-button border vs `--paper` | **4.960** | 3.0 | pass |
+| `--edge` vs `--band` field fill | **4.495** | 3.0 | pass |
+| `--ink` label on secondary button (`--paper` fill, `--edge` stroke) | **17.965** | 4.5 | pass |
+| Focus ring outer `--ink` vs `--paper` | **17.965** | 3.0 | pass |
+| Focus ring, better layer (`--paper` inner) vs the `--accent-plate` `#A81B36` | **7.054** | 3.0 | pass |
+| Focus ring inner/outer boundary, `--paper` vs `--ink` | **17.965** | 3.0 | pass |
+| Error text `--ink` on `--paper`, plus 3px `--ink` rule | **17.965** | 4.5 text, 3.0 rule | pass |
+| Disabled label `--muted` on `--band` fill | **5.982** | not required, held anyway | pass |
+| `--on-plate` `#FBFBFA` type on the `--accent-plate` `#A81B36` | **7.054** | 4.5 | pass |
+| `--on-plate` pill fill boundary vs the `--accent-plate` | **7.054** | 3.0 | pass |
+| `--accent-plate` `#A81B36` label on the `--on-plate` pill | **7.054** | 4.5 | pass |
+| `JoinModal` `--paper` surface vs `--scrim` over `--paper` (composite `#70706E`) | **4.793** | 3.0 | pass |
+| `JoinModal` `--paper` surface vs `--scrim` over `--band` (composite `#6B6B69`) | **5.158** | 3.0 | pass |
+| `JoinModal` 1px `--ink` border vs the modal `--paper` surface | **17.965** | 3.0 | pass |
+| `JoinModal` 1px `--ink` border vs `--scrim` over `--paper` (composite `#70706E`) | **3.748** | 3.0 | pass |
+| `JoinModal` 1px `--ink` border vs `--scrim` over `--band` (composite `#6B6B69`) | **3.483** | 3.0 | pass |
+| Error text `--ink` on the modal `--paper` ground | **17.965** | 4.5 | pass |
 
-Eyebrow budget: nine sections allows at most three eyebrow labels. Plan uses two.
+**Dark mode**
+
+| Pairing | Ratio | Requirement | Result |
+|---|---|---|---|
+| `--ink` body and display on `--paper` ground `#131311` | **17.965** | 4.5, 7 AAA target | pass |
+| `--ink` on `--band` `#1D1D1A` | **16.318** | 4.5 | pass |
+| `--muted` `#A5A59C` on the page ground | **7.496** | 4.5 | pass |
+| `--muted` on `--band` | **6.808** | 4.5 | pass |
+| `--muted` as placeholder on the `--band` field fill | **6.808** | 4.5 | pass |
+| `--accent` `#E85C77` as marked type on the page ground | **5.517** | 4.5 | pass |
+| `--accent` as marked type on `--band` (the lighter dark ground, the binding case) | **5.011** | 4.5 | pass |
+| `--on-accent` `#131311` label on the `--accent` **fill** `#E85C77` | **5.517** | 4.5 | pass |
+| `--accent-press` `#EF7389` fill, `--on-accent` label | **6.629** | 4.5 | pass |
+| `--accent` fill boundary vs page ground | **5.517** | 3.0 | pass |
+| `--accent` fill boundary vs `--band` | **5.011** | 3.0 | pass |
+| 3px `--accent` mark rule vs page ground | **5.517** | 3.0 | pass |
+| 3px `--accent` mark rule vs `--band` | **5.011** | 3.0 | pass |
+| `--rule` `#75756D` vs page ground | **4.005** | 3.0 | pass |
+| `--rule` vs `--band` | **3.638** | 3.0 | pass |
+| `--edge` `#82827A` vs page ground | **4.804** | 3.0 | pass |
+| `--edge` vs `--band` field fill | **4.363** | 3.0 | pass |
+| Focus ring outer `--ink` vs the `--paper` page ground | **17.965** | 3.0 | pass |
+| Focus ring, better layer (`--ink` outer) vs the `--accent-plate` `#A81B36` | **7.054** | 3.0 | pass |
+| Focus ring inner/outer boundary, `--paper` vs `--ink` | **17.965** | 3.0 | pass |
+| Error text `--ink` on page ground | **17.965** | 4.5 | pass |
+| `--on-plate` `#FBFBFA` type on the `--accent-plate` `#A81B36` | **7.054** | 4.5 | pass |
+| `--on-plate` pill fill boundary vs the `--accent-plate` | **7.054** | 3.0 | pass |
+| `--accent-plate` `#A81B36` label on the `--on-plate` pill | **7.054** | 4.5 | pass |
+| `JoinModal` 1px `--ink` border vs the modal `--paper` surface | **17.965** | 3.0 | pass |
+| `JoinModal` `--ink` border vs `--scrim` over `--paper` (composite `#131311`) | **17.965** | 3.0 | pass |
+| `JoinModal` `--ink` border vs `--scrim` over `--band` (composite `#171715`) | **17.337** | 3.0 | pass |
+| Error text `--ink` on the modal `--paper` ground | **17.965** | 4.5 | pass |
+
+**Rows that fail, and the rule each one produces**
+
+| Pairing | Ratio | Requirement | Rule it produces |
+|---|---|---|---|
+| `--accent` `#A81B36` against surrounding `--ink` body text, light | **2.547** | 3.0 (WCAG 1.4.1, technique G183) | **Every inline link carries an underline, in both modes, always.** Colour alone can never identify a link on this page. G183 measures the link against the surrounding text, not the ground, and light mode fails it. This is the row that was missing from every one of the five judged contrast tables. |
+| `--accent` `#E85C77` against surrounding `--paper` body text, dark | **3.256** | 3.0 | Marginal pass, and the underline rule applies anyway so the page never depends on it. |
+| `--band` plate against the `--paper` ground, tone only | **1.103** | not governed, but too weak to carry meaning | **Every plate carries a 1px `--rule` border.** Ground tone alone is 1.10:1 in light and 1.10:1 in dark, so banding is a supporting device and never the mechanism by which a plate is perceived. The border measures 4.063 and 4.005. |
+| `JoinModal`'s `--paper` surface against `--scrim` over the dark page ground | **1.000** | 3.0 non-text | **The modal boundary is carried by tone in light mode and by its 1px `--ink` border in dark, so the border is mandatory rather than stylistic.** A 60% scrim over `#131311` composites back to `#131311`, so in dark mode the modal surface and its own backdrop are the same colour. The border measures 17.965 and does the work. The token is `--ink` rather than `--rule` for the reason computed at the top of this section: `--rule` is invisible against its own outer side in light mode at 1.180. |
+| `--on-accent` `#131311` on the `--accent-plate`, dark | **2.547** | 3.0 large text, 4.5 body | **This is why `--on-plate` exists.** Recorded rather than fixed silently, because the naive repair (locking `--on-accent` to `#FBFBFA`) fails the other direction at 3.256 on the dark accent fill. Published so the two-token split cannot be "simplified" back out later. |
+| `--rule` at 75% pixel coverage over its own ground | **2.665 light, 2.764 dark** | 3.0 | **Hairlines are full-opacity 1px, never expressed with `opacity` or an alpha colour, and never on a fractional device-pixel offset.** At 75% antialiased coverage a compliant rule drops below the floor. The margins, recomputed rather than quoted: at full opacity `--rule` clears the 3.0 floor by **35.4% in light** (4.063) and **33.5% in dark** (4.005), which is real headroom; 75% coverage spends all of it and then **11.2% more in light** and **7.9% more in dark**. No token in this palette can be specified generously enough to survive being drawn at partial coverage, which is why the rule is about how the hairline is drawn and not about which grey it uses. |
+
+**Two further stated bans, each measured**
+
+- `--rule` against the `--accent-plate` measures **1.736 in light** (`#7C7C74`) and **1.573 in dark** (`#75756D`). Both tokens are quoted because `--rule` is per-mode and the plate is not, so there is no single number here. No hairline, table rule or plate border ever terminates on the section 9 accent field in either mode. Separation inside the plate is space only.
+- The focus ring is a two-layer ring, **2px `--paper` inner plus 2px `--ink` outer, identical in both modes**, with no `ring-offset`. This replaces the shipped `focus-visible:ring-offset-2` pattern, which assumed a known solid ground. **There is no dark-mode reversal, and an earlier draft of this plan specified one, which was a bug.** `--paper` is always the page colour and `--ink` is always the type colour, so the construction already inverts itself when the tokens swap. Writing the reversal on top of that swap inverts it twice: the outer layer becomes `--paper`, which in dark mode is `#131311`, which **is** the page ground, at **1.000**. Every focus indicator on all eighteen routes would collapse to a single 2px line. Unreversed, the ring is correct in both modes with one declaration.
+
+  Swept across all 256 grey values, the better of the two layers never drops below **4.264** (worst case at `#787878`), so the ring survives any conceivable ground including a photograph. That sweep is unaffected by the fix above, because it swept the construction rather than the reversal. The layers also contrast with each other at **17.965** in both modes, so the ring reads as a shape rather than as a colour, and a shape is what survives a ground the sweep did not anticipate. On the `--accent-plate` the better layer measures **7.054** in both modes (the `--paper` inner in light, the `--ink` outer in dark), so the plate is not the binding case; the grey sweep is. Nothing focusable sits on a photograph under the Plate Rule, so this is belt and braces, but it is computed rather than assumed.
+
+**Token collision check.** `--ink` `#131311` measures **1.042** against Tailwind `slate-900`, **1.084** against `slate-950`, **1.272** against `slate-800`. That is the same class of luminance collision that produced four bugs in this repo including an invisible focus ring on the events newsletter input. There are currently **436** hardcoded `slate-` utilities across `src/`. Purging them from every redesigned component is a phase gate, not a cleanup task, and `grep -ro 'slate-' src/components/ src/pages/Home.tsx | wc -l` returning zero is the pass condition.
+
+**Retired for the record.** `--color-accent` `#f97316` as text on `#f8fafc` measures **2.679** against a 3:1 floor. That is the live system-level defect this palette replaces, and it is reproduced here so the tooling that produced the sixty-seven rows above can be checked against a known-bad value.
+
+### 4.3 Type
+
+| Role | Face | Licence | Usage |
+|---|---|---|---|
+| Display and body | **Archivo** variable (Omnibus-Type), axes `wght 100-900` and `wdth 62-125` | SIL Open Font License 1.1, self-hostable | One family for everything. Display at `wght 500-800`, `tracking -0.025em`, `leading 0.95` for the h1 and `1.02` for section headlines. Body at `wght 400`, 17px base, `leading 1.6`, measure capped at 65ch. |
+| Numerals | Archivo with `font-feature-settings: 'tnum' 1` | same file | The events index, membership prices, counts. **There is no mono face on this page.** The slide has none. |
+| Wordmark only | **MuseoModerno** 900 | SIL Open Font License 1.1, self-hostable | `IFN` plus the accent period, unchanged. Locked brand asset. |
+
+No commercial face is named anywhere in this plan. All faces are self-hosted via `@font-face` with `font-display: swap`, which also removes the render-blocking Google Fonts link still live at `index.html:17`. Archivo is preloaded; MuseoModerno is not, because the wordmark is small and a swap there is invisible.
+
+**Weight budget, honestly stated.** Archivo variable, latin plus latin-ext, two axes, lands around 70 to 78KB as woff2. MuseoModerno 900 as a Google static latin subset is roughly 20 to 25KB. Subsetting it to the four glyphs the wordmark actually uses would take it to roughly 2 to 3KB, and that requires `pyftsubset` from `fonttools`, which **is not installed on this machine**. Name it as a dev dependency or skip the subset and ship the 22KB file. Do not claim the 3KB figure without adding the tool.
+
+**Emphasis rule.** Emphasis inside a headline is a weight step within Archivo, `wght 800` against a `500` line, exactly as the slide sets `International` light against `Founders` black. Never a second family. Never colour alone. Italic is retired from display type entirely, which also retires the italic descender-clearance trap and collapses `Emphasis.tsx` from two ground-dependent colour branches to one branch with no colour logic at all.
+
+**The hero's cycling word takes no accent and no mark.** It is the third rung of the weight ladder and nothing else. This is deliberate on two counts: the mark means "checkable", and how a founder names their own origin is not a checkable fact; and it means the overlapping inline-grid that sizes the slot to the longest candidate needs only identical `font-variation-settings` on its invisible twins, with no rule to render on one span and not the others. The 360px overflow fix survives untouched.
+
+**Descender clearance on that slot.** "Immigrant" carries a `g`, and a vertical roll inside an `overflow-hidden` slot clips a descender exactly the way `leading-none` does. The slot runs `leading-[1.15]` minimum with `pb-1` bottom reserve, applied identically to the visible span and to both invisible sizing twins so the slot's metrics stay in agreement.
+
+### 4.4 Shape, surface, material
+
+**One radius rule, two values, no third.**
+
+- **Every non-interactive surface is radius 0.** Plates, photographic frames, the events index, disclosure rows, the accent field.
+- **Every discrete interactive control is full pill.** Buttons, inputs, the resources filter chips, the nav action.
+- **Boundary, stated because it will otherwise break on contact:** "control" means a discrete control. Full-width interactive rows (FAQ disclosure triggers, events index rows) and nav links stay radius 0 and carry their pressability through the focus ring, not through shape.
+- **Full-width interactive rows never use a ground swap for hover.** FAQ sits on `--band`, so a `--band` hover ground would measure 1.0:1 against its own section. Instead the row's 1px `--rule` hairline promotes to a 2px `--edge` on hover, which measures 4.960 on `--paper` and 4.495 on `--band` and works identically on every ground in both modes.
+
+The reason is wayfinding, not taste. Shape tells a reader what can be pressed before they read the label and independent of language or colour, which is the strongest non-verbal affordance available to a substantially second-language audience. It also resolves a collision that two of the judged concepts acknowledged and neither fixed: MuseoModerno is a rounded geometric logotype, and on an all-square page it would be the only curved object on screen, fighting the system. Here the wordmark rhymes with the controls.
+
+**Material.** The page is flat. Zero shadows, zero glows, zero gradients (including in display type), zero blur, zero glass, zero backdrop-filter. Separation is carried by ground tone, by full-opacity 1px `--rule` hairlines that clear 3:1 on every ground, by plate borders, and by space. The only non-flat surfaces on the page are the photographs.
+
+**No type sits on a photograph anywhere on this page.** This is the Plate Rule, grafted from the Contact Sheet concept and adopted because its derivation is a measurement rather than a preference: an ink scrim over the worst real pixel inside a candidate frame's type zone needs an alpha that erases the photograph before it reaches AAA. Every caption sits outside its frame. This deletes an entire class of uncomputable contrast case (scrims, ghost buttons over images, per-pixel variation, dark-mode veil alphas) rather than mitigating it, and it is the reason no veil token exists in section 4.1.
+
+**Navigation.** Fixed, 64px at rest, flat, one 1px `--rule` bottom edge, no backdrop blur, no transparent state. It renders on one line at `lg` and the wordmark drops from `text-3xl` to `text-xl`. Coupling to retune in the same commit: `src/index.css:41` sets `scroll-margin-top: 6rem` for the current ~92px bar and must move to `4.5rem`, or every anchor lands under the bar.
 
 ---
 
-## 5. What is preserved, and why the last two rounds were not wasted
+## 5. Section architecture
 
-This is a **visual** overhaul on a **structurally sound** base. Everything below
-carries forward untouched. This is the answer to the reasonable worry about
-reworking the same ground twice.
+Order, anchor ids and nav labels are frozen. `id="mentorship"` sits on ValueProps, has nothing to do with the section's content, and moves with it verbatim; it is called out here because it is the one most likely to be silently dropped in a restructure.
 
-| Preserved | Detail |
+| # | Section | Layout family | Geometry that makes it distinct | Ground | Eyebrow |
+|---|---|---|---|---|---|
+| 1 | Hero | Poster stack above a full-bleed photographic band | h1 runs the full content measure as a three-weight ladder, then a `7fr 5fr` split below it carries the subtext and CTAs with the 5fr column deliberately empty, gutter `clamp(1rem, 6vw, 6.5rem)`, band breaks the container edge to edge | `--paper` | **1 of 3** |
+| 2 | ValueProps `#mentorship` | Staircased statements in open space | 12-col grid, four rows whose column-start walks 1, 3, 2, 4, no rules, no containers, no icons, vertical stack per row | `--paper` | none |
+| 3 | HowItWorks | Single-rule sequence with unequal stops | One 2px `--rule` across the container with three ticks, stops at `1fr 2fr 1fr`, only the wide middle stop carries an image cell | `--band` | none |
+| 4 | FounderStory | Prose measure with a hanging gutter rail | Single 62ch measure left, three-fact `<dl>` hanging in the right gutter under one rule, and (added 2026-08-10) one photograph stacked on grid row 3, starting in column 1 on the same left spine and spanning both tracks to 56.5rem | `--paper` | none |
+| 5 | EventsPreview `#events` | Featured object plus compact index | One large object (date at display scale with `tnum`, arrow, zone-correct time, venue, one action) above a compact ruled index of the remaining upcoming dates | `--paper` | none |
+| 6 | PartnersStrip `#partners` | Logo baseline with running prose | Three marks on one optical baseline sized by eye, one full-measure paragraph beneath, no cards, nothing printed under any individual mark | `--band` | **2 of 3** |
+| 6a | GalleryPreview | Unequal two-column frame set with the link set into the void | One lead frame across 7 of 12 columns, the other two stacked in the remaining 5, the stacked column deliberately taller so the section's one link sits in the space the lead frame does not fill rather than under the whole grid. No frame, no caption, no date | `--paper` | none |
+| 7 | ResourcesPreview `#resources` | Horizontal scroll-snap rail | Four unequal snap panels on a native CSS rail, filter chips above as a snap row | `--paper` | none |
+| 8 | FAQ `#faq` | Interactive disclosure register | Full-width rows on hairlines, open answers indent into a 7-of-12 column so an open panel differs in structure and not only in height | `--band` | none |
+| 9 | FinalCTA | Full-bleed accent field | The page's one colour block, `--accent-plate` edge to edge, `--on-plate` type, one pill action filled `--on-plate` and labelled `--accent-plate`, no photograph, no rules | `--accent-plate` | none |
+
+**Eyebrow count: 2 used against a budget of `ceil(10 / 3) = 4`.** The hero keeps the shipped string "Monthly meetups in Austin, Texas" and PartnersStrip keeps "Who we work with". ValueProps and ResourcesPreview both currently carry eyebrows and both lose them.
+
+**Ten layout families across ten sections, as of 2026-08-10.** Sections 2, 4 and 8 are all type on ground with no containers, so their distinguishing geometry is printed above rather than left to a family label: staircased column starts with no rules, a single measure against a gutter rail, and full-width interactive rows. Exactly one section is an image plus text split (section 3), so the zigzag cap is nowhere near, and the new section does not move that count: a lead frame with two frames beside it is an image set, not an image beside text.
+
+**The new row is numbered 6a rather than 7, and the renumber it avoids is the point.** Inserting it as a new 7 would push ResourcesPreview, FAQ and FinalCTA to 8, 9 and 10, and this document refers to FinalCTA as "section 9" in roughly a dozen places across sections 4, 5, 6 and 11, every one of which would silently start pointing at the FAQ. The section order that ships is Hero, ValueProps, HowItWorks, FounderStory, EventsPreview, PartnersStrip, GalleryPreview, ResourcesPreview, FAQ, FinalCTA, and no existing section moved relative to any other. `6a` is a document-internal label rather than a position claim.
+
+**Photographs on the home page, and the zigzag accounting, restated twice on 2026-08-10 because it changed twice.** There are now **six** frames rather than three: the hero band, the HowItWorks middle stop, one in FounderStory, and three in GalleryPreview. **Exactly one of the six is an image plus text split** and it is still the HowItWorks middle stop. The hero band is full bleed with nothing beside it. The FounderStory frame **stacks** under the prose on the same left spine. The three GalleryPreview frames sit beside each other with no text between them, which is an image set rather than an image opposite a paragraph. So the count of consecutive image-plus-text splits is still one against a cap of two, and that is the check to re-run if a seventh photograph is ever placed.
+
+The six frames are separated by subject, by scale and by date. February contributes the FounderStory room and the lit sign; April contributes the hero band circle, the close-range conversation and the room seen past a laptop; July contributes three people talking with drinks. Three evenings now reach the home page where two did on the morning of the same day, and section 7 carries the accounting.
+
+**The middle-third defect this fixed, measured before and after rather than asserted.** A design pre-flight measured the built page at 1366 and found 5,649px, 47 percent of a 12,022px document, running from the last photograph to the accent field with no image in it; all three frames sat in the first 41 percent, because the FounderStory frame had been placed at the END of its section and therefore opened the run rather than breaking it. After GalleryPreview the document is 13,247px and the longest imageless run is **3,320px, 25 percent**, made of ResourcesPreview and FAQ, which are a snap rail of text panels and a disclosure register and are text surfaces by design. At 390 the figure moved from 6,275 to 3,668.
+
+**An eleventh family lives on `/gallery` and is deliberately not on the home page. REPLACED 2026-08-10 on the founder's ruling, and the family it replaced is named so the change is checkable.** It was a chronological register of dated sheets: a full-measure hairline per evening carrying its date and its frame count, then that evening's frames as **equal** tiles. The founder rejected it outright, because grouping three dated evenings makes the page's strongest claim "there have been three nights", which is false. The family is now **an authored hang**: nine unequal rows on one twelve-column measure, six size classes running 906 to 389 at 1440, three rows of a single frame with a placed void, two rows hung from a bottom rail rather than a top one, no date and no grouping anywhere. Section 7 carries the size ladder and the phone collapse. It is a new route, which the brief permits; no existing route, slug, anchor id or form field name moves.
+
+**Equal tiles there and unequal frames in section 6a is the distinction that keeps them two families rather than one repeated.** On `/gallery` the tiles are equal because block area is frame count drawn to scale, and the raggedness of the last row is the argument. That argument does not exist on the home page, where there is one frame per evening and nothing being counted, so equal tiles there would be the three-equal-card row skill 9.C bans outright. The two surfaces reach opposite geometry from the same photographs because they are making different claims about them.
+
+**Section notes that carry real constraints**
+
+- **Hero.** Four text elements exactly: eyebrow, headline, subtext, CTAs. The eyebrow string is preserved verbatim but **the decorative accent dot inside the eyebrow pill is deleted** (`src/components/Hero.tsx:87`, `h-2 w-2 rounded-full bg-primary`). It is banned by skill 9.F, and independently of the skill it breaks two of this plan's own rules: it is accent that marks nothing, which the licence in section 2 does not permit, and it would consume one of the two marks the density rule allows per viewport for no informational return. Preserving the copy does not mean preserving the ornament attached to it. Two actions, no more: "Join the community" (primary, accent fill, opens the existing modal) and "Browse our resources" (secondary, `--paper` fill with a 2px `--edge` stroke, links to `/resources`). No Luma link, no live date, no proof cards, no globe. The two `HeroVisual` proof claims move down: "Six months of monthly meetups, in person" to section 2, "Speed networking by Reuneo" to section 6.
+
+  **Font scale and fit, recomputed rather than asserted.** The h1 is `clamp(2.75rem, 6vw, 5.25rem)` at `leading 0.95`, and it runs the full content measure rather than a 7fr column, which is the slide's own construction and is what makes the line count work. **This is the same clamp quoted in section 2, and it is the only h1 clamp in this document.** An earlier draft answered the "poster scale got discarded" charge with `clamp(2.75rem, 6vw, 5.25rem)` and then did the fold arithmetic against `clamp(2.5rem, 4.6vw, 4.5rem)`, which resolves to 62.8px at 1366px against this one's 82.0px. A rebuttal that ships a headline 23% smaller than the one it argued for is not a rebuttal, so the larger clamp is kept and the arithmetic below is redone against it.
+
+  **The metric, printed so the next reader recomputes rather than re-asserts.** Every line count here uses an average advance of **0.503em per character for display type** (Archivo's roughly 0.528em base, less the 0.025em display tracking) and **0.529em for body** at `wght 400` with no tracking. Wrapping is greedy at word boundaries. The longest cycling headline is **"Where International Founders Connect, Grow, and Succeed"**, which is **55 characters**, not 53; the overlapping inline-grid sizes the slot to that longest candidate, so the line count is stable across all three words rather than shifting every 3000ms.
+
+  At **1366x768**: gutter resolves to 82.0px, content measure 1202px, font 82.0px, 29.2 characters per line, so **2 lines** ("Where International Founders" at 28, "Connect, Grow, and Succeed" at 26) at 77.9px each = 156px. Subtext sits in the 7fr column at 701px, 78 characters per line, 186 characters, so **3 lines** at 82px. Stack: 64 nav + 80 `pt-20` + 44 eyebrow + 156 h1 + 24 + 82 subtext + 32 + 56 CTAs + 64 bottom = **601px to the top of the band**. Browser chrome takes roughly 120px of 768, leaving 648 visible, so the copy clears the fold with **47px of band showing**. That is a thinner "there is more" signal than the 110px an earlier draft claimed off the smaller clamp, and it is the price of poster scale, stated rather than hidden.
+
+  **The 28-against-29.2 first line is the fragile number in this section and it is named as such.** It carries 4% headroom, so a heavier rendered advance than the metric above pushes "Founders" down and the h1 goes to 3 lines. The degradation is graceful and was computed rather than hoped: 3 lines takes the stack to 679px, the CTA block's bottom edge still lands at 615px against 648 visible, so the actions stay above the fold and only the band drops below it. The hero loses its band preview, not its buttons. This is the first thing to measure in Phase 4.
+
+  At **1920x1080**: font caps at 84px, the container caps at `max-w-7xl` (1280px), still **2 lines** at 79.8px, subtext column 747px at 83 characters per line, still 3 lines, stack totals **605px**, band visible from 605 to 960. At **360px**: font floors at 44px, measure 317px, 14.3 characters per line, so the headline runs **5 lines** ("Where" / "International" / "Founders" / "Connect, Grow," / "and Succeed"), not the 4 an earlier draft assumed off the 40px floor. Five lines at 41.8px is 209px, which is fine on a scrolling mobile view where there is no fold to clear, but it is the exact measurement risk 4 exists to catch and it is not treated as settled here. All of these are build-time measurements to re-verify, not assumptions. Hero top padding is `pt-20` and never exceeds `pt-24`.
+
+  **The subtext overruns the skill's hero rule, and as of 2026-08-09 the founder has delegated the string to us with the instruction to optimise for punch and conversion. So it is now ours to cut, and the cut is made in Phase 4 rather than here.** The preserved string (`src/components/Hero.tsx` lines 139 to 143) measures **33 words and 186 characters** against a pre-flight commitment of 20 words, a 65% overrun. Until the delegation arrived, this document kept it, because the only other authority in play was the brief's content-preservation constraint and a plan does not edit shipped copy on its own say-so. That constraint has been lifted by the person who owns it, so the argument that held the 33 words in place is gone and is not reproduced here as if it still bound.
+
+  **What does not change is the reason the trim has to be done carefully rather than to a word count.** Section 3 rejects the Out Loud direction for lifting this string's second sentence above the fold and stranding two pronouns with no antecedent. That charge was about a referential defect, not about length, so trimming for brevity is not the same move and this document is not committing the fault it charged. The requirement it produces is specific and it is binding on whatever ships: **the shipped line must still answer "ask who?"**, which is the job the clause "with founders who have already solved it" currently does. A shorter lead that drops the answer to that question buys a word count with the sentence's only piece of reassurance.
+
+  **The fold arithmetic above is retained as the recorded worst case, computed against 33 words and 3 lines of subtext, and a shorter line can only improve it.** The document's own pairing prices the improvement without a new computation: 3 lines where the rule budgets 2 is the 27px that took the band preview from 74px to 47px at 1366x768, so a 2-line subtext returns that 27px and the band preview goes back to 74px. The specific 24-word alternative drafted earlier is "Visas, U.S. banking, hiring across borders, funding norms nobody explained to you. Once a month in Austin, you can ask about any of it out loud." It is recorded as a starting point and **not** adopted, because it is still over the 20-word budget and it drops the "ask who?" answer, which is the one thing the requirement above forbids. Phase 4 sets the final string, re-measures it against the 0.503em display metric and the 0.529em body metric printed above, and re-states the line count and the band preview it actually produces.
+- **ValueProps.** The four shipped claims survive verbatim. Exactly one clause in each is marked, and only the checkable one: "a meetup you can put in your calendar" is marked because there is a dated feed below it; "There is no matching system here" is marked because a denial is checkable.
+- **HowItWorks.** Three identical cards and the giant ghost numerals are both deleted. Order is carried by the existing semantic `<ol>`; the ticks are `aria-hidden`. The dark navy slab is gone, replaced by a `--band` tone, so the page never inverts mid-scroll. The relocated sub-CTA line lands here as three stacked lines, retiring its middle-dot separators.
+- **EventsPreview.** Every piece of `EventCard`'s logic is preserved verbatim: formatting in the event's own zone rather than the reader's, the DST-correct CDT and CST label, the "In your time zone" second line when they differ, `<time dateTime>`, the past/upcoming split reading `Date.now()` once at mount, and the sr-only event title appended to repeated Luma links. **The index shows upcoming meetups only and never renders a historical record.** Five of the ten rows in `src/data/events.json` are dated after today, so a "record" built from that feed would present scheduled dates as operating history. **On this section, recurrence is carried by the copy ("more than six months of monthly meetups") and by nothing else.** Not by the feed, which is upcoming-only by the rule immediately above, and an index of future dates cannot evidence past recurrence in any case. Not by this section's photographs either: no frame on the home page prints a date, so crediting them here would be asserting evidence the page does not display.
+
+**Amended 2026-08-10, and this is a real change rather than a softening.** `/gallery` prints three separately dated evenings as headings, February, April and July 2026, with that evening's frames beneath each one. That is the first surface on this site that displays dated evidence at all, and it is narrow evidence: three nights photographed, not "monthly since February". The gallery page says exactly that in its own words, describing itself as a record of the nights that were photographed rather than of every night, and it hardcodes no numeral in its prose. The home page's claim of **monthly** recurrence is still carried by one sentence of copy. What is no longer true is that the copy stands entirely alone.
+
+  **Featured-plus-index retires the dot pager, and that is a real accessibility deletion rather than a layout simplification, so it is itemised.** It is the reason this section does not become the hairline-under-every-row spec table the skill bans, but it removes machinery that `EventsPreview.tsx` currently ships: `role="group"` with `aria-label="Choose a meetup page"` (line 125), a per-dot `aria-label` (line 133), `aria-current` (line 134), a documented 44px hit area around an 8px dot (line 143), width-not-colour state on the current dot, and an `aria-live="polite"` page counter reading "Page N of M" (line 76). Five of those six have no replacement and need none: featured-plus-index has no pages, so there is nothing to group, label, mark current, or hit. **The live region is the one that does need a named replacement, because the non-regression promise below is binding and the announcement it made would otherwise simply vanish.** It is replaced by the section's permanently-mounted `role="status"` region, which already exists in this spec for the loading state and which announces the resolved result in place of the page count: "Showing the next N meetups", or the empty-state sentence when N is zero. Same region, same politeness, one announcement instead of one per page turn, and it now fires on the transition a reader actually cannot see (a fetch resolving) rather than on one they just caused by clicking. The 44px floor is unaffected because it is encoded in `SIZES` and governs every control on the page independently of this section.
+
+  Loading state is skeleton rows in the final row shape with the existing `.motion-status` spinner kept inside the live region; the empty state ("The next date is not on the calendar yet") gets the full measure and its own composition.
+- **PartnersStrip.** No category label under any mark. The information those labels carried moves into one 65ch paragraph beneath the row, so the shipped headline stays true. The Yani Partners disclosure is reproduced verbatim, unshortened, at body scale, and it is **marked**, because a standing disclosure is the most checkable sentence on the page. **Blocking, and after the rulings of 2026-08-09 this is the only asset any phase in this plan is still blocked on.** `Icons.tsx` currently hotlinks the Station Austin and Reuneo marks from `google.com/s2/favicons`, which is the same third-party-request and visitor-IP class this repo already removed from the hero. Two of the three marks are hotlinked; real artwork must be vendored into `public/partners/` before this section ships. If a mark cannot be obtained with permission, the partner is omitted from the row rather than set as a text wordmark.
+- **ResourcesPreview.** The animated stage timeline, the counted stat strip and the example card grid are all cut. Four topic panels with genuine visual variation, one carrying oversized display type on `--band`. **Keyboard contract, stated because a snap rail is where this regresses:** the rail is `role="group"` with an `aria-label`, `tabindex="0"` so it is reachable and scrollable by keyboard, and every panel contains a focusable link so Tab reaches all four. The `aria-pressed` filter toggles keep their labelled `role="group"` and their 44px floor, and each stage description is still rendered exactly once.
+- **FAQ.** Restyle, explicitly not rebuild. Preserved byte for byte: `hidden="until-found"` set imperatively because React 19 coerces the prop to a boolean, the `beforematch` listener that syncs state when Chrome reveals a panel via find-in-page, the re-hide in `onAnimationComplete`, the `<h3>`-wrapped trigger, `aria-expanded`, `aria-controls`, `role="region"` with `aria-labelledby`, ids from `useId`, and the two entries open by default. `focus:outline-none` does not return. The answers that name IFN's limits are the emotional centre of this page, set at full body scale rather than as fine print, and their denials carry the mark.
+- **FinalCTA.** One action, one field, no photograph. The preserved headline sits at the page's second-largest size. The four-item "What you are signing up for" panel keeps all four items and loses only its bordered box. **Two of the four strings were rewritten on 2026-08-10 and this line is amended rather than left standing:** they now read Every month, in person / **Hosted by our venue partner** / Structured one-to-one networking / Free to attend. The venue is no longer named here because the founder's partner-footprint ruling keeps partner names on the partner surfaces only, and the address reaches this reader through the event listing the item points them at. The other two are unchanged: the four run as four **`--on-plate`** lines on the field at **7.054:1 in both modes**, stacked, no rules, no icons, no bullets, because a hairline cannot terminate on the accent plate (1.736:1 light, 1.573:1 dark) and space is the only separator available there. **Every mark in this section takes `--on-plate` and not `--on-accent`**, for the reason measured in section 4.1: `--on-accent` is per-mode, so in dark mode it would resolve to `#131311` on `#A81B36` at 2.547:1 and render the page's closing frame unreadable. The single action is a pill filled `--on-plate` `#FBFBFA` (boundary 7.054:1 against the plate) carrying an `--accent-plate` `#A81B36` label (7.054:1 against the pill), which is the page's primary button inverted onto its own field. It is deliberately **not** a `--paper` fill with an `--ink` label, because `--paper` is per-mode and a dark-mode `#131311` pill on the plate measures 2.547:1 at its boundary, which is the same defect one component further down. The pricing sentence imports `MEMBERSHIP_PRICE_STANDARD` from `src/data/membershipData.ts` rather than hardcoding a figure. **`MEMBERSHIP_PRICE_ATTENDEE` was named here too and no longer exists**, deleted on 2026-08-10 along with the two-entry `MEMBERSHIP_TIERS` array that housed it: the second price is a warm-lead price sent by email to a selected list and is not public, and deleting the shape as well as the value is what stops a second public figure being re-derived from it. **Exactly one price is published anywhere on this site.** No checkout is designed and `STRIPE_PAYMENT_LINK` is still wired to nothing; a real gateway is recorded in `BACKLOG.md` as next-iteration work rather than built here.
+
+  **Resolved 2026-08-09, and recorded here because this paragraph previously flagged it as a ship blocker.** Item two of those four read "Hosted at Station Austin" at the time. Capital Factory has been rebranded as Station Austin: it is one physical venue under two names, the current one and the former one, so there was no contradiction to route around. **Both halves of this have since moved and the record is updated rather than left as it stood.** The panel item now reads "Hosted by our venue partner", because the founder's partner-footprint ruling of 2026-08-10 keeps partner names on the partner surfaces only; and the freshness question this paragraph parked is half closed. All ten rows of `src/data/events.json` now carry "Station Austin, 701 Brazos St, Austin, TX 78701, USA". **The live Postgres `events` table is the half that is still open**, and it is the more dangerous half, because `netlify/functions/events.ts` consults the bundled snapshot only when the table has zero rows: on a database with rows the deployed feed can say one venue while the page says another, and that is invisible locally, in CI and in every test. `db/migrations/02_event_venue_station_austin.sql` and its runner `scripts/fix-event-venue.mjs` exist for it (preview by default, `--apply` to write, no connection string in this repo), and the check plus the caveat that Luma can write the old name back on the next sync are recorded in `AGENTS.md` under deployment so a deploy cannot forget it. It **blocks nothing in this plan** and it is not fixed by anything in it. The photography rule that fell out of the old premise is retired with it: **the plan no longer refuses frames in which Capital Factory branding is legible**, because that branding is dated signage rather than a false claim, and section 7 now selects on composition instead. Alt text still names no venue, for the reason given in section 7.
+
+**On the theme lock.** Section 9 is a full-bleed saturated field on a page that is otherwise `--paper` or `--band`. That is the skill's single permitted colour-block exception and I am claiming it deliberately rather than by accident, with one mitigation that makes it defensible: **the plate is theme-invariant.** `#A81B36` carrying `--on-plate` `#FBFBFA` type at 7.054:1 is the same object in light mode and in dark mode, and the theme-invariance is what forces the separate `--on-plate` token rather than being a free consequence of it, so it is a brand field rather than a theme inversion, and no reader in either mode feels they walked into a different website. The two dark navy slabs in the outgoing design are both retired, so this is the only ground change on the page.
+
+**One CTA label per intent.** The page currently ships five spellings of one intent: "Join the Community", "Join the community", "Join International Founders Network", "Join Network", "Join IFN". This unifies on **"Join the community"** in the hero, HowItWorks, FinalCTA and the nav action. The modal title stays "Join IFN" because a dialog title is not a CTA. Changing the nav button from "Join Network" touches a nav label, which is locked, so this needed founder sign-off. **It has it: on 2026-08-09 the founder delegated the label to us, which is the lock's owner unlocking one string, so "Join the community" is now the decision rather than the preference.** The "Join Network" fallback is retired and is not carried forward as an alternative. Only the action label moves; every nav route label and every anchor id is untouched.
+
+---
+
+## 6. Motion
+
+`MOTION_INTENSITY 4`. Six behaviours, all deliverable in the installed `framer-motion` ^12.29.2, all transform or opacity, no new dependency. GSAP and three.js are not installed and neither is proposed; this project fought `dist` from 5.8MB to about 1.5MB and neither would repay its weight here.
+
+| # | Behaviour | Why it earns its place | Reduced motion |
+|---|---|---|---|
+| 1 | Hero copy block translates `y` 16px to 0 over 700ms | Establishes reading order at the top of the page | Renders at rest |
+| 2 | **The mark draw.** A pseudo-element under a marked phrase scales `scaleX(0)` to `scaleX(1)` from the left over 260ms, `whileInView`, once | It enacts the page's whole idea, a hand marking the checkable parts in reading order, and it is the only animation here that carries meaning rather than polish | CSS resting state is `scaleX(1)`, the transition lives inside `@media (prefers-reduced-motion: no-preference)`, so the mark is drawn with JavaScript disabled and under reduced motion |
+| 3 | Section entry: `whileInView` `y` 16px plus opacity, 60ms stagger, once, `amount: 0.25`, non-LCP content only | Reveals content in reading sequence | Renders at rest via `MotionConfig` |
+| 4 | The HowItWorks rule draws left to right via `scaleX` with `transform-origin: left` on view | The line is the sequence, so drawing it communicates order rather than decorating it | Renders full width instantly |
+| 5 | The cycling headline word rolls vertically inside an `overflow-hidden` slot on the preserved 3000ms interval, transform only | It is three ways this audience names itself and a roll says "and also this" without ranking them | A `setInterval` is a JS timer that `MotionConfig` cannot reach, so it keeps its hand-written `useReducedMotion` early return and settles on "International" |
+| 6 | Controls take `translateY(1px)` and `scale(0.985)` on `:active`, plus a 150ms background transition to `--accent-press` on hover | Physical feedback on the page's one action | Transform kept, it is instantaneous feedback rather than an animation |
+
+**The LCP guard, absolute.** No ancestor of the h1, the subtext, the CTAs or the hero band may animate `opacity`, `clip-path`, `mask`, or use `whileInView`. The second audit measured the current hero at effective opacity 0 with zero animations queued, after the first audit reported it fixed, because opacity composites multiplicatively down the ancestor chain and a single-element read cannot detect it. A transform-only entrance degrades to "sits 16px low", never to a blank page.
+
+**Explicitly not built:** no text scramble or date shuffle (the source concept had one on the events date and it mutates the most actionable string on the page in front of a reader parsing a US date format for the first time), no parallax, no marquee, no pinning, no scrub, no scroll hijack, no counters, no infinite loops. `window.addEventListener('scroll')` at `Navbar.tsx:39` is a hard ban and is **deleted with no replacement**: the new nav is flat, solid and fixed at 64px with no transparent state and no height change, so there is no scroll-driven state to track and reaching for `useScroll` would be replacing a banned listener with an unused hook.
+
+**The reduced-motion CSS block in `src/index.css` is kept exactly as written**, including its `*:not(.motion-status)` selector-exclusion form. The naive repair that used `revert` was measured to be inert and froze six spinners harder than no rule at all. `.motion-status` must stay on the same element as the `animate-*` utility, never on an ancestor. No new blanket animation rule is added.
+
+---
+
+## 7. Photography
+
+**REWRITTEN 2026-08-10 for the founder's gallery and photography ruling, and rewritten rather than patched for the reason the previous rewrite gave: the selection this section used to describe was produced by constraints that no longer apply, and patching it would leave the file holding two accounts of the same fifteen photographs.** The rows and reasons that lost their subject are not preserved here in prose; they are in git, and `scripts/photos.manifest.json` is the machine-readable artifact of record beside this section.
+
+**The three-axis audit is retired.** The old audit judged every frame on identifiable faces, third-party branding and redundancy. Axis 1 stopped gating on 2026-08-09 when consent was granted. Axis 2 dropped to a preference when the venue rebranded. Axis 3, redundancy, is the only one that ever survived, and on 2026-08-10 the founder overrode the composition and genre exclusions that had been doing the rest of the work. **All fifteen sources ship.** Nothing in this folder is held back.
+
+### What the founder ruled, and what it changed
+
+Three instructions, each with the thing in the repository it moved:
+
+1. **All fifteen photographs ship.** The founder has personally vetted every one and overrode the standing exclusions of `meetups/20260423_184523.jpg`, `meetups/20260423_184536.jpg`, `venue/20260226_184639.jpg`, `venue/20260226_184645.jpg` and `venue/20260723_175654.jpg`. Those exclusions were argued on quality, composition, former venue branding and genre, and they are not re-litigated anywhere in this repository. The manifest's `pool` block is now empty in all three of its categories, and that emptiness is the correct state rather than an oversight: fifteen sources, eighteen slots, nothing left over to record.
+2. **No dates and no event grouping in the gallery.** `/gallery` used to open each evening on a dated hairline and draw each evening's block to the scale of its frame count. The founder's objection is that this makes the page's strongest visual claim "there have been three nights", which is false. Every date, evening heading, per-night section and date-derived data field is gone: `galleryNights` and the per-slot `night` key no longer exist in the manifest or in `src/data/photos.generated.ts`, and the frames are interleaved so no reader can reconstruct a grouping from the order either.
+3. **No visible captions, and different sizes.** Every visible caption and description is deleted from the gallery and from the enlarged view. The frames run at six sizes on the desktop hang and three on a phone.
+
+**Alt text is not a caption and every frame keeps one.** A caption is copy every reader sees. An `alt` attribute is never rendered to a sighted reader and is the only route by which a screen reader user perceives that a photograph exists or what is in it. Deleting alt would leave fifteen images announcing nothing, which is exactly the regression section 8 forbids. So: every visible caption is gone, and all fifteen frames carry hand-written alt on the grid, in the enlarged view and on the home page.
+
+**What the gallery is allowed to claim, now that it prints no date.** That these are photographs from IFN meetups in Austin, and that they are a selection rather than a record of every one. It prints no date, no count of evenings, no count of meetups, and it calls itself neither an archive nor complete. Dropping the dates removed the page's only dated evidence, so the recurrence claim is carried by copy on the home page and by the events feed, exactly as it was before `/gallery` existed. The page is honest by refusing the larger claim rather than by supporting it.
+
+### What ships
+
+**Fifteen sources, eighteen slots, six frames on the home page and fifteen on `/gallery`.** Eighteen slots against fifteen sources because three sources are built twice, where a home slot and a gallery tile want the same frame at different ratios or different tile widths. Three of the six home frames are `GalleryPreview` rendering gallery tiles a second time rather than separate builds.
+
+**Home page, six frames in four slots**
+
+| Slot | Source | Crop | Why it is selected |
+|---|---|---|---|
+| Hero band, full bleed, 2.4:1 | `meetups/20260423_184527.jpg` | 4000 x 2252 source, so a full-width 2.4:1 crop is 4000 x 1667 and the vertical offset is the only free parameter. Bottom anchored at top 585, which is its maximum: it drops the ductwork ceiling and keeps every seated person. | About fourteen people filling the band, at least six faces legible at band scale, one person standing mid gesture at the back, almost no empty seating in shot, daylight, two IFN slide screens and downtown Austin through a full-height glass wall. **Reselected 2026-08-10 from `meetups/20260423_184515.jpg`** on the founder's instruction that the landing photography favour people, faces and energy: the outgoing frame put the circle small and far and gave roughly its lower left quarter to empty chairs. It is not discarded, it ships whole as the largest cell in the gallery. |
+| HowItWorks middle stop, 1093:874 | `meetups/20260423_184540.jpg` | 4000 x 2252 source, so a 1093:874 crop is 2816 x 2252 at full frame height and the horizontal offset is the only free parameter. | One founder mid gesture with the row opposite listening, the IFN slide behind, the city through the glass. Close range, one conversation, a different subject at a different scale from the hero band rather than the same room twice. It carries zero third-party branding of any kind. |
+| FounderStory, under the prose at the full 56.5rem section grid, 16:9 | `meetups/20260723_190939.jpg` | Full frame at the source ratio. No crop decision to make. | **Reselected 2026-08-10 from `meetups/20260226_184622.jpg`.** The outgoing frame was chosen on an "empty room, before it filled up" argument, matched to the section's line that the meetups came first. The founder rejected that argument in those terms: it does not show the faces of members and is largely a big empty event hall. This frame is three people standing in close conversation, two faces fully legible, one mid sentence with a raised hand, drinks in hand, an IFN slide behind. It is the most human frame on the landing page. The outgoing frame ships in the gallery. |
+| GalleryPreview, three frames in one unequal row | lead `meetups/20260423_201820.jpg`, stacked `meetups/20260423_184509.jpg` and `venue/20260226_184628.jpg` | None. All three render the gallery tile the pipeline already builds, at the width of the cell that frame occupies on `/gallery`. Zero new derivatives. | The lead is the group portrait at the end of the April evening: seventeen people shoulder to shoulder facing the camera in front of an IFN screen, the most legible faces in the folder by a wide margin. **This reverses the frame's landing page exclusion, and the reversal is written out rather than done quietly, below.** The stacked pair is a wide circle from a lower and closer vantage with no former venue gear in it, and the IFN sign lit at night, which is the only tonal counterweight in the folder to two daylight frames. |
+
+**The `20260423_201820` landing page exclusion is REVERSED, and the reason it stood is recorded so the reversal is checkable.** The reason was genre: "a posed line-up is a different kind of picture from the documentary frames this page is built on, and mixing the two is how a page starts looking like a brochure." It had already been reversed for the gallery route and left binding on the landing page. The founder's instruction to reselect the landing photography from scratch and favour people, faces and energy reopens exactly that judgment, and this frame wins it on the stated criterion. The brochure charge is answered by what the frame sits in: one posed frame beside two documentary ones, under a heading that says what a meetup looks like, is a community wall rather than a brochure. `src/components/GalleryPreview.tsx` carries the same reversal in its own header so the two files cannot disagree.
+
+**The lead was `meetups/20260423_184523.jpg` for a few hours and the defect that removed it is worth keeping in this file, because no automated check in this repository can catch it.** That frame and the hero band's `184527` are four seconds apart from one camera position: the same circle, the same people in the same clothes, the same two IFN screens, the same glass wall. They are different files at different slots, so every name-based check passed and the home page printed one photograph twice. A design pre-flight found it by opening the two rendered frames side by side. **Adding a photographic slot to the landing page means looking at the frames already on it, not only at their slot names.**
+
+**What the reselection does not fix, and it is inventory rather than an oversight.** The home page still leans on one April evening: four of the six frames are April. There is no selection of six frames from this folder that both favours faces and spreads across evenings. April is eight of the fifteen sources. February's only frame with people in it is the wide half-empty hall the founder rejected by name. July's only frame with people in it is already carrying FounderStory, and the other July frame carries the flags and the former venue emblem. The fix is a fourth photographed evening and it is listed under founder input below, not as a build task.
+
+**The gallery, fifteen frames, no dates, no grouping, six sizes.** Every source in the folder has a cell. The layout is a nine-row authored hang on a twelve-column measure: six rows of two frames at different scales, three rows of a single frame with a placed void, all on one left spine, with two rows hung from a bottom rail instead of a top one. Cell width runs 906, 803, 699, 596, 493 and 389 at a 1440 viewport, a 2.33x spread, and **cell size follows subject scale**: every frame carrying a legible group of people lands in a large cell, every frame whose subject is one bright object lands in a small one. All fifteen sources are 4000 x 2252 landscape, so scale is the only honest axis of variation; a portrait crop of a circle of fifteen people cuts people out of it. Per-frame crop boxes, tile widths and alt text live in `scripts/photos.manifest.json`; `src/pages/Gallery.tsx` carries the row-by-row composition and its arithmetic.
+
+**The phone gets three size classes and this is a correction, not an addition.** The first version of the hang collapsed to one column at 358px per cell below 640px: six size classes down to one, which is the uniform grid the founder rejected, at the width most visitors use. The rule now, measured on the built page at 360 and 390:
+
+| Class | Frames | Width at 360 | Width at 390 | Treatment |
+|---|---|---|---|---|
+| Bleed | the 3 frames at desktop spans 9 and 8 | 352 | 382 | `-mx-3` eats 12 of the container's 16px side padding, so the frame all but runs off both screen edges |
+| Measure | the 5 frames at spans 7 and 6 | 328 | 358 | the full container width |
+| Inset | the 7 frames at spans 5 and 4 | 279 | 304 | 85 percent of the measure, hung alternately against the left and the right edge of the column |
+
+Largest to smallest is 1.26x, and the alternation is doing at least as much of the work as the width: the inset frames step right, left, right, left down the scroll while the bleed frames run past both edges. **The rule that said no frame should be narrowed on a phone is narrowed rather than voided.** Its arithmetic was right, a 78 percent cell is 256 x 144 and stops being a photograph, and its conclusion was too wide. Only frames whose subject does not need area are inset, which is the same editorial mapping the desktop ladder uses, and 85 percent rather than 78 puts the worst case at 279 x 157 rather than 256 x 144. No frame carrying a readable group of people is ever narrowed; on a phone those run wider than the single width the first version shipped.
+
+**The bleed stops 4px short of the screen edge rather than at it, and the 4px is measured rather than aesthetic.** Every cell is a button and its focus ring is drawn outside it, 2px `--paper` then 2px `--ink`. A cell at exactly 100vw pushes the ring's left and right legs off the viewport, degrading the keyboard affordance on precisely the three largest frames, and no gate in this repository would see it. `-mx-3` rather than `-mx-4` leaves a 4px gutter on each side, which is the ring's exact width. Verified on the built page at 390: the bleed cell's rect runs left 4 to right 386, so the ring occupies 0 to 390 and renders whole.
+
+**The former branding is in several of these frames and this plan does not pretend otherwise.** The Capital Factory gear is legible in the hero band and in a number of gallery frames. Under the venue ruling it is the same room under its former name, so it disqualifies nothing, and no crop of these compositions removes it without removing the room. The design preference is one sentence and it is a preference: do not let the gear be the highest-contrast object in the frame. Checked on the hero band by rendering rather than by reasoning: the two IFN screens are white panels and the glass wall is the brightest region, while the gear reads as a dark disc with white line art behind the group. The crop is full source width, so the vertical offset is the only free parameter and no vertical offset removes a horizontally-spanning object; cropping it out from the left would take the left IFN screen with it. It is present, it is not the subject, and it is not actionable within the stated crop.
+
+**Alt text is written by hand per photograph and describes the room.** It names no individual, because consent to appear in a photograph is not consent to be named in markup, and this plan holds no names. It names no venue either: the alt text's job is to describe what is in the frame, and the venue is stated by the events feed where it can be kept current.
+
+### The consent gate, answered
+
+**Answered 2026-08-09: consent is granted.** Participants have signed off on appearing in IFN marketing material and are happy to be shown. All fifteen photographs are usable, and after the founder's ruling of 2026-08-10 all fifteen ship.
+
+The gate as it previously stood is recorded because the reasoning was right and would be right again: `assets/photos-source/DO-NOT-USE.txt` does not exist, and per the folder README's own protocol that file is created when someone declines, so its absence meant consent had **never been recorded**, not that it had been granted. Absence of a refusal is not a permission. **The standing rule for any frame shot after this date is unchanged: an unrecorded consent is a no.** The manifest's `pool` block keeps its vocabulary for that reason even though all three of its categories are now empty.
+
+### What still needs the founder, and costs nothing
+
+Four shots that do not exist. None of them needs anyone's consent and each is minutes of work at the next meetup.
+
+- **A fourth photographed evening.** This is the one that would move the landing page. Fifteen frames across three evenings is why the home page leans on April, and no reselection inside this folder can fix that.
+- **Detail frames.** A name badge, hands around a cup, the sign-in sheet. The folder has no close range detail of any kind, so every surface on the site is a room at conversation distance or further.
+- **Any vertical frame at all.** All fifteen sources are 16:9 landscape, which is why the gallery hang varies area rather than shape and why every non-landscape slot would be a destructive crop.
+- **An exterior of the building at dusk.**
+
+### Pipeline
+
+`sharp` is a devDependency. It runs at build time only and adds zero bytes to the client bundle.
+
+`scripts/build-photos.mjs` reads from `assets/photos-source/`, which stays outside `public/` because Vite copies `public/` into `dist` verbatim and would otherwise publish 41MB of originals. It reads a checked-in manifest that names, per slot: source file, crop box in source pixels, output tiers as literal integers, grade and alt text. It writes `public/photos/` plus `src/data/photos.generated.ts` carrying intrinsic width and height per derivative, so every `<img>` ships explicit `width` and `height` and CLS stays at zero.
+
+- **Formats and widths:** AVIF plus WebP, delivered through `<picture>`. Each slot declares its own tiers in the manifest and the script never upscales past the source. Landing slots carry a `srcset`; **gallery tiles deliberately do not.** The pipeline builds one tile per gallery frame at the width of the cell that frame occupies in the hang (960w for the span 9 cell, 832w for the two span 8 cells, 704w for the two span 7 cells, 640w for the remaining ten), so there is no `sizes` string that can be wrong and no device pixel ratio that can pull a large tier into a small cell. The page costs the same bytes at 1x and at 2x. The three phone classes add no tier: the widest phone cell is 382px against a 640px smallest tile.
+- **Output tiers are literal integers in the manifest, never derived from a ratio.** The HowItWorks stop is 1093:874 = 1.2506, which is 5:4 to within 0.05 percent and is not 5:4: 1093 and 874 share no common factor, so no tier height falls out of the ratio as a whole number. Calling it "5:4" in an earlier draft was the kind of rounding that becomes an off-by-one in a build script.
+- **Hard cap:** 1920px long edge globally, enforced in the manifest rather than in prose. Originals are never published.
+- **Grade, baked in at build so it costs nothing at runtime:** per-night white balance normalisation (February off its green cast, April neutral), saturation to about 0.55, black point lifted 4%, white point pulled to 92%. No duotone and no heavy stylisation. The amateurness of these photographs is the credibility, and converting evidence into a graphic device is the point at which documentary stops being proof.
+- **Delivery:** the hero band is `loading="eager"` `decoding="async"`. On `/gallery` only the first row's frame is eager and the fourteen below it are `lazy`. Whether the hero band also gets `rel="preload"` with `fetchpriority="high"` is decided by measurement, not by default: at 1366x768 it sits below the fold and preloading it would compete with the font load that gates the text LCP, while at 1920x1080 it is above the fold and is plausibly the LCP element itself.
+- **Budget, MET and read off the built files rather than estimated, re-read 2026-08-10 after the gallery round and again after the landing reselection.** Two ceilings and both hold.
+
+  | Line | Measured | Cap | Result |
+  |---|---|---|---|
+  | Hero band, 1440w AVIF | 53.7KB | 110.0KB | pass |
+  | Landing route, every AVIF a 1440 viewport takes at 1x | 148.3KB | 500.0KB | pass |
+  | `/gallery`, all fifteen AVIF tiles across a full scroll | 266.4KB | 280.0KB | pass |
+  | `/gallery` arrival at 1440x900, one eager tile, conditional on the fourteen below being lazy | 35.3KB | not a budget line | reported |
+
+  The landing figure is the sum of hero band 53.7, HowItWorks stop 18.8, FounderStory 24.2 and the three GalleryPreview tiles at 26.1, 16.9 and 8.7. **The list of slots that sums to it is DATA rather than JavaScript**, in `photos.manifest.json` under `budget.landingAt1440`, because the runner previously named three slots by hand while carrying a comment claiming it did not, and it went stale twice in one round. A slot missing from that list is reported as MISSING rather than quietly summed short. It named `gallery-apr-seated` until the lead swap above and now names `gallery-apr-group`.
+
+  **`dist` is 5.65MB and that number is reported rather than buried, because the standing instruction on this project is to watch page weight and `dist` was about 2.9MB before the gallery round.** The breakdown, read off the built directory: **4.23MB is `public/photos` and 1.42MB is everything else** (603.8KB png, 593.0KB js, 183.9KB woff2, 60.5KB css). Inside the photo directory: 1,405.8KB AVIF across 41 files, 2,188.5KB WebP across the same 41, and 738.4KB JPEG across 18. **None of those three numbers is a download.** They are alternates: a browser takes exactly one format per image, and every browser in current use takes AVIF, so the WebP tier and the JPEG fallback are 2.86MB of repository that a real visitor never fetches. **What a visitor actually pays is the two budget lines above, 148.3KB on the landing route and 266.4KB across a full scroll of `/gallery`**, and both pass. The disk figure is the price of shipping fifteen photographs at four tiers in three formats from a git repository; it does not appear on anyone's connection, and the honest way to report it is with the per-route figures beside it rather than either number alone.
+
+  **The gallery cap moved in this round and it is recorded as a raise rather than dressed up as a pass.** It was 262,144 bytes, set against ten frames at one uniform 640px tile, which measured 158,781 bytes. That artifact no longer exists. Fifteen frames on a four-tier ladder measure 272,765 bytes, 104.1 percent of the old cap. Shaving the largest cell from 960 to 896 would have bought about 4KB and squeaked under a number that had stopped describing the thing it was measuring. The cap is restated at 286,720 bytes instead, which is the measured figure plus 5.1 percent: enough headroom to re-crop one frame without a budget edit, and not enough to absorb a sixteenth. The 1280px `view` tier is excluded on the same basis as before, because it is fetched only when a reader opens a frame and most visitors never do. If a future frame cannot meet its cap at acceptable quality the answer is a tighter crop rather than a bigger number.
+
+---
+
+## 8. What is preserved, and why the two audits were not wasted
+
+The visual language is being replaced. Almost none of the engineering is.
+
+**Preserved verbatim, with the reasoning that produced each one:**
+
+- **The full information architecture.** Every route, slug, nav label and anchor id. `#mentorship`, `#events`, `#partners`, `#resources`, `#faq`, `#main-content`.
+- **The accessibility floor. The gate is the named checklist below, item by item, and it is not a count.**
+
+  | # | Affordance that must still exist and work after the redesign |
+  |---|---|
+  | 1 | The Join dialog's focus trap **with focus restored to the opener on close** |
+  | 2 | Its capture-phase keydown handler that re-queries focusables on every Tab |
+  | 3 | The body scroll lock, **with the prior overflow restored on close** |
+  | 4 | A permanently-mounted `role="status"` region in `JoinModal` (mounted at all times, never conditionally rendered) |
+  | 5 | A permanently-mounted `role="status"` region in `EventsPreview`, now announcing the resolved meetup count in place of the retired pager's page counter |
+  | 6 | `role="alert"` on submit error, **with focus returned to the submit button** |
+  | 7 | The FAQ's `hidden="until-found"` set imperatively, its `beforematch` listener, and the re-hide in `onAnimationComplete` |
+  | 8 | `ButtonLink`'s union type keeping navigation as real anchors, including the sr-only "(opens in a new tab)" |
+  | 9 | The `aria-pressed` filter group with its labelled `role="group"` |
+  | 10 | The skip link, resolving to `#main-content` |
+  | 11 | Exactly one `<main>` landmark |
+  | 12 | Per-route `document.title` on all eighteen routes. **Seventeen when this plan was written; `/gallery` made it eighteen on 2026-08-10.** The count is written out rather than left as "every route" because `RouteTitle` falls through to "Page not found" for any path that is in neither `ROUTE_TITLES` nor `COMING_SOON_PATHS`, so a route added without an entry is actively mistitled rather than merely untitled. Adding a route means adding a title in the same commit. |
+  | 13 | The 44px touch floor encoded in `SIZES`, governing every control including the new snap rail and the section 9 pill |
+  | 14 | The resources rail's `role="group"`, `tabindex="0"` and per-panel focusable link |
+
+  **Why this replaces the count that stood here before.** An earlier draft made `grep -roE 'aria-[a-z]+=' src/ | wc -l` returning **140** and `grep -ro 'role=' src/ | wc -l` returning **27** binding pass conditions. Both numbers are correct today and both are the wrong instrument, for two reasons that point in opposite directions. The gate is arithmetically impossible to meet: this plan deletes `HeroVisual.tsx` (6 aria attributes), `GlobeIcon.tsx` (2) and the events dot pager (roughly 4 aria and 1 role), so about 12 aria attributes and 1 role leave the tree before a single one is added. And most of what leaves is `aria-hidden` on decorative divs, which is precisely what deleting the hand-rolled globe medallion is **for**. A raw count penalises the deletions this plan exists to make and can be satisfied in the other direction by scattering redundant attributes that help nobody. Counting sightings instead of enumerating roles is the same error section 4.2 was rewritten to stop making with contrast.
+
+  **The counts are kept as an informational note, not a gate:** 140 aria and 27 role today, expected to land near 128 aria and 26 role after the deletions above and before any additions. Report the delta and explain it; do not defend the number.
+- **The correctness fixes.** Zone-correct and DST-correct event formatting, server-side join validation, the 404 route, the events API fallback.
+- **The primitives.** `Button`, `ButtonLink`, `buttonClasses`, `Container`. These get new token values, not new structure. `buttonStyles.ts` stays outside the component file because of the React Fast Refresh rule.
+- **The performance work.** Per-section `Suspense` boundaries in `Home.tsx`, lazy sections, the 1.5MB dist.
+- **The honesty.** No invented testimonial, no counted metric, no fabricated partner, no chapter, no matching system, no mentor programme, no response-time promise, no confirmation-email claim. `portraits/` is empty, so no face-plus-quote treatment is buildable and none is proposed.
+
+**Two audit findings are load-bearing in this plan rather than merely respected.**
+
+The amber failure was not twelve local bugs, it was one token deployed into a role whose contrast was never computed, mandated by a design document, so twelve components were correct against a wrong contract. Section 4.2 above exists in the form it does because of that: every token is measured in every role it plays, against both grounds, in both modes, before it is adopted, and the failing rows are published rather than deleted. The one row every judged concept still missed, accent against surrounding body text at 2.547:1, is in that table because the lesson is to enumerate roles rather than sightings.
+
+The LCP opacity gating was reported fixed and was not, because the verification method read `getComputedStyle(h1).opacity` on a single element and opacity composites down the ancestor chain. The motion section's LCP guard is written as a structural ban on the ancestor chain rather than as a per-component instruction, because a per-component instruction is what failed.
+
+**Two couplings that will produce CLS if missed. Both are done, and the first one is a standing obligation rather than a one-off.** Each of the **seven** lazy sections in `Home.tsx` hardcodes both its ground tone and a real height into its `Suspense` fallback. All were retuned to the new tokens in Phase 3 and **re-measured twice on 2026-08-10**. The first pass: FounderStory gained a photograph, EventsPreview gained a link and moved onto the clamp scale, ResourcesPreview moved onto it too, and FAQ, FinalCTA and PartnersStrip all changed copy length; the stale declarations were out by up to 378px. **The second pass is the standing obligation catching its own round**: hours after that measurement, the FounderStory photograph widened from 576 to 904 CSS px and added 185px to the section, and EventsPreview lost its gallery link to the new section and dropped 60px at `base`. Neither was the edit anyone was thinking about, and both would have shipped a wrong fallback.
+
+The method is recorded in the file: serve the built page, scroll it so every lazy chunk resolves, then read `getBoundingClientRect().height` on each `main > section` under `prefers-reduced-motion: reduce`, at nine widths rather than five because `clamp()` headlines vary continuously inside a breakpoint band. **Any change to a lazy section's composition re-opens this.**
+
+**The seventh, `GalleryPreview`, is the one exception to "a constant per band" and it is a principled one.** Six of the seven sections are made of type, which REFLOWS, so their height barely moves inside a band and a constant lands within 12px. A section made of 16:9 photographs has a height that is close to LINEAR in viewport width, and sampled at seventeen widths it runs 1004 to 1455 inside the base band alone: a constant there would be out by 225px, twenty times the worst residual anywhere else on the page. Its fallback is therefore a least-squares fit of rendered height against viewport width, declared per band as `calc(<intercept> + <slope>vw)`, with worst residuals of 25px, 1px, 2px, 2px and 0px. The points and the fits are printed at the boundary itself. `scroll-margin-top` moved from `6rem` to `4.5rem` with the nav height in Phase 2 and is correct at `src/index.css:345` against a 64px bar plus its 1px edge.
+
+---
+
+## 9. Build sequence
+
+Each phase is independently shippable and leaves the site in a better state than it found it.
+
+**Phase 1: the token layer, type, and the shell. Light only. No photographs. No founder decision outstanding.**
+
+*Precondition, discharged 2026-08-09.* This phase carried exactly one blocker and it was the nav CTA label: the pre-flight commitment in section 11 requires one label per intent across nav, hero, HowItWorks and FinalCTA, section 5 records that changing the nav button from "Join Network" touches a locked nav label, and `Navbar` is restyled in **this** phase, so that is where the decision landed. The founder has delegated the label to us. **The nav action reads "Join the community", and hero, HowItWorks and FinalCTA read the same.** The "Join Network" fallback is retired rather than held in reserve, because a fallback exists to cover an unanswered question and the question is answered. What must still not happen is shipping the nav on one label and the page on another, which is the current defect with extra steps.
+Rewrite `src/index.css` `@theme` to reference swappable CSS custom properties rather than holding literal hexes, so Tailwind utilities can track a runtime theme swap later. Define the light values on bare `:root`. Self-host Archivo and MuseoModerno, delete the render-blocking Google Fonts link at `index.html:17`. Restyle `Button`, `ButtonLink`, `Container`, `Navbar` (drop to 64px, delete `window.addEventListener('scroll')` at line 39 outright with no replacement, since a flat solid fixed bar has no scroll-driven state to track), `Footer`, `JoinModal` and the FAQ shell.
+
+**Dark mode is defined at the token layer in this phase and deliberately not activated.** `App.tsx` renders one `Navbar` and one `Footer` around an `Outlet` shared by seventeen routes (eighteen since `/gallery` landed on 2026-08-10), and sixteen of those routes still carry hardcoded `slate-` utilities that will not respond to a token swap. Turning dark mode on here would ship a dark shell around sixteen light pages, which is exactly the failure I charged The Circle with. Shipping light-only is safe because the new light tokens are near-equivalents of the slate values they replace, so any not-yet-migrated utility still reads correctly. Ships as: the whole site gets a new typeface and a new palette, one fewer render-blocking request, one fewer banned pattern, and no regression anywhere.
+
+**Phase 2: the sweeps, then dark mode. Mechanical, no design decisions. SHIPPED 2026-08-09.** The completion record, with final counts and the Phase 3 carry-forwards, is the block titled "Phase 2 as shipped" at the end of this phase. The four pass descriptions below are left exactly as they were written, because a pass condition rewritten after the fact to match what was built is not a pass condition.
+
+Two mechanical passes across the whole tree. First, punctuation: **119 em-dash occurrences across 36 files** in `src/` plus `index.html`, recounted after Phase 1 shipped rather than quoted from the pre-Phase-1 measurement, plus **6 en-dashes** used as separators in `roadmapData.ts`. No words change. What remains includes every route title in `ROUTE_TITLES`. **Recounted 2026-08-09, and the earlier figure is kept here rather than overwritten silently: this bullet read 151 across 46 files, which was correct against `design/landing-redesign-v2` and is the number to check any claim of completeness against.** Phase 1 cleared 32 of them across 10 files as a side effect of rewriting the shell, and it also cleared the two items this bullet used to name specifically, the `<title>`, `og:title` and `twitter:title` strings in `index.html` and the three literal `&mdash;` entities in `JoinModal`; `grep -rn 'mdash\|ndash' src/ index.html` now returns nothing. Second, tokens: migrate all **436** hardcoded `slate-` utilities across `src/` to semantic tokens.
+
+**A third mechanical pass belongs in this phase and was not in it, added 2026-08-09 during Phase 1.** `grep -rn 'outline-none' src/` returns roughly 26 sites across the sixteen unmigrated routes. Tailwind v4's `outline-none` emits only `outline-style: none`; `outline-hidden` additionally emits `outline: 2px solid transparent` under `@media (forced-colors: active)`. A forced colours UA drops `box-shadow` entirely, and every focus indicator on this site is a box shadow or a Tailwind ring, so **on those routes a keyboard user in Windows High Contrast Mode currently has no focus indicator at all**. Phase 1 fixed its own seven sites (`Navbar`, `Footer`, `FAQ` twice, `JoinModal` twice, `buttonStyles.ts`); the rest are a find and replace of `outline-none` to `outline-hidden` on any element whose focus state is carried by a ring or a box shadow. Pass condition: `grep -rn 'outline-none' src/ | wc -l` returns **0**.
+
+**A fourth mechanical pass, added 2026-08-09 during Phase 1 verification, and it is the one that dark mode makes urgent.** With comments stripped, `ring-offset-2` appears **25 times across 12 unmigrated files** with no `ring-offset-<colour>` alongside it. Tailwind's default `--tw-ring-offset-color` is `#fff`, and the offset is the ring's INNER layer while `--ink` is the outer. That is why the defect is invisible today and fatal the moment this phase switches dark mode on:
+
+| Mode | Inner vs outer, intended | Inner vs outer, bare |
+|---|---|---|
+| Light (`--paper` `#FBFBFA`, `--ink` `#131311`) | 17.965 | **18.602**, benign, `#fff` and `#FBFBFA` are near-identical |
+| Dark (`--paper` `#131311`, `--ink` `#FBFBFA`) | 17.965 | **1.035**, the two layers are both light and the ring loses its shape entirely |
+
+So on those 25 controls a keyboard user in dark mode gets a single indistinct light halo rather than a two-layer ring, on exactly the argument section 4.2 uses to justify the construction. This is the same failure class as the reversal defect that section 4.2 already records, arriving by a different route: not a wrong value, but an unnamed one falling back to a default that was correct only against a white ground. Pass condition: every `ring-offset-2` in `src/` is accompanied by an explicit `ring-offset-paper`, or the element is migrated to the `buttonStyles.ts` box-shadow form. Both spellings emit identical geometry, `0 0 0 2px paper` then `0 0 0 4px ink`, so this is a naming fix and not a redesign.
+
+**The pass condition greps for the outgoing accent as well as the outgoing neutrals, because greping only `slate-` returns zero while the old palette is still live.** `slate-` is the neutral ramp; it says nothing about `--color-accent` `#f97316`, the token whose 2.679 failure this palette exists to replace. Measured today across `src/`: `grep -roE '(bg|text|border|ring|shadow)-(primary|accent)[a-z-]*' src/ | wc -l` returns **158**, of which `grep -ro 'text-accent-on-light' src/ | wc -l` returns **4** and is the retired Welcome Amber specifically. A gate that misses 158 utilities pointing at a known-bad token is not a colour gate. Pass condition is site-wide and both halves must hold: `grep -ro 'slate-' src/ | wc -l` returns **0** **and** the `(primary|accent)` expression above returns **0**, with every one of those 158 call sites repointed at a semantic token measured in section 4.2.
+
+Only once that returns zero does dark mode switch on, in the same phase: redefine the tokens under `@media (prefers-color-scheme: dark)` guarded as `:root:not([data-theme="light"])` and again under `:root[data-theme="dark"]` so a manual toggle wins in both directions, declare `color-scheme: light dark` on `:root` (which matters concretely, because `JoinModal` has a native `<select>` that would otherwise render as a white system dropdown in the middle of the conversion path), and add the footer toggle that closes the open `BACKLOG.md` item. Ships as: correct punctuation everywhere, a token system that cannot collide with a Tailwind default, and a dark mode that is genuinely site-wide.
+
+#### Phase 2 as shipped, 2026-08-09
+
+Verified green on `npm run lint`, `npx tsc --noEmit`, `npm test` (5 files, 23 tests) and `npm run build` after the last edit, not before it. 48 files modified, 1 added (`src/components/ThemeToggle.tsx`), 0 deleted. Dark mode is live: both guards survive minification, `color-scheme: light dark` is declared on bare `:root`, and `index.html` carries a classic non-deferred bootstrap on `localStorage['ifn-theme']` so there is no flash.
+
+**Final gate counts.**
+
+| Pass | Condition as written | Literal result | Reading |
+|---|---|---|---|
+| 1 punctuation | em-dash, en-dash, `mdash`, `ndash` across `src/` and `index.html` return 0 | **0, 0, 0** | clean, as written |
+| 2 tokens, half A | bare substring grep for the stock neutral ramp across `src/` returns 0 | **13** | **unsatisfiable as written.** All 13 are the substring inside `translate-*` transform utilities. `grep -roE '(^\|[^n])slate-' src/` returns **0**. |
+| 2 tokens, half B | `(bg\|text\|border\|ring\|shadow)-(primary\|accent)[a-z-]*` returns 0 | **15** | **unsatisfiable as written.** The new palette names its own token `--accent`, so the regex matches its own destination. 14 are live `bg-accent` / `text-accent` / `border-accent` / `bg-accent-press` compiling through `@theme inline` to `#A81B36` light (7.054 on `--paper`) and `#E85C77` dark; 1 is an `index.css` comment. Retired names across all 16 Tailwind namespaces: **0**. `var(--color-` in `.tsx` or `.ts`: **0**. |
+| 3 outline | `outline-none` in `src/` returns 0 | **0** | clean. 28 conversions; `outline-hidden` 7 to 36. Confirmed in the built stylesheet: both the `focus:` and `focus-visible:` variants emit the transparent 2px outline under `@media (forced-colors: active)`. |
+| 4 ring offset | every `ring-offset-2` has `ring-offset-paper`, or uses the box-shadow form | **0 bare** | clean. 29 live pairs across 14 files, 1:1 per line; 3 remaining unpaired mentions are prose comments. 3 box-shadow sites emit identical geometry. |
+
+**Both halves of gate 2 are permanently unsatisfiable and must be narrowed, not re-run.** Half A collides with `translate-`; half B matches the token it exists to protect. The four `index.css` comment hits that used to pad half A were reworded so the residue is now 100% attributable to transform utilities, which is a checkable claim where "some of these are comments" was not. The discriminating greps that do return zero are the ones in the Reading column, and they are the gate from here on.
+
+**Punctuation, reconciled.** 119 em-dashes across 36 files plus 6 en-dashes, matching this section's recount. The task brief's 151 across 46 files is the pre-Phase-1 figure preserved above; Phase 1 cleared 32. No visible word changed anywhere: word multisets are identical per file, and the only case shifts are five sentence-initial capitalisations where an em-dash became a period. Two substitutions fall outside the enumerated set of period, comma, parentheses, colon and line break, both word-preserving: a pipe at the 11 `ROUTE_TITLES` and `index.html` title sites, so the title shape does not change on client-side navigation, and a hyphen at 6 numeric ranges in `roadmapData.ts`.
+
+**Four hardcoded-palette defects were swept in this phase rather than deferred, because this is the phase that turns dark mode on and therefore owns every mode inversion it makes visible.** None of `Contact`, `Admin` or `CodeOfConduct` is rebuilt in Phase 3, 4 or 5, so nobody was coming back for them. All four were a stock second hue, banned outright by section 11's Color Consistency Lock, and all four were fixed light objects that invert against the dark page ground.
+
+| Site | Was | Now | Measured |
+|---|---|---|---|
+| `Contact.tsx` submit error | stock red slab, border and type | section 4.2's error form: `--ink` type plus a 3px `--ink` left rule, no fill | 17.965 text, 17.965 rule, both grounds both modes |
+| `Admin.tsx` load error | same | same | 17.965 |
+| `CodeOfConduct.tsx` heading chip | stock red chip | `--paper` fill, `--ink` glyph, borderless | fill vs the `--band` section 1.103 light and 1.101 dark; glyph 17.965 both modes |
+| `Contact.tsx` success chip | stock green chip | `--band` fill, `--ink` glyph, borderless | fill vs the card's `--paper` 1.103 and 1.101; glyph 16.281 light and 16.318 dark |
+
+The old values, recomputed here so the claim is checkable: the red slab measured **17.005** against the dark page ground and its type measured **2.897** against surrounding `--ink` body copy in light, which is a G183 failure at a 3.0 floor; the green chip measured **16.910** against the dark page ground. Nothing semantic was carried by either colour. Both errors keep `role="alert"` and a self-describing message; the success glyph is `aria-hidden` under a visible "Message sent" heading.
+
+**Both chips ship borderless, and the first draft of this phase got that wrong.** They were built with a 1px `--rule` border on the reading that section 4.2 makes one mandatory on every plate. Reading the rendered page in Chrome corrected it: `/code-of-conduct` carries **three** decorative heading chips, and the other two are borderless token fills already, so a border would have made the rebuilt one the odd chip of three, which is a composition change and outside a mechanical phase. The chosen fills are also not interchangeable, which is why "match the siblings" is the wrong instruction to follow literally: the two existing chips are `--band` on the page's `--paper` ground, while the rebuilt one sits **inside** a `--band` section, so giving it a `--band` fill would measure **1.000** and erase it. `--paper` there is the same one-step-off-ground delta in the opposite direction. Section 4.2's plate border governs recessed content surfaces; on an icon chip the perceivable object is the glyph, at 16.281 or better in every combination above.
+
+**One further verdict rejected rather than fixed.** A verifier called the success chip a WCAG AA text failure at 4.496 against a 4.5 floor. It is not text. The element is a `w-16 h-16` circle whose only child is an `aria-hidden` glyph, so it is a non-text graphical object under 1.4.11 at a 3.0 floor and 4.496 cleared it. The chip was retokenised anyway, for the mode-inversion and second-hue reasons above, but the severity was wrong and is recorded as wrong.
+
+**Two token migrations the utility greps could not see, both fixed.** `Hero.tsx` drew its dot grid with `rgb(15 23 42 / 0.06)`, the stock neutral-900 written as a function so no utility grep matched it; against the dark ground it composited to `#131312` at **1.002** and disappeared. It now reads `color-mix(in srgb, var(--ink) 6%, transparent)`, which composites to `#EDEDEC` at 1.131 light and `#21211F` at 1.153 dark, so the grid is equally faint in both modes instead of present in one. `Resources.tsx`'s search input was the only genuine single-layer focus ring left in the tree and now carries `ring-offset-2 ring-offset-paper` like every other control. Four other apparent single-layer rings were false positives: the class string is split across two concatenated literals and the offset is on the second line.
+
+**Carried forward to Phase 3.**
+
+- **Finish section 4.2's error form.** `Admin.tsx` sign-in error and `Events.tsx` newsletter error are both `--ink` at 17.965 with no 3px rule. There is no defect behind either, which is why they were left: adding rules is composition work, and the sign-in error is centre-aligned where a left rule is simply wrong.
+- **Flat-material violations, unchanged and out of scope for a mechanical phase.** 7 live blur sites, 13 resting-shadow sites, and 10 token-alpha composites against section 4.1's rule that `--scrim` is the only alpha composite left on the page. The hero dot grid above is now a token but is still one of those composites, and it retires with the hero in Phase 4. `FinalCTA`, `HowItWorks` and `ValueProps` have a Phase 3 owner; `About`, `Membership`, `Partners` and `Events` have no owner in any phase and need one.
+- **Decide whether section 4.2's plate border binds on decorative icon chips.** `/code-of-conduct` carries three of them, now all borderless token fills at 1.103 light and 1.101 dark: one `--paper` on a `--band` section, two `--band` on the page's `--paper` ground. Phase 2 deliberately did not resolve this, because resolving it means editing all three and that is composition. If the rule binds, Phase 3 applies it to the family rather than to one member.
+- **Ghost step numerals** in `HowItWorks` measure 1.293 dark and 1.239 light. They are `aria-hidden` so this is not a text failure, and this section already names them a Phase 3 deletion.
+- **The section 9 plate is unverified because it does not exist yet.** `--accent-plate` and `--on-plate` have no live consumer; the greps find comments only. The 2.547 defect section 4.1 records therefore cannot be present today, but that is vacuous by absence. Whoever builds the plate in Phase 3 owns that check, and `scripts/verify-dark-contrast.py` is the tool for it.
+- **Two field grounds where this plan specifies one.** `Contact` and `JoinModal` fill inputs with `--band`, giving the 5.982 and 6.808 placeholder rows above; `Events` and `Resources` fill theirs with `--paper`, giving 6.601 and 7.496. All four pass, so this is a consistency decision rather than a defect.
+
+**One build-isolation observation, diagnosed and deliberately not fixed here.** `src/index.css` opens with a bare `@import "tailwindcss"` and no `@source`, so Tailwind v4 auto-detects sources from the repo root and emits stock neutral, red and green colour classes into the root bundle that no root component uses. A verifier attributed this to `apps/qr/src/` being scanned, which would be an `AGENTS.md` violation. **That diagnosis is wrong and the correction matters.** Greping the whole repo for the emitted class names finds them in `REDESIGN-PLAN.md`, `AUDIT.md` and `scripts/verify-dark-contrast.py`, and in none of `apps/qr`. The bundle is byte-identical at 55,383 before and after this phase removed the last such string from `src/`, which is the proof. So no cross-app coupling exists and the extraction invariant is intact. The fix is an `@source` line, but a wrong path silently drops utilities on some route and no gate in this repo catches that, so it belongs in its own change with an emitted-class-list diff as its verification and not in a phase that was supposed to be mechanical.
+
+**Phase 3: sections 2, 3, 4, 8 and 9. Composition only, no photographs. Unblocked. SHIPPED 2026-08-09.**
+
+*Precondition, discharged 2026-08-09.* This phase was held on the venue question, and the hold is lifted in full. The reasoning that produced it was sound and is worth keeping in view: FinalCTA sets "Hosted at Station Austin" at the page's second-largest size in the closing frame, `src/data/events.json` carries `location_name` = "Capital Factory, 701 Brazos St" on all ten rows, and section 5's featured event object **prints the venue**, so once Phase 5 landed the page would print one name in section 5 and another in section 9 on a single scroll. That is a real thing for a plan to notice. It is not a contradiction, because Capital Factory was rebranded as Station Austin and both strings name the same building. **Ship all five sections, including section 9's four-item panel, with no held items and no string edits.** The feed's older name is a freshness question for whoever maintains the data and blocks nothing in this phase or any other.
+
+ValueProps, HowItWorks, FounderStory, FAQ and FinalCTA. The HowItWorks middle stop ships with a `--band` display-type cell where the photograph will go. Ships as: five sections rebuilt, three banned patterns retired (three identical cards, ghost step numerals, the 2x2 icon-card grid), both dark slabs gone, and the accent field closing the page.
+
+**Phase 4: the photo pipeline and sections 1 and 7. The consent upgrades land here rather than in Phase 6, and the hero copy is set here. SHIPPED 2026-08-09.**
+Add `sharp`, write `scripts/build-photos.mjs` and the manifest, and generate the day-one derivatives **from the two consent-unlocked frames directly**: `meetups/20260423_184515.jpg` at the hero band and `meetups/20260423_184540.jpg` at the HowItWorks middle stop, at the ratios fixed in section 7. There is no interim architectural crop to build and then throw away, and the middle stop ships all three width tiers (640x512, 1024x819, 1440x1151) rather than two, because the source is 2816x2252 at that ratio. Build the hero and the resources rail. **Set the final hero subtext here**, under the delegation recorded in section 10, against the requirement in section 5 that it still answers "ask who?", and re-measure the line count and the band preview it produces. Retune all six `Suspense` fallbacks and `scroll-margin-top` here, because this is where section heights settle. Measure the photography budget and decide the preload by measurement. **Order matters inside this phase: set the subtext first, then measure.** The preload decision turns on whether the hero band is above or below the fold, the band preview at 1366x768 is 47px against the 33-word string and 74px against a 2-line one, and measuring the preload before the copy is settled means measuring it against a string that will not ship and doing it twice.
+
+**Phase 5: sections 5 and 6. Partly gated, on one asset rather than on a decision. SHIPPED 2026-08-09 WITH ONE NAMED HOLD, which is recorded below rather than closed.**
+EventsPreview is clean and ships immediately. It was never blocked in itself, but the venue name its featured object prints was the half of the venue contradiction that would have published the conflict on the page, and there is no conflict now, so it goes out with `location_name` rendered as it stands and nothing to reconcile. PartnersStrip is blocked on vendored partner artwork, since two of the three marks are currently hotlinked from a third-party favicon endpoint. That artwork is now the only outstanding input that blocks anything in this plan.
+
+**Phase 6: documentation only. Most of what stood here has moved into Phase 4. SHIPPED 2026-08-09.**
+The consent upgrades were the bulk of this phase and they are day-one work now, so what genuinely remains is two documents and nothing else. Rewrite `DESIGN.md` so it describes what actually shipped, because a design document that specifies a wrong contract is how twelve correct components ended up wrong, and it currently still calls the italic accent word the signature typographic move that section 10 retires. Correct `openspec/specs/home-page/spec.md`, which lists **eight sections while the code renders nine**. Neither task blocks anything and neither is optional.
+
+#### Phases 3, 4, 5 and 6 as shipped, 2026-08-09
+
+The nine sections were rebuilt in parallel, one agent per section, and then integrated. Verified green after the last edit rather than before it: `npm run lint`, `npx tsc --noEmit`, `npm test` (5 files, 23 tests) and `npm run build`.
+
+**What the integration pass owned, because no section agent could see across a boundary.**
+
+| Cross-boundary check | Result |
 |---|---|
-| All copy and every truth rule | Austin-first, plain language, zero fabricated claims. The hard part is already done. |
-| Information architecture | Every route, slug, anchor and nav label. No SEO migration risk. |
-| Accessibility structure | 137 ARIA attributes, 21 roles, the Join dialog's focus trap and restore, labelled fields, `aria-pressed` toggles, live regions, skip link, per-route titles. |
-| Correctness fixes | Timezone with DST, server-side join validation, the 404 route, events API fallback state. |
-| Component primitives | `Button`, `ButtonLink`, `buttonClasses`, `Container`. They get new token values, not new structure. |
-| Performance work | 5.8 MB to 1.4 MB, route splitting, zero infinite animations, the reduced-motion architecture. |
-| Admin and legal surfaces | Out of scope. Untouched. |
+| Eyebrow count | **2 against a budget of `ceil(9/3) = 3`**, exactly as section 5 planned: Hero ("Monthly meetups in Austin, Texas") and PartnersStrip ("Who we work with"). The discriminator is printed rather than assumed, because the raw `uppercase tracking` grep returns more: an eyebrow is a small uppercase tracked label **above a section headline**. PartnersStrip's "Logo pending" label sits inside a reserved slot, `EventCard`'s month sits inside a date block, and Footer, ThemeToggle, Resources and ComingSoon are not home-page sections. None of those counts. |
+| Layout family repetition | **Nine families across nine sections**, tabulated with their geometry in `DESIGN.md`. The closest pair is EventsPreview and FAQ, both ruled row registers, and they are told apart explicitly: EventsPreview rules every index row under a display-scale datum, FAQ rules only its three cluster headings and separates rows by space. |
+| Zigzag alternation cap | **One image-plus-text split on the whole page** (HowItWorks). The hero band is full bleed, not a split, and no other section carries a photograph. The cap of two consecutive is not approached. |
+| Duplicate CTA intent | **Two intents, two labels, no intent with two spellings.** "Join the community" three times (Hero, HowItWorks, FinalCTA) plus the nav action; "Browse our resources" three times (the hero secondary, the ResourcesPreview section action, and the rail's terminal panel). **Corrected after the pre-flight audit: this row previously recorded eight sightings of the second label, one per rail panel, and defended the repetition as section 8 item 14 being kept.** The rule was kept and the repetition was still filler, so item 14 is now kept by a different mechanism: each stage panel carries its focusable link on the stage name, which is one link per panel with a distinct accessible name each. |
+| Accent licence | Every accent-coloured string on the page carries its 3px accent rule, in all seven marked sections. Zero accent on any error state. `--on-accent` appears **zero** times in the section 9 plate, which takes `--on-plate` throughout as section 4.1 requires. |
+| Mark density | **Peak of exactly two marks in any viewport-tall window**, at 390, 768, 1024, 1366 and 1920, in both light and dark. Measured by collecting every 3px accent rule's document position off the rendered page and sliding a window down it, rather than by counting call sites. |
+| Theme lock | Both dark navy slabs are gone. Nine sections on three grounds, all token driven: five `--paper`, three `--band`, one `--accent-plate`. Zero hardcoded colour utilities and zero literal hexes in any of the nine components outside comments. |
 
-**Retired deliberately:** the navy and amber tokens, `Emphasis`'s specific colour
-logic, Inter, all rounded corners, and the five card-grid section compositions.
+**The `Suspense` fallbacks and `scroll-margin-top`, which section 8 named as the two couplings that would produce CLS if missed.**
 
-The one piece of this session's work that the overhaul discards is the
-amber-on-light contrast correction, which is expected: the whole reason it was
-needed is that the outgoing accent could not do its job.
+Both are closed, and the heights are measurements rather than estimates. The built page was served and every `main > section` read for its rendered height at five viewports in both modes, under `prefers-reduced-motion: reduce`. Heights are theme invariant to the pixel; they are not viewport invariant, which is why each fallback is a breakpoint ladder.
 
----
+| Section | 390 | 768 | 1024 | 1366 | 1920 | Fallback now declared |
+|---|---|---|---|---|---|---|
+| FounderStory | 1234 | 1066 | 798 | 798 | 798 | `77 / 66.5 / 50 rem` |
+| EventsPreview | 1380 | 1302 | 1295 | 1292 | 1292 | `86.25 / 81 rem` |
+| PartnersStrip | 1028 | 912 | 934 | 952 | 952 | `64.25 / 57 / 59 rem` |
+| ResourcesPreview | 1258 | 1206 | 1206 | 1206 | 1206 | `78.75 / 75.5 rem` |
+| FAQ | 2199 | 1856 | 1913 | 1920 | 1920 | `137.5 / 116 / 120 rem` |
+| FinalCTA | 1205 | 1024 | 990 | 904 | 1080 | `max(100dvh, 75.5 / 62 / 56.5 rem)` |
 
-## 6. Build sequence
+**ResourcesPreview's row was re-measured after the pre-flight audit and its old figures are named rather than quietly replaced: it read 1306 / 1254 declared `81.5 / 78.5 rem`.** Retiring the per-panel "Browse our resources" link took 48px off the section at every viewport, and a fallback left at the old height would have pulled the page up by that much when the chunk landed, which is the exact CLS coupling section 8 named. Residual at the new figures is 2px at both breakpoints.
 
-Each phase leaves the site shippable.
+Worst residual across all 60 measured pairs is **10px** (PartnersStrip at 1024). **Two of the six fallbacks were also carrying the wrong ground**, which no section agent could have seen: FounderStory's placeholder was `--band` against a `--paper` section, and FinalCTA's was `--band` at 30rem against a `--accent-plate` section running `min-h-[100dvh]`, so the closing frame would have flashed the wrong colour and then grown by most of a viewport. FinalCTA is the one section whose fallback has to be the same `max()` of viewport and content as the section itself, because a rem value can never converge with a `dvh` one. `scroll-margin-top` moved from `6rem` to `4.5rem` against a navbar measured at 64px plus its 1px edge.
 
-1. **Tokens and type.** New CSS custom properties, self-hosted Geist and Geist
-   Mono, radius to zero, dark-mode variables. Nothing else changes. The whole
-   site shifts underneath at once.
-2. **Hero.** Highest single lift, and the only section that is currently a
-   placeholder rather than a design.
-3. **Departure board and partner strip.** The two most concept-specific
-   components.
-4. **Remaining sections**, in page order.
-5. **Motion pass.** Reveals and the one board flourish, reduced-motion verified.
-6. **Verification.** Contrast measured with alpha compositing rather than
-   eyeballed, both themes, real mobile viewports, `detect.mjs`, then a fresh
-   `/impeccable audit`.
+**Deletions, each proved unreferenced before removal.** `HeroVisual.tsx` and `GlobeIcon.tsx` are gone; `grep -rn "HeroVisual\|GlobeIcon" src/ index.html` returns 0. `Icons.tsx` stays, because `EventCard` still imports `LumaLogo` and `MeetupLogo` and `/partners` still imports the other two. `src/lib/eventTime.ts` had its module surface narrowed from eight exports to one function plus three interfaces; the three helpers and the zone constant are live but private, since an exported helper nobody calls is an invitation to grow a second copy of the zone logic two audits exist to keep in one place.
 
-Phases 1 and 2 alone deliver most of the visible change.
+**The hero subtext commitment in section 11 is met.** The shipped string is "Visas, U.S. banking, hiring across borders. Once a month in Austin, ask the founders who have already solved it." That is **19 words against a budget of 20**, down from 33, and it still answers "ask who?" in the final clause, which is the requirement section 5 carried forward. Section 11's bullet is updated accordingly rather than left recording an overrun that no longer exists.
+
+**Phase 5's hold, named rather than closed.** PartnersStrip ships with the Station Austin and Reuneo marks as **reserved slots**: a dashed 1px `--rule` box, 192 x 56, carrying the partner name and "Logo pending". The `google.com/s2/favicons` hotlinks are gone from the component, no monogram was drawn (skill 4.8 permits generated marks only for invented brands, and these are real companies), and the home page now issues **zero third-party requests**. The outstanding ask is unchanged and is still the only input blocking anything in this plan: single-colour SVG, transparent background, with permission, vendored into `public/partners/`. Until it arrives this section is shipped-with-a-hold, not complete, and saying otherwise here would be the documentation lie this plan exists to prevent. `/partners` still hotlinks both marks through `Icons.tsx` and is not covered by any phase.
+
+**One deployment coupling that belongs to whoever commits this.** `public/photos/` and `src/data/photos.generated.ts` are build outputs that are **not** gitignored and are currently **untracked**. `Hero.tsx` and `HowItWorks.tsx` both import `photos.generated`, and `package.json`'s `build` script is `tsc -b && vite build` with no `photos` step, so a fresh clone on Netlify fails to typecheck. Either commit the derivatives and the generated module, or add `npm run photos` to the build. Committing them is the cheaper option and keeps `sharp` out of the deploy path.
 
 ---
 
-## 7. Open items and risks
+## 10. Open risks and founder input
 
-| Item | Status |
+**Answered and delegated, 2026-08-09**
+
+Three of the seven questions that stood in the table below are closed, and a fourth decision that section 5 had parked behind founder sign-off is now ours to make. They are recorded with their answer and the date rather than deleted, because Phases 1, 3, 4 and 6 were all sequenced around them, and a reader who finds the sequencing surprising is owed the reason it changed.
+
+| Question | Answer, 2026-08-09 | What it changes |
+|---|---|---|
+| **Station Austin or Capital Factory?** | **Answered.** Capital Factory has been rebranded as Station Austin. One physical venue, current name and former name. Photographs carrying Capital Factory signage show the venue's former branding, which is dated rather than dishonest. | Phase 3 loses its block entirely and ships section 9's four-item panel with it. Section 5's EventsPreview is clean. The rule that refused any frame with legible Capital Factory branding is retired, which returns `venue/20260226_184645.jpg` and `meetups/20260423_184536.jpg` to the usable pool. `events.json` keeping the former name is a freshness question that blocks nothing. |
+| **Photo consent on `20260423_184540` and `20260423_184515`.** | **Granted, and wider than the ask.** Participants have signed off on appearing in IFN marketing material and are happy to be shown. All fifteen photographs are usable subject to quality. | The day-one restriction to two faceless frames is lifted. Both slots take the frames the upgrade path named, at the same ratios, so it is a manifest edit. Phase 6's consent swaps move into Phase 4, and the middle stop gains its third width tier. Risk 1 below is retired. |
+| **Nav CTA label.** | **Delegated to us.** | "Join the community" across nav, hero, HowItWorks and FinalCTA. The "Join Network" fallback is retired. Phase 1 has no outstanding decision. |
+| **Hero subtext.** | **Delegated to us**, with the instruction to optimise for punch and conversion, and the 33-word preserved string may be cut. | The content-preservation argument that held 33 words in place is gone. The final string is set in Phase 4, not Phase 1, against one carried-forward requirement: it must still answer "ask who?". The fold arithmetic in section 5 stands as the recorded worst case. |
+
+**Risks I own**
+
+1. **Retired 2026-08-09, and replaced by a smaller residual.** This entry read "day one carries no photograph of a person" and priced the page at roughly 75% of its strength until consent landed. Consent has landed and the figure is withdrawn rather than restated at a new number, because it was an estimate and the condition it estimated is gone. What is left is genuinely smaller and is not nothing: **both day-one photographs come from the same April evening, and neither prints a date**, so recurrence is still carried by one sentence of copy and by nothing else. The two frames are separated by subject and scale rather than by date, the February frames sit in reserve, and one frame from a second evening at the next meetup closes this completely.
+2. **A deep crimson on near-white is a taste bet.** It is derived by measurement from IFN's own slide, but a sponsor could read red as alarm rather than as a mark. The mitigations are structural: the accent never carries an error state, the density rule caps it at two marks plus the wordmark period in any viewport, and the neutrals are locked to one hue so the red is the only colour on the page. If the founder's read is that it reads as warning, the honest fallback is a deep petrol at the same three roles, re-measured by the same sweep, not a retreat to navy.
+3. **The page is more austere than the slide it derives from.** The slide's gradient-filled `Founders` cannot come across, because gradient display type is banned and it is the most common AI tell in headline treatment. Stated above in full.
+4. **Mobile verification is unresolved for a third round.** The browser harness could not resize the viewport in either audit. I am not making a fourth promise. What I am doing instead is declaring the sub-768px collapse for every asymmetric layout in the same component that declares the asymmetry, and re-measuring the hero h1 at 360px against the preserved overlapping-grid slot before ship, because that exact bug (a `min-w-[240px]` slot making line one unbreakable) has already happened here once.
+5. **Retiring italic display emphasis removes a documented brand signature.** `DESIGN.md` calls the italic accent word the signature typographic move. It goes because Archivo's weight ladder is the slide's own emphasis mechanism and because colour-only emphasis is the defect this whole palette exists to fix. It is still a loss and the founder should be told rather than discover it.
+
+**Founder input this plan still cannot supply**
+
+Two tables, because "open" and "blocking" are not the same thing and the previous single table let them read as if they were.
+
+*Open and blocking. This is the whole list.*
+
+| Question | What it blocks |
 |---|---|
-| **Real photographs** | **Blocking for phases 2 and 4.** Upload folder and shot list are at `public/photos/README.md`. Without them the concept degrades to typographic only, which the skill explicitly warns is incomplete work rather than minimalism. |
-| Consent for identifiable faces | Flagged in the photo README. A trust-first brand cannot publish faces without permission. |
-| `DESIGN.md` rewrite | Required by an overhaul. Happens at the end of phase 1 so the document describes what is actually shipped. |
-| Mobile verification | The browser harness could not resize the tab's viewport in either audit round. Real-device or emulated-viewport checking is needed before sign-off rather than canvas measurement. |
-| Stripe links, social URLs, testimonials | Unchanged founder-input items from `AUDIT-2.md`. Not blocking the redesign. |
+| **Vendored partner artwork.** | **No longer blocking, as of 2026-08-10.** The `google.com/s2/favicons` hotlinks are deleted outright: they sent every visitor's IP to a third party on a page the founder had not asked to be tracked on, and the initials fallback sitting behind them was worse in kind rather than a safe default, because drawn initials on a real company misrepresent it more quietly than a favicon does. Both partner surfaces now switch on a `logo` field in `src/data/partnersData.ts`, and a partner without one renders a **labelled reserved slot** that says so. What the founder still owes is the artwork itself, with permission: drop the file into `public/partners/` and add one `logo` key. Two steps, zero component edits. If a mark cannot be obtained with permission, the partner is omitted from the row rather than set as a text wordmark. |
+| **Real member testimonials.** | Nothing in the build sequence, and that is the point. `assets/photos-source/portraits/` is empty and no member quote exists anywhere in this repo, so no face-plus-quote treatment is buildable and none is proposed. Consent to be photographed at a meetup is not a quote, and the two must not be conflated now that the first one exists. Until real attributed words arrive with permission, the page's social proof is the photographs and the partner disclosure, which caps how much this page can ever say about what members got out of it. Invented testimonials remain banned outright under section 8. |
+
+*Open, and blocking nothing here. Carried so they are not lost.*
+
+| Question | Standing |
+|---|---|
+| **The exact brand red.** | Recovered from photographs of an emissive screen, so the hue family is certain and the value is not. If a source file exists, the hex should be re-derived from it and then re-swept for contrast against every row in section 4.2. Until then the swept value ships and is correct against the measurements published here. |
+| **Real LinkedIn and Instagram URLs.** | `socialLinks.ts` flags them `verified: false`; they ship as live links and will 404 if wrong. Predates this plan and is untouched by it. |
+| **Correct Stripe Payment Links, and whether "Cancel anytime" is a commitment IFN honours on an annual membership.** | Both still open from the second audit. No checkout is designed in this plan and `STRIPE_PAYMENT_LINK` is wired to nothing, so neither reaches the redesign. |
 
 ---
 
-## 8. Pre-flight commitments
+## 11. Pre-flight commitments
 
-Held to at build time, from the skill's Section 14: zero em-dashes; one theme
-locked per page; one accent used identically everywhere; one radius system; every
-CTA contrast-checked; no CTA label wrapping at desktop; no duplicate CTA intent;
-logo wall with no category labels; at most three eyebrows; no three consecutive
-image-and-text splits; no section-number labels; no scroll cues; no decorative
-status dots; no locale or weather strips; no fake product previews built from
-divs; navigation on one line under 80px; real images or labelled placeholder
-slots, never decorative SVG filler.
+Drawn from skill Section 14. These are the conditions the built page is held to, not aspirations.
+
+- **Zero em-dash and en-dash characters** anywhere visible: headlines, eyebrows, body, quotes, attribution, captions, buttons, alt text, route titles, meta tags. Phase 2 is the mechanism. This document contains zero, verified by grep.
+- **Page Theme Lock:** one theme end to end, both dark navy slabs retired, with exactly one declared colour-block exception at section 9 which is theme-invariant and therefore not an inversion.
+- **Color Consistency Lock:** one accent, three licensed roles, identical hue across modes. No second brand hue anywhere, including error states.
+- **Shape Consistency Lock:** radius 0 on surfaces, full pill on discrete controls, radius 0 on full-width interactive rows. Documented boundary, applied everywhere.
+- **Button Contrast Check:** primary 7.054 light and 5.517 dark on the per-mode `--accent` fill; the section 9 pill is `--on-plate` filled with an `--accent-plate` label at 7.054 in both modes, because the plate is theme-invariant and anything on it must be too; secondary is a `--paper` fill with a 4.960 `--edge` stroke and a 17.965 label, never a transparent button with no border. No CTA label wraps at desktop; "Join the community" is three words.
+- **Form Contrast Check:** input border 4.960 and 4.495, placeholder 5.982 and 6.808, helper text 6.601 and 7.496, error text 17.965 on the modal's `--paper` ground with no accent, focus ring never below 3:1 on any ground (4.264 worst case on the grey sweep, 7.054 on the accent plate, both layers declared identically in both modes with no reversal). The `JoinModal` scrim and surface are named tokens with measured rows, not an unspecified overlay: boundary 4.793 by tone in light and 17.965 by its 1px `--ink` border in both modes, the border clearing 3.0 on its outer side too at 3.748 light and 17.965 dark. Labels above inputs, no placeholder-as-label, field names and order unchanged.
+- **No Duplicate CTA Intent:** one label per intent across nav, hero, HowItWorks and FinalCTA, and the label is settled rather than pending. It is **"Join the community"**, decided under the founder's delegation of 2026-08-09. Five spellings go to one. The modal title stays "Join IFN" because a dialog title is not a CTA.
+- **Eyebrow count:** 2 against a budget of 4 (`ceil(10 / 3)`), counted mechanically. The tenth section spends none of it.
+- **Section-Layout-Repetition:** ten families across ten sections on the home page, geometry printed per section rather than asserted by label, plus an eleventh on the `/gallery` route (a nine-row authored hang, six size classes on the desktop measure and three on a phone). Four home sections now carry photography, six frames between them, and **exactly one is an image-plus-text split** (HowItWorks): the hero band is full bleed with nothing beside it, the FounderStory frame stacks under the prose, and GalleryPreview is three frames beside each other with no text between them. One split against a cap of two consecutive, so the cap is still not approached. Both sets are deliberately UNEQUAL, and the sentence that used to sit here saying the gallery route's set was equal is deleted rather than reworded: the equal grid was the thing the founder rejected.
+- **Hero:** four text elements, two actions, no decorative dot in the eyebrow pill, headline `clamp(2.75rem, 6vw, 5.25rem)` running 2 lines at desktop and 5 at 360px, `pt-20` top padding, **601px to the band at 1366x768** and **605px at 1920x1080**, both computed against a 3-line subtext and both re-measured at build against the 0.503em display metric printed in section 5.
+- **Hero subtext: MET as of Phase 4.** The rule is 20 words on a line that still answers "ask who?", and both halves hold. The shipped string is **"Visas, U.S. banking, hiring across borders. Once a month in Austin, ask the founders who have already solved it."**, which is **19 words and 111 characters** and sets in **2 lines** at 1366 and 1920. The clause that answers "ask who?" is "the founders who have already solved it", which is the piece of reassurance section 5 forbade trading away for a word count. The outgoing string was 33 words and 186 characters at 3 lines. The fold arithmetic above was computed against that worst case and the document's own pairing prices the improvement without a new computation: 3 lines where the rule budgets 2 was the 27px that took the band preview from 74px to 47px at 1366x768, so the 2-line string returns it to 74px. This bullet previously read "not yet met because the string does not exist yet" and instructed its successor to record the overrun again with its price if the shipped line could not do both. It can, so it does not.
+- **Logo wall:** logos only, no category label under any mark, real vendored artwork or the partner is omitted.
+- **Motion:** every behaviour justified in one sentence, all transform or opacity, reduced motion explicit per behaviour, no `window.addEventListener('scroll')`, no marquee, no pinning, no loops, `useEffect` cleanups strict.
+- **Images:** real documentary photography only, no hand-rolled decorative SVG, no div-based fake previews, explicit `width` and `height` on every image, `min-h-[100dvh]` never `h-screen`. **Verified on the rendered pages 2026-08-10, and re-verified after the gallery round and again after the landing reselection the same day:** seven images on `/` (six photographs plus the one real vendored partner mark) and fifteen on `/gallery`, zero missing dimensions and zero missing or empty alt on either, measured at 360, 390, 430, 640, 768, 1024 and 1440 in both modes. No partner mark is hotlinked from a third party any more; the two that had no artwork render a labelled reserved slot and neither draws a substitute monogram, because a generated mark is only permissible for an invented brand.
+- **Icons:** `lucide-react`, already a project dependency and permitted on that basis by skill 3.C, `strokeWidth` standardised at 1.5, every glyph `aria-hidden`, no hand-rolled paths, no second family.
+- **States:** empty, loading and error designed for the events section and the join form, not just the successful state.
+- **Mobile:** every asymmetric layout declares its sub-768px collapse in the same component.
+- **Copy self-audit:** every visible string re-read before ship. No invented metric, no invented person, no invented partner, no fake precision.
+- **Core Web Vitals:** LCP under 2.5s with a transform-only hero entrance and a measured preload decision, CLS zero via explicit image dimensions and retuned `Suspense` fallback heights, INP under 200ms with no scroll listeners and no rAF loops touching React state.

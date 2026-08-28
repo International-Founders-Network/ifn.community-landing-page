@@ -1,10 +1,10 @@
 /**
  * Outbound channels rendered in the footer.
  *
- * `verified: true`  — confirmed to exist and belong to IFN. Safe to ship.
- * `verified: false` — PLACEHOLDER. The URL is a guess at IFN's handle and has
- *                     NOT been checked. Confirm the account before launch, or
- *                     set `href` to null to hide the icon.
+ * `verified: true`, confirmed to exist and belong to IFN. Safe to ship.
+ * `verified: false`, PLACEHOLDER. The URL is a guess at IFN's handle and has
+ *   NOT been checked. Confirm the account before launch, or set `href` to null
+ *   to hide the icon.
  *
  * This is the single place to change any of them.
  */

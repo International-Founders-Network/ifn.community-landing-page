@@ -1,31 +1,335 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #0f172a;
-  --color-primary-light: #1e293b;
-  --color-primary-dark: #020617;
+/* Tailwind v4 scans the whole project for class names, markdown included, so a
+   class quoted inside prose becomes a real rule in the shipped stylesheet.
+   AUDIT.md records a texture URL that was removed from the hero on privacy
+   grounds, and quoting it there was enough to re-emit
+   `.bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]` into
+   dist. Nothing rendered it, so no visitor ever requested that host, but the
+   documentation of a fix should not reinstate any part of the thing it
+   documents. Docs are prose, not markup: exclude them from the scan. */
+@source not "../**/*.md";
 
-  --color-accent: #f97316;
-  --color-accent-hover: #ea580c;
+/* ============================================================================
+   IFN TOKEN LAYER. Phases 1 and 2 of REDESIGN-PLAN.md ("The Sign").
+   DARK MODE IS LIVE as of Phase 2. See the mode blocks below.
 
-  /* Label colour for text sitting ON an amber fill.
-     White on #f97316 is 2.80:1 and fails WCAG AA; navy is 6.37:1. */
-  --color-accent-ink: #0f172a;
+   Structure, and why it is this shape:
 
-  /* Amber TEXT on a light ground. #f97316 measures 2.80:1 on white and 2.68:1
-     on Harbor Mist, both under the 3:1 floor for large text. This value clears
-     it at 3.56:1 / 3.40:1 and is the existing Welcome Amber Deep, so the
-     two-colour ceiling holds. On dark grounds use --color-accent (5.9:1). */
-  --color-accent-on-light: #ea580c;
+   1. `:root` holds the palette as BARE custom properties (`--ink`, `--accent`,
+      ...). These are the swappable layer. Nothing else in the codebase should
+      ever hardcode one of these hexes.
+   2. `@theme inline` maps Tailwind's `--color-*` namespace onto those bare
+      properties. `inline` is load bearing: it makes `.text-accent` compile to
+      `color: var(--accent)` rather than to `color: var(--color-accent)`. That
+      is what lets the mode blocks below retarget every utility on the page by
+      reassigning nine custom properties, with no `dark:` variant anywhere in
+      the tree and no component edits.
+   3. Fonts live in a separate NON-inline `@theme` block, because `body` reads
+      `var(--font-sans)` directly and therefore needs the variable emitted at
+      `:root`. Fonts are not swappable, so there is nothing to gain from inline.
 
-  --font-sans: 'Inter', sans-serif;
-  --font-logo: 'MuseoModerno', display;
+   Every colour below is quoted from REDESIGN-PLAN.md section 4.1 and every
+   ratio quoted in a comment was recomputed with the WCAG relative luminance
+   formula rather than copied. No colour appears here that is not in that table.
+   ========================================================================== */
+
+
+/* ---------------------------------------------------------------------------
+   SELF HOSTED FACES (plan section 4.3)
+
+   Both Archivo subsets are required. Shipping only `latin` drops accented
+   characters in founder names to a system font mid word. The two files carry
+   an IDENTICAL axis space (wght 100..900, wdth 62..125), so a word that spans
+   the subset boundary resolves the same variation settings on both and renders
+   at one width. Omitting `font-stretch` would mean the face never matches a
+   `font-stretch` query, so it is declared even though nothing queries it yet.
+
+   Archivo's `fvar` default weight is 600, not 400. A resolved CSS
+   `font-weight` always wins, so this is cosmetic, but it is why the name table
+   inside the binary reads "Archivo SemiBold".
+
+   MuseoModerno is a genuine static 900 instance and is used by exactly one
+   thing, the `IFN.` wordmark, which reaches it through the arbitrary utility
+   `font-['MuseoModerno']` in Navbar and Footer. The family string must stay
+   spelled exactly that way. It is deliberately NOT preloaded: the wordmark is
+   small and a swap there is invisible.
+
+   Paths are root absolute because Vite copies `public/` to the site root
+   verbatim. The served URL is `/fonts/...`, never `/public/fonts/...`.
+   -------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url('/fonts/archivo-variable-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url('/fonts/archivo-variable-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/fonts/museomoderno-900-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/* ---------------------------------------------------------------------------
+   LIGHT PALETTE. The default mode, and the fallback for any UA that does not
+   report a colour-scheme preference.
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Tell the UA both modes are supported so it themes the things CSS cannot
+     reach: form control internals, scrollbars, the caret, and the popup list of
+     the native `<select>` in `JoinModal`. Without this the select renders as a
+     white system dropdown in the middle of the conversion path on a dark page.
+     The two attribute rules further down narrow this to a single scheme when a
+     manual choice has been made, so a chosen mode themes its controls too. */
+  color-scheme: light dark;
+
+  /* Grounds and type. Two grounds per mode, no more. Every neutral is locked
+     to hue 60 so warm and cool greys cannot mix. */
+  --paper: #FBFBFA;   /* page ground */
+  --band: #F0F0EC;    /* the only second surface: recessed sections, plate and field fills */
+  --ink: #131311;     /* all body and display type. 17.965 on paper, 16.281 on band */
+  --muted: #5B5B55;   /* captions, helper text, placeholders. 6.601 on paper, 5.982 on band */
+  --rule: #7C7C74;    /* every 1px structural hairline and plate border. 4.063 on paper */
+  --edge: #6E6E67;    /* control boundaries: input borders, secondary button strokes. 4.960 on paper */
+
+  /* The accent, licensed to exactly three roles: the mark, the primary action
+     fill, and the wordmark period. Never an error state. Hue 348.5. */
+  --accent: #A81B36;        /* 7.054 on paper, 6.393 on band */
+  --accent-press: #93132C;  /* hover and active on accent fills and accent links */
+  --on-accent: #FBFBFA;     /* the ONLY label colour on an accent fill. 7.054 on --accent, 8.557 on --accent-press */
+
+  /* The section 9 field. Deliberately theme invariant in both directions:
+     anything that sits on the plate is theme invariant, because the plate is.
+     Folding --on-plate into --on-accent measures 2.547 in dark mode and puts
+     the page's closing frame below even the 3:1 large text floor. */
+  --accent-plate: #A81B36;
+  --on-plate: #FBFBFA;      /* 7.054 on the plate, in both modes */
+
+  /* The JoinModal backdrop, and the only alpha composite left on the page.
+
+     THEME INVARIANT, and that is a measurement rather than a convenience. The
+     scrim's job is to dim the page CONTENT, and it dims it by exactly the same
+     amount in both modes: page --ink text behind it reads 3.748 against its own
+     ground in light AND in dark, down from 17.965 unscrimmed. The composite is
+     symmetric about the two tokens that swap, so one value serves both modes
+     for the same reason the focus ring needs no reversal.
+
+     WHAT IT DELIBERATELY DOES NOT DO is create a tonal step under the dialog.
+     Composited per channel in sRGB gamma space it resolves to #70706E over
+     --paper and #6B6B69 over --band in light mode, and to #131311 and #171715
+     in dark, where the first of those is the same colour as the modal's own
+     --paper surface (1.000). No scrim value repairs that: a scrim can only
+     darken toward black and the dark page ground is already there, so the
+     tonal step is unavailable in dark mode at any alpha. The modal boundary is
+     carried by the better of its tone and its 1px --ink border, which is
+     measured over --paper, --band and the --accent-plate in both modes by
+     scripts/verify-dark-contrast.py and never drops below 4.719 on any grey
+     ground. Do not reach for a darker scrim, a per mode scrim, or a lighter
+     modal surface; none of the three moves that number, and a lighter surface
+     would collapse the --band field fills inside the dialog to 1.000. */
+  --scrim: rgb(19 19 17 / 0.6);
+}
+
+
+/* ---------------------------------------------------------------------------
+   DARK PALETTE. LIVE as of Phase 2. Nine properties, one per row of
+   REDESIGN-PLAN.md section 4.1. Nothing else in the tree is mode aware.
+
+   Why it is only nine rows
+   ------------------------
+   `--accent-plate`, `--on-plate` and `--scrim` are absent BY MEASUREMENT, not
+   by omission. The section 9 field is the same object in both modes, so
+   anything sitting on it is theme invariant too. Folding `--on-plate` into
+   `--on-accent` resolves the plate label to #131311 on #A81B36 in dark mode,
+   which measures 2.547 and puts the page's closing frame below even the 3:1
+   large text floor. The naive repair, locking `--on-accent` to #FBFBFA in both
+   modes, measures 3.256 on the dark accent fill #E85C77 and so fixes the plate
+   by breaking the fill. Two grounds that do not move together need two label
+   tokens. Do not "simplify" these three back into the swap.
+
+   Why there is no focus ring reversal
+   -----------------------------------
+   The ring is 2px `--paper` inner plus 2px `--ink` outer, IDENTICAL in both
+   modes. `--paper` is always the page colour and `--ink` is always the type
+   colour, so the construction inverts itself when the nine rows below swap.
+   Writing a reversal on top of that swap inverts it twice: the outer layer
+   becomes `--paper`, which in dark mode is #131311, which IS the page ground,
+   at 1.000. Every focus indicator on all eighteen routes would collapse to a
+   single 2px line. An earlier draft of the plan specified that reversal and it
+   was a bug. The layers contrast with each other at 17.965 in both modes.
+
+   Why the guard is written twice
+   ------------------------------
+   The `@media` rule is scoped to `:root:not([data-theme="light"])` and the
+   attribute rule is a separate, unmediated selector, so a manual choice wins in
+   BOTH directions: light chosen on a dark system, and dark chosen on a light
+   one. A single `@media` block with an attribute override inside it can only
+   win one of those.
+
+   Recomputed with the WCAG relative luminance formula rather than copied
+   forward: --ink on --paper 17.965, --ink on --band 16.318, --muted on --paper
+   7.496, --muted on --band 6.808, --accent as type on --paper 5.517 and on
+   --band 5.011, --on-accent on the --accent fill 5.517 and on --accent-press
+   6.629, --rule on --paper 4.005 and on --band 3.638, --edge on --paper 4.804
+   and on --band 4.363, --on-plate on the invariant plate 7.054, focus ring
+   inner against outer 17.965.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #131311;
+    --band: #1D1D1A;
+    --ink: #FBFBFA;
+    --muted: #A5A59C;
+    --rule: #75756D;
+    --edge: #82827A;
+    --accent: #E85C77;
+    --accent-press: #EF7389;
+    --on-accent: #131311;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #131311;
+  --band: #1D1D1A;
+  --ink: #FBFBFA;
+  --muted: #A5A59C;
+  --rule: #75756D;
+  --edge: #82827A;
+  --accent: #E85C77;
+  --accent-press: #EF7389;
+  --on-accent: #131311;
+}
+
+/* A chosen mode narrows `color-scheme` from `light dark` to the one that was
+   chosen, so form control internals, scrollbars and the native `<select>`
+   popup follow the choice rather than the system. Without these two rows a
+   reader who picks light on a dark system gets dark widgets on a light page. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+
+/* ---------------------------------------------------------------------------
+   TAILWIND THEME MAPPING
+
+   `inline` so that utilities compile to `var(--accent)` and friends rather
+   than to `var(--color-accent)`. A `--color-*` variable declared at `:root`
+   with a `var()` value is substituted AT `:root` and inherits down already
+   resolved, so a descendant override of the bare property would do nothing.
+   Inline is what makes the bare properties actually swappable.
+   -------------------------------------------------------------------------- */
+
+@theme inline {
+  /* Current system. These are the names new work should use. */
+  --color-paper: var(--paper);
+  --color-band: var(--band);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-edge: var(--edge);
+  --color-accent: var(--accent);
+  --color-accent-press: var(--accent-press);
+  --color-on-accent: var(--on-accent);
+  --color-accent-plate: var(--accent-plate);
+  --color-on-plate: var(--on-plate);
+  --color-scrim: var(--scrim);
+
+  /* -------------------------------------------------------------------------
+     THE RETIRED NAMES ARE GONE, deleted in Phase 2 rather than aliased.
+
+     `--color-primary`, `--color-primary-light`, `--color-accent-hover`,
+     `--color-accent-ink` and `--color-accent-on-light` stood here through
+     Phase 1 so that sixteen unmigrated routes kept compiling. Phase 2's token
+     sweep repointed every one of those call sites, verified three ways across
+     `src/`: no utility ending in a retired name in ANY Tailwind namespace
+     (`bg-`, `text-`, `border-`, `ring-`, `shadow-`, `divide-`, `from-`, `to-`,
+     `via-`, `decoration-`, `placeholder-`, `accent-`, `fill-`, `stroke-`,
+     `caret-`, `outline-`), no `var(--color-` reference anywhere in `.tsx` or
+     `.ts`, and no hardcoded utility from Tailwind's stock neutral ramp.
+
+     That ramp's name is deliberately not spelled out anywhere in this file.
+     Phase 2's pass condition is a bare substring grep for it across `src/`, and
+     since it is also a substring of every `translate-*` utility the count can
+     never reach zero on its own. Keeping the literal out of the prose here
+     means the residue is 100% attributable to transform utilities, which is a
+     checkable statement where "some of these are comments" is not. It also
+     stops Tailwind v4's raw-text scanner emitting the matching colour classes
+     into the bundle as dead CSS.
+
+     The `accent-` namespace is called out explicitly because it is the one
+     that hides: `accent-primary` is Tailwind's `accent-color` utility, it does
+     not match a `(bg|text|border|ring|shadow)-` gate, it does not match
+     `var(--color-`, and it would have compiled to nothing the moment
+     `--color-primary` was deleted, with lint, typecheck, test and build all
+     green. The one live site, the Resources filter checkbox, now reads
+     `accent-ink` and resolves through `--color-ink` above.
+
+     The three pages that consumed `var(--color-primary-light)` inside an
+     arbitrary value (Partners, Membership, About) now read `var(--muted)`,
+     which is a bare property declared at `:root` and therefore safe to
+     reference directly. That is why the light block above declares the bare
+     names as plain properties and not only through this block.
+
+     `--color-primary-dark` (#020617) was already deleted in Phase 1: zero call
+     sites in this app. The only surviving occurrence is in
+     `apps/qr/src/index.css`, an independently tooled app with its own token
+     layer that is not reached from here.
+     ---------------------------------------------------------------------- */
+}
+
+
+/* ---------------------------------------------------------------------------
+   TYPE. Non inline on purpose: `body` below reads `var(--font-sans)` directly,
+   so the variable has to be emitted at `:root`. Fonts do not swap, so there is
+   nothing inline would buy.
+
+   Archivo is one family for everything, display and body and numerals. There
+   is no mono face on this page. Numerals use Archivo's tabular lining figures
+   through Tailwind's own `tabular-nums`, which needs no token.
+   -------------------------------------------------------------------------- */
+
+@theme {
+  --font-sans: 'Archivo', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-logo: 'MuseoModerno', 'Archivo', ui-sans-serif, sans-serif;
+}
+
 
 @layer base {
   body {
     font-family: var(--font-sans);
-    @apply antialiased text-slate-800 bg-white;
+    @apply antialiased text-ink bg-paper;
   }
 
   a,
@@ -33,12 +337,22 @@
     @apply cursor-pointer;
   }
 
-  /* Anchor targets must clear the fixed navbar (~92px at rest). Scoped to the
-     things that are actually linked to — a bare [id] selector also matches every
-     form field and would offset any programmatic scrollIntoView by 96px. */
+  /* Anchor targets must clear the fixed navbar. Scoped to the things that are
+     actually linked to. A bare [id] selector also matches every form field and
+     would offset any programmatic scrollIntoView by the same amount.
+
+     RETUNED to the shipped bar, which is measured rather than quoted: the
+     rendered header is 64px of content plus its 1px --rule bottom edge = 65px,
+     read off the built page at 1366, 1024, 768 and 390. 4.5rem is 72px, so an
+     anchored section lands 7px below the bar. The 6rem this replaces was sized
+     for the ~92px pre-redesign bar and left a 31px hole above every anchor.
+
+     The two failure modes are not symmetric, which is why the residual is on
+     the generous side: too much clearance leaves a visible gap, too little puts
+     the section heading underneath the bar where it cannot be read at all. */
   :target,
   section[id] {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 4.5rem;
   }
 
   /* Framer Motion is handled globally by <MotionConfig reducedMotion="user">
@@ -56,8 +370,8 @@
        exemption is expressed as a selector exclusion rather than as a second
        rule that tries to undo this one.
 
-       An earlier version did the latter — `.motion-status { animation-duration:
-       revert !important }` — and was inert. `revert` rolls a property back to
+       An earlier version did the latter, `.motion-status { animation-duration:
+       revert !important }`, and was inert. `revert` rolls a property back to
        the user/UA origin, discarding EVERY author declaration for it, including
        Tailwind's own `--animate-spin: spin 1s linear infinite`. A spinner so
        marked computed to `0s / 1`: frozen harder than if it had carried no class
@@ -69,7 +383,7 @@
        The exemption exists for indicators whose ONLY job is to say "something is
        happening": freezing a spinner into a static icon removes the feedback
        instead of calming it. Reduced motion means no gratuitous movement, not no
-       information — and every `.motion-status` element in this codebase is
+       information, and every `.motion-status` element in this codebase is
        paired with a visible text label, so the message never depends on motion
        alone. `:not()` exempts only the element it matches, so the class must sit
        on the same element as the `animate-*` utility, not on an ancestor. */
@@ -85,3 +399,47 @@
     }
   }
 }
+
+
+/* ============================================================================
+   LEGACY DARK SLAB BRIDGE: DELETED IN PHASE 2. THIS NOTE IS THE HEADSTONE.
+
+   What stood here
+   ---------------
+   An unlayered rule keyed on three class selectors, the retired brand-fill
+   class, the stock neutral-900 background class, and `.bg-ink`, which swapped
+   `--accent`, `--accent-press` and `--on-accent` to their near-black-ground
+   values inside the two legacy dark slabs. It existed because the incoming
+   accent #A81B36 is a deep crimson that measures 2.547 on --ink and 2.444 on
+   stock neutral-900 (#0F172A), so four call sites on dark grounds would have
+   regressed the moment `--color-accent` was repointed in Phase 1.
+
+   Why it had to go before dark mode switched on, not after
+   -------------------------------------------------------
+   Its own Phase 1 comment named the trap and it fired exactly as written. The
+   rule keys on CLASS NAMES, not on how dark a ground actually is. `.bg-ink` was
+   listed pre-emptively as the likeliest rename and was safe only while light
+   was the sole live mode. In dark mode `--ink` is #FBFBFA, so `.bg-ink` is a
+   LIGHT ground, and the bridge would have forced the dark-mode accent #E85C77
+   onto it at 3.256, below the 4.5 floor for the type in those pills, on about
+   ten live chips, dots, filter states and badges.
+
+   The other two selectors were already dead: after the Phase 2 token sweep, a
+   grep for either class across `src/*.tsx` and `src/*.ts` returns nothing. The
+   literals are omitted here for the reason given in the token block above, that
+   this file must not itself be the thing a pass-condition grep finds. The sweep
+   also retired both dark slabs outright, so there is
+   no near-black section ground left in the tree for a bridge to rescue. Every
+   surviving accent call site sits on --paper or --band and is measured in both
+   modes: 7.054 and 6.393 light, 5.517 and 5.011 dark.
+
+   `--accent-on-ink` and `--accent-press-on-ink`, the two properties that
+   existed only to feed this rule, were deleted with it.
+
+   If a near-black slab ever comes back
+   ------------------------------------
+   Do not rebuild this. A slab that must stay dark in both modes is a
+   theme-invariant surface, which is what `--accent-plate` and `--on-plate`
+   already are. Add an invariant token pair and measure it in both modes rather
+   than re-deriving a class-name bridge that cannot see a rename.
+   ========================================================================== */

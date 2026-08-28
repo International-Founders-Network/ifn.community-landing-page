@@ -1,10 +1,12 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, Outlet, useLocation } from 'react-router-dom';
+import { useState, Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ScrollToAnchor } from './components/ScrollToAnchor';
 import { ScrollToTop } from './components/ScrollToTop';
+import { Head } from './components/Head';
+import { ConsentBanner } from './components/ConsentBanner';
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
@@ -15,6 +17,7 @@ const Contact = lazy(() => import('./pages/Contact').then(module => ({ default: 
 const Blog = lazy(() => import('./pages/Blog').then(module => ({ default: module.Blog })));
 const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ default: module.Playbooks })));
 const Events = lazy(() => import('./pages/Events').then(module => ({ default: module.Events })));
+const Gallery = lazy(() => import('./pages/Gallery').then(module => ({ default: module.Gallery })));
 const Newsletter = lazy(() => import('./pages/Newsletter').then(module => ({ default: module.Newsletter })));
 const Membership = lazy(() => import('./pages/Membership').then(module => ({ default: module.Membership })));
 const Mentorship = lazy(() => import('./pages/Mentorship').then(module => ({ default: module.Mentorship })));
@@ -28,58 +31,24 @@ const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: modu
 
 const JoinModal = lazy(() => import('./components/JoinModal').then(module => ({ default: module.JoinModal })));
 
-const SITE_NAME = 'International Founders Network';
-
 /**
- * Every route shared one <title>, which fails WCAG 2.4.2 (Page Titled) and makes
- * tabs, history and search results indistinguishable.
+ * Route metadata now lives in src/data/seo.ts and is applied by the <Head>
+ * component below. The ROUTE_TITLES map and the RouteTitle component that used
+ * to sit here were removed rather than extended: they set document.title and
+ * nothing else, so every route still shared one meta description and one Open
+ * Graph block. seo.ts holds the title AND the description AND the indexability
+ * of each route in one record, which is also what generates sitemap.xml and the
+ * prerender route list, so the three can no longer drift apart.
  *
- * The six "coming soon" routes are deliberately absent: ComingSoon.tsx sets its
- * own title alongside the noindex tag it injects, and owns both.
+ * The COMING_SOON_PATHS set went with it. Those six routes are now ordinary
+ * `indexable: false` entries in ROUTE_SEO, which gives them correct titles
+ * without a second list to keep in sync.
  */
-const ROUTE_TITLES: Record<string, string> = {
-    '/': `${SITE_NAME} — Austin, Texas`,
-    '/about': `About IFN — ${SITE_NAME}`,
-    '/partners': `Partners — ${SITE_NAME}`,
-    '/contact': `Contact us — ${SITE_NAME}`,
-    '/events': `Monthly meetups in Austin — ${SITE_NAME}`,
-    '/resources': `Founder resources — ${SITE_NAME}`,
-    '/membership': `Membership — ${SITE_NAME}`,
-    '/code-of-conduct': `Code of conduct — ${SITE_NAME}`,
-    '/privacy-policy': `Privacy policy — ${SITE_NAME}`,
-    '/terms-and-conditions': `Terms and conditions — ${SITE_NAME}`,
-};
-
-function RouteTitle() {
-    const { pathname } = useLocation();
-
-    useEffect(() => {
-        const title = ROUTE_TITLES[pathname];
-        if (title) {
-            document.title = title;
-        } else if (!(pathname in ROUTE_TITLES)) {
-            // Unmatched path renders NotFound; ComingSoon routes set their own.
-            const isComingSoon = COMING_SOON_PATHS.has(pathname);
-            if (!isComingSoon) document.title = `Page not found — ${SITE_NAME}`;
-        }
-    }, [pathname]);
-
-    return null;
-}
-
-const COMING_SOON_PATHS = new Set([
-    '/blog',
-    '/careers',
-    '/chapters',
-    '/mentorship',
-    '/newsletter',
-    '/playbooks',
-]);
 
 function PageFallback() {
     return (
         <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
-            <span className="text-slate-500">Loading&hellip;</span>
+            <span className="text-muted">Loading&hellip;</span>
         </div>
     );
 }
@@ -89,10 +58,10 @@ function Layout() {
     const openJoinModal = () => setIsJoinModalOpen(true);
 
     return (
-        <div className="min-h-screen bg-white flex flex-col">
+        <div className="min-h-screen bg-paper flex flex-col">
             <a
                 href="#main-content"
-                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-5 focus:py-3 focus:text-white focus:font-semibold"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-ink focus:px-5 focus:py-3 focus:text-paper focus:font-semibold"
             >
                 Skip to main content
             </a>
@@ -108,6 +77,10 @@ function Layout() {
             <Suspense fallback={null}>
                 <JoinModal isOpen={isJoinModalOpen} onClose={() => setIsJoinModalOpen(false)} />
             </Suspense>
+            {/* Renders nothing unless analytics is configured AND the visitor
+                has not already answered. Inside Layout, so it is absent from
+                /admin, which is not a public page. */}
+            <ConsentBanner />
         </div>
     );
 }
@@ -120,7 +93,7 @@ function App() {
             <BrowserRouter>
                 <ScrollToAnchor />
                 <ScrollToTop />
-                <RouteTitle />
+                <Head />
                 <Routes>
                     <Route
                         path="/admin"
@@ -139,6 +112,13 @@ function App() {
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/playbooks" element={<Playbooks />} />
                         <Route path="/events" element={<Events />} />
+                        {/* ADDED, not moved. Every existing route, slug and
+                            anchor id is untouched; /gallery collides with none
+                            of them. It sits beside /events because the two are
+                            the same subject seen forwards and backwards: the
+                            dates that are coming, and the evenings that were
+                            photographed. */}
+                        <Route path="/gallery" element={<Gallery />} />
                         <Route path="/resources" element={<ResourcesHub />} />
                         <Route path="/newsletter" element={<Newsletter />} />
                         <Route path="/membership" element={<Membership />} />

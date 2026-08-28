@@ -135,7 +135,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'entity-selection',
                     title: 'Business Entity Selection Guide',
-                    description: 'LLC vs. C-Corp vs. S-Corp — which structure is right for your situation.',
+                    description: 'LLC vs. C-Corp vs. S-Corp: which structure is right for your situation.',
                     icon: Building,
                     tag: 'Guide'
                 },
@@ -328,7 +328,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'fundraising-101',
                     title: 'Fundraising Mechanics 101',
-                    description: 'SAFE notes, convertible notes, priced rounds — what they are and when to use each.',
+                    description: 'SAFE notes, convertible notes, priced rounds: what they are and when to use each.',
                     icon: Landmark,
                     tag: 'Guide'
                 },
@@ -393,7 +393,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'eng-scaling',
                     title: 'Engineering Team Scaling Guide',
-                    description: 'From 3 engineers to 30 — hiring, culture, and technical debt management.',
+                    description: 'From 3 engineers to 30: hiring, culture, and technical debt management.',
                     icon: Users,
                     tag: 'Guide'
                 },
@@ -474,7 +474,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'smb-entity-guide',
                     title: 'Business Structure Comparison Guide',
-                    description: 'LLC, S-Corp, C-Corp, Sole Prop — pros, cons, and tax implications for each.',
+                    description: 'LLC, S-Corp, C-Corp, Sole Prop: pros, cons, and tax implications for each.',
                     icon: Building,
                     tag: 'Guide'
                 },
@@ -495,7 +495,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'smb-funding-options',
                     title: 'Funding Options for Small Businesses',
-                    description: 'From SBA loans to microloans to community grants — all your options in one place.',
+                    description: 'From SBA loans to microloans to community grants: all your options in one place.',
                     icon: LineChart,
                     tag: 'Guide'
                 }
@@ -548,7 +548,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'hiring-checklist',
                     title: 'Employee Hiring Checklist',
-                    description: 'From job posting to onboarding — everything for your first hire.',
+                    description: 'From job posting to onboarding: everything for your first hire.',
                     icon: Users,
                     tag: 'Checklist'
                 },
@@ -666,7 +666,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'visa-pathways',
                     title: 'US Visa Pathways for Entrepreneurs',
-                    description: 'O-1, E-2, L-1, H-1B, EB-5 — which visa fits your situation and timeline.',
+                    description: 'O-1, E-2, L-1, H-1B, EB-5: which visa fits your situation and timeline.',
                     icon: Scale,
                     tag: 'Guide'
                 },
@@ -775,7 +775,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'ip-protection',
                     title: 'US Intellectual Property Protection Guide',
-                    description: 'Trademarks, patents, copyrights — protecting your IP in the US system.',
+                    description: 'Trademarks, patents, copyrights: protecting your IP in the US system.',
                     icon: Shield,
                     tag: 'Guide'
                 },
@@ -902,7 +902,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'entry-strategy-guide',
                     title: 'Market Entry Strategy Guide',
-                    description: 'Direct sales, partnerships, or joint ventures—choosing the right model.',
+                    description: 'Direct sales, partnerships, or joint ventures: choosing the right model.',
                     icon: Map,
                     tag: 'Guide'
                 }
@@ -920,7 +920,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'localization-checklist',
                     title: 'Product Localization Checklist',
-                    description: 'Beyond translation—adapting your product for local culture and regulations.',
+                    description: 'Beyond translation: adapting your product for local culture and regulations.',
                     icon: CheckSquare,
                     tag: 'Checklist'
                 }

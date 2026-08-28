@@ -5,11 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "node scripts/sync-pricing.mjs && tsc -b && vite build && node scripts/prerender.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "audit": "node scripts/audit-performance.js",
-    "test": "vitest run"
+    "photos": "node scripts/build-photos.mjs",
+    "test": "vitest run",
+    "build:nossg": "tsc -b && vite build",
+    "prerender": "node scripts/prerender.mjs",
+    "sync-pricing": "node scripts/sync-pricing.mjs",
+    "check-pricing-drift": "node scripts/check-pricing-drift.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -21,6 +26,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.0",
+    "stripe": "^22.6.0",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
@@ -40,6 +46,7 @@
     "globals": "^16.5.0",
     "postcss": "^8.5.6",
     "puppeteer": "^24.36.1",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",

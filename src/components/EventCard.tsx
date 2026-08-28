@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from 'react';
 import { Calendar, MapPin, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { LumaLogo, MeetupLogo } from './Icons';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ButtonLink } from './ButtonLink';
+import { describeMoment } from '../lib/eventTime';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 export type RegistrationPlatform = 'luma' | 'meetup' | 'other';
@@ -30,80 +30,25 @@ interface EventCardProps {
     index: number;
 }
 
-/** IFN's own calendar. Used when an event carries no registration link of its own. */
-
-const AUSTIN_TIME_ZONE = 'America/Chicago';
-
-function isSupportedTimeZone(timeZone: string): boolean {
-    try {
-        new Intl.DateTimeFormat('en-US', { timeZone });
-        return true;
-    } catch {
-        return false;
-    }
-}
-
 /**
- * The zone the event actually happens in — never the reader's.
+ * The card used by the /events listing, where a grid of equal objects is the
+ * right shape because past and upcoming meetups are being browsed rather than
+ * acted on. The home page does NOT use this component: REDESIGN-PLAN.md
+ * section 5 gives `EventsPreview` a featured object plus a ruled index instead,
+ * so that the next date is set at display scale rather than as one tile of
+ * three.
  *
- * An Austin meetup starting 2026-08-27T23:30Z is 6:30 PM CDT. Rendered in the reader's
- * zone with no label, a founder in Berlin was being told 1:30 AM the following day.
- * Returns null when the zone genuinely cannot be established, so the caller can say so
- * rather than guess.
+ * ALL ZONE LOGIC NOW LIVES IN `src/lib/eventTime.ts` and is imported by both
+ * surfaces. It moved rather than changed: formatting in the event's own zone,
+ * the DST-correct CDT and CST label, and the "In your time zone" second line
+ * are the same rules, in one place, so the two surfaces cannot drift.
+ *
+ * MATERIAL. Restyled onto the plan's flat rule (section 4.4): radius 0 on every
+ * non-interactive surface, zero shadows, separation carried by a full-opacity
+ * 1px `--rule` hairline (4.063 light, 4.005 dark on `--paper`) promoting to
+ * `--edge` on hover (4.960 and 4.804). The pill radius stays where it belongs,
+ * on the discrete controls, which arrive through `buttonClasses`.
  */
-function resolveEventTimeZone(event: Pick<Event, 'timezone' | 'location_name'>): string | null {
-    const declared = event.timezone?.trim();
-    if (declared && isSupportedTimeZone(declared)) return declared;
-
-    const place = event.location_name?.toLowerCase() ?? '';
-    if (/austin|texas|\btx\b/.test(place)) return AUSTIN_TIME_ZONE;
-
-    return null;
-}
-
-function viewerTimeZone(): string {
-    try {
-        return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-    } catch {
-        return 'UTC';
-    }
-}
-
-interface FormattedMoment {
-    /** Short month, for the cover badge. */
-    month: string;
-    /** Day of month, for the cover badge. */
-    day: string;
-    /** e.g. "Thu, Aug 27, 2026" */
-    date: string;
-    /** e.g. "6:30 PM" */
-    time: string;
-    /** e.g. "CDT" */
-    zone: string;
-}
-
-function formatMoment(date: Date, timeZone: string): FormattedMoment {
-    const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone,
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        timeZoneName: 'short',
-    }).formatToParts(date);
-
-    const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((p) => p.type === type)?.value ?? '';
-
-    return {
-        month: part('month'),
-        day: part('day'),
-        date: `${part('weekday')}, ${part('month')} ${part('day')}, ${part('year')}`,
-        time: `${part('hour')}:${part('minute')} ${part('dayPeriod')}`,
-        zone: part('timeZoneName'),
-    };
-}
 
 interface ExternalActionLinkProps {
     href: string;
@@ -120,15 +65,17 @@ interface ExternalActionLinkProps {
 /**
  * An off-site card action: a real link that looks like a button.
  *
- * The styling is `ButtonLink`'s, not its own — this only adds the three things a bare
+ * The styling is `ButtonLink`'s, not its own. This only adds the three things a bare
  * button link has no opinion about: the platform logo, the arrow that slides in on
  * hover, and the event title appended to the accessible name so six identical
  * "Register on Luma" links stay tellable apart. `ButtonLink` supplies the new-tab
  * handling and the "(opens in a new tab)" hint, so neither is written here.
  *
- * Card actions are Deep Harbor rather than Welcome Amber: a three-across grid of amber
- * buttons would put amber on adjacent elements and blow past the three-per-viewport
- * ceiling. Amber on this page is spent on the headline word and the notify button.
+ * Card actions take the `secondary` and `outline` button variants, never the accent
+ * fill: a three-across grid of accent buttons would put the accent on adjacent
+ * elements and blow past the two-marks-per-viewport ceiling REDESIGN-PLAN.md
+ * section 2 sets. The same reasoning governs the home page's featured object,
+ * where the accent is already spent on the date itself.
  */
 export function ExternalActionLink({
     href,
@@ -151,6 +98,7 @@ export function ExternalActionLink({
             {context && <span className="sr-only">, {context}</span>}
             <ArrowRight
                 aria-hidden="true"
+                strokeWidth={1.5}
                 className="w-4 h-4 -translate-x-1 opacity-0 transition duration-200 group-hover/action:translate-x-0 group-hover/action:opacity-100 group-focus-visible/action:translate-x-0 group-focus-visible/action:opacity-100"
             />
         </ButtonLink>
@@ -165,38 +113,29 @@ function registrationLabel(platform: RegistrationPlatform, isPast: boolean): str
 }
 
 /**
- * Wrapped in an aria-hidden span: the logo components ship `alt="Luma Logo"`, which would
- * otherwise be read out as part of the link's name.
+ * Registration-platform marks were removed on 2026-08-10 along with
+ * `src/components/Icons.tsx`.
+ *
+ * Both were `<img>` tags hotlinking a favicon from `luma.com` and
+ * `secure.meetupstatic.com`, so /events fired two uninvited third-party
+ * requests carrying the reader's IP before they clicked anything. That is the
+ * same class of request already removed from the hero and from /partners, and
+ * the weaker "it goes to the destination the reader is being sent to" argument
+ * does not survive the fact that it fires whether or not they ever click.
+ *
+ * Nothing is lost by removing them. Both were wrapped in `aria-hidden`, so they
+ * were decorative by construction, and the adjacent link already names the
+ * platform in its own text ("Register on Luma"). `ExternalActionLink`'s `icon`
+ * prop is optional and `EventsPreview` already renders these links without one,
+ * so /events now matches the home page rather than diverging from it.
+ *
+ * Do not reintroduce a hotlinked mark. If a platform mark is genuinely wanted,
+ * vendor the artwork into `public/` with permission and pass it as `icon`.
  */
-function platformIcon(platform: RegistrationPlatform) {
-    if (platform === 'luma') {
-        return (
-            <span aria-hidden="true" className="inline-flex">
-                <LumaLogo className="w-4 h-4" />
-            </span>
-        );
-    }
-    if (platform === 'meetup') {
-        return (
-            <span aria-hidden="true" className="inline-flex">
-                <MeetupLogo className="w-4 h-4" />
-            </span>
-        );
-    }
-    return null;
-}
 
 export function EventCard({ event, index }: EventCardProps) {
-    const date = new Date(event.start_at);
-    const eventZone = resolveEventTimeZone(event);
-    const readerZone = viewerTimeZone();
-
-    // When the event's own zone is unknown we fall back to the reader's zone and label it
-    // as theirs, rather than printing an Austin abbreviation we cannot stand behind.
-    const shown = formatMoment(date, eventZone ?? readerZone);
-    const inReaderZone = formatMoment(date, readerZone);
-    const showReaderLine =
-        eventZone !== null && (inReaderZone.date !== shown.date || inReaderZone.time !== shown.time);
+    const { date, eventZone, shown, inReaderZone, showReaderLine } = describeMoment(event);
+    const reduce = useReducedMotion() ?? false;
 
     // Read once at mount: the past/upcoming split must not flip mid-session on a re-render.
     const [renderedAt] = useState(() => Date.now());
@@ -205,77 +144,83 @@ export function EventCard({ event, index }: EventCardProps) {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={reduce ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: Math.min(index, 5) * 0.08 }}
+            transition={{ duration: 0.5, delay: Math.min(index, 5) * 0.08, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
-            className="group flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:border-slate-300 h-full"
+            className="group flex h-full flex-col overflow-hidden border border-rule bg-paper transition-colors duration-200 hover:border-edge"
         >
             {/* Cover */}
-            <div className="h-48 bg-slate-100 relative overflow-hidden">
+            <div className="relative h-48 overflow-hidden bg-band">
                 {event.cover_url ? (
                     <img
                         src={event.cover_url}
                         // Decorative: the poster repeats the title, which is the heading below.
                         alt=""
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="h-full w-full object-cover"
                         loading="lazy"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-300">
-                        <Calendar className="w-12 h-12" aria-hidden="true" />
+                    <div className="flex h-full w-full items-center justify-center bg-band text-muted">
+                        <Calendar className="w-12 h-12" strokeWidth={1.5} aria-hidden="true" />
                     </div>
                 )}
 
-                <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl px-3 py-2 text-center min-w-[60px]">
-                    <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">{shown.month}</div>
-                    <div className="text-xl font-bold text-slate-900 leading-none">{shown.day}</div>
+                <div className="absolute top-4 left-4 min-w-[60px] bg-paper px-3 py-2 text-center">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-muted">{shown.month}</div>
+                    <div className="text-xl font-bold leading-none text-ink tabular-nums">{shown.day}</div>
                 </div>
 
                 {isPast && (
-                    <span className="absolute top-4 right-4 rounded-full bg-slate-900/90 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                    <span className="absolute top-4 right-4 bg-ink px-3 py-1 text-xs font-bold uppercase tracking-wider text-paper">
                         Past meetup
                     </span>
                 )}
             </div>
 
             {/* Content */}
-            <div className="flex flex-col flex-grow p-6">
-                <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2">{event.title}</h3>
+            <div className="flex flex-grow flex-col p-6">
+                <h3 className="mb-3 text-xl font-semibold tracking-[-0.02em] text-ink line-clamp-2">{event.title}</h3>
 
-                <div className="space-y-3 mb-6 flex-grow">
-                    <div className="flex items-start text-slate-600 text-sm">
-                        <Calendar className="w-4 h-4 mr-2 mt-0.5 shrink-0 text-slate-400" aria-hidden="true" />
+                <div className="mb-6 flex-grow space-y-3">
+                    <div className="flex items-start text-sm text-muted">
+                        <Calendar className="mr-2 mt-0.5 h-4 w-4 shrink-0 text-muted" strokeWidth={1.5} aria-hidden="true" />
                         <div>
-                            <time dateTime={event.start_at} className="block font-medium text-slate-700">
-                                {shown.date} · {shown.time} {shown.zone}
+                            {/* Two lines rather than one date-dot-time string: the
+                                middle dot is rationed to one per line and it was
+                                doing no work between two facts that already sit on
+                                separate rows of the same block. */}
+                            <time dateTime={event.start_at} className="block font-medium text-ink tabular-nums">
+                                {shown.date}
                             </time>
+                            <span className="block font-medium text-ink tabular-nums">
+                                {shown.time} {shown.zone}
+                            </span>
                             {showReaderLine ? (
-                                <span className="block text-slate-500">
+                                <span className="block text-muted tabular-nums">
                                     In your time zone: {inReaderZone.time} {inReaderZone.zone}, {inReaderZone.date}
                                 </span>
                             ) : eventZone === null ? (
-                                <span className="block text-slate-500">Shown in your time zone.</span>
+                                <span className="block text-muted">Shown in your time zone.</span>
                             ) : null}
                         </div>
                     </div>
 
                     {event.location_name && (
-                        <div className="flex items-center text-slate-600 text-sm">
-                            <MapPin className="w-4 h-4 mr-2 shrink-0 text-slate-400" aria-hidden="true" />
+                        <div className="flex items-center text-sm text-muted">
+                            <MapPin className="mr-2 h-4 w-4 shrink-0 text-muted" strokeWidth={1.5} aria-hidden="true" />
                             <span className="line-clamp-1">{event.location_name}</span>
                         </div>
                     )}
                 </div>
 
-                <div className="flex flex-col gap-2 mt-auto pt-6 border-t border-slate-100">
+                <div className="mt-auto flex flex-col gap-2 border-t border-rule pt-6">
                     {links.length > 0 ? (
                         links.map((reg) => (
                             <ExternalActionLink
                                 key={reg.url}
                                 href={reg.url}
                                 variant={isPast || reg.platform !== 'luma' ? 'outline' : 'solid'}
-                                icon={platformIcon(reg.platform)}
                                 label={registrationLabel(reg.platform, isPast)}
                                 context={event.title}
                                 fullWidth
@@ -287,7 +232,6 @@ export function EventCard({ event, index }: EventCardProps) {
                         <ExternalActionLink
                             href={LUMA_CALENDAR_URL}
                             variant="outline"
-                            icon={platformIcon('luma')}
                             label="Find this meetup on Luma"
                             context={event.title}
                             fullWidth

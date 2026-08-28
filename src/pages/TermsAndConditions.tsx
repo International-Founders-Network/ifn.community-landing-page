@@ -2,32 +2,32 @@ import { Link } from 'react-router-dom';
 import { Container } from '../components/Container';
 import { Emphasis } from '../components/Emphasis';
 
-const SECTION_HEADING = 'mb-4 text-2xl font-bold text-primary';
-const BODY = 'leading-relaxed text-slate-600';
-const LIST = 'mt-4 list-disc space-y-2 pl-6 text-slate-600 marker:text-slate-400';
+const SECTION_HEADING = 'mb-4 text-2xl font-bold text-ink';
+const BODY = 'leading-relaxed text-muted';
+const LIST = 'mt-4 list-disc space-y-2 pl-6 text-muted marker:text-muted';
 const INLINE_LINK =
-    'rounded-sm font-semibold text-primary underline decoration-slate-300 underline-offset-4 hover:decoration-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2';
+    'rounded-sm font-semibold text-ink underline decoration-rule underline-offset-4 hover:decoration-ink focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
 
 export function TermsAndConditions() {
     return (
         <Container size="md" className="py-24">
             <div className="mx-auto max-w-3xl">
-                <h1 className="mb-6 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+                <h1 className="mb-6 text-4xl font-bold tracking-tight text-ink md:text-5xl">
                     Terms and <Emphasis>Conditions</Emphasis>
                 </h1>
-                <p className="mb-4 text-lg leading-relaxed text-slate-600">
+                <p className="mb-4 text-lg leading-relaxed text-muted">
                     These terms cover the ifn.community website, IFN events, and IFN membership. They are
                     written plainly because most of the people reading them are reading in a second language.
                 </p>
-                <p className="mb-16 text-sm text-slate-500">Last updated: August 8, 2026</p>
+                <p className="mb-16 text-sm text-muted">Last updated: August 8, 2026</p>
 
                 <div className="space-y-12">
                     <section>
                         <h2 className={SECTION_HEADING}>1. Agreement</h2>
                         <p className={BODY}>
                             By using this website, attending an IFN event, or buying an IFN membership, you
-                            agree to these terms. They are an agreement between you — whether for yourself or
-                            on behalf of a company — and the International Founders Network ("IFN", "we",
+                            agree to these terms. They are an agreement between you, whether for yourself or
+                            on behalf of a company, and the International Founders Network ("IFN", "we",
                             "us"). If you do not agree with them, please do not use the site.
                         </p>
                     </section>
@@ -67,7 +67,7 @@ export function TermsAndConditions() {
                     <section>
                         <h2 className={SECTION_HEADING}>4. How you agree to behave</h2>
                         <p className={BODY}>
-                            Everything IFN runs — the site, the events, and the member channel — is governed by
+                            Everything IFN runs (the site, the events, and the member channel) is governed by
                             our{' '}
                             <Link to="/code-of-conduct" className={INLINE_LINK}>
                                 Code of Conduct
@@ -114,7 +114,7 @@ export function TermsAndConditions() {
                             own.
                         </p>
                         <p className={`mt-4 ${BODY}`}>
-                            Anything you send us — a message, an application, a resource suggestion — stays
+                            Anything you send us (a message, an application, a resource suggestion) stays
                             yours. By sending it you allow us to read it and act on it for the purpose you sent
                             it for. How we handle it is described in our{' '}
                             <Link to="/privacy-policy" className={INLINE_LINK}>
@@ -129,7 +129,7 @@ export function TermsAndConditions() {
                         <p className={BODY}>
                             The site and the community are provided as they are. To the fullest extent the law
                             allows, IFN and the people who run it are not liable for indirect or consequential
-                            losses — including lost profit, lost revenue, or lost data — arising from your use
+                            losses (including lost profit, lost revenue, or lost data) arising from your use
                             of the site, from attending an event, or from acting on something you heard in the
                             community. Nothing here limits liability that cannot be limited by law.
                         </p>

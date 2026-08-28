@@ -5,51 +5,127 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Fonts is the only font source: src/fonts.css was removed and
-       public/fonts/ is empty. Preconnect to both hosts BEFORE the stylesheet
-       request so the TLS handshake overlaps the CSS fetch.
-       Weights are limited to what the site actually renders:
-       Inter 400/500/600/700 (DESIGN.md's pinned ramp) and MuseoModerno 900,
-       which is used only by the "IFN." wordmark in the navbar and footer. -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=MuseoModerno:wght@900&display=swap"
-    rel="stylesheet">
+  <!-- THEME BOOTSTRAP. This is the whole of the no-flash mechanism.
+
+       src/components/ThemeToggle.tsx persists a three state choice at
+       localStorage['ifn-theme']: 'light', 'dark', or the key being absent,
+       which means "follow the system". React cannot apply that choice early
+       enough. The bundle is a module script, so it is deferred by definition
+       and does not execute until after the document is parsed; a dark-choosing
+       reader on a light system would get a fully painted light page first and
+       watch it invert.
+
+       A CLASSIC, NON-DEFERRED, NON-MODULE inline script is the only thing in
+       the document that runs during head parsing. It executes before <body> is
+       parsed and therefore before the first style computation and the first
+       paint, so `data-theme` is already on the root element by the time any
+       pixel is produced. There is no frame in which the wrong palette exists.
+
+       It must stay inline. An external file would be a network round trip that
+       either blocks the parser or arrives too late, which is the same flash by
+       a slower route. There is no Content-Security-Policy on this site
+       (netlify.toml sets only X-Robots-Tag headers and public/_headers is
+       empty), so no nonce or hash is required; if a CSP is ever added, this
+       script needs a hash entry rather than deletion.
+
+       Only 'light' and 'dark' are written. Anything else, including a corrupted
+       value and storage throwing outright, leaves the attribute absent, which
+       is exactly the system state: src/index.css guards its dark block as
+       `:root:not([data-theme="light"])` under the media query and declares
+       `:root[data-theme="dark"]` separately, so an absent attribute follows the
+       OS and a present one wins over it in both directions. -->
+  <script>
+    (function () {
+      try {
+        var choice = localStorage.getItem('ifn-theme');
+        if (choice === 'light' || choice === 'dark') {
+          document.documentElement.setAttribute('data-theme', choice);
+        }
+      } catch (e) {
+        /* Storage unavailable (Safari private browsing throws on access rather
+           than returning null). No attribute means follow the system. */
+      }
+    })();
+  </script>
+
+  <!-- Fonts are self hosted from public/fonts/ and declared with @font-face in
+       src/index.css. The render blocking Google Fonts stylesheet that used to
+       sit here, and its two preconnects, are deleted: a self hosted face needs
+       no third party origin, costs no extra connection, and sends no visitor IP
+       to a third party. Inter is retired with it; Archivo is now the one family
+       for everything and MuseoModerno 900 is still the "IFN." wordmark only.
+
+       Only Archivo's latin subset is preloaded. latin-ext is bytes most
+       visitors never use, and MuseoModerno is small enough that a swap on the
+       wordmark is invisible. `crossorigin` is required even though the file is
+       same origin: fonts are fetched in anonymous CORS mode, so without it the
+       preload does not match the @font-face request and Archivo is fetched
+       twice. `type` lets a browser that cannot decode woff2 skip the download
+       rather than waste it. -->
+  <link rel="preload" href="/fonts/archivo-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
 
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <meta name="theme-color" content="#0f172a" />
+  <!-- Both values are `--paper`, the page ground of their mode, quoted from
+       REDESIGN-PLAN.md section 4.1. The dark row is the Phase 2 companion this
+       comment used to hold in reserve, and it lands here because the condition
+       it named has been met: the dark tokens in src/index.css are live.
 
-  <title>International Founders Network — Austin, Texas</title>
+       Media scoped rather than rewritten from JavaScript. That is a deliberate
+       limit, stated rather than hidden: browser chrome follows the SYSTEM
+       preference, so a reader who manually picks the mode their OS is not in
+       gets a chrome tint from the other mode. That is a tint on the surrounding
+       browser UI, not a flash on the page, and mutating `media` on a live
+       theme-color meta is re-evaluated inconsistently across user agents, so
+       the static pair is the more predictable trade. -->
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFBFA" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#131311" />
+
+  <title>International Founders Network | Founder Community in Austin, Texas</title>
   <meta name="description"
-    content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
+    content="A community for international and immigrant founders in Austin, Texas. Monthly in-person meetups at Station Austin, a founder resource library, and a paid membership." />
 
-  <!-- No <link rel="canonical"> here on purpose: netlify.toml rewrites /* to
-       this same index.html and nothing updates the head per route, so a
-       hard-coded canonical would declare every route a duplicate of "/". The
-       og:url below has the same single-value limitation, but a stale og:url
-       only affects the URL shown in a share card. -->
+  <!-- CANONICAL, DESCRIPTION AND OPEN GRAPH ARE NOW PER ROUTE.
 
-  <!-- Open Graph — shared links should carry the Austin reality, not a bare URL. -->
+       This block used to carry a comment explaining that no canonical could
+       live here, because netlify.toml rewrites /* to this one file and nothing
+       updated the head per route, so a hard-coded canonical would have declared
+       all twenty routes duplicates of "/". That reasoning was correct for the
+       architecture it described, and that architecture is gone.
+
+       Two things replaced it. src/components/Head.tsx sets the title,
+       description, canonical and og:* from the ROUTE_SEO table in
+       src/data/seo.ts on every route change, which keeps client-side navigation
+       correct. scripts/prerender.mjs then renders each indexable route in real
+       Chrome at build time and writes dist/<route>/index.html, so the tags are
+       baked into static HTML — which is the only copy that non-rendering
+       crawlers and social unfurlers ever read.
+
+       The values below are therefore the DEFAULTS, and they are what a route
+       with no prerendered file would fall back to. Keep them describing the
+       homepage. Do not add a canonical here: the prerender injects a correct
+       per-route one, and a hard-coded tag would be a second, competing
+       canonical on every page. -->
+
+  <!-- Open Graph. Shared links should carry the Austin reality, not a bare URL. -->
   <meta property="og:site_name" content="International Founders Network" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ifn.community/" />
-  <meta property="og:title" content="International Founders Network — Austin, Texas" />
+  <meta property="og:title" content="International Founders Network | Founder Community in Austin, Texas" />
   <meta property="og:description"
-    content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
-  <meta property="og:image" content="https://ifn.community/logo.png" />
-  <meta property="og:image:width" content="1024" />
-  <meta property="og:image:height" content="364" />
-  <meta property="og:image:alt" content="The International Founders Network wordmark: IFN." />
+    content="A community for international and immigrant founders in Austin, Texas. Monthly in-person meetups at Station Austin, a founder resource library, and a paid membership." />
+  <meta property="og:image" content="https://ifn.community/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The IFN wordmark above the words: Founders who came from somewhere else. Monthly meetups in Austin, Texas." />
   <meta property="og:locale" content="en_US" />
 
   <!-- Twitter / X card. No @handle is claimed here because none is verified. -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="International Founders Network — Austin, Texas" />
+  <meta name="twitter:title" content="International Founders Network | Founder Community in Austin, Texas" />
   <meta name="twitter:description"
-    content="Monthly in-person meetups in Austin, Texas for international and immigrant founders, plus a paid membership and a resource library. Six months and running." />
-  <meta name="twitter:image" content="https://ifn.community/logo.png" />
-  <meta name="twitter:image:alt" content="The International Founders Network wordmark: IFN." />
+    content="A community for international and immigrant founders in Austin, Texas. Monthly in-person meetups at Station Austin, a founder resource library, and a paid membership." />
+  <meta name="twitter:image" content="https://ifn.community/og-image.png" />
+  <meta name="twitter:image:alt" content="The IFN wordmark above the words: Founders who came from somewhere else. Monthly meetups in Austin, Texas." />
 </head>
 
 <body>

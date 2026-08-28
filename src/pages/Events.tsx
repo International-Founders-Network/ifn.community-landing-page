@@ -7,6 +7,7 @@ import { Emphasis } from '../components/Emphasis';
 import { useEvents } from '../hooks/useEvents';
 import { EventCard, ExternalActionLink, type Event } from '../components/EventCard';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
+import { trackEvent } from '../lib/analytics';
 
 type WhenFilter = 'upcoming' | 'this-month' | 'past';
 type PlaceFilter = 'all' | 'austin' | 'elsewhere';
@@ -25,7 +26,7 @@ const PLACE_FILTERS: { id: PlaceFilter; label: string }[] = [
 
 /**
  * Three buckets, not two. The old test was `!location_name.includes('austin')`, so an
- * event with no location at all was silently filed as "global" — an event we cannot
+ * event with no location at all was silently filed as "global". An event we cannot
  * place is not the same as an event somewhere else.
  */
 function placeOf(event: Event): 'austin' | 'elsewhere' | 'unknown' {
@@ -59,7 +60,7 @@ function FilterChip({ active, label, onClick }: FilterChipProps) {
             type="button"
             onClick={onClick}
             aria-pressed={active}
-            className={`inline-flex items-center gap-1.5 h-11 px-4 rounded-xl text-sm font-bold whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${active ? 'bg-primary text-white' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            className={`inline-flex items-center gap-1.5 h-11 px-4 rounded-xl text-sm font-bold whitespace-nowrap transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper ${active ? 'bg-ink text-paper' : 'text-muted hover:text-ink hover:bg-band'
                 }`}
         >
             {/* A tick as well as the fill: selection must not rest on colour alone. */}
@@ -95,18 +96,18 @@ export function Events() {
 
     return (
         <div className="pt-24 pb-20">
-            <section className="bg-slate-50 py-20 mb-16">
+            <section className="bg-band py-20 mb-16">
                 <Container>
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
                         <div className="max-w-2xl">
-                            <div className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-bold inline-flex items-center gap-2 mb-6">
+                            <div className="bg-ink/10 text-ink px-4 py-1.5 rounded-full text-sm font-bold inline-flex items-center gap-2 mb-6">
                                 <Calendar className="w-4 h-4" aria-hidden="true" />
                                 One meetup a month, in person
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+                            <h1 className="text-4xl md:text-5xl font-bold text-ink mb-6 tracking-tight">
                                 Monthly <Emphasis>meetups</Emphasis> in Austin, Texas
                             </h1>
-                            <p className="text-xl text-slate-600 leading-relaxed">
+                            <p className="text-xl text-muted leading-relaxed">
                                 We have met in person every month for more than six months. Each meetup pairs founders
                                 for short one-to-one conversations, so you speak with people directly instead of hoping
                                 to find them in a crowded room. Dates are published on Luma and Meetup.
@@ -117,7 +118,7 @@ export function Events() {
                             <div
                                 role="group"
                                 aria-label="Filter meetups by date"
-                                className="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1"
+                                className="bg-paper p-1.5 rounded-2xl border border-rule flex gap-1"
                             >
                                 {WHEN_FILTERS.map((option) => (
                                     <FilterChip
@@ -132,7 +133,7 @@ export function Events() {
                             <div
                                 role="group"
                                 aria-label="Filter meetups by place"
-                                className="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1"
+                                className="bg-paper p-1.5 rounded-2xl border border-rule flex gap-1"
                             >
                                 {PLACE_FILTERS.map((option) => (
                                     <FilterChip
@@ -152,16 +153,16 @@ export function Events() {
                 {isStale && !loading && (
                     <div
                         role="status"
-                        className="mb-10 flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700"
+                        className="mb-10 flex items-start gap-3 rounded-xl border border-rule bg-band p-4 text-sm text-ink"
                     >
-                        <Info className="w-5 h-5 shrink-0 text-slate-500" aria-hidden="true" />
+                        <Info className="w-5 h-5 shrink-0 text-muted" aria-hidden="true" />
                         <p>
                             These dates come from our saved copy of the calendar, so they may be behind.{' '}
                             <a
                                 href={LUMA_CALENDAR_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="font-semibold text-primary underline underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                className="font-semibold text-ink underline underline-offset-2 rounded-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                             >
                                 Luma has the current dates
                                 <span className="sr-only"> (opens in a new tab)</span>
@@ -172,9 +173,9 @@ export function Events() {
                 )}
 
                 <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-slate-900">{heading}</h2>
+                    <h2 className="text-2xl font-bold text-ink">{heading}</h2>
                     {/* Present on every render so the count is announced when a filter changes. */}
-                    <p aria-live="polite" className="text-slate-600 mt-1">
+                    <p aria-live="polite" className="text-muted mt-1">
                         {summary}
                     </p>
                 </div>
@@ -186,8 +187,8 @@ export function Events() {
                     // paragraph above is the aria-live announcement, so this block stays silent
                     // for screen readers rather than saying it twice.
                     <div className="py-32 flex flex-col items-center justify-center space-y-4">
-                        <Loader2 className="motion-status w-12 h-12 text-primary animate-spin" aria-hidden="true" />
-                        <p className="text-slate-500 font-medium">Loading the calendar.</p>
+                        <Loader2 className="motion-status w-12 h-12 text-ink animate-spin" aria-hidden="true" />
+                        <p className="text-muted font-medium">Loading the calendar.</p>
                     </div>
                 ) : count > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -196,10 +197,10 @@ export function Events() {
                         ))}
                     </div>
                 ) : (
-                    <div className="py-24 px-6 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-                        <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-4" aria-hidden="true" />
-                        <p className="text-slate-700 text-lg font-semibold mb-2">Nothing here yet</p>
-                        <p className="text-slate-600 mb-8 max-w-md mx-auto">
+                    <div className="py-24 px-6 text-center bg-band rounded-2xl border border-dashed border-rule">
+                        <Calendar className="w-12 h-12 text-muted mx-auto mb-4" aria-hidden="true" />
+                        <p className="text-ink text-lg font-semibold mb-2">Nothing here yet</p>
+                        <p className="text-muted mb-8 max-w-md mx-auto">
                             {place === 'elsewhere'
                                 ? 'Every IFN meetup so far has been in Austin, Texas. That is the whole record, and we would rather show it than pad it.'
                                 : when === 'past'
@@ -217,14 +218,14 @@ export function Events() {
                 )}
 
                 {!loading && (
-                    <section className="mt-24 bg-slate-900 rounded-3xl px-6 py-16 sm:px-12 text-center text-white relative overflow-hidden">
+                    <section className="mt-24 bg-band rounded-3xl px-6 py-16 sm:px-12 text-center text-ink relative overflow-hidden">
                         <div
                             aria-hidden="true"
                             className="absolute top-0 right-0 w-64 h-64 bg-accent opacity-10 rounded-full blur-[80px] -mr-32 -mt-32"
                         />
                         <div className="relative">
                             <h2 className="text-3xl font-bold mb-4">Hear about the next meetup</h2>
-                            <p className="text-slate-300 max-w-xl mx-auto mb-10 text-lg">
+                            <p className="text-muted max-w-xl mx-auto mb-10 text-lg">
                                 IFN runs one in-person meetup in Austin each month. Leave your email address and we will
                                 let you know when the next date is open.
                             </p>
@@ -257,6 +258,7 @@ function SignupForm() {
 
             if (response.ok) {
                 setStatus('success');
+                trackEvent('event_signup');
                 setMessage(data.message);
                 setEmail('');
             } else {
@@ -276,9 +278,9 @@ function SignupForm() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
                 role="alert"
-                className="bg-green-500/10 border border-green-500/30 rounded-2xl p-6 max-w-md mx-auto"
+                className="bg-paper border border-rule rounded-2xl p-6 max-w-md mx-auto"
             >
-                <p className="text-green-300 font-bold">{message}</p>
+                <p className="text-ink font-bold">{message}</p>
             </motion.div>
         );
     }
@@ -302,7 +304,7 @@ function SignupForm() {
                     placeholder="you@example.com"
                     aria-describedby={status === 'error' ? 'event-notify-error' : undefined}
                     aria-invalid={status === 'error' || undefined}
-                    className="h-14 flex-grow rounded-lg bg-white/10 border border-white/25 px-5 text-white placeholder-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-900"
+                    className="h-14 flex-grow rounded-lg bg-paper border border-edge px-5 text-ink placeholder:text-muted transition-colors focus:outline-hidden focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-paper"
                 />
                 <Button type="submit" size="lg" onDark disabled={status === 'submitting'} className="shrink-0">
                     {status === 'submitting' ? 'Sending' : 'Notify me'}
@@ -315,7 +317,7 @@ function SignupForm() {
                     transition={{ duration: 0.2 }}
                     id="event-notify-error"
                     role="alert"
-                    className="mt-3 text-sm font-medium text-red-300"
+                    className="mt-3 text-sm font-medium text-ink"
                 >
                     {message}
                 </motion.p>

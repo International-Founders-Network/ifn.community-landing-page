@@ -3,7 +3,7 @@ import type { Event, EventRegistration, RegistrationPlatform } from '../componen
 import eventsData from '../data/events.json';
 
 /**
- * Shape of a record as it actually arrives — deliberately loose.
+ * Shape of a record as it actually arrives. Deliberately loose.
  *
  * Two producers feed this hook and they do not agree:
  *  - `src/data/events.json` (the scraped snapshot) carries `registrations`, and every
@@ -33,7 +33,7 @@ export interface UseEventsReturn {
     error: string | null;
     /**
      * True when the list on screen is the bundled snapshot rather than live data.
-     * Surfaces in the UI — the audit's complaint was that this state was silent.
+     * Surfaces in the UI. The audit's complaint was that this state was silent.
      */
     isStale: boolean;
 }
@@ -118,8 +118,8 @@ function fingerprint(events: Event[]): string {
  *     that key; every record in the snapshot does.
  *  2. Contents. The same meetups, at the same instants, as the file we shipped.
  *
- * Requiring both means a healthy database seeded from the same scrape — same ids, same
- * times, but DB-shaped rows — is not mislabelled as stale. If the schema ever grows a
+ * Requiring both means a healthy database seeded from the same scrape (same ids, same
+ * times, but DB-shaped rows) is not mislabelled as stale. If the schema ever grows a
  * registrations column this check goes quiet rather than crying wolf, which is the right
  * direction to fail in: a missed warning costs less than a permanent false one.
  */

@@ -1,7 +1,7 @@
 # contact-flow Specification
 
 ## Purpose
-The Contact page form and its `/api/contact` backend — a general-inquiry channel, storing messages in Postgres for admin review (no outbound notification yet).
+The Contact page form and its `/api/contact` backend: a general-inquiry channel, storing messages in Postgres for admin review (no outbound notification yet).
 
 ## Requirements
 ### Requirement: Visitors can submit a contact message

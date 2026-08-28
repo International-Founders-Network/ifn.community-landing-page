@@ -1,7 +1,7 @@
 # join-flow Specification
 
 ## Purpose
-The Join modal and its `/api/join` backend — the primary founder-application intake flow linked from CTAs across the site.
+The Join modal and its `/api/join` backend: the primary founder-application intake flow linked from CTAs across the site.
 
 ## Requirements
 ### Requirement: Visitors can submit a founder application

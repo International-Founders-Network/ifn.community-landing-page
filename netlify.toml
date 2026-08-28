@@ -1,26 +1,159 @@
 [build]
-  command = "npm run build"
+  # `npm run build` now ends with scripts/prerender.mjs, which drives a real
+  # headless Chrome. Netlify's build image does not ship one, and puppeteer's
+  # automatic post-install download is unreliable behind `npm ci --omit=dev`
+  # style installs, so Chrome is fetched explicitly before the build rather than
+  # left to chance. If it is missing the prerender fails the build loudly, which
+  # is correct — silently shipping the empty SPA shell is the failure this whole
+  # change exists to prevent.
+  command = "npx puppeteer browsers install chrome && npm run build"
   publish = "dist"
+
+[build.environment]
+  # Keep the downloaded Chrome inside the repo directory rather than in the
+  # home directory, so Netlify has a chance to retain it between deploys instead
+  # of re-downloading ~150 MB every time.
+  #
+  # RELATIVE, not absolute. An absolute "/opt/build/repo/..." is correct on
+  # Netlify and wrong everywhere else, which silently breaks `netlify build` and
+  # `netlify dev` on a developer machine. Puppeteer resolves this against the
+  # working directory, and that is the repo root in both places.
+  PUPPETEER_CACHE_DIR = ".cache/puppeteer"
+
+  # Pin the Node major version. It was previously unpinned, which means the
+  # build ran on whatever Netlify's build image defaulted to that week — and a
+  # default bump is a build that breaks on a day nobody touched the repo. 24 is
+  # the version the prerender step was developed and verified against.
+  # .nvmrc carries the same value so local and CI agree.
+  NODE_VERSION = "24"
+
+  # Netlify scans build output for the values of environment variables and fails
+  # the deploy when it finds one, on the assumption that a leaked secret is
+  # always a mistake. For `VITE_`-prefixed variables that assumption is wrong by
+  # design: Vite inlines them into the client bundle at build time, which is the
+  # documented purpose of the prefix. They are public values — a GA4 measurement
+  # ID appears in the page source of every site that uses GA4, and a Google
+  # OAuth client ID is likewise designed to be public (the client SECRET is not,
+  # and is not here).
+  #
+  # Without this, adding VITE_GA4_MEASUREMENT_ID would fail the build with
+  # "Secrets scanning found secrets in build output" and the cause would be
+  # entirely non-obvious.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_GA4_MEASUREMENT_ID,VITE_GOOGLE_CLIENT_ID"
 
 [functions]
   directory = "netlify/functions"
+
+# ---------------------------------------------------------------------------
+# REDIRECTS. Order is significant: Netlify applies the first matching rule.
+#
+# Netlify matches an EXISTING STATIC FILE before it applies any non-forced
+# rewrite, which is what makes prerendering work. scripts/prerender.mjs writes
+# dist/<route>/index.html for each of the eleven indexable routes, so a request
+# for /membership is answered by that file and never reaches the catch-all
+# below. The catch-all is therefore only ever hit by (a) the routes listed
+# explicitly here, which have no prerendered file, and (b) URLs that do not
+# exist at all.
+# ---------------------------------------------------------------------------
 
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
+# The routes that are real but deliberately not prerendered: six placeholder
+# pages with no content yet, and the internal admin dashboard. They must return
+# 200 and the SPA shell, because they render fine client-side — they simply must
+# not be indexed, which the X-Robots-Tag headers below take care of.
+#
+# These have to be listed BEFORE the catch-all, because the catch-all now
+# returns 404. Without these entries every one of them would answer 404 while
+# still rendering its page, which is the worst of both worlds.
 [[redirects]]
-  from = "/*"
+  from = "/blog"
   to = "/index.html"
   status = 200
 
-# The six placeholder routes are real URLs with nothing behind them yet.
-# ComingSoon.tsx injects a client-side noindex tag, but a crawler that does not
-# run JavaScript never sees it — this header is the durable version.
-# Remove the entry for a path once that page has real content.
+[[redirects]]
+  from = "/careers"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/chapters"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/mentorship"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/newsletter"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/playbooks"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/index.html"
+  status = 200
+
+# THE CATCH-ALL, AND THE ONE CHARACTER THAT MATTERS: status = 404, not 200.
+#
+# This rule used to be `status = 200`. Because it matches EVERYTHING that is not
+# a real file, every nonexistent URL on the domain returned HTTP 200 with the
+# HTML shell — `/this-does-not-exist` was, as far as any crawler could tell, a
+# real page. That is a soft 404, and it has three separate costs:
+#
+#   1. Google will index arbitrary junk URLs, and any typo'd or spam link
+#      pointing at the domain mints a new indexable page.
+#   2. A MISSING ASSET returned 200 with an HTML body. A stale hashed chunk
+#      request (/assets/Home-OLDHASH.js) got HTML with a 200 instead of a 404,
+#      which is also why long-lived immutable caching could not safely be turned
+#      on before this was fixed: the browser would have pinned an HTML shell at
+#      a .js URL for a year with no revalidation and no recovery path.
+#   3. Broken image and font paths failed silently in development instead of
+#      surfacing as 404s.
+#
+# React still renders the NotFound page from this response, because the body is
+# unchanged — only the status line differs. Crawlers get the truth; visitors get
+# the same page they always did.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 404
+
+# ---------------------------------------------------------------------------
+# HEADERS
+# ---------------------------------------------------------------------------
+
+# The six placeholder routes and the admin dashboard.
+#
+# NOTE ON WHAT CHANGED IN public/robots.txt ALONGSIDE THIS. These paths used to
+# be listed as `Disallow:` in robots.txt AND sent `X-Robots-Tag: noindex` here.
+# Those two directives cancel each other out: a compliant crawler does not fetch
+# a Disallowed URL, so it never receives the response that carries the noindex,
+# and the page can be indexed as a URL-only result that nothing can then remove.
+# The Disallow lines were deleted so that these headers can actually be read.
+#
+# Each path is listed twice, bare and globbed. The glob is not redundant: a
+# `Disallow: /blog` prefix-matched /blog, /blog/ and /blog/anything, while a
+# header rule `for = "/blog"` matches only the exact path. Dropping the Disallow
+# without adding the glob would have left every subpath crawlable and
+# non-noindexed.
 [[headers]]
   for = "/blog"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/blog/*"
   [headers.values]
     X-Robots-Tag = "noindex, follow"
 
@@ -30,7 +163,17 @@
     X-Robots-Tag = "noindex, follow"
 
 [[headers]]
+  for = "/careers/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
   for = "/chapters"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/chapters/*"
   [headers.values]
     X-Robots-Tag = "noindex, follow"
 
@@ -40,7 +183,17 @@
     X-Robots-Tag = "noindex, follow"
 
 [[headers]]
+  for = "/mentorship/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
   for = "/newsletter"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/newsletter/*"
   [headers.values]
     X-Robots-Tag = "noindex, follow"
 
@@ -49,10 +202,20 @@
   [headers.values]
     X-Robots-Tag = "noindex, follow"
 
+[[headers]]
+  for = "/playbooks/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
 # Internal admin dashboard. The real access control is server-side (Google
-# sign-in + allowlist, verified in every /api/admin-* function). This header
-# only keeps the route out of search indexes.
+# sign-in + allowlist, verified in every /api/admin-* function). These headers
+# only keep the route out of search indexes.
 [[headers]]
   for = "/admin"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/admin/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"

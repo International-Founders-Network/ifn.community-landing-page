@@ -29,7 +29,7 @@ const SEGMENT_ICONS: Record<string, LucideIcon> = {
 
 /**
  * Suppressed at the view layer, not in the data file (owned elsewhere).
- * `ambassador-program` reads "How to lead an IFN chapter in your city" — IFN
+ * `ambassador-program` reads "How to lead an IFN chapter in your city". IFN
  * has no chapters outside Austin and PRODUCT.md forbids implying otherwise.
  * Remove the entry from `src/data/resourcesData.ts` and this set can go.
  */
@@ -40,25 +40,32 @@ function visibleResources(list: Resource[] | undefined): Resource[] {
 }
 
 /**
- * This page carries three selection controls — the audience chips, the stage
+ * This page carries three selection controls: the audience chips, the stage
  * list and the content-type filter trigger. They are one idea in three shapes:
- * navy fill when the thing is chosen, white over a hairline when it is not.
+ * `--ink` fill when the thing is chosen, `--paper` over a hairline when it is
+ * not.
  *
  * They are not `Button`. `buttonClasses` has no two-state selection variant, and
  * routing them through `ghost` or `outline` would mean overriding every
- * declaration those variants make — the same duplication in a costume. Keeping
+ * declaration those variants make (the same duplication in a costume). Keeping
  * the shape in one function means the three cannot drift apart, which is the
  * defect this replaces. `cn` is the merge helper `buttonClasses` itself uses.
  *
  * `font-semibold` deliberately lives in each call site's `shape`: the stage
  * buttons carry a normal-weight description underneath their bold title.
+ *
+ * Rest and hover share `--ink` on the off state, which is deliberate and is not
+ * a missing step. These are `aria-pressed` controls: state is carried by that
+ * attribute and by the fill swap, which is 17.965 apart on `--paper` and 16.281
+ * on `--band`. Hover promotes the hairline from `--rule` to `--edge` instead of
+ * inventing a third neutral.
  */
 const SELECTION = {
-    on: 'bg-primary border-primary text-white',
-    off: 'bg-white border-slate-200 text-slate-700 hover:border-slate-400 hover:text-slate-900',
+    on: 'bg-ink border-ink text-paper',
+    off: 'bg-paper border-rule text-ink hover:border-edge hover:text-ink',
     focus:
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ' +
-        'focus-visible:ring-offset-2',
+        'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink ' +
+        'focus-visible:ring-offset-2 focus-visible:ring-offset-paper',
 } as const;
 
 function toggleClasses(isSelected: boolean, shape: string) {
@@ -66,14 +73,15 @@ function toggleClasses(isSelected: boolean, shape: string) {
 }
 
 /**
- * Links that read as links — inside a sentence, or at the end of a card. Navy,
- * underlined, never a button: `ButtonLink` cannot express an underlined link in
+ * Links that read as links: inside a sentence, or at the end of a card. `--ink`,
+ * underlined, never a button. `ButtonLink` cannot express an underlined link in
  * reading flow, and dressing these as buttons would put four competing actions
  * on a page whose real action is choosing a stage.
  */
 const TEXT_LINK =
-    'font-semibold text-primary underline underline-offset-4 transition-colors hover:text-primary-light ' +
-    'rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2';
+    'font-semibold text-ink underline underline-offset-4 transition-colors hover:text-muted ' +
+    'rounded focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink ' +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
 
 export function Resources() {
     const { openJoinModal } = useOutletContext<{ openJoinModal?: () => void }>() || {};
@@ -176,22 +184,22 @@ export function Resources() {
     };
 
     return (
-        <section className="pt-12 pb-24 bg-slate-50" id="resources">
+        <section className="pt-12 pb-24 bg-band" id="resources">
             <Container>
                 <div className="max-w-3xl mx-auto text-center mb-16">
                     {/* Plain elements, not motion: this block is above the fold at mount,
                         so an entrance buys nothing and would leave the page's only <h1>
                         at opacity 0 on any path where the frame loop does not run. */}
-                    <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight leading-[1.15]">
+                    <h1 className="text-4xl md:text-5xl font-bold text-ink mb-6 tracking-tight leading-[1.15]">
                         A practical <Emphasis>library</Emphasis> for international founders
                     </h1>
-                    <p className="text-lg text-slate-600 leading-relaxed">
+                    <p className="text-lg text-muted leading-relaxed">
                         Written for people building a company in a country they did not grow up in:
                         registering the business, opening a United States bank account, understanding
                         visa options, and finding the first customers here. Pick who you are and where
                         you are, and see what the library covers.
                     </p>
-                    <p className="mt-6 text-base text-slate-600 leading-relaxed border-t border-slate-200 pt-6">
+                    <p className="mt-6 text-base text-muted leading-relaxed border-t border-rule pt-6">
                         Being honest about where this stands: most of these guides are still being
                         written. We work through them in the order the questions come up at our
                         monthly meetups in Austin, and members receive each one as it is finished.
@@ -231,7 +239,7 @@ export function Resources() {
                             Search resources for {activeSegment.name}
                         </label>
                         <div className="relative">
-                            <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-500">
+                            <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-muted">
                                 <Search size={20} aria-hidden="true" />
                             </div>
                             <input
@@ -240,18 +248,18 @@ export function Resources() {
                                 placeholder={`Search ${activeSegment.name} resources`}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full rounded-lg border border-slate-300 bg-white py-3.5 pl-12 pr-4 text-slate-900 placeholder:text-slate-500 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="w-full rounded-lg border border-edge bg-paper py-3.5 pl-12 pr-4 text-ink placeholder:text-muted transition-colors focus:border-ink focus:outline-hidden focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-paper"
                             />
                         </div>
                     </div>
                 </div>
 
-                <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden">
+                <div className="bg-paper rounded-3xl border border-rule overflow-hidden">
                     <div className="flex flex-col lg:flex-row min-h-[600px]">
                         {/* Stages */}
-                        <div className="lg:w-80 shrink-0 bg-slate-50 border-b lg:border-b-0 lg:border-r border-slate-200">
+                        <div className="lg:w-80 shrink-0 bg-band border-b lg:border-b-0 lg:border-r border-rule">
                             <div className="p-8">
-                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-600 mb-6">
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-muted mb-6">
                                     Choose a stage
                                 </h2>
                                 <div
@@ -275,12 +283,12 @@ export function Resources() {
                                                 <span className="flex items-center justify-between gap-4 font-semibold">
                                                     <span>{stage.name}</span>
                                                     {isActive && (
-                                                        <motion.span layoutId="activeStage" className="hidden lg:block text-white">
+                                                        <motion.span layoutId="activeStage" className="hidden lg:block text-paper">
                                                             <ChevronRight size={18} aria-hidden="true" />
                                                         </motion.span>
                                                     )}
                                                 </span>
-                                                <span className={`mt-1 hidden lg:block text-xs leading-relaxed ${isActive ? 'text-slate-300' : 'text-slate-600'}`}>
+                                                <span className={`mt-1 hidden lg:block text-xs leading-relaxed ${isActive ? 'text-paper' : 'text-muted'}`}>
                                                     {stage.description}
                                                 </span>
                                             </button>
@@ -294,17 +302,17 @@ export function Resources() {
                         <div className="flex-1 p-8 lg:p-12 flex flex-col">
                             <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
                                 <div>
-                                    <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-slate-700">
+                                    <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-rule bg-band px-3 py-1 text-xs font-bold uppercase tracking-wide text-ink">
                                         <SegmentIcon size={14} aria-hidden="true" />
                                         {activeSegment.name}
                                     </p>
-                                    <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+                                    <h2 className="text-2xl font-bold text-ink tracking-tight">
                                         {activeStage?.name}
                                     </h2>
                                     {activeStage?.description && (
-                                        <p className="mt-2 max-w-md text-slate-600">{activeStage.description}</p>
+                                        <p className="mt-2 max-w-md text-muted">{activeStage.description}</p>
                                     )}
-                                    <p aria-live="polite" aria-atomic="true" className="mt-3 text-sm font-medium text-slate-600">
+                                    <p aria-live="polite" aria-atomic="true" className="mt-3 text-sm font-medium text-muted">
                                         {filteredResources.length === 0
                                             ? 'No resources match your search.'
                                             : `${filteredResources.length} ${filteredResources.length === 1 ? 'resource' : 'resources'} shown${isFiltered ? ' for your search' : ''}.`}
@@ -343,10 +351,10 @@ export function Resources() {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: 8 }}
                                                 transition={{ duration: 0.15 }}
-                                                className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg"
+                                                className="absolute right-0 z-50 mt-2 w-64 overflow-hidden rounded-xl border border-rule bg-paper shadow-lg"
                                             >
                                                 <fieldset className="p-2">
-                                                    <legend className="px-2 pt-1 pb-2 text-xs font-bold uppercase tracking-wide text-slate-600">
+                                                    <legend className="px-2 pt-1 pb-2 text-xs font-bold uppercase tracking-wide text-muted">
                                                         Content type
                                                     </legend>
                                                     <div className="max-h-64 overflow-y-auto">
@@ -356,14 +364,14 @@ export function Resources() {
                                                                 <label
                                                                     key={type}
                                                                     htmlFor={id}
-                                                                    className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                                                                    className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-ink hover:bg-band"
                                                                 >
                                                                     <input
                                                                         id={id}
                                                                         type="checkbox"
                                                                         checked={activeFilters.includes(type)}
                                                                         onChange={() => toggleFilter(type)}
-                                                                        className="h-4 w-4 shrink-0 accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                                                        className="h-4 w-4 shrink-0 accent-ink focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                                                                     />
                                                                     <span>{type}</span>
                                                                 </label>
@@ -372,14 +380,14 @@ export function Resources() {
                                                     </div>
                                                 </fieldset>
                                                 {activeFilters.length > 0 && (
-                                                    <div className="border-t border-slate-200 p-2">
+                                                    <div className="border-t border-rule p-2">
                                                         <Button
                                                             type="button"
                                                             variant="ghost"
                                                             size="sm"
                                                             fullWidth
                                                             onClick={() => setActiveFilters([])}
-                                                            className="focus-visible:ring-primary"
+                                                            className="focus-visible:ring-ink"
                                                         >
                                                             Clear all types
                                                         </Button>
@@ -403,12 +411,12 @@ export function Resources() {
                                     {filteredResources.length > 0 ? (
                                         <>
                                             {nothingPublishedHere && (
-                                                <div className="mb-8 flex flex-col gap-6 rounded-2xl border border-slate-200 bg-slate-50 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+                                                <div className="mb-8 flex flex-col gap-6 rounded-2xl border border-rule bg-band p-6 md:flex-row md:items-center md:justify-between md:p-8">
                                                     <div className="max-w-xl">
-                                                        <h3 className="mb-2 text-lg font-bold text-slate-900">
+                                                        <h3 className="mb-2 text-lg font-bold text-ink">
                                                             Nothing in this stage is published yet
                                                         </h3>
-                                                        <p className="text-slate-600 leading-relaxed">
+                                                        <p className="text-muted leading-relaxed">
                                                             These are the guides we are writing, in the order the
                                                             questions come up at the monthly meetups in Austin.
                                                             Members read each one first.{' '}
@@ -437,18 +445,18 @@ export function Resources() {
                                                     return (
                                                         <li
                                                             key={resource.id}
-                                                            className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-shadow duration-300 hover:shadow-lg"
+                                                            className="group flex flex-col rounded-2xl border border-rule bg-paper p-6 transition-shadow duration-300 hover:shadow-lg"
                                                         >
                                                             <div className="mb-6 flex items-start justify-between gap-4">
-                                                                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-primary">
+                                                                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-rule bg-band text-ink">
                                                                     <ResourceIcon size={24} aria-hidden="true" />
                                                                 </span>
                                                                 <div className="flex flex-col items-end gap-2">
-                                                                    <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-slate-700">
+                                                                    <span className="rounded-full border border-rule bg-band px-3 py-1 text-xs font-bold uppercase tracking-wide text-ink">
                                                                         {resource.tag}
                                                                     </span>
                                                                     {resource.isMembersOnly && (
-                                                                        <span className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                                                                        <span className="inline-flex items-center gap-1 rounded-full bg-ink px-3 py-1 text-xs font-bold uppercase tracking-wide text-paper">
                                                                             <Lock size={12} aria-hidden="true" />
                                                                             Members
                                                                         </span>
@@ -456,14 +464,14 @@ export function Resources() {
                                                                 </div>
                                                             </div>
 
-                                                            <h3 className="mb-2 text-lg font-bold text-slate-900">
+                                                            <h3 className="mb-2 text-lg font-bold text-ink">
                                                                 {resource.title}
                                                             </h3>
-                                                            <p className="mb-6 flex-1 text-sm leading-relaxed text-slate-600">
+                                                            <p className="mb-6 flex-1 text-sm leading-relaxed text-muted">
                                                                 {resource.description}
                                                             </p>
 
-                                                            <div className="border-t border-slate-200 pt-4">
+                                                            <div className="border-t border-rule pt-4">
                                                                 {resource.link ? (
                                                                     <a
                                                                         href={resource.link}
@@ -475,7 +483,7 @@ export function Resources() {
                                                                         {isExternal && <span className="sr-only">(opens in a new tab)</span>}
                                                                     </a>
                                                                 ) : (
-                                                                    <p className="inline-flex items-center gap-2 text-sm font-medium text-slate-600">
+                                                                    <p className="inline-flex items-center gap-2 text-sm font-medium text-muted">
                                                                         <Clock size={16} aria-hidden="true" />
                                                                         {resource.isComingSoon ? 'Being written' : 'Not published yet'}
                                                                     </p>
@@ -488,20 +496,20 @@ export function Resources() {
                                         </>
                                     ) : (
                                         <div className="flex h-full flex-col items-center justify-center py-12 text-center">
-                                            <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-slate-600">
+                                            <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-band text-muted">
                                                 <Search size={32} aria-hidden="true" />
                                             </span>
-                                            <h3 className="mb-2 text-lg font-bold text-slate-900">
+                                            <h3 className="mb-2 text-lg font-bold text-ink">
                                                 Nothing here matches yet
                                             </h3>
-                                            <p className="mb-2 max-w-md text-slate-600 leading-relaxed">
+                                            <p className="mb-2 max-w-md text-muted leading-relaxed">
                                                 {searchQuery.trim()
-                                                    ? <>Nothing in <span className="font-semibold text-slate-900">{activeStage?.name}</span> matches &ldquo;{searchQuery.trim()}&rdquo;{activeFilters.length > 0 ? ' with the types you selected' : ''}.</>
-                                                    : <>Nothing in <span className="font-semibold text-slate-900">{activeStage?.name}</span> matches the types you selected.</>}
+                                                    ? <>Nothing in <span className="font-semibold text-ink">{activeStage?.name}</span> matches &ldquo;{searchQuery.trim()}&rdquo;{activeFilters.length > 0 ? ' with the types you selected' : ''}.</>
+                                                    : <>Nothing in <span className="font-semibold text-ink">{activeStage?.name}</span> matches the types you selected.</>}
                                             </p>
-                                            <p className="mb-8 max-w-md text-slate-600 leading-relaxed">
+                                            <p className="mb-8 max-w-md text-muted leading-relaxed">
                                                 Try another stage in the list on the left, or clear what you have
-                                                set. If the thing you need is missing, tell us — it helps us decide
+                                                set. If the thing you need is missing, tell us. It helps us decide
                                                 what to write next.
                                             </p>
                                             <div className="flex flex-col items-center gap-4 sm:flex-row">
@@ -521,7 +529,7 @@ export function Resources() {
                                 </motion.div>
                             </AnimatePresence>
 
-                            <div className="mt-12 flex flex-col gap-3 border-t border-slate-200 pt-8 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="mt-12 flex flex-col gap-3 border-t border-rule pt-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
                                 <p>
                                     {stageResources.length} {stageResources.length === 1 ? 'resource' : 'resources'} planned
                                     for {activeStage?.name}.

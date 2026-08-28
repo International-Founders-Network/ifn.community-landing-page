@@ -28,7 +28,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
             };
         }
 
-        console.log('Received event signup:', { email });
+        /** No email address in the log. See the note in contact.ts. */
+        console.log('Received event signup');
 
         // Create table if not exists
         await sql`

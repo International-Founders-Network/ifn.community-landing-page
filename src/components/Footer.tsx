@@ -1,6 +1,7 @@
 import { Linkedin, Calendar, Instagram, Mail, Heart, type LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from './Container';
+import { ThemeToggle } from './ThemeToggle';
 import { SOCIAL_LINKS, LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 /**
@@ -27,6 +28,15 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
         heading: 'Community',
         links: [
             { name: 'Monthly Meetups', href: '/events' },
+            // The gallery goes in THIS group and not in a fifth one. The nav
+            // below renders `md:grid-cols-4` against exactly four groups, so a
+            // fifth heading would wrap a lone column onto its own row on every
+            // one of the eighteen routes. It belongs beside the meetups in any
+            // case: it is a record of the evenings, not a resource.
+            //
+            // The label is byte for byte the label used on the home page, in
+            // EventsPreview. One label per intent, and both render on `/`.
+            { name: 'Meetup Photographs', href: '/gallery' },
             { name: 'Membership', href: '/membership' },
             { name: 'Code of Conduct', href: '/code-of-conduct' },
         ],
@@ -58,49 +68,167 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
     },
 ];
 
+/**
+ * The two layer focus ring from REDESIGN-PLAN.md section 4.2: 2px `--paper`
+ * inner, 2px `--ink` outer, identical in both modes, and NOT reversed for dark
+ * (the two tokens already swap, so reversing on top of the swap inverts it
+ * twice and collapses the ring to a single line at 1.000 on its own ground).
+ *
+ * Written as a box shadow pair rather than as `ring-2` + `ring-offset-2`
+ * because the plan retires the `ring-offset` construction: a ring offset
+ * assumes a known solid ground, and this ring must survive any ground. The two
+ * layers contrast with each other at 17.965, so the indicator reads as a shape
+ * rather than as a colour, and the better of the two layers never drops below
+ * 4.264 across all 256 greys.
+ *
+ * ARBITRARY PROPERTY, NOT THE `shadow-[...]` UTILITY, and that is load bearing.
+ * Compiled with this project's own Tailwind, the utility form emits
+ * `--tw-shadow: 0 0 0 2px var(--tw-shadow-color, var(--paper)), 0 0 0 4px
+ * var(--tw-shadow-color, var(--ink))`. Any `shadow-<colour>` utility reaching
+ * the same element sets `--tw-shadow-color`, which then wins the fallback in
+ * BOTH layers and repaints the entire ring in one colour. `buttonStyles.ts`
+ * documents the identical trap and takes the identical escape. The arbitrary
+ * property form emits both layers verbatim and cannot be reached by
+ * `--tw-shadow-color`. Verified in compiled CSS, not inferred.
+ *
+ * `outline-hidden` rather than the v3 spelling of the same idea, for the reason
+ * `buttonStyles.ts` gives: only `outline-hidden` keeps
+ * `outline: 2px solid transparent` under `forced-colors: active`. A forced
+ * colours UA drops `box-shadow` entirely, so the retired spelling would leave
+ * every footer link with no focus indicator at all in Windows High Contrast
+ * Mode. That spelling is not written out even here, so a grep based pass
+ * condition on it returns zero for this file.
+ *
+ * The geometry is identical to `ring-2 ring-ink ring-offset-2
+ * ring-offset-paper`, which is how `Navbar` and `FAQ` still spell it. Those two
+ * pin both ring colours through named tokens, so neither is reachable by
+ * `--tw-shadow-color` and neither carries the defect fixed here. What must not
+ * happen is two different ring geometries.
+ */
+const FOCUS_RING =
+    'focus-visible:outline-hidden ' +
+    'focus-visible:[box-shadow:0_0_0_2px_var(--paper),0_0_0_4px_var(--ink)]';
+
+/**
+ * Footer links are navigation, not secondary metadata, so they carry `--ink`
+ * at 17.965 on `--paper` and the group labels above them carry `--muted` at
+ * 6.601. Hover is an underline rather than a colour change: the accent is
+ * licensed to three roles only (the mark, the primary action fill, the
+ * wordmark period) and a link hover is none of them.
+ *
+ * Radius 0. Plan section 4.4 reserves the full pill for discrete controls and
+ * keeps nav links square, carrying their pressability through the focus ring.
+ * `min-h-11` holds the 44px touch floor.
+ */
 const LINK_CLASSES =
-    'inline-flex min-h-11 items-center rounded-lg text-sm text-slate-600 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50';
+    'inline-flex min-h-11 items-center rounded-none text-sm text-ink ' +
+    'decoration-1 underline-offset-4 hover:underline ' +
+    FOCUS_RING;
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-slate-50 border-t border-slate-200 pt-16 pb-8">
+        /*
+         * Ground is `--paper`, separated from the page above by a single full
+         * opacity 1px `--rule` hairline at 4.063. Not a partial opacity border:
+         * plan section 4.2 measures a rule at 75% coverage at 2.665 in light and
+         * 2.764 in dark, both under the 3:1 non text floor.
+         *
+         * PHASE 3 HANDOFF: on `/` this hairline meets FinalCTA. Once FinalCTA
+         * becomes the section 9 accent field, `--rule` against `--accent-plate`
+         * measures 1.736 light and 1.573 dark and the plan bans any hairline
+         * terminating on that field. Whoever builds the plate owns this edge.
+         * On the other seventeen routes the hairline is the mechanism, because
+         * ground tone alone between the two surfaces is only 1.103.
+         */
+        <footer className="border-t border-rule bg-paper">
             <Container>
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12">
-                    {/* Brand & positioning */}
-                    <div className="lg:col-span-5 space-y-4">
+                <div className="grid grid-cols-1 gap-12 pt-20 pb-16 lg:grid-cols-12 lg:gap-16 lg:pt-24">
+                    {/* Brand and positioning */}
+                    <div className="space-y-5 lg:col-span-5">
                         <Link
                             to="/"
-                            className="inline-flex items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50"
+                            className={`inline-flex items-center rounded-none ${FOCUS_RING}`}
                         >
-                            <span className="font-['MuseoModerno'] font-black text-3xl tracking-tighter text-primary">
+                            <span className="font-['MuseoModerno'] text-3xl font-black tracking-tighter text-ink">
                                 IFN<span className="text-accent">.</span>
                             </span>
                             <span className="sr-only">International Founders Network home page</span>
                         </Link>
-                        <p className="text-slate-600 max-w-sm">
-                            A community for founders who moved to Austin, Texas from another
-                            country. We meet in person every month to work through the practical
-                            parts: visas, U.S. banking, unfamiliar funding rules, and building a
-                            network from zero.
+                        {/* THIS PARAGRAPH RENDERS ON ALL EIGHTEEN ROUTES, so it
+                            is the one piece of copy on the site that has to
+                            describe IFN without any surrounding context. It used
+                            to open "A community for founders who moved to Austin,
+                            Texas from another country. We meet in person every
+                            month...", which made the monthly meetup the
+                            definition rather than an activity. It now leads with
+                            what IFN is and where it operates, and the meetup is
+                            carried by the line below and by /events.
+
+                            Requested by the founder in the same pass that
+                            recentred the home page, so the footer and the
+                            landing page state the same positioning rather than
+                            disagreeing on every route. */}
+                        <p className="max-w-sm leading-relaxed text-ink">
+                            A practical network for international founders building in the U.S.,
+                            starting in Austin. IFN helps founders navigate visas, U.S. banking,
+                            hiring, fundraising, and building a network from zero.
                         </p>
-                        <p className="text-sm text-slate-500 max-w-sm">
-                            Six-plus months of monthly meetups, hosted at Station Austin.
+                        {/*
+                         * THE VENUE PARTNER IS NO LONGER REFERRED TO HERE AT
+                         * ALL, which retires this note's original subject rather
+                         * than satisfying it. The line used to read "Six-plus
+                         * months of monthly meetups, hosted by our venue
+                         * partner", and the rule it was obeying was that the two
+                         * partner names live only on the three partner surfaces
+                         * (the home PartnersStrip, /partners, partnersData.ts)
+                         * plus the factual event address printed from the events
+                         * feed, so this line described the partner instead of
+                         * naming it. It now mentions no partner in any form,
+                         * which satisfies that cap trivially. The cap itself is
+                         * unchanged and still binds every other surface.
+                         *
+                         * TWO OTHER THINGS WENT WITH THAT WORDING. The
+                         * "six-plus months" count is gone from the footer, so
+                         * the recurrence claim now lives only in `ValueProps`
+                         * and `FinalCTA` on the home page; and the line now
+                         * names Austin, which the note here previously forbade
+                         * on the grounds that the paragraph above already did.
+                         * That guard is deliberately dropped: this line is the
+                         * footer's only remaining statement of what IFN runs,
+                         * it renders on all eighteen routes, and on the
+                         * seventeen that are not the landing page it is worth
+                         * more than the repetition costs.
+                         */}
+                        <p className="max-w-sm text-sm text-muted">
+                            Monthly meetups in Austin, with practical resources and optional
+                            membership.
                         </p>
                     </div>
 
-                    {/* Links Grid */}
-                    <nav aria-label="Footer" className="lg:col-span-7 grid grid-cols-2 md:grid-cols-4 gap-8">
+                    {/*
+                     * Links grid. Each group is opened by a 1px `--rule` hairline
+                     * rather than boxed in a card, so grouping is carried by rule
+                     * and space, which is the only device that works on both
+                     * grounds in both modes.
+                     */}
+                    <nav
+                        aria-label="Footer"
+                        className="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4 lg:col-span-7"
+                    >
                         {FOOTER_LINKS.map((group) => (
-                            <div key={group.id}>
+                            <div key={group.id} className="border-t border-rule pt-4">
                                 <h2
                                     id={`footer-${group.id}-heading`}
-                                    className="font-bold text-slate-900 mb-2"
+                                    className="text-xs font-semibold uppercase tracking-[0.08em] text-muted"
                                 >
                                     {group.heading}
                                 </h2>
-                                <ul aria-labelledby={`footer-${group.id}-heading`} className="space-y-0.5">
+                                <ul
+                                    aria-labelledby={`footer-${group.id}-heading`}
+                                    className="mt-1"
+                                >
                                     {group.links.map((link) => (
                                         <li key={link.name}>
                                             {link.external ? (
@@ -126,50 +254,136 @@ export function Footer() {
                     </nav>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-slate-500 text-sm">
-                        © {currentYear} IFN Global LLC. All rights reserved.
-                    </p>
+                {/*
+                 * Bottom bar. The side-by-side split moved from `md` to `lg` when
+                 * the theme control landed here, and the reason is arithmetic
+                 * rather than taste. The controls group has a hard min-content
+                 * width: 197px of theme control (three 44px chips that cannot
+                 * shrink, plus the label) and 188px of channel row, plus the 32px
+                 * `sm:gap-8`, so roughly 417px that will not compress. Against the
+                 * ~720px the container gives at 768px, the copyright block is left
+                 * about 149px short of its natural width and wraps to two lines
+                 * across the whole 768 to 920px band, on all eighteen routes. It
+                 * never overflows (its own min-content is ~142px), so this is
+                 * crowding rather than a break, and holding the split until `lg`
+                 * gives the metadata its own row until there is genuinely room for
+                 * two.
+                 */}
+                <div className="flex flex-col items-center gap-6 border-t border-rule py-8 lg:flex-row lg:justify-between">
+                    <div className="flex flex-col items-center gap-2 text-sm text-muted sm:flex-row sm:gap-4">
+                        <p>© {currentYear} IFN Global LLC. All rights reserved.</p>
 
-                    <p className="flex items-center gap-1.5 text-sm text-slate-500">
-                        <span>Built with</span>
-                        <Heart size={14} aria-hidden="true" className="text-accent fill-accent" />
-                        <span className="sr-only">love</span>
-                        <span>from Austin</span>
-                    </p>
+                        {/*
+                         * THE HEART IS ACCENT COLOURED AGAIN, AT THE FOUNDER'S
+                         * DIRECTION, and this comment used to argue the opposite
+                         * at length: that the accent is licensed to the mark, the
+                         * primary action fill and the wordmark period, that a
+                         * mark may only attach to a phrase a reader can check
+                         * against a named artifact, and that "Built with love
+                         * from Austin" is not one, so the glyph should inherit
+                         * `--muted`.
+                         *
+                         * That argument was applying the MARK licence to
+                         * something that is not a mark. A mark is accent type
+                         * plus a 3px accent rule under a checkable phrase; this
+                         * is a 14px glyph standing in for a word in a sentence
+                         * about the people who built the site. It makes no claim,
+                         * so there is nothing for a reader to check and the
+                         * licence has no purchase on it. Treating it as a fourth
+                         * accent role is the honest reading rather than a breach
+                         * of the other three.
+                         *
+                         * CONTRAST, AND WHY THE COLOUR IS SAFE HERE. `--accent`
+                         * measures 7.054 against `--paper` in light and 5.517 in
+                         * dark, both well clear of the 4.5 text floor and the 3.0
+                         * non-text floor, and BETTER than the `--muted` 6.601 it
+                         * replaces in light mode. The glyph is `aria-hidden` with
+                         * an `sr-only` "love" beside it, so the colour is never
+                         * the only thing carrying the word: strip the hue
+                         * entirely and the sentence still reads "Built with love
+                         * from Austin" to every reader, sighted or not. That is
+                         * the same test the mark has to pass, and this passes it
+                         * more easily because the word is literally in the DOM.
+                         *
+                         * `fill-current` is kept, so the glyph fills with whatever
+                         * `text-accent` sets rather than carrying a second colour
+                         * value that could drift from the token.
+                         */}
+                        <p className="flex items-center gap-1.5 sm:border-l sm:border-rule sm:pl-4">
+                            <span>Built with</span>
+                            <Heart
+                                size={14}
+                                strokeWidth={1.5}
+                                aria-hidden="true"
+                                className="fill-current text-accent"
+                            />
+                            <span className="sr-only">love</span>
+                            <span>from Austin</span>
+                        </p>
+                    </div>
 
                     {/*
-                     * Channel row. Every entry, its URL and its accessible name live in
-                     * src/data/socialLinks.ts — entries flagged `verified: false` there are
-                     * unconfirmed guesses at IFN's handle and should be confirmed or removed
-                     * from that file before launch rather than edited here.
+                     * The controls end of the bottom bar. The theme control and the
+                     * channel row are wrapped in ONE group so the bar keeps its two
+                     * part composition: metadata left, controls right. Mounting the
+                     * toggle as a third direct child would have turned
+                     * `md:justify-between` into a three way spread and pushed the
+                     * channel row off the right edge of the reading rhythm.
+                     *
+                     * They stack at the narrowest widths and sit on one line from
+                     * `sm` up. That is this block's sub 768px collapse, declared in
+                     * the same component as the asymmetry per plan section 11.
                      */}
-                    <ul className="flex items-center gap-1">
-                        {SOCIAL_LINKS.map((social) => {
-                            const Icon = SOCIAL_ICONS[social.id];
-                            if (!Icon) return null;
+                    <div className="flex flex-col items-center gap-6 sm:flex-row sm:gap-8">
+                        {/*
+                         * Theme control. Three states, `system` by default, persisted in
+                         * localStorage and applied as `data-theme` on the document
+                         * element. The no-flash bootstrap for it is the inline script in
+                         * index.html, which stamps the same attribute from the same
+                         * storage key during head parsing, before first paint.
+                         */}
+                        <ThemeToggle />
 
-                            return (
-                                <li key={social.id}>
-                                    <a
-                                        href={social.href}
-                                        aria-label={
-                                            social.external
-                                                ? `${social.label} (opens in a new tab)`
-                                                : social.label
-                                        }
-                                        {...(social.external
-                                            ? { target: '_blank', rel: 'noopener noreferrer' }
-                                            : {})}
-                                        className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50"
-                                    >
-                                        <Icon size={20} aria-hidden="true" />
-                                    </a>
-                                </li>
-                            );
-                        })}
-                    </ul>
+                        {/*
+                         * Channel row. Every entry, its URL and its accessible name live in
+                         * src/data/socialLinks.ts. Entries flagged `verified: false` there are
+                         * unconfirmed guesses at IFN's handle and should be confirmed or removed
+                         * from that file before launch rather than filtered out here: this
+                         * component renders the list as given, on purpose.
+                         *
+                         * These are discrete controls, so they take the full pill under plan
+                         * section 4.4 while the text links above stay square.
+                         */}
+                        <ul className="flex items-center gap-1">
+                            {SOCIAL_LINKS.map((social) => {
+                                const Icon = SOCIAL_ICONS[social.id];
+                                if (!Icon) return null;
+
+                                return (
+                                    <li key={social.id}>
+                                        <a
+                                            href={social.href}
+                                            aria-label={
+                                                social.external
+                                                    ? `${social.label} (opens in a new tab)`
+                                                    : social.label
+                                            }
+                                            {...(social.external
+                                                ? { target: '_blank', rel: 'noopener noreferrer' }
+                                                : {})}
+                                            className={
+                                                'inline-flex h-11 w-11 items-center justify-center rounded-full ' +
+                                                'text-muted transition-colors hover:text-ink ' +
+                                                FOCUS_RING
+                                            }
+                                        >
+                                            <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
+                                        </a>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
                 </div>
             </Container>
         </footer>
