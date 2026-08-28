@@ -49,6 +49,6 @@
 
 ## 6. Housekeeping
 
-- [ ] 6.1 Archive this change once merged, folding both deltas into `openspec/specs/`
+- [x] 6.1 Archive this change once merged, folding both deltas into `openspec/specs/`
       (`membership-page` modified, `membership-billing` added). Per `AGENTS.md`,
       specs are never deleted after shipping.

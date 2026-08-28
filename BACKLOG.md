@@ -109,6 +109,7 @@ Full specs (not just this index) exist for every capability below:
 | Placeholder pages | [`openspec/specs/placeholder-pages`](openspec/specs/placeholder-pages/spec.md) |
 | Partners page | [`openspec/specs/partners-page`](openspec/specs/partners-page/spec.md) |
 | Membership page | [`openspec/specs/membership-page`](openspec/specs/membership-page/spec.md) |
+| Membership billing | [`openspec/specs/membership-billing`](openspec/specs/membership-billing/spec.md) |
 | QR generator (`apps/qr`) | [`apps/qr/openspec/specs/qr-generator`](apps/qr/openspec/specs/qr-generator/spec.md) |
 | QR bulk generation (`apps/qr`) | [`apps/qr/openspec/specs/qr-bulk-generation`](apps/qr/openspec/specs/qr-bulk-generation/spec.md) |
 | QR link management (`apps/qr`) | [`apps/qr/openspec/specs/qr-link-management`](apps/qr/openspec/specs/qr-link-management/spec.md) |
