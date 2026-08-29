@@ -238,11 +238,24 @@ npx netlify deploy --build --prod
 # or just: Deploys → Trigger deploy → Deploy site
 ```
 
-Confirm it worked:
+Confirm it worked. **Not with `curl` on the page HTML** — that check cannot
+work and an earlier version of this file wrongly told you to use it. The tag is
+injected at runtime by `src/lib/analytics.ts`, and that module deliberately
+refuses to run when `navigator.webdriver` is true so the prerender never reports
+phantom traffic. So `googletagmanager` never appears in the served HTML, by
+design, whether or not analytics is working.
+
+Check the JS bundle instead, which is where the value is compiled in:
 
 ```sh
-curl -s https://ifn.community/ | grep -c googletagmanager    # want 1
+bundle=$(curl -s https://ifn.community/ | grep -o '/assets/index-[^"]*\.js' | head -1)
+curl -s "https://ifn.community$bundle" | grep -c googletagmanager   # want 1
+curl -s "https://ifn.community$bundle" | grep -o 'G-[A-Z0-9]\{6,\}' | sort -u
 ```
+
+The definitive check is a real browser: load the site, open DevTools → Network,
+filter on `collect`, and navigate between two pages. You want a request per
+page, each carrying the new page's title.
 
 Then load the site and check GA4 → **Reports → Realtime**. You should see
 yourself. Accept the consent banner, and you should still see yourself — refusal
