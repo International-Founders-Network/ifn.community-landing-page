@@ -1,9 +1,8 @@
 import { StrictMode } from 'react'
-import { createRoot, hydrateRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { initAnalytics } from './lib/analytics'
-import { normalisePath } from './data/seo'
 
 /**
  * Registered before the first render so that Consent Mode defaults are in place
@@ -13,97 +12,65 @@ import { normalisePath } from './data/seo'
 initAnalytics()
 
 /**
- * HYDRATE THE PRERENDERED HTML; ONLY CLIENT-RENDER WHEN THERE IS NONE.
+ * WHY THIS CLIENT-RENDERS INSTEAD OF HYDRATING, HAVING TRIED THE OTHER WAY.
  *
- * scripts/prerender.mjs writes real HTML into #root for every indexable route.
- * `createRoot` THROWS THAT AWAY and rebuilds the tree from scratch, and that is
- * not a theoretical cost — it was measured at CLS 0.400 on the homepage:
+ * scripts/prerender.mjs writes real HTML into #root for all eleven indexable
+ * routes, so `hydrateRoot` looks like the obviously correct call. It was tried,
+ * shipped, and reverted, and the reason is structural rather than a bug that
+ * could be fixed with more care:
  *
- *   1. The prerendered page paints in full at ~341ms.
- *   2. React discards it and renders the app, where every route sits behind
- *      React.lazy and shows the 60vh `PageFallback` until its chunk arrives.
- *   3. The footer, which had been sitting at y≈14700, jumps to just under the
- *      fallback and then drops back when the route chunk resolves.
+ *   React 19 delimits every Suspense boundary in server markup with `<!--$-->`
+ *   comment markers, emitted by `renderToString`. Our HTML is not a server
+ *   render — it is a snapshot of a CLIENT render, taken by driving headless
+ *   Chrome over the built site, so those markers do not exist. React therefore
+ *   cannot match any Suspense boundary in the document, and every route in this
+ *   app renders behind one. Hydration failed on all eleven, reporting minified
+ *   error #418 against `<main id="main-content">` on every page load.
  *
- * A ~14,000px round trip on the largest element on the page. Lighthouse scored
- * the resulting CLS 0.23/1 and attributed 0.4 of 0.422 to the footer alone.
- * Reproduced locally at 4x CPU throttling with a 150ms/1.6Mbps link; on an
- * unthrottled localhost the chunks win the race and CLS measures 0.000, which
- * is why this never showed up in local testing.
+ * Resolving the lazy chunks before mounting does not help: the boundary breaks
+ * hydration by existing, not by suspending. That was verified with the chunks
+ * pre-resolved and again with the boundaries removed entirely, where the error
+ * merely changed shape (`args[]=HTML` became `args[]=text`) rather than going
+ * away. Making hydration work would mean adopting real server rendering, which
+ * is a different project than prerendering the built artefact.
  *
- * `hydrateRoot` adopts the existing DOM instead. React keeps the server markup
- * for a suspended boundary until its lazy chunk is ready, so nothing is removed
- * and nothing moves.
+ * NOTHING IS LOST BY CLIENT-RENDERING, and this is the part worth stating
+ * plainly: React was already discarding the prerendered tree and re-rendering
+ * it, because that is what it does when hydration fails. The only difference
+ * now is that it no longer attempts the match first, fails, and logs an error
+ * to every visitor's console. The prerendered HTML still does its whole job —
+ * it exists for crawlers and unfurlers that never execute JavaScript, and they
+ * never reach this file.
  *
- * The `hasChildNodes` branch is not defensive clutter, it is load-bearing: the
- * prerender itself loads the freshly built index.html, whose #root IS empty,
- * and hydrating an empty container would make React log a hydration failure and
- * fall back to client rendering on every build.
+ * The layout shift that `hydrateRoot` was introduced to fix is NOT fixed by
+ * hydration and never was; see the height reservation below, which is the
+ * measure that actually moved CLS from 0.400 to 0.000 and which stays.
  */
-/**
- * RESOLVE THE CURRENT ROUTE'S CHUNK BEFORE MOUNTING.
- *
- * Hydration alone does not fix the shift described above, and the reason is
- * worth writing down: React can only hold server markup for a suspended
- * boundary when that boundary is delimited by the `<!--$-->` comment markers
- * that `renderToString` emits. Our HTML is a snapshot of a CLIENT render taken
- * in headless Chrome, so those markers do not exist. React sees one ordinary
- * tree, the lazy route suspends during hydration, and the content is removed
- * and replaced by the fallback exactly as before — measured still at CLS 0.400.
- *
- * So the route chunk is awaited first. Every page in App.tsx sits behind
- * React.lazy; importing the same specifier here resolves the same module
- * instance from Vite's registry, so by the time `<Suspense>` renders, its
- * promise is already fulfilled and no fallback is ever shown.
- *
- * Only the eleven prerendered routes are listed. Anything else (the six
- * placeholder pages, /admin, a 404) has no prerendered markup to protect and
- * takes the normal lazy path.
- */
-const PRERENDERED_ROUTE_CHUNKS: Record<string, () => Promise<unknown>> = {
-  '/': () => import('./pages/Home'),
-  '/about': () => import('./pages/About'),
-  '/events': () => import('./pages/Events'),
-  '/membership': () => import('./pages/Membership'),
-  '/resources': () => import('./pages/ResourcesHub'),
-  '/gallery': () => import('./pages/Gallery'),
-  '/partners': () => import('./pages/Partners'),
-  '/contact': () => import('./pages/Contact'),
-  '/code-of-conduct': () => import('./pages/CodeOfConduct'),
-  '/privacy-policy': () => import('./pages/PrivacyPolicy'),
-  '/terms-and-conditions': () => import('./pages/TermsAndConditions'),
-}
-
-const path = normalisePath(window.location.pathname)
-const loadRouteChunk = PRERENDERED_ROUTE_CHUNKS[path]
-if (loadRouteChunk) {
-  try {
-    await loadRouteChunk()
-  } catch {
-    /* A failed chunk is the router's problem, not the mount's. Carry on. */
-  }
-}
 
 /**
  * RESERVE THE PRERENDERED HEIGHT SO THE FALLBACK CANNOT COLLAPSE THE PAGE.
  *
- * Awaiting the chunk above is necessary but not sufficient. React.lazy wraps
- * the import in a fresh `.then()` on every call, so even a fully cached module
- * leaves the boundary suspended for one microtask — and at 4x CPU throttling
- * that microtask is long enough for the browser to paint. Measured trace:
+ * Every route sits behind React.lazy, and the Suspense fallback is a short box.
+ * Between React mounting and the route chunk arriving, `<main>` collapses from
+ * its prerendered height to that box, and the footer takes the round trip:
  *
  *   4400ms  main 14417px   prerendered markup, correct
- *   4658ms  main   384px   React mounts, PageFallback (60vh of 640) renders
+ *   4658ms  main   384px   React mounts, PageFallback renders
  *   4891ms  main 14203px   route chunk resolves -> layout shift 0.400
  *
- * The prerendered markup is still in the document at this point, so its height
- * can simply be read and handed to the fallback as a floor. `<main>` then keeps
- * its size across the swap and the footer never moves.
+ * Lighthouse scored that CLS 0.23/1 and attributed 0.4 of 0.422 to the footer
+ * alone. It only appears under load: at 4x CPU throttling on a 150ms/1.6Mbps
+ * link the gap is long enough to paint, while on an unthrottled localhost the
+ * chunk wins the race and CLS measures 0.000.
+ *
+ * The prerendered markup is still in the document when this runs, so its height
+ * can be read and handed to the fallback as a floor. `<main>` then keeps its
+ * size across the swap and nothing below it moves.
  *
  * Published as a custom property rather than passed through props because the
  * fallback is rendered deep inside App.tsx by react-router, and a CSS variable
  * needs no plumbing. src/App.tsx falls back to 60vh when it is absent, which is
- * the case for every non-prerendered route.
+ * the case for every route that was never prerendered.
  */
 const prerenderedMain = document.querySelector('main')
 if (prerenderedMain) {
@@ -116,19 +83,8 @@ if (prerenderedMain) {
   }
 }
 
-const container = document.getElementById('root')!
-
-if (container.hasChildNodes()) {
-  hydrateRoot(
-    container,
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  )
-} else {
-  createRoot(container).render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  )
-}
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
