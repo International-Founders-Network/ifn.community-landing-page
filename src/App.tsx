@@ -1,4 +1,4 @@
-import { useState, Suspense, lazy } from 'react';
+import { useState, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { Navbar } from './components/Navbar';
@@ -8,28 +8,28 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { Head } from './components/Head';
 import { ConsentBanner } from './components/ConsentBanner';
 
-// Lazy load pages
-const Home = lazy(() => import('./pages/Home').then(module => ({ default: module.Home })));
-const About = lazy(() => import('./pages/About').then(module => ({ default: module.About })));
-const Careers = lazy(() => import('./pages/Careers').then(module => ({ default: module.Careers })));
-const Partners = lazy(() => import('./pages/Partners').then(module => ({ default: module.Partners })));
-const Contact = lazy(() => import('./pages/Contact').then(module => ({ default: module.Contact })));
-const Blog = lazy(() => import('./pages/Blog').then(module => ({ default: module.Blog })));
-const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ default: module.Playbooks })));
-const Events = lazy(() => import('./pages/Events').then(module => ({ default: module.Events })));
-const Gallery = lazy(() => import('./pages/Gallery').then(module => ({ default: module.Gallery })));
-const Newsletter = lazy(() => import('./pages/Newsletter').then(module => ({ default: module.Newsletter })));
-const Membership = lazy(() => import('./pages/Membership').then(module => ({ default: module.Membership })));
-const Mentorship = lazy(() => import('./pages/Mentorship').then(module => ({ default: module.Mentorship })));
-const Chapters = lazy(() => import('./pages/Chapters').then(module => ({ default: module.Chapters })));
-const CodeOfConduct = lazy(() => import('./pages/CodeOfConduct').then(module => ({ default: module.CodeOfConduct })));
-const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
-const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions').then(module => ({ default: module.TermsAndConditions })));
-const ResourcesHub = lazy(() => import('./pages/ResourcesHub').then(module => ({ default: module.ResourcesHub })));
-const NotFound = lazy(() => import('./pages/NotFound').then(module => ({ default: module.NotFound })));
-const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: module.Admin })));
-
-const JoinModal = lazy(() => import('./components/JoinModal').then(module => ({ default: module.JoinModal })));
+import {
+    About,
+    Admin,
+    Blog,
+    Careers,
+    Chapters,
+    CodeOfConduct,
+    Contact,
+    Events,
+    Gallery,
+    Home,
+    JoinModal,
+    Membership,
+    Mentorship,
+    Newsletter,
+    NotFound,
+    Partners,
+    Playbooks,
+    PrivacyPolicy,
+    ResourcesHub,
+    TermsAndConditions,
+} from './routes';
 
 /**
  * Route metadata now lives in src/data/seo.ts and is applied by the <Head>
