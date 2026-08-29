@@ -48,6 +48,10 @@ const MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID as
  */
 declare global {
     interface Window {
+        /**
+         * Entries are `IArguments`, not arrays — see the note on gtag() below.
+         * Typed loosely because gtag.js also pushes its own internal objects.
+         */
         dataLayer?: unknown[];
         gtag?: (...args: unknown[]) => void;
     }
@@ -83,15 +87,46 @@ function persistConsent(choice: ConsentChoice) {
     }
 }
 
-function gtag(...args: unknown[]) {
-    /**
-     * Pushing `arguments`-shaped entries onto dataLayer is gtag.js's documented
-     * contract, and it works before the script has loaded — queued calls replay
-     * on arrival. That is why config and consent can be set synchronously here
-     * without waiting for the network.
-     */
+/**
+ * THIS MUST PUSH `arguments`, NOT AN ARRAY, AND IT MUST BE A `function`.
+ *
+ * gtag.js does not read dataLayer entries generically. It inspects each entry
+ * as an `arguments` object — an array-LIKE with numeric keys and a `length`,
+ * whose prototype is Object, not Array. A genuine Array is silently skipped:
+ * no error, no warning, no network request.
+ *
+ * The first version of this file used rest parameters and pushed `args`, which
+ * is a real Array. The result was a tag that looked completely healthy and
+ * transmitted nothing. gtag.js loaded, the consent banner worked, the dataLayer
+ * filled up with plausible-looking `['config', 'G-…']` and `['event',
+ * 'page_view', {…}]` entries — and every single one was ignored, so the
+ * measurement ID was never configured and not one hit was ever sent. Verified
+ * against production in a real browser: gtag.js fetched, zero requests to
+ * /g/collect, on load and after consent and across a route change.
+ *
+ * That failure mode is the reason for the length of this comment. It cannot be
+ * caught by typechecking (both shapes satisfy `unknown[]`-ish uses), it cannot
+ * be caught by linting, and it cannot be caught by looking at the page source,
+ * the built bundle, or the dataLayer's apparent contents. It looks right
+ * everywhere except the one place that matters.
+ *
+ * An arrow function cannot be used here: arrow functions have no `arguments`
+ * binding of their own. `prefer-rest-params` is disabled for exactly one line,
+ * because the rest-parameter form it wants is the bug.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function gtag(..._args: unknown[]) {
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push(args);
+    /**
+     * `_args` exists ONLY to give this function a call signature TypeScript can
+     * check; it is deliberately not the thing that gets pushed. A non-arrow
+     * function keeps its own `arguments` binding even when it also declares
+     * rest parameters, so this pushes the array-LIKE object gtag.js requires
+     * while callers still get argument checking. Pushing `_args` instead would
+     * compile, lint and run — and transmit nothing.
+     */
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer.push(arguments);
 }
 
 let initialised = false;
