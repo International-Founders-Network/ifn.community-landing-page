@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { Link } from 'react-router-dom';
 import {
     isAnalyticsEnabled,
@@ -33,32 +33,36 @@ import {
  */
 export function ConsentBanner() {
     /**
-     * A LAZY INITIALISER, read once on mount, rather than a state update inside
-     * an effect.
+     * THE CLIENT-ONLY GUARD, AND WHY IT IS NOT A LAZY useState ANY MORE.
      *
-     * Reading localStorage during render is safe here specifically because
-     * src/main.tsx uses `createRoot`, not `hydrateRoot`. The prerendered HTML
-     * from scripts/prerender.mjs is replaced wholesale on mount rather than
-     * hydrated against, so there is no server/client markup to disagree with —
-     * which is the usual reason to defer a storage read to an effect. The
-     * prerender additionally strips this banner from the snapshot, so the
-     * static HTML never contains it and no visitor sees a flash of a banner
-     * they already dismissed.
+     * This used to read localStorage in a lazy `useState` initialiser, which was
+     * safe only because src/main.tsx used `createRoot` and threw the prerendered
+     * markup away. It now uses `hydrateRoot`, so the first client render must
+     * match the HTML that scripts/prerender.mjs produced — and that HTML never
+     * contains this banner, because the prerender strips it.
      *
-     * The effect-plus-setState version this replaces also tripped
-     * react-hooks/set-state-in-effect, which is the same observation from the
-     * linter's side: the value was derivable at first render and did not need a
-     * second one.
+     * `useSyncExternalStore` is the sanctioned way to express "this value only
+     * exists on the client": the third argument is the server snapshot, so the
+     * hydrating render sees `false` and agrees with the markup, and the store
+     * re-reads as `true` immediately afterwards. `subscribe` returns a no-op
+     * unsubscribe because the value never changes after mount.
      */
-    const [visible, setVisible] = useState(
-        () => isAnalyticsEnabled && storedConsent() === null,
+    const isClient = useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false,
     );
+
+    const [dismissed, setDismissed] = useState(false);
+
+    const visible =
+        isClient && !dismissed && isAnalyticsEnabled && storedConsent() === null;
 
     if (!visible) return null;
 
     const decide = (choice: 'granted' | 'denied') => {
         setConsent(choice);
-        setVisible(false);
+        setDismissed(true);
     };
 
     return (

@@ -45,9 +45,27 @@ const JoinModal = lazy(() => import('./components/JoinModal').then(module => ({ 
  * without a second list to keep in sync.
  */
 
+/**
+ * The route-level Suspense fallback.
+ *
+ * `--prerendered-main-height` is set by src/main.tsx from the height of the
+ * prerendered <main> before React mounts, and it is the whole reason this
+ * component is not a plain `min-h-[60vh]` box: without it the fallback collapses
+ * a 14,000px page to 384px for one frame and the footer takes a round trip that
+ * Lighthouse scored as CLS 0.400. The 60vh is the fallback's fallback, used on
+ * routes that were never prerendered.
+ *
+ * The spinner text stays vertically centred in whatever height is reserved, so
+ * a tall reservation does not push it off screen.
+ */
 function PageFallback() {
     return (
-        <div className="min-h-[60vh] flex items-center justify-center" role="status" aria-live="polite">
+        <div
+            className="flex items-start justify-center pt-[30vh]"
+            style={{ minHeight: 'var(--prerendered-main-height, 60vh)' }}
+            role="status"
+            aria-live="polite"
+        >
             <span className="text-muted">Loading&hellip;</span>
         </div>
     );
