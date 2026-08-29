@@ -40,10 +40,36 @@
 
    Both Archivo subsets are required. Shipping only `latin` drops accented
    characters in founder names to a system font mid word. The two files carry
-   an IDENTICAL axis space (wght 100..900, wdth 62..125), so a word that spans
-   the subset boundary resolves the same variation settings on both and renders
-   at one width. Omitting `font-stretch` would mean the face never matches a
-   `font-stretch` query, so it is declared even though nothing queries it yet.
+   an IDENTICAL axis space, so a word that spans the subset boundary resolves
+   the same variation settings on both and renders at one width.
+
+   THE WIDTH AXIS IS GONE, AND IT WAS TRADED FOR LCP DELIBERATELY. Both files
+   used to be TWO-axis variable fonts (wght 100..900, wdth 62..125), and the
+   `latin` one was 90 kB. index.html preloads `latin` at High priority, which is
+   correct and must stay (see below), but it also means those bytes land inside
+   the LCP window on the critical path. Both files are now pinned to wdth 100,
+   which cuts `latin` from 90 kB to 35 kB and `latin-ext` from 84 kB to 32 kB.
+
+   Measured, Lighthouse mobile, n=7 interleaved, against a build that already
+   had the analytics deferral: LCP 4783ms -> 4503ms and FCP 3005ms -> 2857ms.
+   Nothing rendered differently, because nothing in this codebase has ever
+   queried `font-stretch`; the axis was declared speculatively and was costing
+   61 percent of the file to keep in reserve.
+
+   `font-stretch` is therefore now the single value `100%` rather than a range.
+   Leaving the old `62% 125%` range over a file that can no longer honour it
+   would tell the browser to match width queries it would then render at one
+   width, which is a silent lie rather than a graceful fallback.
+
+   THE INSTANCER IS NOT IN THE BUILD PIPELINE. These two .woff2 files were
+   produced by a one-off `fontTools.varLib.instancer` run
+   (`instantiateVariableFont(font, {'wdth': 100})`, saved with `flavor='woff2'`)
+   in a throwaway virtualenv; `npm run build` does not regenerate them and
+   nothing in package.json depends on fontTools. To restore the width axis, take
+   the two-axis originals out of git —
+   `git show origin/main:public/fonts/archivo-variable-latin.woff2` as of the
+   commit that introduced this note — put the ranges back here, and re-measure,
+   because the preload in index.html is what makes the file size matter.
 
    Archivo's `fvar` default weight is 600, not 400. A resolved CSS
    `font-weight` always wins, so this is cosmetic, but it is why the name table
@@ -63,7 +89,7 @@
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 100 900;
-  font-stretch: 62% 125%;
+  font-stretch: 100%;
   font-display: swap;
   src: url('/fonts/archivo-variable-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
@@ -75,7 +101,7 @@
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 100 900;
-  font-stretch: 62% 125%;
+  font-stretch: 100%;
   font-display: swap;
   src: url('/fonts/archivo-variable-latin-ext.woff2') format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
