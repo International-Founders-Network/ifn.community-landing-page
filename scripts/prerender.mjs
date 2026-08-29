@@ -287,10 +287,27 @@ async function main() {
                     () => `<!doctype html>\n${document.documentElement.outerHTML}`,
                 )
 
+                /**
+                 * FLAT FILES, NOT DIRECTORY INDEXES, and this is load-bearing.
+                 *
+                 * Writing dist/membership/index.html looks equivalent and is
+                 * not: Netlify serves a directory index at its slashed URL and
+                 * 301s the unslashed form to it, so /membership answered
+                 * `301 -> /membership/`. The content was correct at the end of
+                 * that hop, but src/data/seo.ts emits the UNSLASHED form as the
+                 * canonical and the sitemap advertises the unslashed form too,
+                 * so every indexable URL on the site pointed a canonical at a
+                 * URL that redirected somewhere else, and every crawl spent two
+                 * requests where one would do.
+                 *
+                 * dist/membership.html is served directly at /membership with a
+                 * 200 by Netlify's pretty-URL handling, which is exactly the
+                 * form the canonical and the sitemap already claim.
+                 */
                 const outPath =
                     route === '/'
                         ? join(DIST, 'index.html')
-                        : join(DIST, route, 'index.html')
+                        : join(DIST, `${route.replace(/^\//, '')}.html`)
                 await mkdir(dirname(outPath), { recursive: true })
                 await writeFile(outPath, html, 'utf8')
 
