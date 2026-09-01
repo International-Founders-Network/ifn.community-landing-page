@@ -62,7 +62,11 @@
     "cover_url": "https://images.lumacdn.com/event-covers/un/d73f2340-1f70-4691-b115-36b0df990635.png",
     "raw_date": "2026-08-27T23:30:00.000Z",
     "registrations": [
-      {}
+      {},
+      {
+        "platform": "meetup",
+        "url": "https://www.meetup.com/international-founders-network-austin/events/316249560/"
+      }
     ]
   },
   {
