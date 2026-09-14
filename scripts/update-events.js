@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const TARGET_URL = 'https://lu.ma/IFN';
+const TARGET_URL = 'https://lu.ma/IFN_ATX';
 const OUTPUT_FILE = path.join(__dirname, '../src/data/events.json');
 
 /**
@@ -74,7 +74,7 @@ async function scrapeEvents() {
         await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
 
         // Extract data from __NEXT_DATA__ script tag
-        const data = await page.evaluate(() => {
+        const rawEvents = await page.evaluate(() => {
             const script = document.getElementById('__NEXT_DATA__');
             if (!script) return null;
             try {
@@ -96,7 +96,7 @@ async function scrapeEvents() {
                         id: event.api_id || event.id || '',
                         title: event.name || event.title || '',
                         start_at: event.start_at || '',
-                        location_name: normaliseVenue(event.geo_address_info?.full_address || event.geo_address_info?.city || event.location_name || ''),
+                        location_name: event.geo_address_info?.full_address || event.geo_address_info?.city || event.location_name || '',
                         url: (event.url || event.url_handle) ? `https://lu.ma/${event.url || event.url_handle}` : `https://lu.ma/${event.api_id}`,
                         cover_url: event.cover_url || '',
                         platform: 'luma',
@@ -109,12 +109,21 @@ async function scrapeEvents() {
             }
         });
 
-        if (!data || data.length === 0) {
+        if (!rawEvents || rawEvents.length === 0) {
             console.warn("Could not extract events from __NEXT_DATA__, falling back to DOM scraping...");
             // ... (keep minimal fallback or just error out if we want consistency)
             // For now, let's just log and fail so we know it needs a real fix
             throw new Error("No data found in __NEXT_DATA__");
         }
+
+        // The venue correction runs HERE, not inside page.evaluate. That callback is
+        // serialised and executed in the browser, where normaliseVenue — a Node
+        // function in this module's scope — does not exist, so calling it there threw
+        // a ReferenceError as soon as __NEXT_DATA__ actually yielded events.
+        const data = rawEvents.map(event => ({
+            ...event,
+            location_name: normaliseVenue(event.location_name),
+        }));
 
         console.log(`Found ${data.length} events.`);
 
