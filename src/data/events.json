@@ -1,68 +1,12 @@
 [
   {
-    "id": "evt-MKlRP2sMNaeA9mt",
-    "title": "Austin International Founders Meetup (Vol. 03)",
-    "start_at": "2026-03-26T23:30:00.000Z",
-    "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/gz/0288812f-5439-43ce-abf3-8006dc4e6f8d.png",
-    "raw_date": "2026-03-26T23:30:00.000Z",
-    "registrations": [
-      {}
-    ]
-  },
-  {
-    "id": "evt-CCPBsBXEa9lMQEr",
-    "title": "Austin International Founders Meetup (Vol. 04)",
-    "start_at": "2026-04-23T23:30:00.000Z",
-    "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/0u/0b99d09d-cbf3-44f1-94bd-d54fb51c178f.png",
-    "raw_date": "2026-04-23T23:30:00.000Z",
-    "registrations": [
-      {}
-    ]
-  },
-  {
-    "id": "evt-WdkwWifzWfHzNcG",
-    "title": "Austin International Founders Meetup (Vol. 05)",
-    "start_at": "2026-05-28T23:30:00.000Z",
-    "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/3k/9b0f3aea-e86b-4f7c-8644-f84ef2964a31.png",
-    "raw_date": "2026-05-28T23:30:00.000Z",
-    "registrations": [
-      {}
-    ]
-  },
-  {
-    "id": "evt-HTOeAvQ7o7BA8qB",
-    "title": "Austin International Founders Meetup (Vol. 06)",
-    "start_at": "2026-06-25T23:30:00.000Z",
-    "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/iv/9e06a423-0211-417b-8fbf-ee1c3949ab8f.png",
-    "raw_date": "2026-06-25T23:30:00.000Z",
-    "registrations": [
-      {}
-    ]
-  },
-  {
-    "id": "evt-B57YytQMgkUvUDN",
-    "title": "Austin International Founders Meetup (Vol. 07)",
-    "start_at": "2026-07-23T23:30:00.000Z",
-    "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/jz/3cfa5ec3-aac1-48cb-a14f-287bf432e0ae.png",
-    "raw_date": "2026-07-23T23:30:00.000Z",
-    "registrations": [
-      {}
-    ]
-  },
-  {
-    "id": "evt-LJTB5xTc7LyHuHd",
+    "id": "316249560",
     "title": "Austin International Founders Meetup (Vol. 08)",
-    "start_at": "2026-08-27T23:30:00.000Z",
-    "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/un/d73f2340-1f70-4691-b115-36b0df990635.png",
-    "raw_date": "2026-08-27T23:30:00.000Z",
+    "start_at": "2026-08-27T18:30:00-05:00",
+    "location_name": "Austin, TX",
+    "cover_url": "",
+    "raw_date": "2026-08-27T18:30:00-05:00",
     "registrations": [
-      {},
       {
         "platform": "meetup",
         "url": "https://www.meetup.com/international-founders-network-austin/events/316249560/"
@@ -72,12 +16,15 @@
   {
     "id": "evt-c89RQQulatQxQZ4",
     "title": "Austin International Founders Meetup (Vol. 09)",
-    "start_at": "2026-09-24T23:30:00.000Z",
+    "start_at": "2026-09-23T23:30:00.000Z",
     "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/1b/95714bf6-0d0e-4286-809f-fc4874a73b91.png",
-    "raw_date": "2026-09-24T23:30:00.000Z",
+    "cover_url": "https://images.lumacdn.com/uploads/ab/de221c8a-f284-418b-9302-4c308ce09ba7.png",
+    "raw_date": "2026-09-23T23:30:00.000Z",
     "registrations": [
-      {}
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/828bq2i2"
+      }
     ]
   },
   {
@@ -85,10 +32,13 @@
     "title": "Austin International Founders Meetup (Vol. 10)",
     "start_at": "2026-10-22T23:00:00.000Z",
     "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/g7/d2a20721-89f8-42b9-8658-8b7a26bfdf3a.png",
+    "cover_url": "https://images.lumacdn.com/uploads/ab/de221c8a-f284-418b-9302-4c308ce09ba7.png",
     "raw_date": "2026-10-22T23:00:00.000Z",
     "registrations": [
-      {}
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/4429vmwc"
+      }
     ]
   },
   {
@@ -96,10 +46,13 @@
     "title": "Austin International Founders Meetup (Vol. 11)",
     "start_at": "2026-11-27T00:30:00.000Z",
     "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/k5/fee93565-7add-493a-b849-749820340cb2.png",
+    "cover_url": "https://images.lumacdn.com/uploads/ab/de221c8a-f284-418b-9302-4c308ce09ba7.png",
     "raw_date": "2026-11-27T00:30:00.000Z",
     "registrations": [
-      {}
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/fimnxvsm"
+      }
     ]
   },
   {
@@ -107,10 +60,13 @@
     "title": "Austin International Founders Meetup (Vol. 12)",
     "start_at": "2026-12-25T00:30:00.000Z",
     "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/event-covers/j2/386fa94e-adaa-45b3-8f10-7b06c0d9a70d.png",
+    "cover_url": "https://images.lumacdn.com/uploads/ab/de221c8a-f284-418b-9302-4c308ce09ba7.png",
     "raw_date": "2026-12-25T00:30:00.000Z",
     "registrations": [
-      {}
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/vybxr9na"
+      }
     ]
   }
 ]
