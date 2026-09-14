@@ -67,46 +67,21 @@ A 404 from the deploy's `/log` endpoint plus a lifespan of ~2 seconds means no
 build ran, so the cause is never in the code. A real build failure posts a
 `pending` status first and runs for 30-60s.
 
-### The live `events` rows can contradict the deployed copy
+### `src/data/events.json` is the only source of truth for events
 
-**Check this after any deploy that touches events or venue wording.** A stale
-venue in Postgres is invisible locally, invisible in CI, and invisible in every
-test, because `netlify/functions/events.ts` serves the bundled
-`src/data/events.json` ONLY when the table has zero rows. On a database with
-rows, the JSON snapshot is never consulted, so the deployed page can say one
-venue in its copy and a different one in the event feed right beneath it.
+The Sync Events workflow regenerates `src/data/events.json` from Luma, and
+`netlify/functions/events.ts` serves that bundled JSON verbatim. `/api/events`
+does not read a database.
 
-The founder reported on 2026-08-10 that this is the live state: every other
-surface says Station Austin while the Postgres rows still say Capital Factory,
-and the fix below has not been applied. That was not verified from this repo,
-because nothing here connects to a production database. Do not trust the date.
-Run the check instead:
+Do not reintroduce a Neon SELECT path for listing events, and do not treat Neon
+as a store for event dates or venues. The old behaviour — DB rows overriding the
+JSON whenever the `events` table was non-empty — is gone; it let the deployed
+page and the feed beneath it disagree with nothing in CI or local dev catching
+it. Fix event data in Luma and re-sync.
 
-```sh
-curl -s https://ifn.community/api/events | grep -o 'Capital Factory[^"]*' | sort -u
-```
-
-No output is healthy. Any output means the live feed contradicts the page.
-
-Fix it with `db/migrations/02_event_venue_station_austin.sql`, applied through
-its runner. Preview is the default and writes nothing:
-
-```sh
-DATABASE_URL='<connection string>' node scripts/fix-event-venue.mjs
-DATABASE_URL='<connection string>' node scripts/fix-event-venue.mjs --apply
-```
-
-No connection string lives in this repo. The deployed functions read
-`NETLIFY_DATABASE_URL`; the runner accepts either variable name. The update
-matches two exact old strings and writes a third, so running it twice is
-harmless, and any Capital Factory variant it does not recognise is reported
-rather than silently rewritten.
-
-One caveat worth knowing before you call it done: `scripts/update-events.js`
-regenerates `src/data/events.json` from Luma's `geo_address_info.full_address`.
-If the Luma event records themselves still say Capital Factory, the next sync
-writes it back into the JSON and the contradiction returns from the other
-direction. Correct the venue in Luma as well as in the database.
+`db/migrations/02_event_venue_station_austin.sql` and
+`scripts/fix-event-venue.mjs` are obsolete for the public API. `event_signups`
+(written by `netlify/functions/event-signup.ts`) is unaffected.
 
 ## The site is prerendered. Do not treat it as a pure SPA any more
 
