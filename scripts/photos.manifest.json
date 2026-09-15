@@ -1,11 +1,12 @@
 {
   "$about": [
-    "ADDED 2026-09-15: IFN Vol. 08 (Aug 27 2026) curated album. All 21 founder-vetted",
-    "frames ship as gallery slots. Sources land in meetups/ under camera timestamps",
-    "(20260827_*). One portrait needed EXIF orientation baked (20260827_190507); one",
-    "phone portrait had no EXIF and was named 20260827_191000 in the gap before 191238.",
-    "Landing slots are unchanged. Gallery.tsx overflow rows place the new frames; the",
-    "authored hang of the prior fifteen is untouched. Gallery tile budget restated below.",
+    "TRIMMED 2026-09-15: IFN Vol. 08 (Aug 27 2026) curated album reduced 21 \u2192 18.",
+    "Dropped gallery-aug-speaker (20260827_190507), gallery-aug-window-seat",
+    "(20260827_191000), and gallery-aug-lights (20260827_201646) per founder trim.",
+    "Remaining eighteen ship as gallery slots. Sources land in meetups/ under camera",
+    "timestamps (20260827_*). Landing slots are unchanged. Gallery.tsx overflow rows",
+    "place the Vol. 08 frames; the authored hang of the prior fifteen is untouched.",
+    "Gallery tile budget restated below.",
     "",
     "Declarative input for scripts/build-photos.mjs. See REDESIGN-PLAN.md section 7.",
     "Sources live in assets/photos-source/ and are never published: Vite copies public/ verbatim,",
@@ -147,11 +148,11 @@
       }
     ],
     "$galleryNote": [
-      "RESTATED 2026-09-15 for the Vol. 08 full curated album.",
+      "RESTATED 2026-09-15 for the Vol. 08 curated album (trimmed 21 \u2192 18).",
       "",
-      "It was 286,720 bytes against fifteen frames measuring 272,765. Adding all twenty-one",
-      "Vol. 08 frames as 640w gallery tiles roughly doubles the full-scroll tile sum. The cap",
-      "is restated to 720,000 bytes rather than shaved: the founder curated the full set for",
+      "It was 286,720 bytes against fifteen frames measuring 272,765. Adding the eighteen",
+      "Vol. 08 frames as 640w gallery tiles raises the full-scroll tile sum. The cap",
+      "remains 720,000 bytes rather than shaved: the founder curated the set for",
       "publication, and Gallery.tsx lazy-loads every frame below the first row. Arrival cost",
       "stays the prior R1 figure. This is recorded as a raise, not a pass.",
       "",
@@ -1151,42 +1152,6 @@
       }
     },
     {
-      "name": "gallery-aug-speaker",
-      "status": "ship",
-      "source": "meetups/20260827_190507.jpg",
-      "grade": "august-2026",
-      "aspectRatio": "9:16",
-      "crop": {
-        "left": 1,
-        "top": 0,
-        "width": 2250,
-        "height": 4000
-      },
-      "cropNote": [
-        "NEW 2026-09-15. Vol. 08 portrait frame, shipped at source aspect rather than forced to 16:9.",
-        "A 16:9 crop of a standing speaker or seated pair would cut the subject the frame exists to show."
-      ],
-      "outputs": [
-        {
-          "width": 640,
-          "height": 1138
-        },
-        {
-          "width": 1125,
-          "height": 2000
-        }
-      ],
-      "fallbackWidth": 640,
-      "sizes": "(max-width: 639px) 100vw, 67vw",
-      "alt": "A person standing with a microphone mid gesture in front of a meetup agenda slide on a large screen.",
-      "loading": "lazy",
-      "fetchPriority": "auto",
-      "gallery": {
-        "tileWidth": 640,
-        "viewWidth": 1125
-      }
-    },
-    {
       "name": "gallery-aug-listening",
       "status": "ship",
       "source": "meetups/20260827_190613.jpg",
@@ -1292,42 +1257,6 @@
       "gallery": {
         "tileWidth": 640,
         "viewWidth": 1280
-      }
-    },
-    {
-      "name": "gallery-aug-window-seat",
-      "status": "ship",
-      "source": "meetups/20260827_191000.jpg",
-      "grade": "august-2026",
-      "aspectRatio": "9:16",
-      "crop": {
-        "left": 0,
-        "top": 0,
-        "width": 1080,
-        "height": 1920
-      },
-      "cropNote": [
-        "NEW 2026-09-15. Vol. 08 portrait frame, shipped at source aspect rather than forced to 16:9.",
-        "A 16:9 crop of a standing speaker or seated pair would cut the subject the frame exists to show."
-      ],
-      "outputs": [
-        {
-          "width": 640,
-          "height": 1138
-        },
-        {
-          "width": 1080,
-          "height": 1920
-        }
-      ],
-      "fallbackWidth": 640,
-      "sizes": "(max-width: 639px) 100vw, 67vw",
-      "alt": "Two people seated in chairs listening beside tall windows that look out onto a neighbouring building.",
-      "loading": "lazy",
-      "fetchPriority": "auto",
-      "gallery": {
-        "tileWidth": 640,
-        "viewWidth": 1080
       }
     },
     {
@@ -1539,42 +1468,6 @@
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 67vw",
       "alt": "People standing and talking under industrial pendant lights, with a tall plant and glass partitions behind them.",
-      "loading": "lazy",
-      "fetchPriority": "auto",
-      "gallery": {
-        "tileWidth": 640,
-        "viewWidth": 1280
-      }
-    },
-    {
-      "name": "gallery-aug-lights",
-      "status": "ship",
-      "source": "meetups/20260827_201646.jpg",
-      "grade": "august-2026",
-      "aspectRatio": "16:9",
-      "crop": {
-        "left": 0,
-        "top": 1,
-        "width": 4000,
-        "height": 2250
-      },
-      "cropNote": [
-        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
-        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
-      ],
-      "outputs": [
-        {
-          "width": 640,
-          "height": 360
-        },
-        {
-          "width": 1280,
-          "height": 720
-        }
-      ],
-      "fallbackWidth": 640,
-      "sizes": "(max-width: 639px) 100vw, 67vw",
-      "alt": "A small cluster of people talking under warm circular ceiling lights, with other attendees soft in the background.",
       "loading": "lazy",
       "fetchPriority": "auto",
       "gallery": {

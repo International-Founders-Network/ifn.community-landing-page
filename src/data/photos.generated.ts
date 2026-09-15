@@ -25,7 +25,7 @@
 // enlarged view for every cell. That is the exact failure the split shape exists
 // to prevent.
 
-export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-floor" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-speaker" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-window-seat" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-lights" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night"
+export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-floor" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night"
 
 export type PhotoDerivative = {
   width: number
@@ -457,24 +457,6 @@ export const photos: Record<PhotoSlot, Photo> = {
     ],
     bytesTotal: 218915,
   },
-  "gallery-aug-speaker": {
-    slot: "gallery-aug-speaker",
-    alt: "A person standing with a microphone mid gesture in front of a meetup agenda slide on a large screen.",
-    sizes: "(max-width: 639px) 100vw, 67vw",
-    loading: "lazy",
-    fetchPriority: "auto",
-    src: "/photos/gallery-aug-speaker-640w.jpg",
-    width: 640,
-    height: 1138,
-    aspectRatio: "9:16",
-    avif: "/photos/gallery-aug-speaker-640w.avif 640w, /photos/gallery-aug-speaker-1125w.avif 1125w",
-    webp: "/photos/gallery-aug-speaker-640w.webp 640w, /photos/gallery-aug-speaker-1125w.webp 1125w",
-    derivatives: [
-      { width: 640, height: 1138, avif: "/photos/gallery-aug-speaker-640w.avif", webp: "/photos/gallery-aug-speaker-640w.webp" },
-      { width: 1125, height: 2000, avif: "/photos/gallery-aug-speaker-1125w.avif", webp: "/photos/gallery-aug-speaker-1125w.webp" },
-    ],
-    bytesTotal: 247823,
-  },
   "gallery-aug-listening": {
     slot: "gallery-aug-listening",
     alt: "A seated audience turned toward a speaker out of frame, one person smiling in the foreground, with others standing along the back wall beside a tall plant.",
@@ -528,24 +510,6 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 1280, height: 720, avif: "/photos/gallery-aug-address-1280w.avif", webp: "/photos/gallery-aug-address-1280w.webp" },
     ],
     bytesTotal: 205332,
-  },
-  "gallery-aug-window-seat": {
-    slot: "gallery-aug-window-seat",
-    alt: "Two people seated in chairs listening beside tall windows that look out onto a neighbouring building.",
-    sizes: "(max-width: 639px) 100vw, 67vw",
-    loading: "lazy",
-    fetchPriority: "auto",
-    src: "/photos/gallery-aug-window-seat-640w.jpg",
-    width: 640,
-    height: 1138,
-    aspectRatio: "9:16",
-    avif: "/photos/gallery-aug-window-seat-640w.avif 640w, /photos/gallery-aug-window-seat-1080w.avif 1080w",
-    webp: "/photos/gallery-aug-window-seat-640w.webp 640w, /photos/gallery-aug-window-seat-1080w.webp 1080w",
-    derivatives: [
-      { width: 640, height: 1138, avif: "/photos/gallery-aug-window-seat-640w.avif", webp: "/photos/gallery-aug-window-seat-640w.webp" },
-      { width: 1080, height: 1920, avif: "/photos/gallery-aug-window-seat-1080w.avif", webp: "/photos/gallery-aug-window-seat-1080w.webp" },
-    ],
-    bytesTotal: 271509,
   },
   "gallery-aug-networking": {
     slot: "gallery-aug-networking",
@@ -654,24 +618,6 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 1280, height: 720, avif: "/photos/gallery-aug-midroom-1280w.avif", webp: "/photos/gallery-aug-midroom-1280w.webp" },
     ],
     bytesTotal: 165559,
-  },
-  "gallery-aug-lights": {
-    slot: "gallery-aug-lights",
-    alt: "A small cluster of people talking under warm circular ceiling lights, with other attendees soft in the background.",
-    sizes: "(max-width: 639px) 100vw, 67vw",
-    loading: "lazy",
-    fetchPriority: "auto",
-    src: "/photos/gallery-aug-lights-640w.jpg",
-    width: 640,
-    height: 360,
-    aspectRatio: "16:9",
-    avif: "/photos/gallery-aug-lights-640w.avif 640w, /photos/gallery-aug-lights-1280w.avif 1280w",
-    webp: "/photos/gallery-aug-lights-640w.webp 640w, /photos/gallery-aug-lights-1280w.webp 1280w",
-    derivatives: [
-      { width: 640, height: 360, avif: "/photos/gallery-aug-lights-640w.avif", webp: "/photos/gallery-aug-lights-640w.webp" },
-      { width: 1280, height: 720, avif: "/photos/gallery-aug-lights-1280w.avif", webp: "/photos/gallery-aug-lights-1280w.webp" },
-    ],
-    bytesTotal: 130778,
   },
   "gallery-aug-pose": {
     slot: "gallery-aug-pose",
@@ -838,42 +784,39 @@ export const photos: Record<PhotoSlot, Photo> = {
  * COMMENT on purpose: the filenames carry timestamps, and nothing date derived is
  * emitted as data a component could render.
  *
- *    1. gallery-apr-room         meetups/20260423_184515.jpg  (tile 960w)
- *    2. gallery-jul-hall         venue/20260723_175654.jpg  (tile 640w)
- *    3. gallery-apr-gesture      meetups/20260423_184540.jpg  (tile 704w)
- *    4. gallery-apr-listening    meetups/20260423_184527.jpg  (tile 640w)
- *    5. gallery-feb-sign         venue/20260226_184628.jpg  (tile 640w)
- *    6. gallery-jul-screen       venue/20260723_190952.jpg  (tile 640w)
- *    7. gallery-feb-hall         meetups/20260226_184622.jpg  (tile 640w)
- *    8. gallery-jul-standing     meetups/20260723_190939.jpg  (tile 704w)
- *    9. gallery-apr-seated       meetups/20260423_184523.jpg  (tile 832w)
- *   10. gallery-feb-slide        venue/20260226_184639.jpg  (tile 640w)
- *   11. gallery-apr-profile      meetups/20260423_184536.jpg  (tile 640w)
- *   12. gallery-apr-floor        meetups/20260423_184620.jpg  (tile 640w)
- *   13. gallery-apr-circle       meetups/20260423_184509.jpg  (tile 640w)
- *   14. gallery-feb-room         venue/20260226_184645.jpg  (tile 640w)
- *   15. gallery-apr-group        meetups/20260423_201820.jpg  (tile 832w)
- *   16. gallery-aug-group        meetups/20260827_202740.jpg  (tile 640w)
- *   17. gallery-aug-audience     meetups/20260827_190404.jpg  (tile 640w)
- *   18. gallery-aug-room         meetups/20260827_190429.jpg  (tile 640w)
- *   19. gallery-aug-rows         meetups/20260827_190459.jpg  (tile 640w)
- *   20. gallery-aug-speaker      meetups/20260827_190507.jpg  (tile 640w)
- *   21. gallery-aug-listening    meetups/20260827_190613.jpg  (tile 640w)
- *   22. gallery-aug-standing     meetups/20260827_190620.jpg  (tile 640w)
- *   23. gallery-aug-address      meetups/20260827_190703.jpg  (tile 640w)
- *   24. gallery-aug-window-seat  meetups/20260827_191000.jpg  (tile 640w)
- *   25. gallery-aug-networking   meetups/20260827_191238.jpg  (tile 640w)
- *   26. gallery-aug-lounge       meetups/20260827_191242.jpg  (tile 640w)
- *   27. gallery-aug-posters      meetups/20260827_191301.jpg  (tile 640w)
- *   28. gallery-aug-wall         meetups/20260827_191304.jpg  (tile 640w)
- *   29. gallery-aug-gesture      meetups/20260827_201545.jpg  (tile 640w)
- *   30. gallery-aug-midroom      meetups/20260827_201643.jpg  (tile 640w)
- *   31. gallery-aug-lights       meetups/20260827_201646.jpg  (tile 640w)
- *   32. gallery-aug-pose         meetups/20260827_201654.jpg  (tile 640w)
- *   33. gallery-aug-skyline      meetups/20260827_201705.jpg  (tile 640w)
- *   34. gallery-aug-counter      meetups/20260827_201717.jpg  (tile 640w)
- *   35. gallery-aug-dusk         meetups/20260827_201725.jpg  (tile 640w)
- *   36. gallery-aug-night        meetups/20260827_201728.jpg  (tile 640w)
+ *    1. gallery-apr-room        meetups/20260423_184515.jpg  (tile 960w)
+ *    2. gallery-jul-hall        venue/20260723_175654.jpg  (tile 640w)
+ *    3. gallery-apr-gesture     meetups/20260423_184540.jpg  (tile 704w)
+ *    4. gallery-apr-listening   meetups/20260423_184527.jpg  (tile 640w)
+ *    5. gallery-feb-sign        venue/20260226_184628.jpg  (tile 640w)
+ *    6. gallery-jul-screen      venue/20260723_190952.jpg  (tile 640w)
+ *    7. gallery-feb-hall        meetups/20260226_184622.jpg  (tile 640w)
+ *    8. gallery-jul-standing    meetups/20260723_190939.jpg  (tile 704w)
+ *    9. gallery-apr-seated      meetups/20260423_184523.jpg  (tile 832w)
+ *   10. gallery-feb-slide       venue/20260226_184639.jpg  (tile 640w)
+ *   11. gallery-apr-profile     meetups/20260423_184536.jpg  (tile 640w)
+ *   12. gallery-apr-floor       meetups/20260423_184620.jpg  (tile 640w)
+ *   13. gallery-apr-circle      meetups/20260423_184509.jpg  (tile 640w)
+ *   14. gallery-feb-room        venue/20260226_184645.jpg  (tile 640w)
+ *   15. gallery-apr-group       meetups/20260423_201820.jpg  (tile 832w)
+ *   16. gallery-aug-group       meetups/20260827_202740.jpg  (tile 640w)
+ *   17. gallery-aug-audience    meetups/20260827_190404.jpg  (tile 640w)
+ *   18. gallery-aug-room        meetups/20260827_190429.jpg  (tile 640w)
+ *   19. gallery-aug-rows        meetups/20260827_190459.jpg  (tile 640w)
+ *   20. gallery-aug-listening   meetups/20260827_190613.jpg  (tile 640w)
+ *   21. gallery-aug-standing    meetups/20260827_190620.jpg  (tile 640w)
+ *   22. gallery-aug-address     meetups/20260827_190703.jpg  (tile 640w)
+ *   23. gallery-aug-networking  meetups/20260827_191238.jpg  (tile 640w)
+ *   24. gallery-aug-lounge      meetups/20260827_191242.jpg  (tile 640w)
+ *   25. gallery-aug-posters     meetups/20260827_191301.jpg  (tile 640w)
+ *   26. gallery-aug-wall        meetups/20260827_191304.jpg  (tile 640w)
+ *   27. gallery-aug-gesture     meetups/20260827_201545.jpg  (tile 640w)
+ *   28. gallery-aug-midroom     meetups/20260827_201643.jpg  (tile 640w)
+ *   29. gallery-aug-pose        meetups/20260827_201654.jpg  (tile 640w)
+ *   30. gallery-aug-skyline     meetups/20260827_201705.jpg  (tile 640w)
+ *   31. gallery-aug-counter     meetups/20260827_201717.jpg  (tile 640w)
+ *   32. gallery-aug-dusk        meetups/20260827_201725.jpg  (tile 640w)
+ *   33. gallery-aug-night       meetups/20260827_201728.jpg  (tile 640w)
  */
 
 export type GalleryImage = {
@@ -1105,17 +1048,6 @@ export const galleryFrames: GalleryFrame[] = [
       webp: "/photos/gallery-aug-rows-1280w.webp" },
   },
   {
-    slot: "gallery-aug-speaker",
-    alt: "A person standing with a microphone mid gesture in front of a meetup agenda slide on a large screen.",
-    tile: { width: 640, height: 1138,
-      src: "/photos/gallery-aug-speaker-640w.jpg",
-      avif: "/photos/gallery-aug-speaker-640w.avif",
-      webp: "/photos/gallery-aug-speaker-640w.webp" },
-    view: { width: 1125, height: 2000,
-      avif: "/photos/gallery-aug-speaker-1125w.avif",
-      webp: "/photos/gallery-aug-speaker-1125w.webp" },
-  },
-  {
     slot: "gallery-aug-listening",
     alt: "A seated audience turned toward a speaker out of frame, one person smiling in the foreground, with others standing along the back wall beside a tall plant.",
     tile: { width: 640, height: 360,
@@ -1147,17 +1079,6 @@ export const galleryFrames: GalleryFrame[] = [
     view: { width: 1280, height: 720,
       avif: "/photos/gallery-aug-address-1280w.avif",
       webp: "/photos/gallery-aug-address-1280w.webp" },
-  },
-  {
-    slot: "gallery-aug-window-seat",
-    alt: "Two people seated in chairs listening beside tall windows that look out onto a neighbouring building.",
-    tile: { width: 640, height: 1138,
-      src: "/photos/gallery-aug-window-seat-640w.jpg",
-      avif: "/photos/gallery-aug-window-seat-640w.avif",
-      webp: "/photos/gallery-aug-window-seat-640w.webp" },
-    view: { width: 1080, height: 1920,
-      avif: "/photos/gallery-aug-window-seat-1080w.avif",
-      webp: "/photos/gallery-aug-window-seat-1080w.webp" },
   },
   {
     slot: "gallery-aug-networking",
@@ -1226,17 +1147,6 @@ export const galleryFrames: GalleryFrame[] = [
       webp: "/photos/gallery-aug-midroom-1280w.webp" },
   },
   {
-    slot: "gallery-aug-lights",
-    alt: "A small cluster of people talking under warm circular ceiling lights, with other attendees soft in the background.",
-    tile: { width: 640, height: 360,
-      src: "/photos/gallery-aug-lights-640w.jpg",
-      avif: "/photos/gallery-aug-lights-640w.avif",
-      webp: "/photos/gallery-aug-lights-640w.webp" },
-    view: { width: 1280, height: 720,
-      avif: "/photos/gallery-aug-lights-1280w.avif",
-      webp: "/photos/gallery-aug-lights-1280w.webp" },
-  },
-  {
     slot: "gallery-aug-pose",
     alt: "Two people facing the camera mid celebration in a meetup room, one seated with a laptop, others talking further back near framed posters.",
     tile: { width: 640, height: 360,
@@ -1294,4 +1204,4 @@ export const galleryFrames: GalleryFrame[] = [
 ]
 
 /** Every avif tile summed, measured at build. A full scroll costs this much. */
-export const galleryTileBytesAvif = 591830
+export const galleryTileBytesAvif = 532537
