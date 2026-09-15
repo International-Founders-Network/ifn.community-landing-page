@@ -1,5 +1,12 @@
 {
   "$about": [
+    "ADDED 2026-09-15: IFN Vol. 08 (Aug 27 2026) curated album. All 21 founder-vetted",
+    "frames ship as gallery slots. Sources land in meetups/ under camera timestamps",
+    "(20260827_*). One portrait needed EXIF orientation baked (20260827_190507); one",
+    "phone portrait had no EXIF and was named 20260827_191000 in the gap before 191238.",
+    "Landing slots are unchanged. Gallery.tsx overflow rows place the new frames; the",
+    "authored hang of the prior fifteen is untouched. Gallery tile budget restated below.",
+    "",
     "Declarative input for scripts/build-photos.mjs. See REDESIGN-PLAN.md section 7.",
     "Sources live in assets/photos-source/ and are never published: Vite copies public/ verbatim,",
     "and the 15 originals are 41MB. Only the derivatives named here reach dist/.",
@@ -67,12 +74,11 @@
   "publicPath": "/photos",
   "generatedManifest": "src/data/photos.generated.ts",
   "hardCapLongEdge": 1920,
-
   "budget": {
     "$note": "REDESIGN-PLAN.md section 7. Measured at build, never estimated.",
     "heroAt1440AvifBytes": 112640,
     "totalAt1440ViewportBytes": 512000,
-    "galleryTilesAvifBytes": 286720,
+    "galleryTilesAvifBytes": 720000,
     "$landingNote": [
       "Every avif tier a 1440px viewport at 1x actually selects on the landing route, named as data.",
       "The runner used to hardcode this list in JavaScript while carrying a comment claiming it did not,",
@@ -109,46 +115,74 @@
       "the page, not only at their slot names."
     ],
     "landingAt1440": [
-      { "slot": "hero-band", "width": 1440, "why": "full bleed band, the widest tier a 1440 viewport takes" },
-      { "slot": "how-it-works-middle", "width": 640, "why": "the 2fr middle stop is about 600 CSS px" },
-      { "slot": "founder-story", "width": 960, "why": "904 CSS px at 1x lands on the 960 tier" },
-      { "slot": "gallery-apr-group", "width": 832, "why": "GalleryPreview lead frame, about 690 CSS px, at its span 8 gallery cell tier" },
-      { "slot": "gallery-apr-circle", "width": 640, "why": "GalleryPreview stacked frame, about 470 CSS px" },
-      { "slot": "gallery-feb-sign", "width": 640, "why": "GalleryPreview stacked frame, about 470 CSS px" }
+      {
+        "slot": "hero-band",
+        "width": 1440,
+        "why": "full bleed band, the widest tier a 1440 viewport takes"
+      },
+      {
+        "slot": "how-it-works-middle",
+        "width": 640,
+        "why": "the 2fr middle stop is about 600 CSS px"
+      },
+      {
+        "slot": "founder-story",
+        "width": 960,
+        "why": "904 CSS px at 1x lands on the 960 tier"
+      },
+      {
+        "slot": "gallery-apr-group",
+        "width": 832,
+        "why": "GalleryPreview lead frame, about 690 CSS px, at its span 8 gallery cell tier"
+      },
+      {
+        "slot": "gallery-apr-circle",
+        "width": 640,
+        "why": "GalleryPreview stacked frame, about 470 CSS px"
+      },
+      {
+        "slot": "gallery-feb-sign",
+        "width": 640,
+        "why": "GalleryPreview stacked frame, about 470 CSS px"
+      }
     ],
     "$galleryNote": [
-      "THE CAP MOVED IN THIS ROUND AND THE ARITHMETIC IS WRITTEN OUT RATHER THAN ASSERTED.",
+      "RESTATED 2026-09-15 for the Vol. 08 full curated album.",
       "",
-      "It was 262,144 bytes and it was set against ten frames at one uniform 640px tile, which measured",
-      "158,781 bytes, 60.6 percent of it. That artifact no longer exists. Fifteen frames on a four tier",
-      "ladder measure 272,765 bytes, which is 104.1 percent of the old cap. Shaving the largest cell from",
-      "960 to 896 would buy about 4KB and squeak under a number that stopped describing the thing it was",
-      "measuring, so the cap is restated instead: 286,720 bytes, which is the measured 272,765 plus 5.1",
-      "percent, enough headroom to re-crop one frame without a budget edit and not enough to absorb a",
-      "sixteenth. Raising a cap is worse than meeting one and this is recorded as a raise, not a pass.",
+      "It was 286,720 bytes against fifteen frames measuring 272,765. Adding all twenty-one",
+      "Vol. 08 frames as 640w gallery tiles roughly doubles the full-scroll tile sum. The cap",
+      "is restated to 720,000 bytes rather than shaved: the founder curated the full set for",
+      "publication, and Gallery.tsx lazy-loads every frame below the first row. Arrival cost",
+      "stays the prior R1 figure. This is recorded as a raise, not a pass.",
       "",
-      "WHAT THIS NUMBER IS AND IS NOT. It is every avif tile in the composition summed, which is what a",
-      "visitor pays across a FULL SCROLL of a page measured by the designer at 4,294px tall at 1440. It is",
-      "NOT what they pay on arrival. The old note claimed the two were the same, which was defensible for a",
-      "short uniform grid and is not defensible for a nine row hang. Arrival cost is R1 alone, the 960 tier",
-      "of gallery-apr-room, and it is conditional on the integrator giving every frame below the fold",
-      "loading=lazy. That attribute is not in this file and cannot be enforced from here, so the runner",
-      "prints the figure labelled as conditional rather than as a budget line.",
-      "",
-      "Enlarged views are excluded from the cap on the same basis as before: they are fetched on",
-      "interaction and most visitors never open one."
+      "WHAT THIS NUMBER IS AND IS NOT. It is every avif tile in the composition summed across",
+      "a FULL SCROLL. It is NOT arrival cost. Enlarged views remain excluded."
     ],
     "galleryAboveFoldAt1440x900": [
-      { "slot": "gallery-apr-room", "width": 960, "why": "R1, the only cell wholly above the fold at 900px" }
+      {
+        "slot": "gallery-apr-room",
+        "width": 960,
+        "why": "R1, the only cell wholly above the fold at 900px"
+      }
     ]
   },
-
   "encode": {
-    "avif": { "quality": 50, "effort": 9, "chromaSubsampling": "4:2:0" },
-    "webp": { "quality": 76, "effort": 6, "smartSubsample": true },
-    "jpeg": { "quality": 78, "progressive": true, "mozjpeg": true }
+    "avif": {
+      "quality": 50,
+      "effort": 9,
+      "chromaSubsampling": "4:2:0"
+    },
+    "webp": {
+      "quality": 76,
+      "effort": 6,
+      "smartSubsample": true
+    },
+    "jpeg": {
+      "quality": 78,
+      "progressive": true,
+      "mozjpeg": true
+    }
   },
-
   "grades": {
     "$note": [
       "Baked in at build so the grade costs nothing at runtime.",
@@ -159,28 +193,50 @@
       "reaches a component. Nothing date derived is emitted."
     ],
     "april-2026": {
-      "whiteBalance": [1.0, 1.0, 1.0],
+      "whiteBalance": [
+        1,
+        1,
+        1
+      ],
       "saturation": 0.55,
       "blackPoint": 0.04,
       "whitePoint": 0.92,
       "note": "Daylight through a full height glass wall. Measured on the hero crop: mean RGB 93.6 / 94.8 / 91.7, so red sits 1.3 percent over green and blue 3.4 percent over green. That is neutral inside any correction worth applying, so none is applied."
     },
     "february-2026": {
-      "whiteBalance": [1.024, 1.0, 0.914],
+      "whiteBalance": [
+        1.024,
+        1,
+        0.914
+      ],
       "saturation": 0.55,
       "blackPoint": 0.04,
       "whitePoint": 0.92,
       "note": "REDESIGN-PLAN.md section 7 calls this night a green cast. The files do not agree and this is the measurement that corrects it: on the sign crop mean RGB is 61.4 / 64.3 / 77.6, so blue runs 21 percent over green and red 4.5 percent under it. The cast is blue, not green. A full grey world correction would be [1.0475, 1.0, 0.8286] and it erases the night by neutralising a window that really is that colour, so this is half of it, which reads as a cool room rather than a lavender one. Verified by rendering, not by argument. Four frames now carry it."
     },
     "july-2026": {
-      "whiteBalance": [1.0, 1.0, 1.0],
+      "whiteBalance": [
+        1,
+        1,
+        1
+      ],
       "saturation": 0.55,
       "blackPoint": 0.04,
       "whitePoint": 0.92,
       "note": "Evening interior under white LED strips. Measured on the standing group crop: mean RGB 126.1 / 118.1 / 114.0, so red runs 6.8 percent over green. That warmth is the room and correcting it out makes skin tones grey, so it is left alone. Checked by rendering. Three frames carry it, one of them now on the landing page."
+    },
+    "august-2026": {
+      "whiteBalance": [
+        1,
+        1,
+        1
+      ],
+      "saturation": 0.55,
+      "blackPoint": 0.04,
+      "whitePoint": 0.92,
+      "note": "Evening interior under mixed LED and window light at Station Austin, 2026-08-27. Sampled on a mid-room networking crop: warmth is the room, left alone like july-2026. Two portrait sources (speaker at the agenda screen; two people seated by the windows) carry the same grade."
     }
   },
-
   "slots": [
     {
       "name": "hero-band",
@@ -188,7 +244,12 @@
       "source": "meetups/20260423_184527.jpg",
       "grade": "april-2026",
       "aspectRatio": "2.4:1",
-      "crop": { "left": 0, "top": 585, "width": 4000, "height": 1667 },
+      "crop": {
+        "left": 0,
+        "top": 585,
+        "width": 4000,
+        "height": 1667
+      },
       "cropNote": [
         "SOURCE CHANGED 2026-08-10 from meetups/20260423_184515.jpg on the founder's instruction that the",
         "landing photography favour people, faces and energy. Same room, minutes apart, same ratio, same",
@@ -213,10 +274,22 @@
         "conflict. 184509 goes to the gallery."
       ],
       "outputs": [
-        { "width": 720, "height": 300 },
-        { "width": 1080, "height": 450 },
-        { "width": 1440, "height": 600 },
-        { "width": 1920, "height": 800 }
+        {
+          "width": 720,
+          "height": 300
+        },
+        {
+          "width": 1080,
+          "height": 450
+        },
+        {
+          "width": 1440,
+          "height": 600
+        },
+        {
+          "width": 1920,
+          "height": 800
+        }
       ],
       "fallbackWidth": 1080,
       "sizes": "100vw",
@@ -230,7 +303,12 @@
       "source": "meetups/20260423_184540.jpg",
       "grade": "april-2026",
       "aspectRatio": "1093:874",
-      "crop": { "left": 900, "top": 0, "width": 2816, "height": 2252 },
+      "crop": {
+        "left": 900,
+        "top": 0,
+        "width": 2816,
+        "height": 2252
+      },
       "cropNote": [
         "UNCHANGED 2026-08-10, and it survived a fresh comparison rather than being left alone. Every slot",
         "on the landing page was re-judged from scratch this round. Rendered at left 200, left 500 and the",
@@ -245,9 +323,18 @@
         "only candidate where no subject is cut by an edge the original did not already cut."
       ],
       "outputs": [
-        { "width": 640, "height": 512 },
-        { "width": 1024, "height": 819 },
-        { "width": 1440, "height": 1151 }
+        {
+          "width": 640,
+          "height": 512
+        },
+        {
+          "width": 1024,
+          "height": 819
+        },
+        {
+          "width": 1440,
+          "height": 1151
+        }
       ],
       "fallbackWidth": 1024,
       "sizes": "(max-width: 767px) 100vw, (max-width: 1279px) 45vw, 600px",
@@ -261,7 +348,12 @@
       "source": "meetups/20260723_190939.jpg",
       "grade": "july-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 300, "top": 452, "width": 3200, "height": 1800 },
+      "crop": {
+        "left": 300,
+        "top": 452,
+        "width": 3200,
+        "height": 1800
+      },
       "cropNote": [
         "SOURCE CHANGED 2026-08-10 from meetups/20260226_184622.jpg. The previous revision argued that an",
         "empty February room is what the sentence 'the meetups came first' looks like. That argument is",
@@ -288,10 +380,22 @@
         "second largest cell in the gallery instead, where the composition can give it the width it needs."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 960, "height": 540 },
-        { "width": 1280, "height": 720 },
-        { "width": 1920, "height": 1080 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 960,
+          "height": 540
+        },
+        {
+          "width": 1280,
+          "height": 720
+        },
+        {
+          "width": 1920,
+          "height": 1080
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 1023px) 100vw, 904px",
@@ -307,14 +411,18 @@
       "loading": "lazy",
       "fetchPriority": "auto"
     },
-
     {
       "name": "gallery-apr-room",
       "status": "ship",
       "source": "meetups/20260423_184515.jpg",
       "grade": "april-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "Composition row 1, size class 9, 906 CSS px at a 1216px measure. The largest cell in the hang and",
         "the frame the page opens on. It was the hero band's source until this round and is now a gallery",
@@ -324,15 +432,24 @@
         "a gallery's job is to show the photograph and a crop there is an argument the tile cannot make."
       ],
       "outputs": [
-        { "width": 960, "height": 540 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 960,
+          "height": 540
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 960,
       "sizes": "(max-width: 639px) 100vw, 75vw",
       "alt": "A circle of people talking across a wide open floor, photographed from behind the back row, with IFN meetup slides on two screens and downtown Austin through the windows.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 960, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 960,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-jul-hall",
@@ -340,7 +457,12 @@
       "source": "venue/20260723_175654.jpg",
       "grade": "july-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "NEW 2026-08-10. Composition row 2 left, size class 4, 389 CSS px, the smallest cell in the hang.",
         "Shipped uncropped on the founder's ruling. The frame contains a row of national and military",
@@ -349,15 +471,24 @@
         "in a photograph is not a description of that photograph."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 33vw",
       "alt": "An empty event hall of high tables and stools before the evening starts, with national and military service flags standing either side of a large illuminated wall emblem and a projection screen at each end of the room.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-apr-gesture",
@@ -365,22 +496,36 @@
       "source": "meetups/20260423_184540.jpg",
       "grade": "april-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "Composition row 2 right, size class 7, 699 CSS px. The HowItWorks middle stop's source, shown",
         "whole: the page prints a 1093:874 crop of one conversation, the gallery prints the frame it was",
         "taken from. Full frame at exactly 16:9."
       ],
       "outputs": [
-        { "width": 704, "height": 396 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 704,
+          "height": 396
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 704,
       "sizes": "(max-width: 639px) 100vw, 58vw",
       "alt": "One person mid gesture speaking to a small seated circle, the others turned toward them, with an IFN meetup slide on the screen behind and the city through the glass.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 704, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 704,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-apr-listening",
@@ -388,7 +533,12 @@
       "source": "meetups/20260423_184527.jpg",
       "grade": "april-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "Composition row 3 left, size class 6, 596 CSS px. The hero band's source from this round, shown",
         "whole rather than as the 2.4:1 band cut out of it. The medium cell is deliberate: at the large cell",
@@ -396,15 +546,24 @@
         "band was cut from, with the ductwork ceiling and the foreground chairs the band drops."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 50vw",
       "alt": "A seated circle of people listening, several of them in the foreground with their backs to the camera, with the room's windows and IFN screens behind.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-feb-sign",
@@ -412,7 +571,12 @@
       "source": "venue/20260226_184628.jpg",
       "grade": "february-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 400, "top": 0, "width": 3200, "height": 1800 },
+      "crop": {
+        "left": 400,
+        "top": 0,
+        "width": 3200,
+        "height": 1800
+      },
       "cropNote": [
         "Composition row 3 right, size class 5, 493 CSS px. Also one of GalleryPreview's three frames on the",
         "home page, at the same tier, which is a second placement of one build rather than a second build.",
@@ -423,15 +587,24 @@
         "lamp, both reflections in the window glass and the night skyline."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 42vw",
       "alt": "An IFN meetup slide lit on a wall mounted screen at night under a pendant lamp, with a second screen to the left and the slide reflected twice in the window glass over the city.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-jul-screen",
@@ -439,7 +612,12 @@
       "source": "venue/20260723_190952.jpg",
       "grade": "july-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 820, "width": 1970, "height": 1108 },
+      "crop": {
+        "left": 0,
+        "top": 820,
+        "width": 1970,
+        "height": 1108
+      },
       "cropNote": [
         "Composition row 4 left, size class 4, 389 CSS px, on the row that steps off the left spine.",
         "This crop is UNCHANGED from the previous revision and it is now the only crop in the file that",
@@ -451,15 +629,24 @@
         "and widening it to the right would put a second flag frame two rows away from the first."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 33vw",
       "alt": "An IFN meetup slide projected on a pull down screen in a quiet corner of the room, two potted plants beside it and the ceiling lights reflected in the polished floor.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-feb-hall",
@@ -467,7 +654,12 @@
       "source": "meetups/20260226_184622.jpg",
       "grade": "february-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "NEW SLOT NAME 2026-08-10, same source and same crop as the outgoing founder-story slot. The frame",
         "is unchanged; only its home is. It was the FounderStory image on the landing page until this round",
@@ -483,15 +675,24 @@
         "Full frame at exactly 16:9."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 42vw",
       "alt": "Two small groups of people talking across a large open room with rows of empty chairs around them, under a steel and ductwork ceiling, with lit IFN meetup slides on the screens and the city lights at the windows.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-jul-standing",
@@ -499,7 +700,12 @@
       "source": "meetups/20260723_190939.jpg",
       "grade": "july-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "Composition row 5, size class 7, 699 CSS px, the solo statement that answers row 1's void.",
         "Also one of GalleryPreview's three frames on the home page, at the same tier.",
@@ -510,15 +716,24 @@
         "1400px render of the full source, not against the old string."
       ],
       "outputs": [
-        { "width": 704, "height": 396 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 704,
+          "height": 396
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 704,
       "sizes": "(max-width: 639px) 100vw, 58vw",
       "alt": "Three people standing and talking in an open room, two of them holding drinks, an IFN meetup slide on the screen behind them and another person standing further back beside the wall.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 704, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 704,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-apr-seated",
@@ -526,7 +741,12 @@
       "source": "meetups/20260423_184523.jpg",
       "grade": "april-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "NEW 2026-08-10. Composition row 6 left, size class 8, 803 CSS px, the second largest cell in the",
         "hang. The previous revision held this frame as a reserve for gallery-apr-listening on the grounds",
@@ -536,15 +756,24 @@
         "downtown through the glass wall. Full frame at exactly 16:9."
       ],
       "outputs": [
-        { "width": 832, "height": 468 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 832,
+          "height": 468
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 832,
       "sizes": "(max-width: 639px) 100vw, 67vw",
       "alt": "A full circle of about fifteen people seated in conversation on an open floor, several of them turned toward the camera, with IFN meetup slides on two screens and downtown Austin through a full height glass wall.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 832, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 832,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-feb-slide",
@@ -552,7 +781,12 @@
       "source": "venue/20260226_184639.jpg",
       "grade": "february-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "NEW 2026-08-10. Composition row 6 right, size class 4, 389 CSS px. Full frame at exactly 16:9.",
         "KNOWN ARTIFACT, recorded so nobody finds it later and thinks a date leaked into the page: the slide",
@@ -563,15 +797,24 @@
         "names a date or a venue."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 33vw",
       "alt": "An IFN meetup slide lit on a wall mounted screen at night, a pendant lamp above it, a red exit sign to the right and the edge of a large wall emblem at the frame's edge.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-apr-profile",
@@ -579,22 +822,36 @@
       "source": "meetups/20260423_184536.jpg",
       "grade": "april-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "NEW 2026-08-10. Composition row 7 left, size class 5, 493 CSS px. Full frame at exactly 16:9.",
         "The former venue gear is the largest object in this frame and it is shipped that way, uncropped, on",
         "the founder's ruling. No crop of this composition removes it without removing the room."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 42vw",
       "alt": "A man in glasses seen in profile at the edge of the seated group, the back of another person's head beside him and a third person at the edge of the frame, with a large wall emblem on a dark curtain behind and an IFN meetup slide lit on a screen across the room.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-apr-floor",
@@ -602,7 +859,12 @@
       "source": "meetups/20260423_184620.jpg",
       "grade": "april-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "Composition row 7 right, size class 6, 596 CSS px. Also GalleryPreview's lead frame on the home",
         "page, at the same tier. The only frame in the folder shot from the front of the room looking back,",
@@ -610,15 +872,24 @@
         "the evening. Full frame at exactly 16:9."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 50vw",
       "alt": "The meetup seen from behind a laptop on a stand at the front of the room, the group seated in a circle in the distance across a wide polished concrete floor.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-apr-circle",
@@ -626,7 +897,12 @@
       "source": "meetups/20260423_184509.jpg",
       "grade": "april-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "Composition row 8 left, size class 6, 596 CSS px. The fullest circle in the folder, seen past the",
         "back row. It was tested for the hero band this round and lost on an edge measurement rather than a",
@@ -635,15 +911,24 @@
         "Full frame at exactly 16:9."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 50vw",
       "alt": "About a dozen people seated in a wide circle in conversation, with daylight coming through a full height glass wall behind them and an IFN meetup slide on a screen at the left.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-feb-room",
@@ -651,22 +936,36 @@
       "source": "venue/20260226_184645.jpg",
       "grade": "february-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "NEW 2026-08-10. Composition row 8 right, size class 4, 389 CSS px. Full frame at exactly 16:9.",
         "The former venue emblem is the composition here and it is shipped that way, uncropped, on the",
         "founder's ruling."
       ],
       "outputs": [
-        { "width": 640, "height": 360 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 33vw",
       "alt": "Two leather armchairs set in front of a large illuminated wall emblem at night, an IFN meetup slide on a screen to each side, empty chairs across the polished floor and one person seated at the edge of the frame.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 640, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
     },
     {
       "name": "gallery-apr-group",
@@ -674,7 +973,12 @@
       "source": "meetups/20260423_201820.jpg",
       "grade": "april-2026",
       "aspectRatio": "16:9",
-      "crop": { "left": 0, "top": 1, "width": 4000, "height": 2250 },
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
       "cropNote": [
         "Composition row 9, size class 8, 803 CSS px. The last frame in the hang and the note the page closes",
         "on: the whole group standing together, every face legible, the most people in any frame the folder",
@@ -683,24 +987,793 @@
         "with a whole row to itself instead. Full frame at exactly 16:9."
       ],
       "outputs": [
-        { "width": 832, "height": 468 },
-        { "width": 1280, "height": 720 }
+        {
+          "width": 832,
+          "height": 468
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
       ],
       "fallbackWidth": 832,
       "sizes": "(max-width: 639px) 100vw, 67vw",
       "alt": "A line of people standing shoulder to shoulder facing the camera in front of an IFN meetup screen at the end of the evening.",
       "loading": "lazy",
       "fetchPriority": "auto",
-      "gallery": { "tileWidth": 832, "viewWidth": 1280 }
+      "gallery": {
+        "tileWidth": 832,
+        "viewWidth": 1280
+      }
     },
-
+    {
+      "name": "gallery-aug-group",
+      "status": "ship",
+      "source": "meetups/20260827_202740.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A large group of people standing together facing the camera in an open event hall, with a thank-you slide on a screen behind them and a wall emblem on a dark curtain.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-audience",
+      "status": "ship",
+      "source": "meetups/20260827_190404.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "People seated in rows listening, some with laptops open on their laps, others standing along the back wall of a daylit room with framed posters.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-room",
+      "status": "ship",
+      "source": "meetups/20260827_190429.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A speaker with a microphone facing a seated audience across an open floor, photographed from the back of the room, with a meetup slide on a screen and a wall emblem behind.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-rows",
+      "status": "ship",
+      "source": "meetups/20260827_190459.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Rows of people seated and listening in an industrial room under hanging pendant lamps, with a few people standing along the back wall of framed posters.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-speaker",
+      "status": "ship",
+      "source": "meetups/20260827_190507.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "9:16",
+      "crop": {
+        "left": 1,
+        "top": 0,
+        "width": 2250,
+        "height": 4000
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 portrait frame, shipped at source aspect rather than forced to 16:9.",
+        "A 16:9 crop of a standing speaker or seated pair would cut the subject the frame exists to show."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 1138
+        },
+        {
+          "width": 1125,
+          "height": 2000
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A person standing with a microphone mid gesture in front of a meetup agenda slide on a large screen.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1125
+      }
+    },
+    {
+      "name": "gallery-aug-listening",
+      "status": "ship",
+      "source": "meetups/20260827_190613.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A seated audience turned toward a speaker out of frame, one person smiling in the foreground, with others standing along the back wall beside a tall plant.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-standing",
+      "status": "ship",
+      "source": "meetups/20260827_190620.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Several people standing and seated near glass doors listening, one holding a water bottle, with framed posters on the wall beside them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-address",
+      "status": "ship",
+      "source": "meetups/20260827_190703.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A speaker seen from behind addressing a mixed seated and standing crowd across a wide open floor under industrial pendant lights.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-window-seat",
+      "status": "ship",
+      "source": "meetups/20260827_191000.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "9:16",
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 1080,
+        "height": 1920
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 portrait frame, shipped at source aspect rather than forced to 16:9.",
+        "A 16:9 crop of a standing speaker or seated pair would cut the subject the frame exists to show."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 1138
+        },
+        {
+          "width": 1080,
+          "height": 1920
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two people seated in chairs listening beside tall windows that look out onto a neighbouring building.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1080
+      }
+    },
+    {
+      "name": "gallery-aug-networking",
+      "status": "ship",
+      "source": "meetups/20260827_191238.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Small groups of people talking across an open floor, with a QR code lit on a pillar screen and the city through the windows behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-lounge",
+      "status": "ship",
+      "source": "meetups/20260827_191242.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "People standing in conversation near leather chairs and tall windows, with grey stackable chairs scattered across the polished floor.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-posters",
+      "status": "ship",
+      "source": "meetups/20260827_191301.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two people standing and talking in front of a wall of framed posters, one of them holding a drink.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-wall",
+      "status": "ship",
+      "source": "meetups/20260827_191304.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two people standing with arms crossed in conversation in front of framed posters on a grey wall.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-gesture",
+      "status": "ship",
+      "source": "meetups/20260827_201545.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two people mid conversation in a room of hanging pendant lights, one gesturing with both hands, with other groups talking behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-midroom",
+      "status": "ship",
+      "source": "meetups/20260827_201643.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "People standing and talking under industrial pendant lights, with a tall plant and glass partitions behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-lights",
+      "status": "ship",
+      "source": "meetups/20260827_201646.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A small cluster of people talking under warm circular ceiling lights, with other attendees soft in the background.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-pose",
+      "status": "ship",
+      "source": "meetups/20260827_201654.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two people facing the camera mid celebration in a meetup room, one seated with a laptop, others talking further back near framed posters.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-skyline",
+      "status": "ship",
+      "source": "meetups/20260827_201705.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Small groups of people networking beside tall windows looking out onto a city skyline at dusk under hanging pendant lights.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-counter",
+      "status": "ship",
+      "source": "meetups/20260827_201717.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two people talking across a counter in front of framed posters, with a leafy plant beside them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-dusk",
+      "status": "ship",
+      "source": "meetups/20260827_201725.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A small group talking and smiling beside tall windows with a city skyline at dusk behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-aug-night",
+      "status": "ship",
+      "source": "meetups/20260827_201728.jpg",
+      "grade": "august-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-15. Vol. 08 full curated album. Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A few people standing in conversation in a nightlit room, one wearing a name tag, with city lights visible through the windows behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
     {
       "name": "hero-band-reserve",
       "status": "reserve",
       "source": "venue/20260226_184628.jpg",
       "grade": "february-2026",
       "aspectRatio": "2.4:1",
-      "crop": { "left": 0, "top": 0, "width": 4000, "height": 1667 },
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 4000,
+        "height": 1667
+      },
       "cropNote": [
         "Standing fallback for the hero band, same slot and same ratio, so a swap is one status edit.",
         "Top anchored: it keeps the lit sign, the pendant lamp, the two reflections in the window glass and",
@@ -709,10 +1782,22 @@
         "slot is a crop box held ready, not a claim on the source, and this one builds nothing today."
       ],
       "outputs": [
-        { "width": 720, "height": 300 },
-        { "width": 1080, "height": 450 },
-        { "width": 1440, "height": 600 },
-        { "width": 1920, "height": 800 }
+        {
+          "width": 720,
+          "height": 300
+        },
+        {
+          "width": 1080,
+          "height": 450
+        },
+        {
+          "width": 1440,
+          "height": 600
+        },
+        {
+          "width": 1920,
+          "height": 800
+        }
       ],
       "fallbackWidth": 1080,
       "sizes": "100vw",
@@ -721,7 +1806,6 @@
       "fetchPriority": "auto"
     }
   ],
-
   "pool": {
     "$note": [
       "EMPTY AS OF 2026-08-10, and empty is the correct state rather than an oversight.",

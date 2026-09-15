@@ -25,7 +25,7 @@
 // enlarged view for every cell. That is the exact failure the split shape exists
 // to prevent.
 
-export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-floor" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group"
+export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-floor" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-speaker" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-window-seat" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-lights" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night"
 
 export type PhotoDerivative = {
   width: number
@@ -74,7 +74,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 1440, height: 600, avif: "/photos/hero-band-1440w.avif", webp: "/photos/hero-band-1440w.webp" },
       { width: 1920, height: 800, avif: "/photos/hero-band-1920w.avif", webp: "/photos/hero-band-1920w.webp" },
     ],
-    bytesTotal: 588431,
+    bytesTotal: 585401,
   },
   "how-it-works-middle": {
     slot: "how-it-works-middle",
@@ -93,7 +93,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 1024, height: 819, avif: "/photos/how-it-works-middle-1024w.avif", webp: "/photos/how-it-works-middle-1024w.webp" },
       { width: 1440, height: 1151, avif: "/photos/how-it-works-middle-1440w.avif", webp: "/photos/how-it-works-middle-1440w.webp" },
     ],
-    bytesTotal: 406317,
+    bytesTotal: 403914,
   },
   "founder-story": {
     slot: "founder-story",
@@ -113,7 +113,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 1280, height: 720, avif: "/photos/founder-story-1280w.avif", webp: "/photos/founder-story-1280w.webp" },
       { width: 1920, height: 1080, avif: "/photos/founder-story-1920w.avif", webp: "/photos/founder-story-1920w.webp" },
     ],
-    bytesTotal: 397540,
+    bytesTotal: 394718,
   },
   "gallery-apr-room": {
     slot: "gallery-apr-room",
@@ -131,7 +131,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 960, height: 540, avif: "/photos/gallery-apr-room-960w.avif", webp: "/photos/gallery-apr-room-960w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-apr-room-1280w.avif", webp: "/photos/gallery-apr-room-1280w.webp" },
     ],
-    bytesTotal: 312464,
+    bytesTotal: 310854,
   },
   "gallery-jul-hall": {
     slot: "gallery-jul-hall",
@@ -149,7 +149,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-jul-hall-640w.avif", webp: "/photos/gallery-jul-hall-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-jul-hall-1280w.avif", webp: "/photos/gallery-jul-hall-1280w.webp" },
     ],
-    bytesTotal: 232549,
+    bytesTotal: 230844,
   },
   "gallery-apr-gesture": {
     slot: "gallery-apr-gesture",
@@ -167,7 +167,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 704, height: 396, avif: "/photos/gallery-apr-gesture-704w.avif", webp: "/photos/gallery-apr-gesture-704w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-apr-gesture-1280w.avif", webp: "/photos/gallery-apr-gesture-1280w.webp" },
     ],
-    bytesTotal: 200801,
+    bytesTotal: 199559,
   },
   "gallery-apr-listening": {
     slot: "gallery-apr-listening",
@@ -185,7 +185,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-apr-listening-640w.avif", webp: "/photos/gallery-apr-listening-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-apr-listening-1280w.avif", webp: "/photos/gallery-apr-listening-1280w.webp" },
     ],
-    bytesTotal: 257250,
+    bytesTotal: 256144,
   },
   "gallery-feb-sign": {
     slot: "gallery-feb-sign",
@@ -203,7 +203,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-feb-sign-640w.avif", webp: "/photos/gallery-feb-sign-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-feb-sign-1280w.avif", webp: "/photos/gallery-feb-sign-1280w.webp" },
     ],
-    bytesTotal: 90482,
+    bytesTotal: 89301,
   },
   "gallery-jul-screen": {
     slot: "gallery-jul-screen",
@@ -221,7 +221,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-jul-screen-640w.avif", webp: "/photos/gallery-jul-screen-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-jul-screen-1280w.avif", webp: "/photos/gallery-jul-screen-1280w.webp" },
     ],
-    bytesTotal: 183986,
+    bytesTotal: 182760,
   },
   "gallery-feb-hall": {
     slot: "gallery-feb-hall",
@@ -239,7 +239,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-feb-hall-640w.avif", webp: "/photos/gallery-feb-hall-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-feb-hall-1280w.avif", webp: "/photos/gallery-feb-hall-1280w.webp" },
     ],
-    bytesTotal: 204598,
+    bytesTotal: 203332,
   },
   "gallery-jul-standing": {
     slot: "gallery-jul-standing",
@@ -257,7 +257,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 704, height: 396, avif: "/photos/gallery-jul-standing-704w.avif", webp: "/photos/gallery-jul-standing-704w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-jul-standing-1280w.avif", webp: "/photos/gallery-jul-standing-1280w.webp" },
     ],
-    bytesTotal: 177857,
+    bytesTotal: 176322,
   },
   "gallery-apr-seated": {
     slot: "gallery-apr-seated",
@@ -275,7 +275,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 832, height: 468, avif: "/photos/gallery-apr-seated-832w.avif", webp: "/photos/gallery-apr-seated-832w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-apr-seated-1280w.avif", webp: "/photos/gallery-apr-seated-1280w.webp" },
     ],
-    bytesTotal: 306962,
+    bytesTotal: 305420,
   },
   "gallery-feb-slide": {
     slot: "gallery-feb-slide",
@@ -293,7 +293,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-feb-slide-640w.avif", webp: "/photos/gallery-feb-slide-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-feb-slide-1280w.avif", webp: "/photos/gallery-feb-slide-1280w.webp" },
     ],
-    bytesTotal: 90945,
+    bytesTotal: 89818,
   },
   "gallery-apr-profile": {
     slot: "gallery-apr-profile",
@@ -311,7 +311,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-apr-profile-640w.avif", webp: "/photos/gallery-apr-profile-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-apr-profile-1280w.avif", webp: "/photos/gallery-apr-profile-1280w.webp" },
     ],
-    bytesTotal: 158076,
+    bytesTotal: 156665,
   },
   "gallery-apr-floor": {
     slot: "gallery-apr-floor",
@@ -329,7 +329,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-apr-floor-640w.avif", webp: "/photos/gallery-apr-floor-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-apr-floor-1280w.avif", webp: "/photos/gallery-apr-floor-1280w.webp" },
     ],
-    bytesTotal: 207676,
+    bytesTotal: 206210,
   },
   "gallery-apr-circle": {
     slot: "gallery-apr-circle",
@@ -347,7 +347,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-apr-circle-640w.avif", webp: "/photos/gallery-apr-circle-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-apr-circle-1280w.avif", webp: "/photos/gallery-apr-circle-1280w.webp" },
     ],
-    bytesTotal: 216163,
+    bytesTotal: 214888,
   },
   "gallery-feb-room": {
     slot: "gallery-feb-room",
@@ -365,7 +365,7 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 640, height: 360, avif: "/photos/gallery-feb-room-640w.avif", webp: "/photos/gallery-feb-room-640w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-feb-room-1280w.avif", webp: "/photos/gallery-feb-room-1280w.webp" },
     ],
-    bytesTotal: 144724,
+    bytesTotal: 143611,
   },
   "gallery-apr-group": {
     slot: "gallery-apr-group",
@@ -383,7 +383,385 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 832, height: 468, avif: "/photos/gallery-apr-group-832w.avif", webp: "/photos/gallery-apr-group-832w.webp" },
       { width: 1280, height: 720, avif: "/photos/gallery-apr-group-1280w.avif", webp: "/photos/gallery-apr-group-1280w.webp" },
     ],
-    bytesTotal: 259954,
+    bytesTotal: 258403,
+  },
+  "gallery-aug-group": {
+    slot: "gallery-aug-group",
+    alt: "A large group of people standing together facing the camera in an open event hall, with a thank-you slide on a screen behind them and a wall emblem on a dark curtain.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-group-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-group-640w.avif 640w, /photos/gallery-aug-group-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-group-640w.webp 640w, /photos/gallery-aug-group-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-group-640w.avif", webp: "/photos/gallery-aug-group-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-group-1280w.avif", webp: "/photos/gallery-aug-group-1280w.webp" },
+    ],
+    bytesTotal: 208096,
+  },
+  "gallery-aug-audience": {
+    slot: "gallery-aug-audience",
+    alt: "People seated in rows listening, some with laptops open on their laps, others standing along the back wall of a daylit room with framed posters.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-audience-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-audience-640w.avif 640w, /photos/gallery-aug-audience-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-audience-640w.webp 640w, /photos/gallery-aug-audience-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-audience-640w.avif", webp: "/photos/gallery-aug-audience-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-audience-1280w.avif", webp: "/photos/gallery-aug-audience-1280w.webp" },
+    ],
+    bytesTotal: 173341,
+  },
+  "gallery-aug-room": {
+    slot: "gallery-aug-room",
+    alt: "A speaker with a microphone facing a seated audience across an open floor, photographed from the back of the room, with a meetup slide on a screen and a wall emblem behind.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-room-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-room-640w.avif 640w, /photos/gallery-aug-room-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-room-640w.webp 640w, /photos/gallery-aug-room-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-room-640w.avif", webp: "/photos/gallery-aug-room-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-room-1280w.avif", webp: "/photos/gallery-aug-room-1280w.webp" },
+    ],
+    bytesTotal: 190234,
+  },
+  "gallery-aug-rows": {
+    slot: "gallery-aug-rows",
+    alt: "Rows of people seated and listening in an industrial room under hanging pendant lamps, with a few people standing along the back wall of framed posters.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-rows-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-rows-640w.avif 640w, /photos/gallery-aug-rows-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-rows-640w.webp 640w, /photos/gallery-aug-rows-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-rows-640w.avif", webp: "/photos/gallery-aug-rows-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-rows-1280w.avif", webp: "/photos/gallery-aug-rows-1280w.webp" },
+    ],
+    bytesTotal: 218915,
+  },
+  "gallery-aug-speaker": {
+    slot: "gallery-aug-speaker",
+    alt: "A person standing with a microphone mid gesture in front of a meetup agenda slide on a large screen.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-speaker-640w.jpg",
+    width: 640,
+    height: 1138,
+    aspectRatio: "9:16",
+    avif: "/photos/gallery-aug-speaker-640w.avif 640w, /photos/gallery-aug-speaker-1125w.avif 1125w",
+    webp: "/photos/gallery-aug-speaker-640w.webp 640w, /photos/gallery-aug-speaker-1125w.webp 1125w",
+    derivatives: [
+      { width: 640, height: 1138, avif: "/photos/gallery-aug-speaker-640w.avif", webp: "/photos/gallery-aug-speaker-640w.webp" },
+      { width: 1125, height: 2000, avif: "/photos/gallery-aug-speaker-1125w.avif", webp: "/photos/gallery-aug-speaker-1125w.webp" },
+    ],
+    bytesTotal: 247823,
+  },
+  "gallery-aug-listening": {
+    slot: "gallery-aug-listening",
+    alt: "A seated audience turned toward a speaker out of frame, one person smiling in the foreground, with others standing along the back wall beside a tall plant.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-listening-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-listening-640w.avif 640w, /photos/gallery-aug-listening-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-listening-640w.webp 640w, /photos/gallery-aug-listening-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-listening-640w.avif", webp: "/photos/gallery-aug-listening-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-listening-1280w.avif", webp: "/photos/gallery-aug-listening-1280w.webp" },
+    ],
+    bytesTotal: 231592,
+  },
+  "gallery-aug-standing": {
+    slot: "gallery-aug-standing",
+    alt: "Several people standing and seated near glass doors listening, one holding a water bottle, with framed posters on the wall beside them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-standing-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-standing-640w.avif 640w, /photos/gallery-aug-standing-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-standing-640w.webp 640w, /photos/gallery-aug-standing-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-standing-640w.avif", webp: "/photos/gallery-aug-standing-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-standing-1280w.avif", webp: "/photos/gallery-aug-standing-1280w.webp" },
+    ],
+    bytesTotal: 144486,
+  },
+  "gallery-aug-address": {
+    slot: "gallery-aug-address",
+    alt: "A speaker seen from behind addressing a mixed seated and standing crowd across a wide open floor under industrial pendant lights.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-address-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-address-640w.avif 640w, /photos/gallery-aug-address-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-address-640w.webp 640w, /photos/gallery-aug-address-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-address-640w.avif", webp: "/photos/gallery-aug-address-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-address-1280w.avif", webp: "/photos/gallery-aug-address-1280w.webp" },
+    ],
+    bytesTotal: 205332,
+  },
+  "gallery-aug-window-seat": {
+    slot: "gallery-aug-window-seat",
+    alt: "Two people seated in chairs listening beside tall windows that look out onto a neighbouring building.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-window-seat-640w.jpg",
+    width: 640,
+    height: 1138,
+    aspectRatio: "9:16",
+    avif: "/photos/gallery-aug-window-seat-640w.avif 640w, /photos/gallery-aug-window-seat-1080w.avif 1080w",
+    webp: "/photos/gallery-aug-window-seat-640w.webp 640w, /photos/gallery-aug-window-seat-1080w.webp 1080w",
+    derivatives: [
+      { width: 640, height: 1138, avif: "/photos/gallery-aug-window-seat-640w.avif", webp: "/photos/gallery-aug-window-seat-640w.webp" },
+      { width: 1080, height: 1920, avif: "/photos/gallery-aug-window-seat-1080w.avif", webp: "/photos/gallery-aug-window-seat-1080w.webp" },
+    ],
+    bytesTotal: 271509,
+  },
+  "gallery-aug-networking": {
+    slot: "gallery-aug-networking",
+    alt: "Small groups of people talking across an open floor, with a QR code lit on a pillar screen and the city through the windows behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-networking-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-networking-640w.avif 640w, /photos/gallery-aug-networking-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-networking-640w.webp 640w, /photos/gallery-aug-networking-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-networking-640w.avif", webp: "/photos/gallery-aug-networking-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-networking-1280w.avif", webp: "/photos/gallery-aug-networking-1280w.webp" },
+    ],
+    bytesTotal: 209251,
+  },
+  "gallery-aug-lounge": {
+    slot: "gallery-aug-lounge",
+    alt: "People standing in conversation near leather chairs and tall windows, with grey stackable chairs scattered across the polished floor.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-lounge-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-lounge-640w.avif 640w, /photos/gallery-aug-lounge-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-lounge-640w.webp 640w, /photos/gallery-aug-lounge-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-lounge-640w.avif", webp: "/photos/gallery-aug-lounge-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-lounge-1280w.avif", webp: "/photos/gallery-aug-lounge-1280w.webp" },
+    ],
+    bytesTotal: 246347,
+  },
+  "gallery-aug-posters": {
+    slot: "gallery-aug-posters",
+    alt: "Two people standing and talking in front of a wall of framed posters, one of them holding a drink.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-posters-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-posters-640w.avif 640w, /photos/gallery-aug-posters-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-posters-640w.webp 640w, /photos/gallery-aug-posters-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-posters-640w.avif", webp: "/photos/gallery-aug-posters-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-posters-1280w.avif", webp: "/photos/gallery-aug-posters-1280w.webp" },
+    ],
+    bytesTotal: 170008,
+  },
+  "gallery-aug-wall": {
+    slot: "gallery-aug-wall",
+    alt: "Two people standing with arms crossed in conversation in front of framed posters on a grey wall.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-wall-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-wall-640w.avif 640w, /photos/gallery-aug-wall-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-wall-640w.webp 640w, /photos/gallery-aug-wall-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-wall-640w.avif", webp: "/photos/gallery-aug-wall-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-wall-1280w.avif", webp: "/photos/gallery-aug-wall-1280w.webp" },
+    ],
+    bytesTotal: 118788,
+  },
+  "gallery-aug-gesture": {
+    slot: "gallery-aug-gesture",
+    alt: "Two people mid conversation in a room of hanging pendant lights, one gesturing with both hands, with other groups talking behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-gesture-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-gesture-640w.avif 640w, /photos/gallery-aug-gesture-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-gesture-640w.webp 640w, /photos/gallery-aug-gesture-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-gesture-640w.avif", webp: "/photos/gallery-aug-gesture-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-gesture-1280w.avif", webp: "/photos/gallery-aug-gesture-1280w.webp" },
+    ],
+    bytesTotal: 115416,
+  },
+  "gallery-aug-midroom": {
+    slot: "gallery-aug-midroom",
+    alt: "People standing and talking under industrial pendant lights, with a tall plant and glass partitions behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-midroom-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-midroom-640w.avif 640w, /photos/gallery-aug-midroom-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-midroom-640w.webp 640w, /photos/gallery-aug-midroom-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-midroom-640w.avif", webp: "/photos/gallery-aug-midroom-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-midroom-1280w.avif", webp: "/photos/gallery-aug-midroom-1280w.webp" },
+    ],
+    bytesTotal: 165559,
+  },
+  "gallery-aug-lights": {
+    slot: "gallery-aug-lights",
+    alt: "A small cluster of people talking under warm circular ceiling lights, with other attendees soft in the background.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-lights-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-lights-640w.avif 640w, /photos/gallery-aug-lights-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-lights-640w.webp 640w, /photos/gallery-aug-lights-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-lights-640w.avif", webp: "/photos/gallery-aug-lights-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-lights-1280w.avif", webp: "/photos/gallery-aug-lights-1280w.webp" },
+    ],
+    bytesTotal: 130778,
+  },
+  "gallery-aug-pose": {
+    slot: "gallery-aug-pose",
+    alt: "Two people facing the camera mid celebration in a meetup room, one seated with a laptop, others talking further back near framed posters.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-pose-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-pose-640w.avif 640w, /photos/gallery-aug-pose-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-pose-640w.webp 640w, /photos/gallery-aug-pose-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-pose-640w.avif", webp: "/photos/gallery-aug-pose-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-pose-1280w.avif", webp: "/photos/gallery-aug-pose-1280w.webp" },
+    ],
+    bytesTotal: 124445,
+  },
+  "gallery-aug-skyline": {
+    slot: "gallery-aug-skyline",
+    alt: "Small groups of people networking beside tall windows looking out onto a city skyline at dusk under hanging pendant lights.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-skyline-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-skyline-640w.avif 640w, /photos/gallery-aug-skyline-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-skyline-640w.webp 640w, /photos/gallery-aug-skyline-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-skyline-640w.avif", webp: "/photos/gallery-aug-skyline-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-skyline-1280w.avif", webp: "/photos/gallery-aug-skyline-1280w.webp" },
+    ],
+    bytesTotal: 203953,
+  },
+  "gallery-aug-counter": {
+    slot: "gallery-aug-counter",
+    alt: "Two people talking across a counter in front of framed posters, with a leafy plant beside them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-counter-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-counter-640w.avif 640w, /photos/gallery-aug-counter-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-counter-640w.webp 640w, /photos/gallery-aug-counter-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-counter-640w.avif", webp: "/photos/gallery-aug-counter-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-counter-1280w.avif", webp: "/photos/gallery-aug-counter-1280w.webp" },
+    ],
+    bytesTotal: 161323,
+  },
+  "gallery-aug-dusk": {
+    slot: "gallery-aug-dusk",
+    alt: "A small group talking and smiling beside tall windows with a city skyline at dusk behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-dusk-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-dusk-640w.avif 640w, /photos/gallery-aug-dusk-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-dusk-640w.webp 640w, /photos/gallery-aug-dusk-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-dusk-640w.avif", webp: "/photos/gallery-aug-dusk-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-dusk-1280w.avif", webp: "/photos/gallery-aug-dusk-1280w.webp" },
+    ],
+    bytesTotal: 152485,
+  },
+  "gallery-aug-night": {
+    slot: "gallery-aug-night",
+    alt: "A few people standing in conversation in a nightlit room, one wearing a name tag, with city lights visible through the windows behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-aug-night-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-aug-night-640w.avif 640w, /photos/gallery-aug-night-1280w.avif 1280w",
+    webp: "/photos/gallery-aug-night-640w.webp 640w, /photos/gallery-aug-night-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-aug-night-640w.avif", webp: "/photos/gallery-aug-night-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-aug-night-1280w.avif", webp: "/photos/gallery-aug-night-1280w.webp" },
+    ],
+    bytesTotal: 116290,
   },
 }
 
@@ -460,21 +838,42 @@ export const photos: Record<PhotoSlot, Photo> = {
  * COMMENT on purpose: the filenames carry timestamps, and nothing date derived is
  * emitted as data a component could render.
  *
- *    1. gallery-apr-room       meetups/20260423_184515.jpg  (tile 960w)
- *    2. gallery-jul-hall       venue/20260723_175654.jpg  (tile 640w)
- *    3. gallery-apr-gesture    meetups/20260423_184540.jpg  (tile 704w)
- *    4. gallery-apr-listening  meetups/20260423_184527.jpg  (tile 640w)
- *    5. gallery-feb-sign       venue/20260226_184628.jpg  (tile 640w)
- *    6. gallery-jul-screen     venue/20260723_190952.jpg  (tile 640w)
- *    7. gallery-feb-hall       meetups/20260226_184622.jpg  (tile 640w)
- *    8. gallery-jul-standing   meetups/20260723_190939.jpg  (tile 704w)
- *    9. gallery-apr-seated     meetups/20260423_184523.jpg  (tile 832w)
- *   10. gallery-feb-slide      venue/20260226_184639.jpg  (tile 640w)
- *   11. gallery-apr-profile    meetups/20260423_184536.jpg  (tile 640w)
- *   12. gallery-apr-floor      meetups/20260423_184620.jpg  (tile 640w)
- *   13. gallery-apr-circle     meetups/20260423_184509.jpg  (tile 640w)
- *   14. gallery-feb-room       venue/20260226_184645.jpg  (tile 640w)
- *   15. gallery-apr-group      meetups/20260423_201820.jpg  (tile 832w)
+ *    1. gallery-apr-room         meetups/20260423_184515.jpg  (tile 960w)
+ *    2. gallery-jul-hall         venue/20260723_175654.jpg  (tile 640w)
+ *    3. gallery-apr-gesture      meetups/20260423_184540.jpg  (tile 704w)
+ *    4. gallery-apr-listening    meetups/20260423_184527.jpg  (tile 640w)
+ *    5. gallery-feb-sign         venue/20260226_184628.jpg  (tile 640w)
+ *    6. gallery-jul-screen       venue/20260723_190952.jpg  (tile 640w)
+ *    7. gallery-feb-hall         meetups/20260226_184622.jpg  (tile 640w)
+ *    8. gallery-jul-standing     meetups/20260723_190939.jpg  (tile 704w)
+ *    9. gallery-apr-seated       meetups/20260423_184523.jpg  (tile 832w)
+ *   10. gallery-feb-slide        venue/20260226_184639.jpg  (tile 640w)
+ *   11. gallery-apr-profile      meetups/20260423_184536.jpg  (tile 640w)
+ *   12. gallery-apr-floor        meetups/20260423_184620.jpg  (tile 640w)
+ *   13. gallery-apr-circle       meetups/20260423_184509.jpg  (tile 640w)
+ *   14. gallery-feb-room         venue/20260226_184645.jpg  (tile 640w)
+ *   15. gallery-apr-group        meetups/20260423_201820.jpg  (tile 832w)
+ *   16. gallery-aug-group        meetups/20260827_202740.jpg  (tile 640w)
+ *   17. gallery-aug-audience     meetups/20260827_190404.jpg  (tile 640w)
+ *   18. gallery-aug-room         meetups/20260827_190429.jpg  (tile 640w)
+ *   19. gallery-aug-rows         meetups/20260827_190459.jpg  (tile 640w)
+ *   20. gallery-aug-speaker      meetups/20260827_190507.jpg  (tile 640w)
+ *   21. gallery-aug-listening    meetups/20260827_190613.jpg  (tile 640w)
+ *   22. gallery-aug-standing     meetups/20260827_190620.jpg  (tile 640w)
+ *   23. gallery-aug-address      meetups/20260827_190703.jpg  (tile 640w)
+ *   24. gallery-aug-window-seat  meetups/20260827_191000.jpg  (tile 640w)
+ *   25. gallery-aug-networking   meetups/20260827_191238.jpg  (tile 640w)
+ *   26. gallery-aug-lounge       meetups/20260827_191242.jpg  (tile 640w)
+ *   27. gallery-aug-posters      meetups/20260827_191301.jpg  (tile 640w)
+ *   28. gallery-aug-wall         meetups/20260827_191304.jpg  (tile 640w)
+ *   29. gallery-aug-gesture      meetups/20260827_201545.jpg  (tile 640w)
+ *   30. gallery-aug-midroom      meetups/20260827_201643.jpg  (tile 640w)
+ *   31. gallery-aug-lights       meetups/20260827_201646.jpg  (tile 640w)
+ *   32. gallery-aug-pose         meetups/20260827_201654.jpg  (tile 640w)
+ *   33. gallery-aug-skyline      meetups/20260827_201705.jpg  (tile 640w)
+ *   34. gallery-aug-counter      meetups/20260827_201717.jpg  (tile 640w)
+ *   35. gallery-aug-dusk         meetups/20260827_201725.jpg  (tile 640w)
+ *   36. gallery-aug-night        meetups/20260827_201728.jpg  (tile 640w)
  */
 
 export type GalleryImage = {
@@ -661,7 +1060,238 @@ export const galleryFrames: GalleryFrame[] = [
       avif: "/photos/gallery-apr-group-1280w.avif",
       webp: "/photos/gallery-apr-group-1280w.webp" },
   },
+  {
+    slot: "gallery-aug-group",
+    alt: "A large group of people standing together facing the camera in an open event hall, with a thank-you slide on a screen behind them and a wall emblem on a dark curtain.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-group-640w.jpg",
+      avif: "/photos/gallery-aug-group-640w.avif",
+      webp: "/photos/gallery-aug-group-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-group-1280w.avif",
+      webp: "/photos/gallery-aug-group-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-audience",
+    alt: "People seated in rows listening, some with laptops open on their laps, others standing along the back wall of a daylit room with framed posters.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-audience-640w.jpg",
+      avif: "/photos/gallery-aug-audience-640w.avif",
+      webp: "/photos/gallery-aug-audience-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-audience-1280w.avif",
+      webp: "/photos/gallery-aug-audience-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-room",
+    alt: "A speaker with a microphone facing a seated audience across an open floor, photographed from the back of the room, with a meetup slide on a screen and a wall emblem behind.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-room-640w.jpg",
+      avif: "/photos/gallery-aug-room-640w.avif",
+      webp: "/photos/gallery-aug-room-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-room-1280w.avif",
+      webp: "/photos/gallery-aug-room-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-rows",
+    alt: "Rows of people seated and listening in an industrial room under hanging pendant lamps, with a few people standing along the back wall of framed posters.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-rows-640w.jpg",
+      avif: "/photos/gallery-aug-rows-640w.avif",
+      webp: "/photos/gallery-aug-rows-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-rows-1280w.avif",
+      webp: "/photos/gallery-aug-rows-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-speaker",
+    alt: "A person standing with a microphone mid gesture in front of a meetup agenda slide on a large screen.",
+    tile: { width: 640, height: 1138,
+      src: "/photos/gallery-aug-speaker-640w.jpg",
+      avif: "/photos/gallery-aug-speaker-640w.avif",
+      webp: "/photos/gallery-aug-speaker-640w.webp" },
+    view: { width: 1125, height: 2000,
+      avif: "/photos/gallery-aug-speaker-1125w.avif",
+      webp: "/photos/gallery-aug-speaker-1125w.webp" },
+  },
+  {
+    slot: "gallery-aug-listening",
+    alt: "A seated audience turned toward a speaker out of frame, one person smiling in the foreground, with others standing along the back wall beside a tall plant.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-listening-640w.jpg",
+      avif: "/photos/gallery-aug-listening-640w.avif",
+      webp: "/photos/gallery-aug-listening-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-listening-1280w.avif",
+      webp: "/photos/gallery-aug-listening-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-standing",
+    alt: "Several people standing and seated near glass doors listening, one holding a water bottle, with framed posters on the wall beside them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-standing-640w.jpg",
+      avif: "/photos/gallery-aug-standing-640w.avif",
+      webp: "/photos/gallery-aug-standing-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-standing-1280w.avif",
+      webp: "/photos/gallery-aug-standing-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-address",
+    alt: "A speaker seen from behind addressing a mixed seated and standing crowd across a wide open floor under industrial pendant lights.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-address-640w.jpg",
+      avif: "/photos/gallery-aug-address-640w.avif",
+      webp: "/photos/gallery-aug-address-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-address-1280w.avif",
+      webp: "/photos/gallery-aug-address-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-window-seat",
+    alt: "Two people seated in chairs listening beside tall windows that look out onto a neighbouring building.",
+    tile: { width: 640, height: 1138,
+      src: "/photos/gallery-aug-window-seat-640w.jpg",
+      avif: "/photos/gallery-aug-window-seat-640w.avif",
+      webp: "/photos/gallery-aug-window-seat-640w.webp" },
+    view: { width: 1080, height: 1920,
+      avif: "/photos/gallery-aug-window-seat-1080w.avif",
+      webp: "/photos/gallery-aug-window-seat-1080w.webp" },
+  },
+  {
+    slot: "gallery-aug-networking",
+    alt: "Small groups of people talking across an open floor, with a QR code lit on a pillar screen and the city through the windows behind them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-networking-640w.jpg",
+      avif: "/photos/gallery-aug-networking-640w.avif",
+      webp: "/photos/gallery-aug-networking-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-networking-1280w.avif",
+      webp: "/photos/gallery-aug-networking-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-lounge",
+    alt: "People standing in conversation near leather chairs and tall windows, with grey stackable chairs scattered across the polished floor.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-lounge-640w.jpg",
+      avif: "/photos/gallery-aug-lounge-640w.avif",
+      webp: "/photos/gallery-aug-lounge-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-lounge-1280w.avif",
+      webp: "/photos/gallery-aug-lounge-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-posters",
+    alt: "Two people standing and talking in front of a wall of framed posters, one of them holding a drink.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-posters-640w.jpg",
+      avif: "/photos/gallery-aug-posters-640w.avif",
+      webp: "/photos/gallery-aug-posters-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-posters-1280w.avif",
+      webp: "/photos/gallery-aug-posters-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-wall",
+    alt: "Two people standing with arms crossed in conversation in front of framed posters on a grey wall.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-wall-640w.jpg",
+      avif: "/photos/gallery-aug-wall-640w.avif",
+      webp: "/photos/gallery-aug-wall-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-wall-1280w.avif",
+      webp: "/photos/gallery-aug-wall-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-gesture",
+    alt: "Two people mid conversation in a room of hanging pendant lights, one gesturing with both hands, with other groups talking behind them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-gesture-640w.jpg",
+      avif: "/photos/gallery-aug-gesture-640w.avif",
+      webp: "/photos/gallery-aug-gesture-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-gesture-1280w.avif",
+      webp: "/photos/gallery-aug-gesture-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-midroom",
+    alt: "People standing and talking under industrial pendant lights, with a tall plant and glass partitions behind them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-midroom-640w.jpg",
+      avif: "/photos/gallery-aug-midroom-640w.avif",
+      webp: "/photos/gallery-aug-midroom-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-midroom-1280w.avif",
+      webp: "/photos/gallery-aug-midroom-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-lights",
+    alt: "A small cluster of people talking under warm circular ceiling lights, with other attendees soft in the background.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-lights-640w.jpg",
+      avif: "/photos/gallery-aug-lights-640w.avif",
+      webp: "/photos/gallery-aug-lights-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-lights-1280w.avif",
+      webp: "/photos/gallery-aug-lights-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-pose",
+    alt: "Two people facing the camera mid celebration in a meetup room, one seated with a laptop, others talking further back near framed posters.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-pose-640w.jpg",
+      avif: "/photos/gallery-aug-pose-640w.avif",
+      webp: "/photos/gallery-aug-pose-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-pose-1280w.avif",
+      webp: "/photos/gallery-aug-pose-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-skyline",
+    alt: "Small groups of people networking beside tall windows looking out onto a city skyline at dusk under hanging pendant lights.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-skyline-640w.jpg",
+      avif: "/photos/gallery-aug-skyline-640w.avif",
+      webp: "/photos/gallery-aug-skyline-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-skyline-1280w.avif",
+      webp: "/photos/gallery-aug-skyline-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-counter",
+    alt: "Two people talking across a counter in front of framed posters, with a leafy plant beside them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-counter-640w.jpg",
+      avif: "/photos/gallery-aug-counter-640w.avif",
+      webp: "/photos/gallery-aug-counter-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-counter-1280w.avif",
+      webp: "/photos/gallery-aug-counter-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-dusk",
+    alt: "A small group talking and smiling beside tall windows with a city skyline at dusk behind them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-dusk-640w.jpg",
+      avif: "/photos/gallery-aug-dusk-640w.avif",
+      webp: "/photos/gallery-aug-dusk-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-dusk-1280w.avif",
+      webp: "/photos/gallery-aug-dusk-1280w.webp" },
+  },
+  {
+    slot: "gallery-aug-night",
+    alt: "A few people standing in conversation in a nightlit room, one wearing a name tag, with city lights visible through the windows behind them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-aug-night-640w.jpg",
+      avif: "/photos/gallery-aug-night-640w.avif",
+      webp: "/photos/gallery-aug-night-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-aug-night-1280w.avif",
+      webp: "/photos/gallery-aug-night-1280w.webp" },
+  },
 ]
 
 /** Every avif tile summed, measured at build. A full scroll costs this much. */
-export const galleryTileBytesAvif = 272765
+export const galleryTileBytesAvif = 591830
