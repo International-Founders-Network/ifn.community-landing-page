@@ -83,21 +83,7 @@ export function Sponsors() {
             <Container className="mb-20">
                 <div className="grid gap-10 lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <h2 className="text-2xl font-bold tracking-tight text-ink">Audience</h2>
-                        <p className="mt-4 text-lg leading-relaxed text-muted">
-                            About <span className="font-semibold text-ink">100–300</span> people on the
-                            meetup and newsletter list. Attendees: international/immigrant founders and
-                            operators, plus attorneys, investors, and operators who work with them.
-                            Meetups free; membership optional.
-                        </p>
-                        <p className="mt-4 text-lg leading-relaxed text-muted">
-                            Cadence: usually <span className="font-semibold text-ink">4th Thursday</span>{' '}
-                            each month · Station Austin / Capital Factory pattern · always{' '}
-                            <span className="font-semibold text-ink">confirm on Luma</span> (source of
-                            truth).
-                        </p>
-
-                        <h2 className="mt-12 text-2xl font-bold tracking-tight text-ink">
+                        <h2 className="text-2xl font-bold tracking-tight text-ink">
                             Deliverables you can buy
                         </h2>
                         <ul className="mt-6 space-y-5">
@@ -115,7 +101,22 @@ export function Sponsors() {
 
                     <aside className="lg:col-span-5">
                         <div className="rounded-2xl border border-rule bg-paper p-8">
-                            <h2 className="text-xl font-bold text-ink">Hard boundaries</h2>
+                            <h2 className="text-xl font-bold text-ink">Audience</h2>
+                            <p className="mt-4 leading-relaxed text-muted">
+                                About <span className="font-semibold text-ink">100–300</span> people on
+                                the meetup and newsletter list. Attendees: international/immigrant
+                                founders and operators, plus attorneys, investors, and operators who
+                                work with them. Meetups free; membership optional.
+                            </p>
+                            <p className="mt-3 leading-relaxed text-muted">
+                                Cadence: usually{' '}
+                                <span className="font-semibold text-ink">4th Thursday</span> each month ·
+                                Station Austin / Capital Factory pattern · always{' '}
+                                <span className="font-semibold text-ink">confirm on Luma</span> (source
+                                of truth).
+                            </p>
+
+                            <h2 className="mt-8 text-xl font-bold text-ink">Hard boundaries</h2>
                             <ul className="mt-4 space-y-3 leading-relaxed text-muted">
                                 <li>
                                     Sponsors buy visibility at meetups and on the site. That is
