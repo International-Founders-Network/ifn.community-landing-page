@@ -25,7 +25,7 @@
 // enlarged view for every cell. That is the exact failure the split shape exists
 // to prevent.
 
-export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-floor" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night"
+export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-floor" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night" | "gallery-sep-rows" | "gallery-sep-listening" | "gallery-sep-midroom" | "gallery-sep-gesture" | "gallery-sep-chat" | "gallery-sep-pose" | "gallery-sep-talk" | "gallery-sep-group"
 
 export type PhotoDerivative = {
   width: number
@@ -709,6 +709,150 @@ export const photos: Record<PhotoSlot, Photo> = {
     ],
     bytesTotal: 116290,
   },
+  "gallery-sep-rows": {
+    slot: "gallery-sep-rows",
+    alt: "Rows of attendees seated in gray chairs listening in a bright industrial meetup room with exposed ducts and framed posters on the wall.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-sep-rows-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-sep-rows-640w.avif 640w, /photos/gallery-sep-rows-1280w.avif 1280w",
+    webp: "/photos/gallery-sep-rows-640w.webp 640w, /photos/gallery-sep-rows-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-sep-rows-640w.avif", webp: "/photos/gallery-sep-rows-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-sep-rows-1280w.avif", webp: "/photos/gallery-sep-rows-1280w.webp" },
+    ],
+    bytesTotal: 268994,
+  },
+  "gallery-sep-listening": {
+    slot: "gallery-sep-listening",
+    alt: "Attendees seated facing a presentation, with floor-to-ceiling windows showing a city skyline at dusk behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-sep-listening-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-sep-listening-640w.avif 640w, /photos/gallery-sep-listening-1280w.avif 1280w",
+    webp: "/photos/gallery-sep-listening-640w.webp 640w, /photos/gallery-sep-listening-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-sep-listening-640w.avif", webp: "/photos/gallery-sep-listening-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-sep-listening-1280w.avif", webp: "/photos/gallery-sep-listening-1280w.webp" },
+    ],
+    bytesTotal: 225213,
+  },
+  "gallery-sep-midroom": {
+    slot: "gallery-sep-midroom",
+    alt: "People networking across a nightlit room: some seated mid-conversation, others standing by tall windows overlooking city lights.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-sep-midroom-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-sep-midroom-640w.avif 640w, /photos/gallery-sep-midroom-1280w.avif 1280w",
+    webp: "/photos/gallery-sep-midroom-640w.webp 640w, /photos/gallery-sep-midroom-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-sep-midroom-640w.avif", webp: "/photos/gallery-sep-midroom-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-sep-midroom-1280w.avif", webp: "/photos/gallery-sep-midroom-1280w.webp" },
+    ],
+    bytesTotal: 206578,
+  },
+  "gallery-sep-gesture": {
+    slot: "gallery-sep-gesture",
+    alt: "A man in a light blue shirt gesturing while talking with a young attendee wearing a backpack, posters and a plant behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-sep-gesture-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-sep-gesture-640w.avif 640w, /photos/gallery-sep-gesture-1280w.avif 1280w",
+    webp: "/photos/gallery-sep-gesture-640w.webp 640w, /photos/gallery-sep-gesture-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-sep-gesture-640w.avif", webp: "/photos/gallery-sep-gesture-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-sep-gesture-1280w.avif", webp: "/photos/gallery-sep-gesture-1280w.webp" },
+    ],
+    bytesTotal: 136979,
+  },
+  "gallery-sep-chat": {
+    slot: "gallery-sep-chat",
+    alt: "A man in a black polo and a woman with long blonde hair talking beside a glass window reflecting the room at night.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-sep-chat-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-sep-chat-640w.avif 640w, /photos/gallery-sep-chat-1280w.avif 1280w",
+    webp: "/photos/gallery-sep-chat-640w.webp 640w, /photos/gallery-sep-chat-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-sep-chat-640w.avif", webp: "/photos/gallery-sep-chat-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-sep-chat-1280w.avif", webp: "/photos/gallery-sep-chat-1280w.webp" },
+    ],
+    bytesTotal: 125812,
+  },
+  "gallery-sep-pose": {
+    slot: "gallery-sep-pose",
+    alt: "A man in a gray polo holding a phone and a woman in a patterned top smiling for the camera near stacked chairs and night windows.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-sep-pose-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-sep-pose-640w.avif 640w, /photos/gallery-sep-pose-1280w.avif 1280w",
+    webp: "/photos/gallery-sep-pose-640w.webp 640w, /photos/gallery-sep-pose-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-sep-pose-640w.avif", webp: "/photos/gallery-sep-pose-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-sep-pose-1280w.avif", webp: "/photos/gallery-sep-pose-1280w.webp" },
+    ],
+    bytesTotal: 140775,
+  },
+  "gallery-sep-talk": {
+    slot: "gallery-sep-talk",
+    alt: "A woman with purple headphones gesturing as she talks with a man holding a drink, other attendees mingling behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-sep-talk-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-sep-talk-640w.avif 640w, /photos/gallery-sep-talk-1280w.avif 1280w",
+    webp: "/photos/gallery-sep-talk-640w.webp 640w, /photos/gallery-sep-talk-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-sep-talk-640w.avif", webp: "/photos/gallery-sep-talk-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-sep-talk-1280w.avif", webp: "/photos/gallery-sep-talk-1280w.webp" },
+    ],
+    bytesTotal: 175997,
+  },
+  "gallery-sep-group": {
+    slot: "gallery-sep-group",
+    alt: "A diverse group of meetup attendees standing together facing the camera in front of a thank-you slide on a large screen.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-sep-group-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-sep-group-640w.avif 640w, /photos/gallery-sep-group-1280w.avif 1280w",
+    webp: "/photos/gallery-sep-group-640w.webp 640w, /photos/gallery-sep-group-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-sep-group-640w.avif", webp: "/photos/gallery-sep-group-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-sep-group-1280w.avif", webp: "/photos/gallery-sep-group-1280w.webp" },
+    ],
+    bytesTotal: 198878,
+  },
 }
 
 /**
@@ -817,6 +961,14 @@ export const photos: Record<PhotoSlot, Photo> = {
  *   31. gallery-aug-counter     meetups/20260827_201717.jpg  (tile 640w)
  *   32. gallery-aug-dusk        meetups/20260827_201725.jpg  (tile 640w)
  *   33. gallery-aug-night       meetups/20260827_201728.jpg  (tile 640w)
+ *   34. gallery-sep-rows        meetups/20260923_190822.jpg  (tile 640w)
+ *   35. gallery-sep-listening   meetups/20260923_190834.jpg  (tile 640w)
+ *   36. gallery-sep-midroom     meetups/20260923_202106.jpg  (tile 640w)
+ *   37. gallery-sep-gesture     meetups/20260923_202109.jpg  (tile 640w)
+ *   38. gallery-sep-chat        meetups/20260923_202123.jpg  (tile 640w)
+ *   39. gallery-sep-pose        meetups/20260923_202152.jpg  (tile 640w)
+ *   40. gallery-sep-talk        meetups/20260923_202200.jpg  (tile 640w)
+ *   41. gallery-sep-group       meetups/20260923_202756.jpg  (tile 640w)
  */
 
 export type GalleryImage = {
@@ -1201,7 +1353,95 @@ export const galleryFrames: GalleryFrame[] = [
       avif: "/photos/gallery-aug-night-1280w.avif",
       webp: "/photos/gallery-aug-night-1280w.webp" },
   },
+  {
+    slot: "gallery-sep-rows",
+    alt: "Rows of attendees seated in gray chairs listening in a bright industrial meetup room with exposed ducts and framed posters on the wall.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-sep-rows-640w.jpg",
+      avif: "/photos/gallery-sep-rows-640w.avif",
+      webp: "/photos/gallery-sep-rows-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-sep-rows-1280w.avif",
+      webp: "/photos/gallery-sep-rows-1280w.webp" },
+  },
+  {
+    slot: "gallery-sep-listening",
+    alt: "Attendees seated facing a presentation, with floor-to-ceiling windows showing a city skyline at dusk behind them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-sep-listening-640w.jpg",
+      avif: "/photos/gallery-sep-listening-640w.avif",
+      webp: "/photos/gallery-sep-listening-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-sep-listening-1280w.avif",
+      webp: "/photos/gallery-sep-listening-1280w.webp" },
+  },
+  {
+    slot: "gallery-sep-midroom",
+    alt: "People networking across a nightlit room: some seated mid-conversation, others standing by tall windows overlooking city lights.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-sep-midroom-640w.jpg",
+      avif: "/photos/gallery-sep-midroom-640w.avif",
+      webp: "/photos/gallery-sep-midroom-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-sep-midroom-1280w.avif",
+      webp: "/photos/gallery-sep-midroom-1280w.webp" },
+  },
+  {
+    slot: "gallery-sep-gesture",
+    alt: "A man in a light blue shirt gesturing while talking with a young attendee wearing a backpack, posters and a plant behind them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-sep-gesture-640w.jpg",
+      avif: "/photos/gallery-sep-gesture-640w.avif",
+      webp: "/photos/gallery-sep-gesture-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-sep-gesture-1280w.avif",
+      webp: "/photos/gallery-sep-gesture-1280w.webp" },
+  },
+  {
+    slot: "gallery-sep-chat",
+    alt: "A man in a black polo and a woman with long blonde hair talking beside a glass window reflecting the room at night.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-sep-chat-640w.jpg",
+      avif: "/photos/gallery-sep-chat-640w.avif",
+      webp: "/photos/gallery-sep-chat-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-sep-chat-1280w.avif",
+      webp: "/photos/gallery-sep-chat-1280w.webp" },
+  },
+  {
+    slot: "gallery-sep-pose",
+    alt: "A man in a gray polo holding a phone and a woman in a patterned top smiling for the camera near stacked chairs and night windows.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-sep-pose-640w.jpg",
+      avif: "/photos/gallery-sep-pose-640w.avif",
+      webp: "/photos/gallery-sep-pose-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-sep-pose-1280w.avif",
+      webp: "/photos/gallery-sep-pose-1280w.webp" },
+  },
+  {
+    slot: "gallery-sep-talk",
+    alt: "A woman with purple headphones gesturing as she talks with a man holding a drink, other attendees mingling behind them.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-sep-talk-640w.jpg",
+      avif: "/photos/gallery-sep-talk-640w.avif",
+      webp: "/photos/gallery-sep-talk-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-sep-talk-1280w.avif",
+      webp: "/photos/gallery-sep-talk-1280w.webp" },
+  },
+  {
+    slot: "gallery-sep-group",
+    alt: "A diverse group of meetup attendees standing together facing the camera in front of a thank-you slide on a large screen.",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-sep-group-640w.jpg",
+      avif: "/photos/gallery-sep-group-640w.avif",
+      webp: "/photos/gallery-sep-group-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-sep-group-1280w.avif",
+      webp: "/photos/gallery-sep-group-1280w.webp" },
+  },
 ]
 
 /** Every avif tile summed, measured at build. A full scroll costs this much. */
-export const galleryTileBytesAvif = 532537
+export const galleryTileBytesAvif = 656592
