@@ -978,10 +978,18 @@ export type GalleryImage = {
   webp: string
 }
 
+export type SubjectScale = 'lg' | 'md' | 'sm'
+
 export type GalleryFrame = {
   slot: PhotoSlot
   /** Hand written, describes the room, names no individual, no venue and no date. */
   alt: string
+  /**
+   * Audited subject scale for mosaic packing. Present on overflow frames
+   * (Vol. 08/09 and later). Hang-authored frames omit it; their size is the
+   * cell they were written into, not a scale class.
+   */
+  subjectScale?: SubjectScale
   /** Grid cell. ONE tier, sized to this frame's cell. Carries the jpeg fallback. */
   tile: GalleryImage & { src: string }
   /** Enlarged view. Fetched on interaction, never in the grid. */
@@ -1157,6 +1165,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-group",
+    subjectScale: "lg",
     alt: "A large group of people standing together facing the camera in an open event hall, with a thank-you slide on a screen behind them and a wall emblem on a dark curtain.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-group-640w.jpg",
@@ -1168,6 +1177,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-audience",
+    subjectScale: "lg",
     alt: "People seated in rows listening, some with laptops open on their laps, others standing along the back wall of a daylit room with framed posters.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-audience-640w.jpg",
@@ -1179,6 +1189,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-room",
+    subjectScale: "lg",
     alt: "A speaker with a microphone facing a seated audience across an open floor, photographed from the back of the room, with a meetup slide on a screen and a wall emblem behind.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-room-640w.jpg",
@@ -1190,6 +1201,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-rows",
+    subjectScale: "lg",
     alt: "Rows of people seated and listening in an industrial room under hanging pendant lamps, with a few people standing along the back wall of framed posters.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-rows-640w.jpg",
@@ -1201,6 +1213,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-listening",
+    subjectScale: "md",
     alt: "A seated audience turned toward a speaker out of frame, one person smiling in the foreground, with others standing along the back wall beside a tall plant.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-listening-640w.jpg",
@@ -1212,6 +1225,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-standing",
+    subjectScale: "md",
     alt: "Several people standing and seated near glass doors listening, one holding a water bottle, with framed posters on the wall beside them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-standing-640w.jpg",
@@ -1223,6 +1237,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-address",
+    subjectScale: "lg",
     alt: "A speaker seen from behind addressing a mixed seated and standing crowd across a wide open floor under industrial pendant lights.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-address-640w.jpg",
@@ -1234,6 +1249,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-networking",
+    subjectScale: "md",
     alt: "Small groups of people talking across an open floor, with a QR code lit on a pillar screen and the city through the windows behind them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-networking-640w.jpg",
@@ -1245,6 +1261,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-lounge",
+    subjectScale: "md",
     alt: "People standing in conversation near leather chairs and tall windows, with grey stackable chairs scattered across the polished floor.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-lounge-640w.jpg",
@@ -1256,6 +1273,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-posters",
+    subjectScale: "sm",
     alt: "Two people standing and talking in front of a wall of framed posters, one of them holding a drink.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-posters-640w.jpg",
@@ -1267,6 +1285,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-wall",
+    subjectScale: "sm",
     alt: "Two people standing with arms crossed in conversation in front of framed posters on a grey wall.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-wall-640w.jpg",
@@ -1278,6 +1297,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-gesture",
+    subjectScale: "sm",
     alt: "Two people mid conversation in a room of hanging pendant lights, one gesturing with both hands, with other groups talking behind them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-gesture-640w.jpg",
@@ -1289,6 +1309,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-midroom",
+    subjectScale: "md",
     alt: "People standing and talking under industrial pendant lights, with a tall plant and glass partitions behind them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-midroom-640w.jpg",
@@ -1300,6 +1321,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-pose",
+    subjectScale: "sm",
     alt: "Two people facing the camera mid celebration in a meetup room, one seated with a laptop, others talking further back near framed posters.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-pose-640w.jpg",
@@ -1311,6 +1333,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-skyline",
+    subjectScale: "md",
     alt: "Small groups of people networking beside tall windows looking out onto a city skyline at dusk under hanging pendant lights.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-skyline-640w.jpg",
@@ -1322,6 +1345,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-counter",
+    subjectScale: "sm",
     alt: "Two people talking across a counter in front of framed posters, with a leafy plant beside them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-counter-640w.jpg",
@@ -1333,6 +1357,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-dusk",
+    subjectScale: "md",
     alt: "A small group talking and smiling beside tall windows with a city skyline at dusk behind them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-dusk-640w.jpg",
@@ -1344,6 +1369,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-night",
+    subjectScale: "md",
     alt: "A few people standing in conversation in a nightlit room, one wearing a name tag, with city lights visible through the windows behind them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-night-640w.jpg",
@@ -1355,6 +1381,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-rows",
+    subjectScale: "lg",
     alt: "Rows of attendees seated in gray chairs listening in a bright industrial meetup room with exposed ducts and framed posters on the wall.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-rows-640w.jpg",
@@ -1366,6 +1393,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-listening",
+    subjectScale: "lg",
     alt: "Attendees seated facing a presentation, with floor-to-ceiling windows showing a city skyline at dusk behind them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-listening-640w.jpg",
@@ -1377,6 +1405,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-midroom",
+    subjectScale: "lg",
     alt: "People networking across a nightlit room: some seated mid-conversation, others standing by tall windows overlooking city lights.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-midroom-640w.jpg",
@@ -1388,6 +1417,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-gesture",
+    subjectScale: "sm",
     alt: "A man in a light blue shirt gesturing while talking with a young attendee wearing a backpack, posters and a plant behind them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-gesture-640w.jpg",
@@ -1399,6 +1429,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-chat",
+    subjectScale: "sm",
     alt: "A man in a black polo and a woman with long blonde hair talking beside a glass window reflecting the room at night.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-chat-640w.jpg",
@@ -1410,6 +1441,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-pose",
+    subjectScale: "sm",
     alt: "A man in a gray polo holding a phone and a woman in a patterned top smiling for the camera near stacked chairs and night windows.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-pose-640w.jpg",
@@ -1421,6 +1453,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-talk",
+    subjectScale: "sm",
     alt: "A woman with purple headphones gesturing as she talks with a man holding a drink, other attendees mingling behind them.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-talk-640w.jpg",
@@ -1432,6 +1465,7 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-group",
+    subjectScale: "lg",
     alt: "A diverse group of meetup attendees standing together facing the camera in front of a thank-you slide on a large screen.",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-group-640w.jpg",

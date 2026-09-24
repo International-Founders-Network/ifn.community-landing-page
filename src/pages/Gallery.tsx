@@ -3,6 +3,11 @@ import { motion, useReducedMotion, type MotionProps } from 'framer-motion';
 import { Container } from '../components/Container';
 import { GalleryLightbox } from '../components/GalleryLightbox';
 import { galleryFrames, type GalleryFrame } from '../data/photos.generated';
+import {
+    OVERFLOW_SUBJECT_SCALE,
+    packSubjectScales,
+    resolveSubjectScale,
+} from '../lib/galleryMosaic';
 
 /**
  * THE GALLERY ROUTE. `/gallery`. REBUILT 2026-08-10 to the founder's ruling.
@@ -258,6 +263,12 @@ import { galleryFrames, type GalleryFrame } from '../data/photos.generated';
  * `useReducedMotion` guard drops the `initial` state as well so nothing ever
  * starts displaced.
  *
+ * OVERFLOW AFTER THE HANG, 2026-09-24. Vol. 08 and Vol. 09 frames that the hang
+ * does not claim pack as a subject-scale mosaic (lg|md|sm), not as stacked
+ * full-measure span-8 solos. Spans stay ≤6 so 640w tiles keep ≥1× coverage.
+ * Phone classes follow subject scale through BLEED / MEASURE / INSET. No dates,
+ * no volume chapters, no captions. Pattern language: `src/lib/galleryMosaic.ts`.
+ *
  * THE LCP GUARD, plan section 6, applied by structure rather than by argument:
  * the header AND the first row render completely at rest, with no `whileInView`
  * and no opacity animation anywhere on their ancestor chain. The reveal starts
@@ -491,14 +502,17 @@ const HANG: Row[] = [
     },
 ];
 
-/** Placement for any frame the pipeline ships that the hang does not name. It
- *  is a full measure row rather than a guessed size, because an unrecognised
- *  frame has no audited subject scale and inventing one would be inventing a
- *  composition. Alternating start so the appended run is not a stack. */
-const OVERFLOW_PLACE = [
-    'sm:col-start-1 sm:col-span-12 lg:col-start-1 lg:col-span-8',
-    'sm:col-start-1 sm:col-span-12 lg:col-start-5 lg:col-span-8',
-];
+/**
+ * OVERFLOW MOSAIC (2026-09-24). Frames the hang does not claim pack by audited
+ * subject scale (lg|md|sm) into 2–3 cell rows with intentional solo+void rows
+ * for lone large subjects. Desktop spans stay ≤6 so the existing 640w overflow
+ * tiles remain at or above 1× coverage at the 1216px measure. Phone classes
+ * follow subject scale (lg→BLEED, md→MEASURE, sm→INSET), the same three-class
+ * ladder as the hang. See `src/lib/galleryMosaic.ts` for the pattern language.
+ *
+ * Non-goals: volume/evening chapters, random spans, raising tile widths in
+ * this change.
+ */
 
 interface PlacedCell {
     cell: Cell;
@@ -570,23 +584,39 @@ function allocate(frames: GalleryFrame[]): PlacedRow[] {
         }
     }
 
-    for (const frame of spare.slice(next)) {
-        rows.push({
-            align: 'start',
-            animate: true,
-            cells: [
-                {
-                    cell: {
-                        slots: [],
-                        place: OVERFLOW_PLACE[rows.length % 2],
-                        phone: MEASURE,
-                    },
-                    frame,
-                    order,
+    const overflowFrames = spare.slice(next);
+    const scales = overflowFrames.map((frame) =>
+        resolveSubjectScale(
+            { slot: frame.slot as string, subjectScale: frame.subjectScale },
+            OVERFLOW_SUBJECT_SCALE,
+        ),
+    );
+    const mosaic = packSubjectScales(scales);
+    let overflowCursor = 0;
+    for (const mosaicRow of mosaic) {
+        const placed: PlacedCell[] = [];
+        for (const mosaicCell of mosaicRow.cells) {
+            const frame = overflowFrames[overflowCursor];
+            overflowCursor += 1;
+            if (!frame) break;
+            placed.push({
+                cell: {
+                    slots: [],
+                    place: mosaicCell.place,
+                    phone: mosaicCell.phone,
                 },
-            ],
-        });
-        order += 1;
+                frame,
+                order,
+            });
+            order += 1;
+        }
+        if (placed.length > 0) {
+            rows.push({
+                align: mosaicRow.align,
+                cells: placed,
+                animate: true,
+            });
+        }
     }
 
     return rows;
