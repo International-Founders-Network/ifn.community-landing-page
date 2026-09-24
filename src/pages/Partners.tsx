@@ -127,7 +127,7 @@ export function Partners() {
                             Partners who help run the <Emphasis>room</Emphasis>
                         </h1>
                         <p className="text-xl text-muted leading-relaxed">
-                            Working relationships — venue, format, ops. Paid logo packages live on Sponsors.
+                            Working relationships: venue, format, ops. Paid logo packages live on Sponsors.
                         </p>
                     </div>
                 </Container>

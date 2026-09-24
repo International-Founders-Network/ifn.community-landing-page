@@ -41,7 +41,7 @@ export const GENERATED_PLANS: Record<string, GeneratedPlan> = {
             {
                     "id": "community",
                     "title": "Private member channel",
-                    "description": "Ask mid-week; get answers from other international founders. Share intros and names that actually helped. Remote OK. Platform launches after you join — we do not name a tool until it is live.",
+                    "description": "Ask mid-week; get answers from other international founders. Share intros and names that actually helped. Remote OK. The platform launches after you join. We do not name a tool until it is live.",
                     "included": [
                             "Ask questions between meetups and get answers from other international founders",
                             "Share introductions, referrals and the names of people who actually helped you",
@@ -61,7 +61,7 @@ export const GENERATED_PLANS: Record<string, GeneratedPlan> = {
             {
                     "id": "office-hours",
                     "title": "Monthly members-only call",
-                    "description": "One online call per month for members. No fixed day, time, or named host on the site — details land in the private member channel when the next call is set.",
+                    "description": "One online call per month for members. No fixed day, time, or named host on the site. Details land in the private member channel when the next call is set.",
                     "included": [
                             "One call every month, for members only",
                             "Details shared in the private member channel when scheduled",

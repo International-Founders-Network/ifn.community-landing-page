@@ -39,7 +39,7 @@ export function About() {
         {
             label: 'How often',
             value: 'Once a month',
-            detail: 'Monthly meetups in Austin since January 2026. Usually 4th Thursday — confirm on Luma.',
+            detail: 'Monthly meetups in Austin since January 2026. Usually 4th Thursday. Confirm on Luma.',
         },
         {
             label: 'What happens',

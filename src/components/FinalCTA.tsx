@@ -232,7 +232,7 @@ export function FinalCTA(_props?: FinalCTAProps) {
                         column instead of a statement standing over a measure.
                         52ch is about 551px, which stages them. */}
                     <p className="mt-8 max-w-[52ch] text-lg leading-[1.55] md:text-xl">
-                        Free to attend. Membership is optional and separate — private channel,
+                        Free to attend. Membership is optional and separate: private member channel,
                         monthly members-only call, first access to guides when they publish.
                     </p>
 

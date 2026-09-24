@@ -106,7 +106,7 @@ export function Events() {
                             </h1>
                             <p className="text-xl text-muted leading-relaxed">
                                 International and immigrant founders. Structured one-to-ones. Station Austin.
-                                Dates live on Luma — that calendar is the source of truth. Free. No membership
+                                Dates live on Luma. That calendar is the source of truth. Free. No membership
                                 required to walk in.
                             </p>
                         </div>
@@ -154,7 +154,7 @@ export function Events() {
                     >
                         <Info className="w-5 h-5 shrink-0 text-muted" aria-hidden="true" />
                         <p>
-                            Synced from Luma — that calendar is the source of truth.{' '}
+                            Synced from Luma. That calendar is the source of truth.{' '}
                             <a
                                 href={LUMA_CALENDAR_URL}
                                 target="_blank"
@@ -219,7 +219,7 @@ export function Events() {
                         <div className="relative">
                             <h2 className="text-3xl font-bold mb-4">Want a reminder?</h2>
                             <p className="text-muted max-w-xl mx-auto mb-8 text-lg">
-                                RSVP on Luma — you&apos;ll get their event emails. Or email{' '}
+                                RSVP on Luma and you get their event emails. Or email{' '}
                                 <a
                                     href="mailto:hello@ifn.community"
                                     className="font-semibold text-ink underline underline-offset-2"

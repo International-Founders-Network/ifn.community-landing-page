@@ -155,7 +155,7 @@ export function Contact() {
                                 >
                                     hello@ifn.community
                                 </a>
-                                . The form saves a message for organizers — it does not email anyone.
+                                . The form saves a message for organizers. It does not email anyone.
                             </p>
                         </div>
 
@@ -283,7 +283,7 @@ export function Contact() {
                                 <div>
                                     <h2 className="text-xl font-bold text-ink">Save a message</h2>
                                     <p className="mt-1 text-sm text-muted">
-                                        Optional form — saves for organizers; does not email anyone. Prefer a
+                                        Optional form. Saves for organizers; does not email anyone. Prefer a
                                         reply? Use hello@ifn.community. An asterisk (*) marks a required field.
                                     </p>
                                 </div>

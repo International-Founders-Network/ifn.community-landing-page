@@ -22,13 +22,12 @@ export function Workshops() {
                             Skill and ops track
                         </p>
                         <h1 className="mt-4 text-5xl font-bold tracking-tight text-ink md:text-6xl">
-                            Workshops — the skill and ops <Emphasis>track</Emphasis>
+                            Workshops: the skill and ops <Emphasis>track</Emphasis>
                         </h1>
                         <p className="mt-6 text-xl leading-relaxed text-muted">
                             Meetups are the room. Membership is the private channel and member call.
-                            Workshops are where we dig into one founder problem for one session —
-                            visas, banking, housing, hiring, fundraising, US go-to-market, entity and
-                            tax.
+                            Workshops are where we dig into one founder problem for one session:
+                            visas, banking, housing, hiring, fundraising, US go-to-market, entity and tax.
                         </p>
                         <p className="mt-4 text-lg leading-relaxed text-muted">
                             IFN hosts most sessions. Guest and member hosts are welcome when the topic
@@ -46,7 +45,7 @@ export function Workshops() {
                                 See upcoming on Luma
                             </ButtonLink>
                             <ButtonLink to="/membership" variant="outline" size="lg">
-                                Become a member — $149/year
+                                Become a member ($149/year)
                             </ButtonLink>
                         </div>
                     </div>
@@ -58,7 +57,7 @@ export function Workshops() {
                 <h2 className="text-2xl font-bold tracking-tight text-ink">How it works</h2>
                 <ol className="mt-8 max-w-2xl list-decimal space-y-4 pl-5 text-lg leading-relaxed text-muted">
                     <li>
-                        <span className="text-ink">Pick a session on Luma</span> — topic, date, host,
+                        <span className="text-ink">Pick a session on Luma</span>. Topic, date, host,
                         and price live there.
                     </li>
                     <li>
@@ -70,8 +69,8 @@ export function Workshops() {
                     </li>
                 </ol>
                 <p className="mt-8 max-w-2xl text-base leading-relaxed text-muted">
-                    What this is not: a course catalog with invented dates, and not licensed legal,
-                    tax, or immigration advice. Bring your situation; leave with next steps and people
+                    This is not a course catalog with invented dates. It is not licensed legal,
+                    tax, or immigration advice. Bring your situation. Leave with next steps and people
                     who have done it.
                 </p>
             </Container>
@@ -186,7 +185,7 @@ export function Workshops() {
                         size="lg"
                         className="mt-6 shrink-0 md:mt-0"
                     >
-                        Become a member — $149/year
+                        Become a member ($149/year)
                     </ButtonLink>
                 </div>
             </Container>

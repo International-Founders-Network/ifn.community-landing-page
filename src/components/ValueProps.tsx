@@ -366,7 +366,7 @@ export function ValueProps() {
         {
             place: 'md:col-start-1 md:col-span-7',
             title: 'Monthly meetup (free)',
-            body: 'Usually 4th Thursday downtown Austin — confirm on Luma. Paired conversations so you leave having talked to people.',
+            body: 'Usually 4th Thursday, downtown Austin. Confirm on Luma. Paired conversations so you leave having talked to people.',
         },
         {
             place: 'md:col-start-3 md:col-span-8',

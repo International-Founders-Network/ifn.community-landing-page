@@ -705,7 +705,7 @@ export function Gallery() {
                         The room
                     </h1>
                     <p className="mt-6 text-lg leading-relaxed text-muted">
-                        Frames from IFN meetups in Austin. A selection — not every night had a camera.
+                        Frames from IFN meetups in Austin. A selection. Not every night had a camera.
                     </p>
                 </header>
 

@@ -89,7 +89,7 @@ export function HowItWorks(_props?: HowItWorksProps) {
             body: (
                 <>
                     Our format partner runs structured one-to-ones so you leave having talked to
-                    people — not standing around hoping someone starts a conversation.
+                    people, not standing around hoping someone starts a conversation.
                 </>
             ),
         },

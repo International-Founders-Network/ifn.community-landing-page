@@ -247,7 +247,7 @@ const CLUSTERS: FaqCluster[] = [
                 question: 'Do I have to be a founder already?',
                 answer: (
                     <>
-                        No. Registered company, idea-only, or full-time job you haven&apos;t left yet — all
+                        No. Registered company, idea-only, or full-time job you haven&apos;t left yet: all
                         fine. International students building a first venture too. If you&apos;re building
                         in the U.S. and you&apos;re from somewhere else, you&apos;re in the right room.
                     </>
@@ -287,8 +287,8 @@ const CLUSTERS: FaqCluster[] = [
                 answer: (
                     <>
                         Meetups are free. Optional membership is{' '}
-                        <strong className="font-semibold tabular-nums">{MEMBERSHIP_PRICE_STANDARD}/year</strong>{' '}
-                        — private member channel, monthly members-only call, first access to guides as they
+                        <strong className="font-semibold tabular-nums">{MEMBERSHIP_PRICE_STANDARD}/year</strong>:
+                        private member channel, monthly members-only call, first access to guides as they
                         publish.{' '}
                         <Link to="/membership" className={linkStyles}>
                             See what membership includes
@@ -319,7 +319,7 @@ const CLUSTERS: FaqCluster[] = [
                 question: 'I\'m not in Austin. Useful?',
                 answer: (
                     <>
-                        In-person is <Mark>Austin only</Mark> — no other chapters right now. Member channel,
+                        In-person is <Mark>Austin only</Mark>. No other chapters right now. Member channel,
                         guides-as-published, and the monthly members-only call are remote. The strongest part
                         is the room here.
                     </>

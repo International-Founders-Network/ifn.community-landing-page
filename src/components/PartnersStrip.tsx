@@ -237,10 +237,8 @@ export function PartnersStrip() {
                         variants={step}
                         className="mt-14 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-ink md:mt-16"
                     >
-                        Station Austin hosts. Reuneo runs speed networking. Yani Partners — technology
-                        partner for founders; same founding team (disclosed). These are working
-                        relationships rather than paid placements: nobody on this page bought their
-                        way onto it.
+                        Station Austin hosts. Reuneo runs speed networking. Yani Partners is the technology
+                        partner for founders; same founding team (disclosed). These are working relationships, not paid placements. Nobody on this page bought their way onto it.
                     </motion.p>
 
                     {/* The Yani Partners related-party disclosure was removed here

@@ -294,7 +294,7 @@ export function Hero(_props?: HeroProps) {
                                         size="lg"
                                         className="w-full sm:w-auto"
                                     >
-                                        Become a member ($149/yr)
+                                        Become a member ($149/year)
                                     </ButtonLink>
                                 </div>
                             </div>

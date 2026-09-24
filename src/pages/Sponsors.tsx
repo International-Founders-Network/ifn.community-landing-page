@@ -14,7 +14,7 @@ const DELIVERABLES = [
     },
     {
         title: 'Host shoutout in the room',
-        detail: 'A short, scoped mention from the host — not a sales pitch.',
+        detail: 'A short, scoped mention from the host. Not a sales pitch.',
     },
     {
         title: 'Thank-you email mention',
@@ -22,7 +22,7 @@ const DELIVERABLES = [
     },
     {
         title: 'Member-channel mention when live',
-        detail: 'A factual listing in the member channel when that surface is live — never framed as IFN advice.',
+        detail: 'A factual listing in the member channel when that surface is live. Never framed as IFN advice.',
     },
     {
         title: 'Table or booth (higher packages)',
@@ -30,7 +30,7 @@ const DELIVERABLES = [
     },
     {
         title: 'Optional short founder Q&A',
-        detail: 'A scoped 5-minute seat on a relevant night — education, not a pitch deck.',
+        detail: 'A scoped 5-minute seat on a relevant night. Education, not a pitch deck.',
     },
 ] as const;
 
@@ -38,7 +38,7 @@ const PACKAGES = [
     {
         name: 'Night',
         price: 'from $1,000',
-        summary: 'One meetup night — logo, shoutout, listing presence.',
+        summary: 'One meetup night: logo, shoutout, listing presence.',
     },
     {
         name: 'Workshop',
@@ -73,8 +73,8 @@ export function Sponsors() {
                         </h1>
                         <p className="mt-6 text-xl leading-relaxed text-muted">
                             One flagship meetup a month in Austin. International and immigrant founders.
-                            Sponsorship ≠ Partners — paid seat, clear deliverables, starting-at prices
-                            below.
+                            Sponsorship is not Partners. This is a paid seat with clear deliverables and
+                            starting-at prices below.
                         </p>
                     </div>
                 </Container>
@@ -118,7 +118,7 @@ export function Sponsors() {
                             <h2 className="text-xl font-bold text-ink">Hard boundaries</h2>
                             <ul className="mt-4 space-y-3 leading-relaxed text-muted">
                                 <li>
-                                    Advertising / event presence — not IFN endorsing outcomes.
+                                    Advertising and event presence. Not IFN endorsing outcomes.
                                 </li>
                                 <li>Not a law firm, CPA, bank, or immigration practice.</li>
                                 <li>No scraped attendee lists; no guaranteed lead counts.</li>
@@ -137,7 +137,7 @@ export function Sponsors() {
                 </h2>
                 <p className="mt-3 max-w-3xl text-lg leading-relaxed text-muted">
                     Full deliverable matrix and add-ons (Signal, content, multi-night, etc.) stay on the
-                    private rate card — ask and we send the deck.
+                    private rate card. Ask and we send the deck.
                 </p>
                 <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {PACKAGES.map((pkg) => (

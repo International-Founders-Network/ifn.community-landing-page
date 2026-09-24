@@ -99,7 +99,7 @@ export function Membership() {
                         <h2 className="text-lg font-bold text-ink mb-2">Payment received</h2>
                         <p className="text-muted leading-relaxed">
                             Thank you for joining IFN. Stripe has emailed you a receipt. Private member
-                            channel access comes after checkout — details for the next members-only call
+                            channel access comes after checkout. Details for the next members-only call
                             land in the channel when scheduled. Cancel anytime via the Stripe customer
                             portal or email hello@ifn.community.
                         </p>
@@ -249,7 +249,7 @@ export function Membership() {
                                 onClick={startCheckout}
                                 disabled={checkoutState === 'starting'}
                             >
-                                {checkoutState === 'starting' ? 'Opening checkout…' : 'Become a member — $149/year'}
+                                {checkoutState === 'starting' ? 'Opening checkout…' : 'Become a member ($149/year)'}
                             </Button>
 
                             {checkoutState === 'error' && (

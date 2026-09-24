@@ -86,7 +86,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/events': {
         title: `Monthly founder meetups in Austin | ${SITE_NAME}`,
         description:
-            'Free monthly meetups for international founders in Austin. Register on Luma — calendar source of truth.',
+            'Free monthly meetups for international founders in Austin. Register on Luma. That calendar is the source of truth.',
         indexable: true,
         priority: 0.9,
         changefreq: 'weekly',
@@ -118,7 +118,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/partners': {
         title: `Partners | ${SITE_NAME}`,
         description:
-            'Working collaborators who help run IFN meetups in Austin — Station Austin, Reuneo, Yani Partners. Not paid sponsorship.',
+            'Working collaborators who help run IFN meetups in Austin: Station Austin, Reuneo, Yani Partners. Not paid sponsorship.',
         indexable: true,
         priority: 0.6,
         changefreq: 'monthly',
@@ -142,7 +142,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/contact': {
         title: `Contact | ${SITE_NAME}`,
         description:
-            'Email hello@ifn.community for a reply. Or leave a message on the form — saved for organizers (not emailed).',
+            'Email hello@ifn.community for a reply. Or leave a message on the form. Saved for organizers (not emailed).',
         indexable: true,
         priority: 0.5,
         changefreq: 'yearly',

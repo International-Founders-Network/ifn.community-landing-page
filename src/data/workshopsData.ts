@@ -19,7 +19,7 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
         id: 'immigration-visas',
         title: 'Immigration / visas & status',
         summary:
-            'Stay legal while you build. Sessions for founders navigating status, dependents, and employer vs founder paths — not a law firm intake.',
+            'Stay legal while you build. Sessions for founders navigating status, dependents, and employer vs founder paths. Not a law firm intake.',
         types: [
             { label: 'Visa path map for founders (O-1, H-1B, E-2, and when to talk to counsel)' },
             { label: 'Status changes while raising or incorporating' },
@@ -66,10 +66,10 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
         id: 'fundraising',
         title: 'Fundraising',
         summary:
-            'Raise with a story US investors understand — without pretending every path is VC.',
+            'Raise with a story US investors understand, without pretending every path is VC.',
         types: [
             { label: 'Pitch narrative for immigrant founders (market, team, status risk)' },
-            { label: 'Angels vs seed in Austin / US — what “ready” looks like' },
+            { label: 'Angels vs seed in Austin / US: what “ready” looks like' },
             { label: 'Data room hygiene before you ask for a meeting' },
             { label: 'Non-dilutive and alternative capital options worth knowing' },
         ],
@@ -81,7 +81,7 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
         types: [
             { label: 'First US customer playbook (ICP, outbound, and warm intros)' },
             { label: 'Pricing and packaging for a US buyer' },
-            { label: 'Partners and channel vs direct — when each wins' },
+            { label: 'Partners and channel vs direct: when each wins' },
             { label: 'Localization and trust signals that matter for international products' },
         ],
     },
@@ -93,7 +93,7 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
         types: [
             { label: 'LLC vs C-corp for international founders (tradeoffs, not dogma)' },
             { label: 'EIN, state registration, and registered agent basics' },
-            { label: 'Sales tax and nexus — what trips early teams up' },
+            { label: 'Sales tax and nexus: what trips early teams up' },
             { label: 'Cap table and equity setup before the first hire or raise' },
         ],
     },
