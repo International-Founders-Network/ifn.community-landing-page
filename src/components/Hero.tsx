@@ -226,34 +226,27 @@ export function Hero(_props?: HeroProps) {
                             <span className="sr-only">Where International Founders connect</span>
                             <span aria-hidden="true">
                                 Where{' '}
-                                {mounted ? (
-                                    <span className="relative inline-grid font-light leading-[1.15] pb-1">
-                                        {WORDS.map((word) => (
-                                            <span
-                                                key={word}
-                                                className="col-start-1 row-start-1 invisible"
+                                {/* Width reserved in ch for the longest candidate
+                                    ("International") so we never emit every word
+                                    as invisible text nodes for HTML crawlers. */}
+                                <span className="relative inline-block min-w-[13ch] overflow-hidden pb-1 text-left font-light leading-[1.15] sm:text-center">
+                                    {mounted ? (
+                                        <AnimatePresence mode="wait" initial={false}>
+                                            <motion.span
+                                                key={activeWord}
+                                                initial={{ y: '100%' }}
+                                                animate={{ y: '0%' }}
+                                                exit={{ y: '-100%' }}
+                                                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                                                className="block"
                                             >
-                                                {word}
-                                            </span>
-                                        ))}
-                                        <span className="absolute inset-0 overflow-hidden text-left sm:text-center">
-                                            <AnimatePresence mode="wait" initial={false}>
-                                                <motion.span
-                                                    key={activeWord}
-                                                    initial={{ y: '100%' }}
-                                                    animate={{ y: '0%' }}
-                                                    exit={{ y: '-100%' }}
-                                                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                                                    className="block"
-                                                >
-                                                    {activeWord}
-                                                </motion.span>
-                                            </AnimatePresence>
-                                        </span>
-                                    </span>
-                                ) : (
-                                    <span className="font-light">International</span>
-                                )}{' '}
+                                                {activeWord}
+                                            </motion.span>
+                                        </AnimatePresence>
+                                    ) : (
+                                        'International'
+                                    )}
+                                </span>{' '}
                                 <span className="font-extrabold">Founders</span> connect
                             </span>
                         </h1>
