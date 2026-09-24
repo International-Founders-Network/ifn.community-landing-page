@@ -76,8 +76,8 @@ export function Sponsors() {
                         </h1>
                         <p className="mt-6 text-xl leading-relaxed text-muted">
                             One flagship meetup a month in Austin. International and immigrant founders.
-                            Sponsorship is not Partners. This is a paid seat with clear deliverables and
-                            starting-at prices below.
+                            Sponsorship is not Partners. This is a paid seat with clear inclusions and
+                            packages starting from the prices below.
                         </p>
                     </div>
                 </Container>
