@@ -84,7 +84,7 @@ export function Sponsors() {
                 <div className="grid gap-10 lg:grid-cols-12">
                     <div className="lg:col-span-7">
                         <h2 className="text-2xl font-bold tracking-tight text-ink">
-                            Deliverables you can buy
+                            What sponsorship includes
                         </h2>
                         <ul className="mt-6 space-y-5">
                             {DELIVERABLES.map((item) => (
@@ -116,11 +116,11 @@ export function Sponsors() {
                                 of truth).
                             </p>
 
-                            <h2 className="mt-8 text-xl font-bold text-ink">Hard boundaries</h2>
+                            <h2 className="mt-8 text-xl font-bold text-ink">What this is not</h2>
                             <ul className="mt-4 space-y-3 leading-relaxed text-muted">
                                 <li>
-                                    Sponsors buy visibility at meetups and on the site. That is
-                                    advertising, not IFN endorsing a product or result.
+                                    Sponsorship means visibility at meetups and on the site. That
+                                    is advertising, not IFN endorsing a product or result.
                                 </li>
                                 <li>
                                     We do not share attendee lists. Lead counts are never
