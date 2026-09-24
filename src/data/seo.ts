@@ -100,9 +100,9 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
         changefreq: 'monthly',
     },
     '/resources': {
-        title: `Founder guides (in progress) | ${SITE_NAME}`,
+        title: `Founder Resources for International Founders | ${SITE_NAME}`,
         description:
-            'Guides for international founders — being written. Members get first access as each one publishes. Meetups and membership are live today.',
+            'A resource library for international and immigrant founders: incorporating in the US as a non-resident, banking, visas, fundraising, and the first hires.',
         indexable: true,
         priority: 0.8,
         changefreq: 'monthly',
