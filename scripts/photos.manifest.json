@@ -1,5 +1,11 @@
 {
   "$about": [
+    "ADDED 2026-09-24: IFN Vol. 09 (Sep 23 2026, Station Austin / Capital Factory)",
+    "founder-approved album of 8 frames. Rejects 002,003,005,009,010,011,012,015",
+    "excluded and never copied into photos-source. Sources land in meetups/ under",
+    "camera timestamps (20260923_*). Eight gallery-sep-* slots ship. Gallery.tsx",
+    "overflow rows place the Vol. 09 frames; the authored hang is untouched.",
+    "",
     "TRIMMED 2026-09-15: IFN Vol. 08 (Aug 27 2026) curated album reduced 21 \u2192 18.",
     "Dropped gallery-aug-speaker (20260827_190507), gallery-aug-window-seat",
     "(20260827_191000), and gallery-aug-lights (20260827_201646) per founder trim.",
@@ -236,6 +242,17 @@
       "blackPoint": 0.04,
       "whitePoint": 0.92,
       "note": "Evening interior under mixed LED and window light at Station Austin, 2026-08-27. Sampled on a mid-room networking crop: warmth is the room, left alone like july-2026. Two portrait sources (speaker at the agenda screen; two people seated by the windows) carry the same grade."
+    },
+    "september-2026": {
+      "whiteBalance": [
+        1,
+        1,
+        1
+      ],
+      "saturation": 0.55,
+      "blackPoint": 0.04,
+      "whitePoint": 0.92,
+      "note": "Evening interior under mixed LED and window light at Station Austin, 2026-09-23. Same room family as august-2026; warmth left alone."
     }
   },
   "slots": [
@@ -1648,6 +1665,294 @@
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 67vw",
       "alt": "A few people standing in conversation in a nightlit room, one wearing a name tag, with city lights visible through the windows behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-sep-rows",
+      "status": "ship",
+      "source": "meetups/20260923_190822.jpg",
+      "grade": "september-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-24. Vol. 09 approved album (8). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Rows of attendees seated in gray chairs listening in a bright industrial meetup room with exposed ducts and framed posters on the wall.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-sep-listening",
+      "status": "ship",
+      "source": "meetups/20260923_190834.jpg",
+      "grade": "september-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-24. Vol. 09 approved album (8). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Attendees seated facing a presentation, with floor-to-ceiling windows showing a city skyline at dusk behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-sep-midroom",
+      "status": "ship",
+      "source": "meetups/20260923_202106.jpg",
+      "grade": "september-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-24. Vol. 09 approved album (8). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "People networking across a nightlit room: some seated mid-conversation, others standing by tall windows overlooking city lights.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-sep-gesture",
+      "status": "ship",
+      "source": "meetups/20260923_202109.jpg",
+      "grade": "september-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-24. Vol. 09 approved album (8). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A man in a light blue shirt gesturing while talking with a young attendee wearing a backpack, posters and a plant behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-sep-chat",
+      "status": "ship",
+      "source": "meetups/20260923_202123.jpg",
+      "grade": "september-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-24. Vol. 09 approved album (8). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A man in a black polo and a woman with long blonde hair talking beside a glass window reflecting the room at night.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-sep-pose",
+      "status": "ship",
+      "source": "meetups/20260923_202152.jpg",
+      "grade": "september-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-24. Vol. 09 approved album (8). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A man in a gray polo holding a phone and a woman in a patterned top smiling for the camera near stacked chairs and night windows.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-sep-talk",
+      "status": "ship",
+      "source": "meetups/20260923_202200.jpg",
+      "grade": "september-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-24. Vol. 09 approved album (8). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A woman with purple headphones gesturing as she talks with a man holding a drink, other attendees mingling behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280
+      }
+    },
+    {
+      "name": "gallery-sep-group",
+      "status": "ship",
+      "source": "meetups/20260923_202756.jpg",
+      "grade": "september-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-09-24. Vol. 09 approved album (8). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow rows (col-span 8 alternating), not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A diverse group of meetup attendees standing together facing the camera in front of a thank-you slide on a large screen.",
       "loading": "lazy",
       "fetchPriority": "auto",
       "gallery": {
