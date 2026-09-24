@@ -6,8 +6,8 @@ import { ButtonLink } from './ButtonLink';
 
 
 // Primary nav: conversion surfaces a visitor needs, plus Collaborate as a
-// disclosure for Sponsors + Partners (locked IA). Workshops stays top-level.
-// Resources stays demoted to the footer. One action lives at the right edge.
+// disclosure for Sponsors + Partners (locked IA). Workshops and Resources are
+// top-level. Footer still lists Resources too. One action at the right edge.
 type NavLinkItem = { name: string; href: string };
 type NavGroupItem = { name: string; children: NavLinkItem[] };
 type NavItem = NavLinkItem | NavGroupItem;
@@ -27,6 +27,7 @@ const NAV_LINKS: NavItem[] = [
             { name: 'Partners', href: '/partners' },
         ],
     },
+    { name: 'Resources', href: '/resources' },
     { name: 'Gallery', href: '/gallery' },
     { name: 'About', href: '/about' },
 ];
@@ -237,7 +238,7 @@ export function Navbar() {
                     </Link>
 
                     {/* Desktop Nav */}
-                    {/* Five links plus the action is tight at exactly 768px, so the
+                    {/* Seven items plus the action is tight at exactly 768px, so the
                         gaps step up rather than a link being dropped: 16/20px at md,
                         the original 24/32px from lg. whitespace-nowrap keeps a label
                         from breaking onto two lines in the squeeze. Collaborate is
