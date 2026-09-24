@@ -66,7 +66,7 @@ export function organizationSchema() {
         url: `${SITE_URL}/`,
         email: 'hello@ifn.community',
         description:
-            'A community of international and immigrant founders based in Austin, Texas, running monthly in-person meetups, a founder resource library and a paid membership.',
+            'A community of international and immigrant founders based in Austin, Texas, running monthly in-person meetups, an optional paid membership, and practical sessions between gatherings.',
         /**
          * `areaServed` rather than `address`. IFN has no premises of its own,
          * so an address would either be false or would be Station Austin's,
@@ -166,7 +166,7 @@ export function membershipOfferSchema() {
         '@type': 'Offer',
         name: MEMBERSHIP_TIER_NAME,
         description:
-            'Annual membership of the International Founders Network: a private member channel, the full founder resource library, and introductions between the monthly Austin meetups.',
+            'Annual membership of the International Founders Network: a private member channel, monthly office hours, and first access to founder guides as they are published.',
         price: MEMBERSHIP_PRICE_STANDARD.replace('$', ''),
         priceCurrency: 'USD',
         url: `${SITE_URL}/membership`,

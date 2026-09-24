@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Button } from './Button';
+import { ButtonLink } from './ButtonLink';
+import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 import { Container } from './Container';
 import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
 
@@ -178,10 +179,11 @@ const REVEAL_LAST = {
 };
 
 interface FinalCTAProps {
-    onJoinClick: () => void;
+    onJoinClick?: () => void;
 }
 
-export function FinalCTA({ onJoinClick }: FinalCTAProps) {
+export function FinalCTA(_props?: FinalCTAProps) {
+    void _props;
     return (
         <section className="flex min-h-[100dvh] flex-col justify-between bg-accent-plate py-20 text-on-plate md:py-28">
 
@@ -269,15 +271,24 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         the four colour utilities are overridden, and twMerge
                         drops the primary variant's own three. */}
                     <div className="mt-10">
-                        <Button
-                            size="lg"
-                            variant="primary"
-                            onClick={onJoinClick}
-                            className="w-full gap-3 border-2 border-on-plate bg-on-plate text-accent-plate hover:bg-accent-plate hover:text-on-plate sm:w-auto"
-                        >
-                            Join the community
-                            <ArrowRight className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-                        </Button>
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                            <ButtonLink
+                                href={LUMA_CALENDAR_URL}
+                                size="lg"
+                                className="w-full gap-3 border-2 border-on-plate bg-on-plate text-accent-plate hover:bg-accent-plate hover:text-on-plate sm:w-auto"
+                            >
+                                Register on Luma
+                                <ArrowRight className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                            </ButtonLink>
+                            <ButtonLink
+                                to="/membership"
+                                variant="outline"
+                                size="lg"
+                                className="w-full sm:w-auto"
+                            >
+                                Become a member
+                            </ButtonLink>
+                        </div>
                     </div>
                 </motion.div>
             </Container>
@@ -342,7 +353,7 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         className="mt-14 max-w-[62ch] text-[0.9375rem] leading-[1.55]"
                     >
                         Membership is the paid layer and it is optional: the private member
-                        channel, the resource library and monthly office hours.
+                        channel, monthly office hours, and first access to guides when they are published.
                     </motion.p>
                 </motion.div>
             </Container>

@@ -387,7 +387,7 @@ export function ValueProps() {
             title: 'Resources you can use the same week',
             body: (
                 <>
-                    The resource library covers immigration paperwork, U.S. banking, first hires, raising here and getting a product into the U.S. market, <Mark reduce={reduce}>written from the questions</Mark> founders actually bring us. Membership adds a private member channel and a members-only call each month.
+                    Guides on immigration paperwork, U.S. banking, first hires, raising here and U.S. market entry are <Mark reduce={reduce}>being written</Mark> from questions founders actually bring us — members get first access when each one publishes. Membership also adds a private member channel and a members-only call each month.
                 </>
             )
         },

@@ -2,11 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from './Button';
+import { ButtonLink } from './ButtonLink';
 
-interface NavbarProps {
-    onJoinClick: () => void;
-}
 
 // The navigation exposes the five surfaces a visitor actually needs to judge
 // IFN: the meetups, the paid membership, the library, who we work with, and who
@@ -16,8 +13,9 @@ interface NavbarProps {
 const NAV_LINKS = [
     { name: 'Events', href: '/events' },
     { name: 'Membership', href: '/membership' },
-    { name: 'Resources', href: '/resources' },
-    { name: 'Partners', href: '/partners' },
+    { name: 'Workshops', href: '/workshops' },
+    { name: 'Sponsors', href: '/sponsors' },
+    { name: 'Gallery', href: '/gallery' },
     { name: 'About', href: '/about' },
 ];
 
@@ -50,7 +48,7 @@ const FOCUS_RING =
     'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink ' +
     'focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
 
-export function Navbar({ onJoinClick }: NavbarProps) {
+export function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const toggleRef = useRef<HTMLButtonElement>(null);
     const { pathname } = useLocation();
@@ -170,13 +168,13 @@ export function Navbar({ onJoinClick }: NavbarProps) {
                             rounded-lg in BASE, and cn() is tailwind-merge, so this
                             wins cleanly and becomes redundant when that file lands
                             the pill globally. */}
-                        <Button
+                        <ButtonLink
+                            to="/membership"
                             size="sm"
                             className="whitespace-nowrap rounded-full"
-                            onClick={onJoinClick}
                         >
-                            Join the community
-                        </Button>
+                            Become a member
+                        </ButtonLink>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -236,13 +234,13 @@ export function Navbar({ onJoinClick }: NavbarProps) {
                                     ))}
                                 </ul>
                                 <div className="pt-4">
-                                    <Button
+                                    <ButtonLink
+                                        to="/membership"
                                         fullWidth
                                         className="rounded-full"
-                                        onClick={() => { setIsMobileMenuOpen(false); onJoinClick(); }}
                                     >
-                                        Join the community
-                                    </Button>
+                                        Become a member
+                                    </ButtonLink>
                                 </div>
                             </div>
                         </motion.div>

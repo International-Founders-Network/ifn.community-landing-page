@@ -38,6 +38,7 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
             // EventsPreview. One label per intent, and both render on `/`.
             { name: 'Meetup Photographs', href: '/gallery' },
             { name: 'Membership', href: '/membership' },
+            { name: 'Workshops', href: '/workshops' },
             { name: 'Code of Conduct', href: '/code-of-conduct' },
         ],
     },
@@ -55,6 +56,7 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
         links: [
             { name: 'About Us', href: '/about' },
             { name: 'Partners', href: '/partners' },
+            { name: 'Sponsors', href: '/sponsors' },
             { name: 'Contact', href: '/contact' },
         ],
     },

@@ -35,7 +35,7 @@ export function TermsAndConditions() {
                     <section>
                         <h2 className={SECTION_HEADING}>2. What IFN provides</h2>
                         <p className={BODY}>
-                            IFN runs a monthly in-person meetup in Austin, Texas, publishes a resource library,
+                            IFN runs a monthly in-person meetup in Austin, Texas, is building a founder guide library,
                             and sells an annual membership. We introduce founders to each other and to service
                             providers we know. We do not take equity, we do not guarantee introductions, and we
                             do not promise any business outcome.
@@ -52,7 +52,7 @@ export function TermsAndConditions() {
                         <p className={BODY}>
                             Membership is sold as an annual subscription at the price shown at checkout.
                             Payments are processed by Stripe; IFN never receives or stores your card details.
-                            Membership gives you access to the private member channel, the resource library, and
+                            Membership gives you access to the private member channel, guides as they are published, and
                             the monthly members-only office-hours call for the period you paid for.
                         </p>
                         <p className={`mt-4 ${BODY}`}>

@@ -33,7 +33,7 @@ export const SITE_NAME = 'International Founders Network';
  * than an empty tag.
  */
 export const DEFAULT_DESCRIPTION =
-    'A community of international and immigrant founders in Austin, Texas. Monthly in-person meetups, a founder resource library, and a paid membership.';
+    'A community of international and immigrant founders in Austin, Texas. Monthly in-person meetups, an optional membership, and practical sessions between gatherings.';
 
 export interface RouteSeo {
     /** The full <title>. Written out rather than templated so each can be tuned. */
@@ -70,7 +70,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/': {
         title: 'International Founders Network | Founder Community in Austin, Texas',
         description:
-            'A community for international and immigrant founders in Austin, Texas. Monthly in-person meetups at Station Austin, a founder resource library, and a paid membership.',
+            'A community for international and immigrant founders in Austin, Texas. Monthly in-person meetups at Station Austin, an optional membership, and practical sessions between gatherings.',
         indexable: true,
         priority: 1.0,
         changefreq: 'weekly',
@@ -94,7 +94,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/membership': {
         title: `Membership | ${SITE_NAME}`,
         description:
-            'IFN membership for international founders in Austin: a private member channel, the full resource library, and introductions between meetups. One annual price, one tier.',
+            'IFN membership for international founders in Austin: a private member channel, monthly office hours, and first access to guides as they are published. One annual price, one tier.',
         indexable: true,
         priority: 0.8,
         changefreq: 'monthly',
@@ -102,7 +102,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/resources': {
         title: `Founder Resources for International Founders | ${SITE_NAME}`,
         description:
-            'A resource library for international and immigrant founders: incorporating in the US as a non-resident, banking, visas, fundraising, and the first hires.',
+            'Founder guides for international and immigrant founders — in progress. Topics planned: incorporating in the US as a non-resident, banking, visas, fundraising, and first hires.',
         indexable: true,
         priority: 0.8,
         changefreq: 'monthly',
@@ -121,6 +121,22 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
             'The venues, firms and organisations that make the International Founders Network meetups in Austin possible, and what each of them does for founders.',
         indexable: true,
         priority: 0.6,
+        changefreq: 'monthly',
+    },
+    '/workshops': {
+        title: `Workshops & practical sessions | ${SITE_NAME}`,
+        description:
+            'How IFN workshops and member office hours fit international founders in Austin — interest and membership paths, without a fake catalog.',
+        indexable: true,
+        priority: 0.7,
+        changefreq: 'monthly',
+    },
+    '/sponsors': {
+        title: `Sponsor IFN meetups in Austin | ${SITE_NAME}`,
+        description:
+            'Category sponsorship for IFN’s monthly international founder meetups in Austin: audience facts, deliverables, packages on request.',
+        indexable: true,
+        priority: 0.7,
         changefreq: 'monthly',
     },
     '/contact': {

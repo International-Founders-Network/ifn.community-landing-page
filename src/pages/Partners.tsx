@@ -187,16 +187,21 @@ export function Partners() {
 
             <Container className="text-center">
                 <div className="max-w-2xl mx-auto">
-                    <h2 className="text-2xl font-bold text-ink mb-4">Interested in partnering with IFN?</h2>
+                    <h2 className="text-2xl font-bold text-ink mb-4">Working with IFN?</h2>
                     <p className="text-muted mb-8">
-                        We're always looking for venues, tools, and service providers who want to support international founders in Austin.
+                        We're always looking for venues, tools, and service providers who want to support international founders in Austin. For paid category sponsorship (logo, shoutout, packages), see Sponsors instead.
                     </p>
                     {/* shadow-* is DESIGN.md's Action Glow, the one persistent elevation
                         in the system. buttonClasses() does not carry it, so it is passed
                         per call site rather than baked into every primary button. */}
-                    <ButtonLink to="/contact" variant="primary" size="lg" className="shadow-lg">
-                        Get in Touch
-                    </ButtonLink>
+                    <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+                        <ButtonLink to="/contact" variant="primary" size="lg" className="shadow-lg">
+                            Get in Touch
+                        </ButtonLink>
+                        <ButtonLink to="/sponsors" variant="outline" size="lg">
+                            See sponsorship packages
+                        </ButtonLink>
+                    </div>
                 </div>
             </Container>
         </div>

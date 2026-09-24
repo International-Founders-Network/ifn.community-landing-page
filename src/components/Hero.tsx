@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import { preload } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Button } from './Button';
 import { ButtonLink } from './ButtonLink';
 import { photos } from '../data/photos.generated';
+import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 interface HeroProps {
-    onJoinClick: () => void;
+    /** @deprecated Prefer Luma / membership CTAs. Kept optional for call-site compatibility. */
+    onJoinClick?: () => void;
 }
 
 const heroBand = photos['hero-band'];
@@ -73,9 +74,18 @@ const WORDS = ['International', 'Global', 'Immigrant'] as const;
 
 const WORD_INTERVAL_MS = 3000;
 
-export function Hero({ onJoinClick }: HeroProps) {
+export function Hero(_props?: HeroProps) {
+    void _props;
     const prefersReducedMotion = useReducedMotion();
     const [index, setIndex] = useState(0);
+    // Client snapshot: false during prerender/SSR so the H1 emits one static
+    // word; true in the browser so the carousel can mount without concatenating
+    // every candidate into crawler HTML (audit F06).
+    const mounted = useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false,
+    );
 
     // WCAG 2.2.2: nothing may auto-update for a reader who has asked for still
     // interfaces. Framer Motion's transitions are handled globally by
@@ -208,88 +218,44 @@ export function Hero({ onJoinClick }: HeroProps) {
                             measurement, still current, rather than a re-measured
                             one. */}
                         <h1 className="mt-6 text-ink font-medium text-[clamp(2.75rem,6vw,5.25rem)] leading-[0.95] tracking-[-0.025em]">
-                            Where{' '}
-                            {/* THE SLOT.
-                                An overlapping inline-grid: every candidate word
-                                is rendered invisibly in one cell, so the slot is
-                                exactly as wide as the longest of them at the
-                                current font size. It never jumps as the word
-                                changes and it never forces a line wider than the
-                                viewport.
-
-                                The twins stay IN FLOW. They are what the outer
-                                inline-grid takes its baseline from, and they are
-                                why the clip window below can be
-                                `absolute inset-0` without disturbing the line:
-                                an out-of-flow box contributes to neither the
-                                grid's sizing nor its baseline. Measured at 1366
-                                and 1920: a probe glyph inside the window and one
-                                outside it share a baseline to 0.00px. Putting
-                                `overflow: hidden` on the inline-grid itself
-                                instead would move its baseline to its bottom
-                                margin edge and lift the word roughly 28px off
-                                the line.
-
-                                leading-[1.15] with pb-1 reserve is the descender
-                                clearance: "Immigrant" carries a g, and a
-                                vertical roll inside a clipped slot cuts a
-                                descender exactly the way leading-none does. The
-                                cost is measured and accepted: this line box is
-                                90px against the following line's 78px at 1366,
-                                so the first headline line sits 12px looser. At
-                                desktop the headline is 2 lines, so there is one
-                                gap and nothing to compare it against.
-
-                                ALIGNMENT IS BREAKPOINT SCOPED AND THE
-                                BREAKPOINT WAS SWEPT, NOT GUESSED. The slot is
-                                as wide as "International"; "Global" leaves 210px
-                                of slack at 1366. Left aligned, that whole gap
-                                lands between the word and "Founders" and reads
-                                as a missing word, so from `sm` up it is centred
-                                and reads as poster spacing instead. Below that
-                                the slot is the last thing on its line or alone
-                                on one, where the slack is invisible at the left
-                                and centring would indent a single word off a
-                                flush left column. Sweeping 320px to 1500px in
-                                4px steps put the crossover, the width at which
-                                "Founders" joins the slot's line, at 644px. `sm`
-                                is 640, so a 4px band of viewports centres a line
-                                end slot. Document scrollWidth equalled viewport
-                                width at every one of those 296 widths. */}
-                            <span className="relative inline-grid font-light leading-[1.15] pb-1">
-                                {WORDS.map((word) => (
-                                    <span
-                                        key={word}
-                                        aria-hidden="true"
-                                        className="col-start-1 row-start-1 invisible"
-                                    >
-                                        {word}
+                            {/* One accessible name. The visual carousel is
+                                aria-hidden and mounts only after hydration so
+                                prerendered HTML cannot concatenate every
+                                candidate word into crawler garbage (audit F06).
+                                "Connect, Grow, and Succeed" is retired (F18). */}
+                            <span className="sr-only">Where International Founders connect</span>
+                            <span aria-hidden="true">
+                                Where{' '}
+                                {mounted ? (
+                                    <span className="relative inline-grid font-light leading-[1.15] pb-1">
+                                        {WORDS.map((word) => (
+                                            <span
+                                                key={word}
+                                                className="col-start-1 row-start-1 invisible"
+                                            >
+                                                {word}
+                                            </span>
+                                        ))}
+                                        <span className="absolute inset-0 overflow-hidden text-left sm:text-center">
+                                            <AnimatePresence mode="wait" initial={false}>
+                                                <motion.span
+                                                    key={activeWord}
+                                                    initial={{ y: '100%' }}
+                                                    animate={{ y: '0%' }}
+                                                    exit={{ y: '-100%' }}
+                                                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                                                    className="block"
+                                                >
+                                                    {activeWord}
+                                                </motion.span>
+                                            </AnimatePresence>
+                                        </span>
                                     </span>
-                                ))}
-                                <span className="absolute inset-0 overflow-hidden text-left sm:text-center">
-                                    {/* TRANSFORM ONLY. No opacity, on purpose.
-                                        `initial={false}` on AnimatePresence
-                                        renders the first word at its resting
-                                        position, so first paint (the LCP paint)
-                                        is correct even if no frame ever runs.
-                                        An opacity-gated word would leave a hole
-                                        in the h1 in exactly that case. */}
-                                    <AnimatePresence mode="wait" initial={false}>
-                                        <motion.span
-                                            key={activeWord}
-                                            initial={{ y: '100%' }}
-                                            animate={{ y: '0%' }}
-                                            exit={{ y: '-100%' }}
-                                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                                            className="block"
-                                        >
-                                            {activeWord}
-                                        </motion.span>
-                                    </AnimatePresence>
-                                </span>
-                            </span>{' '}
-                            <span className="font-extrabold">Founders</span> Connect, Grow, and
-                            Succeed
+                                ) : (
+                                    <span className="font-light">International</span>
+                                )}{' '}
+                                <span className="font-extrabold">Founders</span> connect
+                            </span>
                         </h1>
 
                         {/* THE 7fr / 5fr SPLIT.
@@ -384,30 +350,27 @@ export function Hero({ onJoinClick }: HeroProps) {
                                 </p>
 
                                 <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-                                    <Button
+                                    {/* Primary: Luma RSVP. Secondary: membership.
+                                        Join modal is no longer the loudest CTA (F01/F07). */}
+                                    <ButtonLink
+                                        href={LUMA_CALENDAR_URL}
                                         size="lg"
                                         className="w-full sm:w-auto"
-                                        onClick={onJoinClick}
                                     >
-                                        Join the community
+                                        Register on Luma
                                         <ArrowRight
                                             aria-hidden="true"
                                             className="ml-2 h-5 w-5"
                                             strokeWidth={1.5}
                                         />
-                                    </Button>
-                                    {/* Navigation is an anchor, not a button with
-                                        a click handler, so it can be opened in a
-                                        new tab and is announced as a link.
-                                        ButtonLink shares buttonClasses with
-                                        Button so the two can never drift. */}
+                                    </ButtonLink>
                                     <ButtonLink
-                                        to="/resources"
+                                        to="/membership"
                                         variant="outline"
                                         size="lg"
                                         className="w-full sm:w-auto"
                                     >
-                                        Browse our resources
+                                        Become a member
                                     </ButtonLink>
                                 </div>
                             </div>

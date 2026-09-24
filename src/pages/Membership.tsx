@@ -71,7 +71,7 @@ export function Membership() {
                         <p className="text-xl text-muted leading-relaxed">
                             The monthly IFN meetup in Austin is open to everyone, and it stays that way.
                             Membership is what happens in between: a private channel with other international
-                            founders, a written library built from six months of those meetups, and one
+                            founders, first access to guides as we publish them from those meetups, and one
                             members-only call a month.
                         </p>
                     </div>
@@ -97,7 +97,7 @@ export function Membership() {
                         <p className="text-muted leading-relaxed">
                             Thank you for joining IFN. Stripe has emailed you a receipt. A person from the
                             IFN team will be in touch with your invitation to the private member channel
-                            and the resource library.
+                            and first access to the guide library as it publishes.
                         </p>
                     </div>
                 </Container>

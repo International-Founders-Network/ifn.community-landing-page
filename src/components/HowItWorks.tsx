@@ -1,7 +1,8 @@
 import { useId } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Button } from './Button';
+import { ButtonLink } from './ButtonLink';
+import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 import { Container } from './Container';
 import { photos } from '../data/photos.generated';
 
@@ -53,7 +54,8 @@ interface HowItWorksProps {
  * section ground, not a plate sitting inside one, so plan section 4.2's
  * mandatory 1px plate border does not apply and none is drawn.
  */
-export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
+export function HowItWorks(_props?: HowItWorksProps) {
+    void _props;
     const headingId = useId();
     const reduce = useReducedMotion();
     const photo = photos['how-it-works-middle'];
@@ -101,7 +103,7 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
                     The useful part usually happens after the evening ends: an introduction to
                     someone who has raised here, a founder who will read your offer letter, an
                     answer to the question you could not search for. Membership adds the private
-                    member channel, the resource library, and a members-only call each month.
+                    member channel, members-only calls, and first access to guides as they are published.
                 </>
             ),
         },
@@ -269,10 +271,15 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
                             <li key={line}>{line}</li>
                         ))}
                     </ul>
-                    <Button variant="primary" size="lg" onClick={onJoinClick}>
-                        Join the community
-                        <ArrowRight className="ml-2 h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-                    </Button>
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                        <ButtonLink href={LUMA_CALENDAR_URL} size="lg">
+                            Register on Luma
+                            <ArrowRight className="ml-2 h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                        </ButtonLink>
+                        <ButtonLink to="/membership" variant="outline" size="lg">
+                            Become a member
+                        </ButtonLink>
+                    </div>
                 </motion.div>
             </Container>
         </section>

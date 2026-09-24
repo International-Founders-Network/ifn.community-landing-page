@@ -341,7 +341,7 @@ const CLUSTERS: FaqCluster[] = [
                         The meetups are free to attend. You never need to be a member to walk in. Membership is
                         a separate, optional layer:{' '}
                         <strong className="font-semibold tabular-nums">{MEMBERSHIP_PRICE_STANDARD} a year</strong>. It
-                        adds the private member channel on Slack/Discord, the resource library, and monthly
+                        adds the private member channel on Slack/Discord, first access to guides as they publish, and monthly
                         members-only office hours.{' '}
                         <Link to="/membership" className={linkStyles}>
                             See what membership includes
@@ -372,7 +372,7 @@ const CLUSTERS: FaqCluster[] = [
                         get is the next best thing: people in the room who have already been through the same
                         visa process, opened the same accounts and registered the same kind of company, telling
                         you plainly what happened to them, and an introduction to the attorney or accountant
-                        they used. Members also get a resource library of notes and templates on immigration,
+                        they used. Members also get first access to guides on immigration,
                         U.S. banking, hiring and raising here, written out of those conversations.
                     </>
                 ),
@@ -386,7 +386,7 @@ const CLUSTERS: FaqCluster[] = [
                             runs 39 and would wrap below 360px, so the mark takes the denial itself. */}
                         We would rather say this plainly: the in-person part of IFN is{' '}
                         <Mark>Austin only</Mark>. There are no other chapters, and we are not opening any right
-                        now. Everything else works from anywhere: the member channel, the resource library and
+                        now. Everything else works from anywhere: the member channel, guides as they publish, and
                         the monthly office-hours call are all remote. The in-person evenings are the strongest
                         part of IFN, and they happen here.
                     </>

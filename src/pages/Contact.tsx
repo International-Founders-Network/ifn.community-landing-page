@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Container } from '../components/Container';
@@ -45,12 +46,21 @@ function RequiredMark() {
 }
 
 export function Contact() {
+    const [searchParams] = useSearchParams();
+    const intent = (searchParams.get('intent') || '').toLowerCase();
+    const intentPrefill =
+        intent === 'sponsor' || intent === 'sponsors'
+            ? 'I am interested in sponsoring an IFN meetup. Category / package preference: '
+            : intent === 'workshops' || intent === 'workshop'
+              ? 'I want to be notified when IFN schedules a workshop or practical session. My focus area: '
+              : '';
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         phone: '',
         company: '',
-        message: '',
+        message: intentPrefill,
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -110,7 +120,7 @@ export function Contact() {
             hasSubmittedRef.current = true;
             setIsSuccess(true);
             trackEvent('contact_submit');
-            setFormData({ name: '', email: '', phone: '', company: '', message: '' });
+            setFormData({ name: '', email: '', phone: '', company: '', message: intentPrefill });
         } catch (error) {
             // Never surface error.message. It carries strings like "Failed to fetch",
             // and this audience is largely reading in a second language.
