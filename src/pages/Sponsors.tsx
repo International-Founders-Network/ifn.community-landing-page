@@ -83,7 +83,7 @@ export function Sponsors() {
             <Container className="mb-20">
                 <div className="grid gap-10 lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <h2 className="text-2xl font-bold tracking-tight text-ink">Audience (honest)</h2>
+                        <h2 className="text-2xl font-bold tracking-tight text-ink">Audience</h2>
                         <p className="mt-4 text-lg leading-relaxed text-muted">
                             About <span className="font-semibold text-ink">100–300</span> people on the
                             meetup and newsletter list. Attendees: international/immigrant founders and

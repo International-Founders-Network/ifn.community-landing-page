@@ -4,7 +4,7 @@ import { Container } from './Container';
 import { ButtonLink } from './ButtonLink';
 
 /**
- * Home resources strip — single honest link (copy pack Q11).
+ * Home resources strip — single link (copy pack Q11).
  * Replaces the empty stage carousel / "28 being written" theater.
  */
 export function ResourcesPreview() {

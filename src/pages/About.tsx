@@ -214,7 +214,7 @@ export function About() {
                 <div className="max-w-2xl mx-auto">
                     <h2 className="text-3xl font-bold text-ink mb-6 tracking-tight">Come to the next meetup</h2>
                     <p className="text-lg text-muted mb-10 leading-relaxed">
-                        The honest way to find out whether IFN is useful to you is to spend one evening in the room and
+                        The clearest way to find out whether IFN is useful to you is to spend one evening in the room and
                         talk to the people there. One city, one venue, once a month. You do not have to be selected to
                         come.
                     </p>

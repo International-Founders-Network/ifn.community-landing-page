@@ -6,7 +6,7 @@ import { Emphasis } from './Emphasis';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 /**
- * /resources — honest being-written page (Venkat Q11).
+ * /resources — being-written page (Venkat Q11).
  * No fake audience×stage taxonomy / "28 being written" theater until real guides publish.
  */
 const QUEUED_TOPICS = [
