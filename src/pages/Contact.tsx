@@ -55,9 +55,11 @@ export function Contact() {
               ? 'I want to propose or host an IFN workshop. Topic / format: '
               : intent === 'partner' || intent === 'partners'
                 ? 'I want to propose a collaboration with IFN (venue / format / ops): '
-                : intent === 'membership' || intent === 'member'
-                  ? 'I have a question about IFN membership: '
-                  : '';
+                : intent === 'founder-in-residence' || intent === 'fir'
+                  ? 'I want to apply for Founder in Residence. Brief background and why: '
+                  : intent === 'membership' || intent === 'member'
+                    ? 'I have a question about IFN membership: '
+                    : '';
 
     const [formData, setFormData] = useState({
         name: '',

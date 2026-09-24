@@ -92,9 +92,9 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
         changefreq: 'weekly',
     },
     '/membership': {
-        title: `Membership $149/year | ${SITE_NAME}`,
+        title: `Membership | IFN.community`,
         description:
-            'Optional IFN membership: private member channel, monthly members-only call, first access to guides as they publish. Meetups stay free. $149/year via Stripe.',
+            'Guest meetups are free. Member is $149/year for the private channel, monthly call, and resources. Founder in Residence starts from $1,800/year by application.',
         indexable: true,
         priority: 0.8,
         changefreq: 'monthly',
