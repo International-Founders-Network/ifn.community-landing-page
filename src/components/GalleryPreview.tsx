@@ -285,7 +285,7 @@ function reveal(reduce: boolean | null, delay: number): MotionProps {
  */
 const LEAD_SLOTS: string[] = ['gallery-apr-group', 'gallery-apr-seated', 'gallery-apr-circle'];
 const STACKED_SLOTS: string[][] = [
-    ['gallery-apr-circle', 'gallery-apr-floor'],
+    ['gallery-apr-circle', 'gallery-apr-listening'],
     ['gallery-feb-sign', 'gallery-jul-screen'],
 ];
 

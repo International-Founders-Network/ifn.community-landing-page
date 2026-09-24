@@ -467,13 +467,8 @@ const HANG: Row[] = [
         cells: [
             {
                 slots: ['gallery-apr-profile'],
-                place: 'sm:col-start-1 sm:col-span-5 lg:col-start-1 lg:col-span-5',
+                place: 'sm:col-start-1 sm:col-span-7 lg:col-start-1 lg:col-span-6',
                 phone: INSET_LEFT,
-            },
-            {
-                slots: ['gallery-apr-floor'],
-                place: 'sm:col-start-6 sm:col-span-7 lg:col-start-7 lg:col-span-6',
-                phone: MEASURE,
             },
         ],
     },

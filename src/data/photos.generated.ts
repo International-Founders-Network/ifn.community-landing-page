@@ -25,7 +25,7 @@
 // enlarged view for every cell. That is the exact failure the split shape exists
 // to prevent.
 
-export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-floor" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night" | "gallery-sep-rows" | "gallery-sep-listening" | "gallery-sep-midroom" | "gallery-sep-gesture" | "gallery-sep-chat" | "gallery-sep-pose" | "gallery-sep-talk" | "gallery-sep-group"
+export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night" | "gallery-sep-rows" | "gallery-sep-listening" | "gallery-sep-midroom" | "gallery-sep-gesture" | "gallery-sep-chat" | "gallery-sep-pose" | "gallery-sep-talk" | "gallery-sep-group"
 
 export type PhotoDerivative = {
   width: number
@@ -312,24 +312,6 @@ export const photos: Record<PhotoSlot, Photo> = {
       { width: 1280, height: 720, avif: "/photos/gallery-apr-profile-1280w.avif", webp: "/photos/gallery-apr-profile-1280w.webp" },
     ],
     bytesTotal: 156665,
-  },
-  "gallery-apr-floor": {
-    slot: "gallery-apr-floor",
-    alt: "The meetup seen from behind a laptop on a stand at the front of the room, the group seated in a circle in the distance across a wide polished concrete floor.",
-    sizes: "(max-width: 639px) 100vw, 50vw",
-    loading: "lazy",
-    fetchPriority: "auto",
-    src: "/photos/gallery-apr-floor-640w.jpg",
-    width: 640,
-    height: 360,
-    aspectRatio: "16:9",
-    avif: "/photos/gallery-apr-floor-640w.avif 640w, /photos/gallery-apr-floor-1280w.avif 1280w",
-    webp: "/photos/gallery-apr-floor-640w.webp 640w, /photos/gallery-apr-floor-1280w.webp 1280w",
-    derivatives: [
-      { width: 640, height: 360, avif: "/photos/gallery-apr-floor-640w.avif", webp: "/photos/gallery-apr-floor-640w.webp" },
-      { width: 1280, height: 720, avif: "/photos/gallery-apr-floor-1280w.avif", webp: "/photos/gallery-apr-floor-1280w.webp" },
-    ],
-    bytesTotal: 206210,
   },
   "gallery-apr-circle": {
     slot: "gallery-apr-circle",
@@ -939,7 +921,6 @@ export const photos: Record<PhotoSlot, Photo> = {
  *    9. gallery-apr-seated      meetups/20260423_184523.jpg  (tile 832w)
  *   10. gallery-feb-slide       venue/20260226_184639.jpg  (tile 640w)
  *   11. gallery-apr-profile     meetups/20260423_184536.jpg  (tile 640w)
- *   12. gallery-apr-floor       meetups/20260423_184620.jpg  (tile 640w)
  *   13. gallery-apr-circle      meetups/20260423_184509.jpg  (tile 640w)
  *   14. gallery-feb-room        venue/20260226_184645.jpg  (tile 640w)
  *   15. gallery-apr-group       meetups/20260423_201820.jpg  (tile 832w)
@@ -1118,17 +1099,6 @@ export const galleryFrames: GalleryFrame[] = [
     view: { width: 1280, height: 720,
       avif: "/photos/gallery-apr-profile-1280w.avif",
       webp: "/photos/gallery-apr-profile-1280w.webp" },
-  },
-  {
-    slot: "gallery-apr-floor",
-    alt: "The meetup seen from behind a laptop on a stand at the front of the room, the group seated in a circle in the distance across a wide polished concrete floor.",
-    tile: { width: 640, height: 360,
-      src: "/photos/gallery-apr-floor-640w.jpg",
-      avif: "/photos/gallery-apr-floor-640w.avif",
-      webp: "/photos/gallery-apr-floor-640w.webp" },
-    view: { width: 1280, height: 720,
-      avif: "/photos/gallery-apr-floor-1280w.avif",
-      webp: "/photos/gallery-apr-floor-1280w.webp" },
   },
   {
     slot: "gallery-apr-circle",
