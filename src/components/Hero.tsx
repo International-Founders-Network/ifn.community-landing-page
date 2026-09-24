@@ -409,6 +409,14 @@ export function Hero({ onJoinClick }: HeroProps) {
                                     >
                                         Browse our resources
                                     </ButtonLink>
+                                    <ButtonLink
+                                        to="/membership"
+                                        variant="outline"
+                                        size="lg"
+                                        className="w-full sm:w-auto"
+                                    >
+                                        Become a member ($149/year)
+                                    </ButtonLink>
                                 </div>
                             </div>
                         </div>
