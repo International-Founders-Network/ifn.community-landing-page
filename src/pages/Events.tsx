@@ -1,13 +1,11 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Loader2, Calendar, Check, Info } from 'lucide-react';
 import { Container } from '../components/Container';
-import { Button } from '../components/Button';
 import { Emphasis } from '../components/Emphasis';
 import { useEvents } from '../hooks/useEvents';
 import { EventCard, ExternalActionLink, type Event } from '../components/EventCard';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
-import { trackEvent } from '../lib/analytics';
 
 type WhenFilter = 'upcoming' | 'this-month' | 'past';
 type PlaceFilter = 'all' | 'austin' | 'elsewhere';
@@ -21,7 +19,6 @@ const WHEN_FILTERS: { id: WhenFilter; label: string; heading: string }[] = [
 const PLACE_FILTERS: { id: PlaceFilter; label: string }[] = [
     { id: 'all', label: 'All places' },
     { id: 'austin', label: 'Austin' },
-    { id: 'elsewhere', label: 'Outside Austin' },
 ];
 
 /**
@@ -105,12 +102,12 @@ export function Events() {
                                 One meetup a month, in person
                             </div>
                             <h1 className="text-4xl md:text-5xl font-bold text-ink mb-6 tracking-tight">
-                                Monthly <Emphasis>meetups</Emphasis> in Austin, Texas
+                                Free monthly meetups in <Emphasis>Austin</Emphasis>
                             </h1>
                             <p className="text-xl text-muted leading-relaxed">
-                                We have met in person every month for more than six months. Each meetup pairs founders
-                                for short one-to-one conversations, so you speak with people directly instead of hoping
-                                to find them in a crowded room. Dates are published on Luma and Meetup.
+                                International and immigrant founders. Structured one-to-ones. Station Austin.
+                                Dates live on Luma — that calendar is the source of truth. Free. No membership
+                                required to walk in.
                             </p>
                         </div>
 
@@ -157,14 +154,14 @@ export function Events() {
                     >
                         <Info className="w-5 h-5 shrink-0 text-muted" aria-hidden="true" />
                         <p>
-                            These dates come from our saved copy of the calendar, so they may be behind.{' '}
+                            Synced from Luma — that calendar is the source of truth.{' '}
                             <a
                                 href={LUMA_CALENDAR_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="font-semibold text-ink underline underline-offset-2 rounded-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                             >
-                                Luma has the current dates
+                                Open Luma
                                 <span className="sr-only"> (opens in a new tab)</span>
                             </a>
                             .
@@ -219,17 +216,31 @@ export function Events() {
 
                 {!loading && (
                     <section className="mt-24 bg-band rounded-3xl px-6 py-16 sm:px-12 text-center text-ink relative overflow-hidden">
-                        <div
-                            aria-hidden="true"
-                            className="absolute top-0 right-0 w-64 h-64 bg-accent opacity-10 rounded-full blur-[80px] -mr-32 -mt-32"
-                        />
                         <div className="relative">
-                            <h2 className="text-3xl font-bold mb-4">Hear about the next meetup</h2>
-                            <p className="text-muted max-w-xl mx-auto mb-10 text-lg">
-                                IFN runs one in-person meetup in Austin each month. Leave your email address and we will
-                                let you know when the next date is open.
+                            <h2 className="text-3xl font-bold mb-4">Want a reminder?</h2>
+                            <p className="text-muted max-w-xl mx-auto mb-8 text-lg">
+                                RSVP on Luma — you&apos;ll get their event emails. Or email{' '}
+                                <a
+                                    href="mailto:hello@ifn.community"
+                                    className="font-semibold text-ink underline underline-offset-2"
+                                >
+                                    hello@ifn.community
+                                </a>
+                                .
                             </p>
-                            <SignupForm />
+                            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+                                <ExternalActionLink
+                                    href={LUMA_CALENDAR_URL}
+                                    variant="solid"
+                                    label="Register on Luma"
+                                />
+                                <Link
+                                    to="/membership"
+                                    className="inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-bold text-ink underline underline-offset-4"
+                                >
+                                    Become a member (optional)
+                                </Link>
+                            </div>
                         </div>
                     </section>
                 )}
@@ -238,90 +249,3 @@ export function Events() {
     );
 }
 
-function SignupForm() {
-    const [email, setEmail] = React.useState('');
-    const [status, setStatus] = React.useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-    const [message, setMessage] = React.useState('');
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setStatus('submitting');
-
-        try {
-            const response = await fetch('/api/event-signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                setStatus('success');
-                trackEvent('event_signup');
-                setMessage(data.message);
-                setEmail('');
-            } else {
-                setStatus('error');
-                setMessage(data.error || 'Something went wrong. Please try again.');
-            }
-        } catch {
-            setStatus('error');
-            setMessage('We could not reach the server. Please try again.');
-        }
-    };
-
-    if (status === 'success') {
-        return (
-            <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                role="alert"
-                className="bg-paper border border-rule rounded-2xl p-6 max-w-md mx-auto"
-            >
-                <p className="text-ink font-bold">{message}</p>
-            </motion.div>
-        );
-    }
-
-    return (
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto text-left">
-            {/* A real label, not a placeholder. Hidden because the panel is a single
-                centred field, but present for screen readers and label-click focus. */}
-            <label htmlFor="event-notify-email" className="sr-only">
-                Email address
-            </label>
-            <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                    id="event-notify-email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    aria-describedby={status === 'error' ? 'event-notify-error' : undefined}
-                    aria-invalid={status === 'error' || undefined}
-                    className="h-14 flex-grow rounded-lg bg-paper border border-edge px-5 text-ink placeholder:text-muted transition-colors focus:outline-hidden focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-paper"
-                />
-                <Button type="submit" size="lg" onDark disabled={status === 'submitting'} className="shrink-0">
-                    {status === 'submitting' ? 'Sending' : 'Notify me'}
-                </Button>
-            </div>
-            {status === 'error' && (
-                <motion.p
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                    id="event-notify-error"
-                    role="alert"
-                    className="mt-3 text-sm font-medium text-ink"
-                >
-                    {message}
-                </motion.p>
-            )}
-        </form>
-    );
-}

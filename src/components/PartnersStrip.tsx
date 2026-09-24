@@ -237,11 +237,10 @@ export function PartnersStrip() {
                         variants={step}
                         className="mt-14 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-ink md:mt-16"
                     >
-                        Station Austin hosts the meetups. Reuneo runs the speed networking that
-                        pairs founders into one-to-one conversations. Yani Partners provides
-                        fractional CTO and technology help for founders and small teams. These are
-                        working relationships rather than paid placements: nobody on this page
-                        bought their way onto it.
+                        Station Austin hosts. Reuneo runs speed networking. Yani Partners — technology
+                        partner for founders; same founding team (disclosed). These are working
+                        relationships rather than paid placements: nobody on this page bought their
+                        way onto it.
                     </motion.p>
 
                     {/* The Yani Partners related-party disclosure was removed here
@@ -264,9 +263,12 @@ export function PartnersStrip() {
                         this is the way into it. Intent is distinct from the
                         page's "Join the community" action, so the one-label-per-
                         intent rule is not touched. */}
-                    <motion.div variants={step} className="mt-12">
+                    <motion.div variants={step} className="mt-12 flex flex-col gap-3 sm:flex-row sm:items-center">
                         <ButtonLink to="/partners" variant="outline">
-                            Read about each partner
+                            Meet our partners
+                        </ButtonLink>
+                        <ButtonLink to="/sponsors" variant="ghost">
+                            Sponsor a meetup
                         </ButtonLink>
                     </motion.div>
                 </motion.div>

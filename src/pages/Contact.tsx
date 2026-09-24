@@ -52,8 +52,12 @@ export function Contact() {
         intent === 'sponsor' || intent === 'sponsors'
             ? 'I am interested in sponsoring an IFN meetup. Category / package preference: '
             : intent === 'workshops' || intent === 'workshop'
-              ? 'I want to be notified when IFN schedules a workshop or practical session. My focus area: '
-              : '';
+              ? 'I want to propose or host an IFN workshop. Topic / format: '
+              : intent === 'partner' || intent === 'partners'
+                ? 'I want to propose a collaboration with IFN (venue / format / ops): '
+                : intent === 'membership' || intent === 'member'
+                  ? 'I have a question about IFN membership: '
+                  : '';
 
     const [formData, setFormData] = useState({
         name: '',
@@ -112,7 +116,7 @@ export function Contact() {
             if (!response.ok) {
                 setErrorMessage(
                     result.error ||
-                        'Your message was not sent. Please try again, or email hello@ifn.community.'
+                        'Your message was not saved. Please try again, or email hello@ifn.community.'
                 );
                 return;
             }
@@ -126,7 +130,7 @@ export function Contact() {
             // and this audience is largely reading in a second language.
             console.error('Error sending message:', error);
             setErrorMessage(
-                'Your message could not be sent. Please check your internet connection and try again, or email hello@ifn.community.'
+                'Your message could not be saved. Please check your internet connection and try again, or email hello@ifn.community.'
             );
         } finally {
             setIsSubmitting(false);
@@ -141,12 +145,17 @@ export function Contact() {
                     <div className="space-y-10">
                         <div>
                             <h1 className="text-4xl sm:text-5xl font-bold text-ink mb-5 tracking-tight leading-tight">
-                                Ask us a <Emphasis>question</Emphasis>
+                                Contact <Emphasis>IFN</Emphasis>
                             </h1>
                             <p className="text-lg text-muted leading-relaxed">
-                                IFN is a community for international founders building in Austin, Texas. We have
-                                run an in-person meetup here every month for more than six months. Ask us about a
-                                meetup, about membership, or about working together. This form reaches us directly.
+                                Need a reply? Email{' '}
+                                <a
+                                    href="mailto:hello@ifn.community"
+                                    className="font-semibold text-ink underline decoration-rule underline-offset-4 hover:decoration-ink"
+                                >
+                                    hello@ifn.community
+                                </a>
+                                . The form saves a message for organizers — it does not email anyone.
                             </p>
                         </div>
 
@@ -244,11 +253,10 @@ export function Contact() {
                                     tabIndex={-1}
                                     className="text-2xl font-bold text-ink mb-3 rounded-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                                 >
-                                    Message sent
+                                    Message saved for organizers
                                 </h2>
                                 <p className="text-muted mb-8 max-w-sm leading-relaxed">
-                                    Thank you. IFN is run by a small founder team, and your message comes straight
-                                    to us. We read every one.
+                                    Message saved for organizers. For anything urgent, email hello@ifn.community.
                                 </p>
                                 <Button
                                     variant="outline"
@@ -257,7 +265,7 @@ export function Contact() {
                                         setIsSuccess(false);
                                     }}
                                 >
-                                    Send another message
+                                    Save another message
                                 </Button>
                                 <a
                                     href={LUMA_CALENDAR_URL}
@@ -273,9 +281,10 @@ export function Contact() {
                         ) : (
                             <form className="space-y-6" onSubmit={handleSubmit}>
                                 <div>
-                                    <h2 className="text-xl font-bold text-ink">Send a message</h2>
+                                    <h2 className="text-xl font-bold text-ink">Save a message</h2>
                                     <p className="mt-1 text-sm text-muted">
-                                        An asterisk (*) marks a field you have to fill in.
+                                        Optional form — saves for organizers; does not email anyone. Prefer a
+                                        reply? Use hello@ifn.community. An asterisk (*) marks a required field.
                                     </p>
                                 </div>
 
@@ -401,7 +410,7 @@ export function Contact() {
                                     aria-busy={isSubmitting}
                                     className="gap-2 shadow-lg"
                                 >
-                                    {isSubmitting ? 'Sending…' : 'Send message'}
+                                    {isSubmitting ? 'Saving…' : 'Save a message'}
                                     <Send className="w-4 h-4" aria-hidden="true" />
                                 </Button>
                             </form>

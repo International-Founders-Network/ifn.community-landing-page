@@ -365,31 +365,22 @@ export function ValueProps() {
     const statements: Statement[] = [
         {
             place: 'md:col-start-1 md:col-span-7',
-            title: 'Founders who have been through it before',
-            body: 'You will meet founders who have opened a U.S. bank account, worked through a visa, incorporated here, or made a first hire across borders. The perspective comes from someone who has been through it, not from a search result.',
+            title: 'Monthly meetup (free)',
+            body: 'Usually 4th Thursday downtown Austin — confirm on Luma. Paired conversations so you leave having talked to people.',
         },
         {
             place: 'md:col-start-3 md:col-span-8',
             title: (
                 <>
-                    A monthly place to <Mark reduce={reduce}>meet the network</Mark>
+                    Optional membership <Mark reduce={reduce}>$149/year</Mark>
                 </>
             ),
-            body: 'Once a month in downtown Austin, founders, operators, investors and advisors meet in the same room. Every date is published openly on Luma and Meetup, so you can see the history before you commit to anything.',
+            body: 'Private member channel, monthly members-only call, first access to guides when they publish.',
         },
         {
             place: 'md:col-start-2 md:col-span-7',
-            title: 'Introductions through people who know your work',
-            body: 'Introductions happen: you meet someone at a meetup, they know the investor, the attorney or the first engineer you need, and they say so. A warm introduction from a founder who has worked with you is worth more than a list.',
-        },
-        {
-            place: 'md:col-start-4 md:col-span-8',
-            title: 'Resources you can use the same week',
-            body: (
-                <>
-                    Guides on immigration paperwork, U.S. banking, first hires, raising here and U.S. market entry are <Mark reduce={reduce}>being written</Mark> from questions founders actually bring us — members get first access when each one publishes. Membership also adds a private member channel and a members-only call each month.
-                </>
-            )
+            title: 'Not an accelerator',
+            body: 'No equity. No application. Not legal or immigration advice. Peers who have done the step, and intros to people they used.',
         },
     ];
 
@@ -422,10 +413,9 @@ export function ValueProps() {
                         {...(reduce ? {} : childMotion)}
                         className="mt-6 max-w-[62ch] text-[1.0625rem] leading-[1.6] text-muted"
                     >
-                        Whether you moved here last year or are still planning the move, the same problems come up:
-                        visas, U.S. banking, incorporating, hiring across borders, funding rules nobody explained to
-                        you, and a professional network you are building from nothing. IFN is where founders work
-                        through them together, and it has met in Austin every month for more than six months.
+                        IFN is a free monthly room in Austin for international and immigrant founders, plus an
+                        optional membership for the weeks between. It has met in Austin every month since
+                        January 2026.
                     </motion.p>
                 </motion.div>
 

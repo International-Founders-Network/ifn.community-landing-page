@@ -440,7 +440,7 @@ export function EventsPreview() {
                     light mode, so colour may never identify a link here. */}
                 {!loading && isStale && (
                     <p className="mt-10 max-w-[65ch] text-sm text-muted">
-                        These dates come from our saved copy of the calendar, so they may be behind.{' '}
+                        Synced from Luma — that calendar is the source of truth.{' '}
                         <a
                             href={LUMA_CALENDAR_URL}
                             target="_blank"

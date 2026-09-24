@@ -53,7 +53,7 @@ export function TermsAndConditions() {
                             Membership is sold as an annual subscription at the price shown at checkout.
                             Payments are processed by Stripe; IFN never receives or stores your card details.
                             Membership gives you access to the private member channel, guides as they are published, and
-                            the monthly members-only office-hours call for the period you paid for.
+                            the monthly members-only members-only call for the period you paid for.
                         </p>
                         <p className={`mt-4 ${BODY}`}>
                             If a payment goes wrong, or if you believe you were charged in error, write to{' '}

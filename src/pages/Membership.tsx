@@ -10,6 +10,7 @@ import {
     MEMBERSHIP_PRICE_STANDARD,
     MEMBERSHIP_TIER_NAME,
 } from '../data/membershipData';
+import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 /** The one published plan slug. Resolved server-side; see netlify/functions/checkout.ts. */
 const PLAN_SLUG = 'founding-member';
@@ -65,14 +66,16 @@ export function Membership() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--muted),transparent_70%)] opacity-10" />
                 <Container className="relative z-10">
                     <div className="max-w-3xl">
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted mb-4">
+                            Optional · one tier · one price
+                        </p>
                         <h1 className="text-5xl md:text-6xl font-bold text-ink mb-6 tracking-tight">
-                            IFN <Emphasis>Membership</Emphasis>
+                            Membership for the weeks between <Emphasis>meetups</Emphasis>
                         </h1>
                         <p className="text-xl text-muted leading-relaxed">
-                            The monthly IFN meetup in Austin is open to everyone, and it stays that way.
-                            Membership is what happens in between: a private channel with other international
-                            founders, first access to guides as we publish them from those meetups, and one
-                            members-only call a month.
+                            Meetups stay free. Membership adds the private member channel, a monthly
+                            members-only call, and first access to guides as we publish them.{' '}
+                            <span className="font-semibold text-ink tabular-nums">$149/year.</span>
                         </p>
                     </div>
                 </Container>
@@ -95,9 +98,10 @@ export function Membership() {
                     >
                         <h2 className="text-lg font-bold text-ink mb-2">Payment received</h2>
                         <p className="text-muted leading-relaxed">
-                            Thank you for joining IFN. Stripe has emailed you a receipt. A person from the
-                            IFN team will be in touch with your invitation to the private member channel
-                            and first access to the guide library as it publishes.
+                            Thank you for joining IFN. Stripe has emailed you a receipt. Private member
+                            channel access comes after checkout — details for the next members-only call
+                            land in the channel when scheduled. Cancel anytime via the Stripe customer
+                            portal or email hello@ifn.community.
                         </p>
                     </div>
                 </Container>
@@ -174,6 +178,22 @@ export function Membership() {
 
                 `cancelled` deliberately keeps the block: that reader has not paid and
                 came back to decide. */}
+                        <Container className="mb-16">
+                <div className="mx-auto max-w-2xl rounded-2xl border border-rule bg-paper p-8">
+                    <h2 className="text-xl font-bold text-ink">After you pay</h2>
+                    <ol className="mt-4 list-decimal space-y-2 pl-5 text-muted leading-relaxed">
+                        <li>Stripe receipt by email.</li>
+                        <li>
+                            Private member channel access after checkout (no 24h/48h promise).
+                        </li>
+                        <li>Next members-only call details in the channel when scheduled.</li>
+                        <li>
+                            Cancel anytime via Stripe customer portal / email hello@ifn.community.
+                        </li>
+                    </ol>
+                </div>
+            </Container>
+
             {checkoutResult !== 'success' && (
             <section className="bg-band py-20">
                 <Container>
@@ -229,7 +249,7 @@ export function Membership() {
                                 onClick={startCheckout}
                                 disabled={checkoutState === 'starting'}
                             >
-                                {checkoutState === 'starting' ? 'Opening checkout…' : 'Become a member'}
+                                {checkoutState === 'starting' ? 'Opening checkout…' : 'Become a member — $149/year'}
                             </Button>
 
                             {checkoutState === 'error' && (
@@ -248,6 +268,15 @@ export function Membership() {
                             <p className="mt-6 mx-auto max-w-xl text-muted leading-relaxed">
                                 Payment is handled by Stripe. You will be asked to confirm the price before
                                 anything is charged, and you can cancel your membership at any time.
+                            </p>
+                            <p className="mt-4 mx-auto max-w-xl text-muted leading-relaxed">
+                                Prefer to visit first?{' '}
+                                <a
+                                    href={LUMA_CALENDAR_URL}
+                                    className="font-semibold text-ink underline underline-offset-2"
+                                >
+                                    Register on Luma
+                                </a>
                             </p>
                         </div>
                     </div>

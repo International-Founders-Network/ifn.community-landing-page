@@ -261,7 +261,7 @@ export function Home() {
             </Suspense>
 
             <Suspense
-                fallback={<SectionPlaceholder className="bg-paper min-h-[78rem] md:min-h-[72.875rem] lg:min-h-[74.25rem]" />}
+                fallback={<SectionPlaceholder className="bg-paper min-h-[20rem] md:min-h-[18rem] lg:min-h-[16rem]" />}
             >
                 <ResourcesPreview />
             </Suspense>

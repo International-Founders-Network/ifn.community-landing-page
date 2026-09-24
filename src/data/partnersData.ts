@@ -155,7 +155,7 @@ export const PARTNERS: Partner[] = [
         id: 'yani-partners',
         name: 'Yani Partners',
         category: 'Business & Technology Partner',
-        description: 'Fractional CTO and technology consulting for founders and growing teams. Founded by the same team behind IFN.',
+        description: 'Technology partner for founders. Same founding team as IFN — disclosed.',
         /* The one vendored file. Full-colour circular emblem carrying its own
            cream ground, so it reads on both page grounds from a single file.
            2000 x 2000 intrinsic, artwork bounding box 1420 x 1420 centred. */

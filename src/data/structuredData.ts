@@ -166,7 +166,7 @@ export function membershipOfferSchema() {
         '@type': 'Offer',
         name: MEMBERSHIP_TIER_NAME,
         description:
-            'Annual membership of the International Founders Network: a private member channel, monthly office hours, and first access to founder guides as they are published.',
+            'Annual membership of the International Founders Network: a private member channel, monthly members-only call, and first access to founder guides as they are published.',
         price: MEMBERSHIP_PRICE_STANDARD.replace('$', ''),
         priceCurrency: 'USD',
         url: `${SITE_URL}/membership`,

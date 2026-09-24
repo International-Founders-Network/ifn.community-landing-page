@@ -4,13 +4,11 @@ import { Emphasis } from '../components/Emphasis';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 /**
- * /workshops — conversion page for practical sessions and member office hours.
+ * /workshops — IFN-hosted practical sessions + guest hosts.
  *
- * Honest inventory: this repository and sibling strategy docs do not publish
- * concrete public workshop dates, prices, or named instructors. The page
- * therefore sells interest and fit (how workshops sit beside the free monthly
- * meetup and paid membership), not a fabricated catalog. When a dated offer
- * exists, add it here from a real source — do not invent one.
+ * Locked (Venkat Q1, 2026-09-24): price per workshop on the Luma session page;
+ * members get discount or free, session-dependent. No public $ table. No fake
+ * dated catalog.
  */
 export function Workshops() {
     return (
@@ -19,67 +17,85 @@ export function Workshops() {
                 <Container className="relative z-10">
                     <div className="max-w-3xl">
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                            Practical sessions for international founders
+                            Between the monthly meetups
                         </p>
                         <h1 className="mt-4 text-5xl font-bold tracking-tight text-ink md:text-6xl">
-                            Workshops that fit how IFN <Emphasis>actually</Emphasis> runs
+                            Practical workshops — one problem, one <Emphasis>session</Emphasis>
                         </h1>
                         <p className="mt-6 text-xl leading-relaxed text-muted">
-                            IFN is a monthly room in Austin plus the work between meetups. Workshops and
-                            office hours are the practical layer: shorter, focused sessions on the problems
-                            international founders bring to the room — visas and status questions, U.S.
-                            banking, hiring across borders, fundraising without a local network.
+                            IFN hosts most sessions. Members and guests can propose one too. Price is set
+                            per workshop on Luma. Members usually get a discount or free entry — depends on
+                            the session.
                         </p>
                     </div>
                 </Container>
             </section>
 
             <Container className="mb-20">
-                <div className="grid gap-10 lg:grid-cols-12">
+                <h2 className="text-2xl font-bold tracking-tight text-ink">How it works</h2>
+                <div className="mt-8 overflow-x-auto">
+                    <table className="w-full min-w-[36rem] border-collapse text-left">
+                        <thead>
+                            <tr className="border-b border-rule">
+                                <th className="py-3 pr-4 text-sm font-bold text-ink">Layer</th>
+                                <th className="py-3 pr-4 text-sm font-bold text-ink">What it is</th>
+                                <th className="py-3 text-sm font-bold text-ink">How to get in</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-muted">
+                            <tr className="border-b border-rule align-top">
+                                <td className="py-4 pr-4 font-semibold text-ink">Monthly meetup</td>
+                                <td className="py-4 pr-4">Free open room</td>
+                                <td className="py-4">Register on Luma</td>
+                            </tr>
+                            <tr className="border-b border-rule align-top">
+                                <td className="py-4 pr-4 font-semibold text-ink">Monthly members-only call</td>
+                                <td className="py-4 pr-4">Online, members only · no fixed day published</td>
+                                <td className="py-4">Become a member ($149/yr)</td>
+                            </tr>
+                            <tr className="align-top">
+                                <td className="py-4 pr-4 font-semibold text-ink">Public workshop</td>
+                                <td className="py-4 pr-4">Dated IFN or guest-hosted session</td>
+                                <td className="py-4">
+                                    Luma RSVP · <span className="font-semibold text-ink">price on that session page</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="mt-16 grid gap-10 lg:grid-cols-12">
                     <div className="lg:col-span-7">
-                        <h2 className="text-2xl font-bold tracking-tight text-ink">Who this is for</h2>
+                        <h2 className="text-2xl font-bold tracking-tight text-ink">Pricing (honest)</h2>
                         <p className="mt-4 text-lg leading-relaxed text-muted">
-                            Founders who moved to the U.S. (or are building into it) and need answers from
-                            people who have already done the same step — not a generic startup curriculum.
-                            Typical stages: first U.S. entity, first U.S. hire, first U.S. raise, or the
-                            paperwork that sits in front of all three.
+                            No public price menu on this site. When a workshop is scheduled, its Luma page
+                            shows the price. Members get better pricing (discount or free) when that session
+                            offers it.
                         </p>
 
                         <h2 className="mt-12 text-2xl font-bold tracking-tight text-ink">
-                            How workshops sit next to the meetup
+                            Host or propose a workshop
                         </h2>
-                        <ul className="mt-4 space-y-4 text-lg leading-relaxed text-muted">
-                            <li>
-                                <span className="font-semibold text-ink">Monthly meetup (free).</span> The
-                                open room at Station Austin — structured intros, peer conversations, the
-                                calendar on Luma.
-                            </li>
-                            <li>
-                                <span className="font-semibold text-ink">Office hours &amp; practical sessions.</span>{' '}
-                                Smaller, topic-scoped time for members (and, when we publish a public session,
-                                for RSVPs on Luma). Same problems as the meetup; more room to go deep.
-                            </li>
-                            <li>
-                                <span className="font-semibold text-ink">Membership.</span> Private channel
-                                between meetups, members-only calls, and first access to guides when we
-                                publish them.
-                            </li>
-                        </ul>
+                        <p className="mt-4 text-lg leading-relaxed text-muted">
+                            IFN runs most workshops. If you want to host one for the room, propose the topic
+                            and format.
+                        </p>
+                        <ButtonLink
+                            to="/contact?intent=workshops"
+                            variant="outline"
+                            size="lg"
+                            className="mt-6"
+                        >
+                            Propose a workshop
+                        </ButtonLink>
                     </div>
 
                     <aside className="lg:col-span-5">
                         <div className="rounded-2xl border border-rule bg-paper p-8">
-                            <h2 className="text-xl font-bold text-ink">What we will not invent</h2>
+                            <h2 className="text-xl font-bold text-ink">What this is not</h2>
                             <p className="mt-3 leading-relaxed text-muted">
-                                There is no public workshop calendar with prices or named instructors on this
-                                site today. When we schedule a dated session, it will appear on Luma and here
-                                with real details — not placeholders.
-                            </p>
-                            <p className="mt-4 leading-relaxed text-muted">
-                                IFN is a founder community. Workshops are peer and operator practice,{' '}
-                                <span className="font-semibold text-ink">not immigration, legal, tax, or
-                                financial advice</span>
-                                . Hire licensed professionals for those outcomes.
+                                Not a course catalog with invented dates. Not licensed legal, tax, or
+                                immigration advice.
                             </p>
                         </div>
                     </aside>
@@ -87,12 +103,12 @@ export function Workshops() {
             </Container>
 
             <Container className="mb-24">
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-6 md:grid-cols-3">
                     <div className="rounded-2xl border border-rule bg-paper p-8">
                         <h2 className="text-xl font-bold text-ink">Next meetup</h2>
                         <p className="mt-3 leading-relaxed text-muted">
-                            The surest way to see how IFN works is to come to the next free monthly meetup in
-                            Austin. Register on Luma — that calendar is the source of record.
+                            Come to the free monthly meetup in Austin. Register on Luma — that calendar is
+                            the source of truth.
                         </p>
                         <ButtonLink
                             href={LUMA_CALENDAR_URL}
@@ -105,24 +121,22 @@ export function Workshops() {
                         </ButtonLink>
                     </div>
                     <div className="rounded-2xl border border-rule bg-paper p-8">
-                        <h2 className="text-xl font-bold text-ink">Membership &amp; interest</h2>
+                        <h2 className="text-xl font-bold text-ink">Propose a workshop</h2>
                         <p className="mt-3 leading-relaxed text-muted">
-                            Members get the private channel and members-only calls where practical sessions
-                            land first. If you want to be notified when a public workshop is scheduled, send
-                            a short note.
+                            Members and guests can propose a topic and format. Tell us what you want to host.
                         </p>
-                        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                            <ButtonLink to="/membership" variant="primary" size="lg" className="shadow-lg">
-                                Become a member
-                            </ButtonLink>
-                            <ButtonLink
-                                to="/contact?intent=workshops"
-                                variant="outline"
-                                size="lg"
-                            >
-                                Tell us you are interested
-                            </ButtonLink>
-                        </div>
+                        <ButtonLink to="/contact?intent=workshops" variant="outline" size="lg" className="mt-6">
+                            Propose a workshop
+                        </ButtonLink>
+                    </div>
+                    <div className="rounded-2xl border border-rule bg-paper p-8">
+                        <h2 className="text-xl font-bold text-ink">Membership</h2>
+                        <p className="mt-3 leading-relaxed text-muted">
+                            Monthly members-only call plus member workshop pricing when a session offers it.
+                        </p>
+                        <ButtonLink to="/membership" variant="outline" size="lg" className="mt-6">
+                            Become a member
+                        </ButtonLink>
                     </div>
                 </div>
             </Container>

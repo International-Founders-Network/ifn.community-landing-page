@@ -5,9 +5,6 @@ import { Link } from 'react-router-dom';
 import { Container } from './Container';
 import { cn } from '../lib/cn';
 import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
-import { LUMA_CALENDAR_URL } from '../data/socialLinks';
-
-const MEETUP_URL = 'https://www.meetup.com/international-founders-network-austin/';
 
 /**
  * Shared inline-link styling.
@@ -250,10 +247,9 @@ const CLUSTERS: FaqCluster[] = [
                 question: 'Do I have to be a founder already?',
                 answer: (
                     <>
-                        No. People come with a registered company, with an idea and nothing else, and with a
-                        full-time job they have not left yet. International students building a first venture
-                        come as well. If you are building something in the United States and you are from
-                        somewhere else, you are in the right room.
+                        No. Registered company, idea-only, or full-time job you haven&apos;t left yet — all
+                        fine. International students building a first venture too. If you&apos;re building
+                        in the U.S. and you&apos;re from somewhere else, you&apos;re in the right room.
                     </>
                 ),
                 defaultOpen: true,
@@ -263,39 +259,19 @@ const CLUSTERS: FaqCluster[] = [
                 question: 'What happens at a meetup?',
                 answer: (
                     <>
-                        The center of the evening is structured one-to-one networking run with our format
-                        partner: you are paired with one person at a time for a short conversation, then
-                        paired again, so you never have to walk up to a circle of strangers. Around that
-                        there is open conversation with founders who have already worked through whatever
-                        you are on now, whether that is a visa, a bank account, a first hire or a first
-                        raise.
+                        Structured one-to-ones (Reuneo): short paired conversations, then open room. Free.
+                        Downtown Austin. Register on Luma.
                     </>
                 ),
                 defaultOpen: true,
             },
             {
-                id: 'different',
-                question: 'What makes IFN different from other founder meetups?',
-                answer: (
-                    <>
-                        Two things, and you can check both. It has run every month for more than six months:
-                        the past meetups are listed publicly on Meetup and Luma. And everyone in the room is
-                        building in the United States from somewhere else, so the conversation starts at work
-                        authorization, opening a bank account and hiring across borders instead of arriving
-                        there at the end of the night.
-                    </>
-                ),
-            },
-            {
                 id: 'accelerator',
-                question: 'Is this an accelerator or a program?',
+                question: 'Is this an accelerator?',
                 answer: (
                     <>
-                        No. There is no application, no cohort and no selection: anyone building a company
-                        in Austin can come to a meetup, and IFN does not take equity. Accelerators do a
-                        different job and the good ones do it well. This is the layer underneath, for the
-                        months when you are working out a visa, a bank account and a first hire and do not
-                        need a program to do it.
+                        No. No application, no cohort, no equity. IFN is the layer underneath for the months
+                        you&apos;re sorting paperwork, banking, and first hires.
                     </>
                 ),
             },
@@ -306,43 +282,14 @@ const CLUSTERS: FaqCluster[] = [
         label: 'Attending, and membership',
         entries: [
             {
-                id: 'where',
-                question: 'Where is it held, and how do I register?',
-                answer: (
-                    <>
-                        Our venue partner hosts us in Austin. Each meetup is published with its
-                        date, start time and address on{' '}
-                        <a href={LUMA_CALENDAR_URL} target="_blank" rel="noopener noreferrer" className={linkStyles}>
-                            Luma<span className="sr-only"> (opens in a new tab)</span>
-                        </a>{' '}
-                        and on{' '}
-                        <a href={MEETUP_URL} target="_blank" rel="noopener noreferrer" className={linkStyles}>
-                            Meetup<span className="sr-only"> (opens in a new tab)</span>
-                        </a>
-                        . Registering on either one is all that is needed.
-                    </>
-                ),
-            },
-            {
-                id: 'time',
-                question: 'How much time does this take?',
-                answer: (
-                    <>
-                        One evening a month if you only come to the meetup. Members can add the monthly
-                        office-hours call. Nothing else is required, and nobody is counting your attendance.
-                    </>
-                ),
-            },
-            {
                 id: 'fee',
-                question: 'Is there a membership fee?',
+                question: 'Is there a fee?',
                 answer: (
                     <>
-                        The meetups are free to attend. You never need to be a member to walk in. Membership is
-                        a separate, optional layer:{' '}
-                        <strong className="font-semibold tabular-nums">{MEMBERSHIP_PRICE_STANDARD} a year</strong>. It
-                        adds the private member channel on Slack/Discord, first access to guides as they publish, and monthly
-                        members-only office hours.{' '}
+                        Meetups are free. Optional membership is{' '}
+                        <strong className="font-semibold tabular-nums">{MEMBERSHIP_PRICE_STANDARD}/year</strong>{' '}
+                        — private member channel, monthly members-only call, first access to guides as they
+                        publish.{' '}
                         <Link to="/membership" className={linkStyles}>
                             See what membership includes
                         </Link>
@@ -353,42 +300,28 @@ const CLUSTERS: FaqCluster[] = [
         ],
     },
     {
-        /**
-         * The section's emotional centre, and the only cluster that carries the
-         * accent. Both of its answers are denials, both denials are checkable,
-         * and each carries exactly one mark. See the budget note on `FAQ` below.
-         */
         id: 'limits',
         label: 'What IFN does not do',
         entries: [
             {
                 id: 'visas',
-                question: 'Can IFN help with visas, U.S. banking, or incorporating?',
+                question: 'Can IFN handle my visa / banking / incorporation?',
                 answer: (
                     <>
-                        {/* 29 characters, under the 32-character wrap cap computed in `Mark`. */}
-                        <Mark>Not as a professional service</Mark>. Nobody at IFN is an immigration lawyer, an
-                        accountant or a banker, and nothing we publish is legal or financial advice. What you
-                        get is the next best thing: people in the room who have already been through the same
-                        visa process, opened the same accounts and registered the same kind of company, telling
-                        you plainly what happened to them, and an introduction to the attorney or accountant
-                        they used. Members also get first access to guides on immigration,
-                        U.S. banking, hiring and raising here, written out of those conversations.
+                        <Mark>Not as a professional service</Mark>. No immigration lawyers or CPAs on staff.
+                        You get peers who&apos;ve done the step and intros to people they used. Not legal or
+                        financial advice.
                     </>
                 ),
             },
             {
                 id: 'austin',
-                question: 'I am not in Austin. Is IFN useful to me?',
+                question: 'I\'m not in Austin. Useful?',
                 answer: (
                     <>
-                        {/* 11 characters. The full clause "the in-person part of IFN is Austin only"
-                            runs 39 and would wrap below 360px, so the mark takes the denial itself. */}
-                        We would rather say this plainly: the in-person part of IFN is{' '}
-                        <Mark>Austin only</Mark>. There are no other chapters, and we are not opening any right
-                        now. Everything else works from anywhere: the member channel, guides as they publish, and
-                        the monthly office-hours call are all remote. The in-person evenings are the strongest
-                        part of IFN, and they happen here.
+                        In-person is <Mark>Austin only</Mark> — no other chapters right now. Member channel,
+                        guides-as-published, and the monthly members-only call are remote. The strongest part
+                        is the room here.
                     </>
                 ),
             },
@@ -502,11 +435,10 @@ export function FAQ() {
                 </div>
 
                 <p className="mt-14 max-w-[65ch] text-[1.0625rem] leading-[1.6] text-muted">
-                    Something else on your mind?{' '}
-                    <Link to="/contact" className={linkStyles}>
-                        Write to us
-                    </Link>
-                    . A founder reads it, not a support desk.
+                    Something else?{' '}
+                    <a href="mailto:hello@ifn.community" className={linkStyles}>
+                        hello@ifn.community
+                    </a>
                 </p>
             </Container>
         </section>

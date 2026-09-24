@@ -1,6 +1,5 @@
-import { useState, useEffect, useSyncExternalStore } from 'react';
 import { preload } from 'react-dom';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { ButtonLink } from './ButtonLink';
 import { photos } from '../data/photos.generated';
@@ -62,47 +61,8 @@ preload(heroBandPreloadHref, {
     fetchPriority: 'high',
 });
 
-/** The cycling word. Three ways this audience names itself, in one slot.
- *
- *  "International" leads because it is the word the organisation is named for,
- *  and it is the word the headline settles on when motion is switched off.
- *
- *  It carries NO accent and NO mark (plan section 4.3). The mark means
- *  "checkable", and how a founder names their own origin is not a checkable
- *  fact. It is the light rung of the weight ladder instead. */
-const WORDS = ['International', 'Global', 'Immigrant'] as const;
-
-const WORD_INTERVAL_MS = 3000;
-
 export function Hero(_props?: HeroProps) {
     void _props;
-    const prefersReducedMotion = useReducedMotion();
-    const [index, setIndex] = useState(0);
-    // Client snapshot: false during prerender/SSR so the H1 emits one static
-    // word; true in the browser so the carousel can mount without concatenating
-    // every candidate into crawler HTML (audit F06).
-    const mounted = useSyncExternalStore(
-        () => () => {},
-        () => true,
-        () => false,
-    );
-
-    // WCAG 2.2.2: nothing may auto-update for a reader who has asked for still
-    // interfaces. Framer Motion's transitions are handled globally by
-    // <MotionConfig reducedMotion="user">, but a setInterval is a plain JS timer
-    // that MotionConfig cannot reach, so it is ours to stop, and with it stopped
-    // the headline simply settles on WORDS[0].
-    useEffect(() => {
-        if (prefersReducedMotion) return;
-
-        const timer = setInterval(() => {
-            setIndex((prev) => (prev + 1) % WORDS.length);
-        }, WORD_INTERVAL_MS);
-
-        return () => clearInterval(timer);
-    }, [prefersReducedMotion]);
-
-    const activeWord = WORDS[index];
 
     return (
         // LAYOUT FAMILY: poster stack above a full-bleed photographic band
@@ -218,37 +178,8 @@ export function Hero(_props?: HeroProps) {
                             measurement, still current, rather than a re-measured
                             one. */}
                         <h1 className="mt-6 text-ink font-medium text-[clamp(2.75rem,6vw,5.25rem)] leading-[0.95] tracking-[-0.025em]">
-                            {/* One accessible name. The visual carousel is
-                                aria-hidden and mounts only after hydration so
-                                prerendered HTML cannot concatenate every
-                                candidate word into crawler garbage (audit F06).
-                                "Connect, Grow, and Succeed" is retired (F18). */}
-                            <span className="sr-only">Where International Founders connect</span>
-                            <span aria-hidden="true">
-                                Where{' '}
-                                {/* Width reserved in ch for the longest candidate
-                                    ("International") so we never emit every word
-                                    as invisible text nodes for HTML crawlers. */}
-                                <span className="relative inline-block min-w-[13ch] overflow-hidden pb-1 text-left font-light leading-[1.15] sm:text-center">
-                                    {mounted ? (
-                                        <AnimatePresence mode="wait" initial={false}>
-                                            <motion.span
-                                                key={activeWord}
-                                                initial={{ y: '100%' }}
-                                                animate={{ y: '0%' }}
-                                                exit={{ y: '-100%' }}
-                                                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                                                className="block"
-                                            >
-                                                {activeWord}
-                                            </motion.span>
-                                        </AnimatePresence>
-                                    ) : (
-                                        'International'
-                                    )}
-                                </span>{' '}
-                                <span className="font-extrabold">Founders</span> connect
-                            </span>
+                            Austin meetups for founders who built their network from{' '}
+                            <span className="font-extrabold">zero</span>
                         </h1>
 
                         {/* THE 7fr / 5fr SPLIT.
@@ -337,9 +268,9 @@ export function Hero(_props?: HeroProps) {
                                     body copy, not a caption, and it measures
                                     17.965 on --paper in both modes. */}
                                 <p className="mt-6 max-w-[65ch] text-lg leading-relaxed text-ink">
-                                    Visas, U.S. banking, hiring, fundraising. Practical answers and
-                                    introductions from founders who have done it, starting in
-                                    Austin.
+                                    One free evening a month at Station Austin. Structured one-to-ones,
+                                    not standing-around. Optional membership ($149/year) for the weeks
+                                    between.
                                 </p>
 
                                 <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -363,7 +294,7 @@ export function Hero(_props?: HeroProps) {
                                         size="lg"
                                         className="w-full sm:w-auto"
                                     >
-                                        Become a member
+                                        Become a member ($149/yr)
                                     </ButtonLink>
                                 </div>
                             </div>
