@@ -68,6 +68,13 @@ function PartnerLogo({ partner }: { partner: Partner }) {
 
            `width`/`height` come from the data and fix the aspect ratio so the
            box is reserved before the file loads. */
+        /* opticalScale (Yani: 1.4) fills more of the 56px well so padded artwork
+           matches Station / Reuneo weight; peers stay at max-h-10 / max-w-12. */
+        const scale = partner.logo.opticalScale ?? 1;
+        const imgClass =
+            scale === 1
+                ? 'max-h-10 max-w-12 object-contain'
+                : 'max-h-14 max-w-14 object-contain';
         return (
             <div className={`${well} border-rule`}>
                 <img
@@ -75,7 +82,7 @@ function PartnerLogo({ partner }: { partner: Partner }) {
                     alt={`${partner.name} logo`}
                     width={partner.logo.width}
                     height={partner.logo.height}
-                    className="max-h-10 max-w-12 object-contain"
+                    className={imgClass}
                     loading="lazy"
                     decoding="async"
                 />

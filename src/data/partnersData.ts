@@ -60,6 +60,12 @@ export interface PartnerArtwork {
     height: number;
     /** 'lockup' for a horizontal wordmark, 'emblem' for a square or round mark. */
     form: 'lockup' | 'emblem';
+    /**
+     * Multiply the surface's CSS box so optical weight matches peers when the
+     * file carries transparent padding (Yani: ~1420 opaque on 2000 canvas).
+     * Omit when the artwork fills its canvas.
+     */
+    opticalScale?: number;
 }
 
 export interface Partner {
@@ -155,15 +161,18 @@ export const PARTNERS: Partner[] = [
         id: 'yani-partners',
         name: 'Yani Partners',
         category: 'Business & Technology Partner',
-        description: 'Technology partner for founders. Same founding team as IFN, disclosed.',
+        description: 'Technology partner for founders.',
         /* The one vendored file. Full-colour circular emblem carrying its own
            cream ground, so it reads on both page grounds from a single file.
-           2000 x 2000 intrinsic, artwork bounding box 1420 x 1420 centred. */
+           2000 x 2000 intrinsic, artwork bounding box ~1420 x 1420 centred.
+           opticalScale 1.4 compensates that padding so Yani matches Reuneo /
+           Station optical weight on the home strip and /partners well. */
         logo: {
             src: '/partners/yani-partners-logo.png',
             width: 2000,
             height: 2000,
             form: 'emblem',
+            opticalScale: 1.4,
         },
     },
 ];

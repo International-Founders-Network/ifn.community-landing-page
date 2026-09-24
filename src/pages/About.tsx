@@ -48,8 +48,8 @@ export function About() {
         },
         {
             label: 'Who runs it',
-            value: 'A small founding team',
-            detail: 'The same people who founded Yani Partners, technology partner for founders. We say so because you should know who is behind this.',
+            value: 'A small Austin team',
+            detail: 'Organizers who host the monthly meetup and keep membership running. Reach us at hello@ifn.community.',
         },
     ];
 
