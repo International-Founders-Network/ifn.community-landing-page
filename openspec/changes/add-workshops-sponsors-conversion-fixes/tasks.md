@@ -4,6 +4,7 @@
 - [x] 1.1 Complete proposal/design/specs/tasks (this change)
 - [x] 1.2 Add `Workshops.tsx` and `Sponsors.tsx` pages using Container/Button/ButtonLink/Emphasis patterns and The Sign voice
 - [x] 1.3 Wire routes in `App.tsx`; add `ROUTE_SEO` entries; update Navbar + Footer (Workshops, Sponsors, Gallery; demote Resources)
+- [x] 1.4 Collaborate nav IA: replace flat Sponsors with Collaborate disclosure (Sponsors + Partners); Workshops stays top-level; Resources footer-only; Footer Collaborate column
 
 ## 2. Conversion copy fixes
 - [x] 2.1 Hero + FinalCTA + HowItWorks + Navbar: Luma primary, Become a member secondary; demote join-modal CTA

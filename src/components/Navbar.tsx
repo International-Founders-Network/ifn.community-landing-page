@@ -1,25 +1,38 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useId } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ButtonLink } from './ButtonLink';
 
 
-// The navigation exposes the five surfaces a visitor actually needs to judge
-// IFN: the meetups, the paid membership, the library, who we work with, and who
-// runs it. Partners sits beside About because both answer "is this real?" rather
-// than "what do I get". Everything else stays in the footer, and one action
-// lives at the right edge.
-const NAV_LINKS = [
+// Primary nav: conversion surfaces a visitor needs, plus Collaborate as a
+// disclosure for Sponsors + Partners (locked IA). Workshops stays top-level.
+// Resources stays demoted to the footer. One action lives at the right edge.
+type NavLinkItem = { name: string; href: string };
+type NavGroupItem = { name: string; children: NavLinkItem[] };
+type NavItem = NavLinkItem | NavGroupItem;
+
+function isNavGroup(item: NavItem): item is NavGroupItem {
+    return 'children' in item;
+}
+
+const NAV_LINKS: NavItem[] = [
     { name: 'Events', href: '/events' },
     { name: 'Membership', href: '/membership' },
     { name: 'Workshops', href: '/workshops' },
-    { name: 'Sponsors', href: '/sponsors' },
+    {
+        name: 'Collaborate',
+        children: [
+            { name: 'Sponsors', href: '/sponsors' },
+            { name: 'Partners', href: '/partners' },
+        ],
+    },
     { name: 'Gallery', href: '/gallery' },
     { name: 'About', href: '/about' },
 ];
 
 const MOBILE_MENU_ID = 'primary-navigation-menu';
+const COLLABORATE_PANEL_ID = 'collaborate-submenu';
 
 // REDESIGN-PLAN.md section 4.2's focus ring, written once and shared by every
 // focusable in this file so the bar cannot drift into two treatments.
@@ -47,6 +60,109 @@ const MOBILE_MENU_ID = 'primary-navigation-menu';
 const FOCUS_RING =
     'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink ' +
     'focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
+
+const NAV_LINK_BASE =
+    `flex min-h-11 items-center rounded-none py-3 text-sm whitespace-nowrap transition-colors ${FOCUS_RING}`;
+
+function navLinkClass(isActive: boolean): string {
+    return `${NAV_LINK_BASE} ${
+        isActive ? 'font-semibold text-ink' : 'font-medium text-muted hover:text-ink'
+    }`;
+}
+
+/**
+ * Desktop Collaborate disclosure. WAI-ARIA disclosure pattern (not menu):
+ * children are navigational links, so a menu role would be wrong. Escape and
+ * outside click close; route change closes via the parent pathname sync.
+ */
+function CollaborateDisclosure({
+    group,
+    pathname,
+}: {
+    group: NavGroupItem;
+    pathname: string;
+}) {
+    const [open, setOpen] = useState(false);
+    const rootRef = useRef<HTMLLIElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const panelId = useId();
+    const childActive = group.children.some(
+        (child) => pathname === child.href || pathname.startsWith(`${child.href}/`),
+    );
+
+    useEffect(() => {
+        if (!open) return;
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setOpen(false);
+                buttonRef.current?.focus();
+            }
+        };
+        const onPointerDown = (event: MouseEvent) => {
+            if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
+                setOpen(false);
+            }
+        };
+        window.addEventListener('keydown', onKeyDown);
+        window.addEventListener('mousedown', onPointerDown);
+        return () => {
+            window.removeEventListener('keydown', onKeyDown);
+            window.removeEventListener('mousedown', onPointerDown);
+        };
+    }, [open]);
+
+    // Close when the route changes so a submenu tap never leaves the panel open
+    // over the page it just navigated to.
+    const [renderedPathname, setRenderedPathname] = useState(pathname);
+    if (pathname !== renderedPathname) {
+        setRenderedPathname(pathname);
+        if (open) setOpen(false);
+    }
+
+    return (
+        <li ref={rootRef} className="relative">
+            <button
+                ref={buttonRef}
+                type="button"
+                className={`${navLinkClass(childActive)} gap-1`}
+                aria-expanded={open}
+                aria-controls={panelId}
+                onClick={() => setOpen((value) => !value)}
+            >
+                {group.name}
+                <ChevronDown
+                    aria-hidden="true"
+                    strokeWidth={1.5}
+                    className={`size-3.5 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+                />
+            </button>
+            {open && (
+                <ul
+                    id={panelId}
+                    className="absolute left-0 top-full z-50 min-w-[11rem] border border-rule bg-paper py-1"
+                >
+                    {group.children.map((child) => (
+                        <li key={child.name}>
+                            <NavLink
+                                to={child.href}
+                                className={({ isActive }) =>
+                                    `flex min-h-11 items-center px-4 py-2 text-sm whitespace-nowrap ${FOCUS_RING} ${
+                                        isActive
+                                            ? 'font-semibold text-ink'
+                                            : 'font-medium text-muted hover:text-ink'
+                                    }`
+                                }
+                                onClick={() => setOpen(false)}
+                            >
+                                {child.name}
+                            </NavLink>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </li>
+    );
+}
 
 export function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -124,43 +240,47 @@ export function Navbar() {
                     {/* Five links plus the action is tight at exactly 768px, so the
                         gaps step up rather than a link being dropped: 16/20px at md,
                         the original 24/32px from lg. whitespace-nowrap keeps a label
-                        from breaking onto two lines in the squeeze. */}
+                        from breaking onto two lines in the squeeze. Collaborate is
+                        one disclosure trigger, not two flat links. */}
                     <div className="hidden md:flex items-center gap-5 lg:gap-8">
                         <ul className="flex items-center gap-4 lg:gap-6">
-                            {NAV_LINKS.map((link) => (
-                                <li key={link.name}>
-                                    {/* py-3 lifts the 20px text line to a 44px hit area
-                                        inside the 64px bar, and `min-h-11` holds that
-                                        floor independently of the type ramp: 20px of
-                                        line box plus 24px of padding is exactly 44px
-                                        with zero slack, so a later line-height change on
-                                        text-sm would silently fail WCAG 2.5.5 on the
-                                        most used control on the site. Same belt the
-                                        wordmark link above and Footer's links already
-                                        carry. `flex` rather than `inline-flex`: an inline
-                                        level box inside this `li` would give the `li` an
-                                        inline formatting context, and the strut's
-                                        descender would grow the row past 44px and drop
-                                        the label off the bar's centreline while the Join
-                                        button beside it stayed centred.
-                                        NavLink sets aria-current="page" on the
-                                        active route, and the active state is carried by
-                                        weight as well as by tone so it does not depend
-                                        on colour alone.
-                                        --ink on --paper 17.965, --muted 6.601. */}
-                                    <NavLink
-                                        to={link.href}
-                                        className={({ isActive }) =>
-                                            `flex min-h-11 items-center rounded-none py-3 text-sm whitespace-nowrap transition-colors ${FOCUS_RING} ${isActive
-                                                ? 'font-semibold text-ink'
-                                                : 'font-medium text-muted hover:text-ink'
-                                            }`
-                                        }
-                                    >
-                                        {link.name}
-                                    </NavLink>
-                                </li>
-                            ))}
+                            {NAV_LINKS.map((link) =>
+                                isNavGroup(link) ? (
+                                    <CollaborateDisclosure
+                                        key={link.name}
+                                        group={link}
+                                        pathname={pathname}
+                                    />
+                                ) : (
+                                    <li key={link.name}>
+                                        {/* py-3 lifts the 20px text line to a 44px hit area
+                                            inside the 64px bar, and `min-h-11` holds that
+                                            floor independently of the type ramp: 20px of
+                                            line box plus 24px of padding is exactly 44px
+                                            with zero slack, so a later line-height change on
+                                            text-sm would silently fail WCAG 2.5.5 on the
+                                            most used control on the site. Same belt the
+                                            wordmark link above and Footer's links already
+                                            carry. `flex` rather than `inline-flex`: an inline
+                                            level box inside this `li` would give the `li` an
+                                            inline formatting context, and the strut's
+                                            descender would grow the row past 44px and drop
+                                            the label off the bar's centreline while the Join
+                                            button beside it stayed centred.
+                                            NavLink sets aria-current="page" on the
+                                            active route, and the active state is carried by
+                                            weight as well as by tone so it does not depend
+                                            on colour alone.
+                                            --ink on --paper 17.965, --muted 6.601. */}
+                                        <NavLink
+                                            to={link.href}
+                                            className={({ isActive }) => navLinkClass(isActive)}
+                                        >
+                                            {link.name}
+                                        </NavLink>
+                                    </li>
+                                ),
+                            )}
                         </ul>
                         {/* One label per intent across nav, hero, HowItWorks and
                             FinalCTA (plan section 11). rounded-full is the plan's
@@ -216,22 +336,61 @@ export function Navbar() {
                         >
                             <div className="px-4 py-4">
                                 <ul className="flex flex-col">
-                                    {NAV_LINKS.map((link) => (
-                                        <li key={link.name}>
-                                            <NavLink
-                                                to={link.href}
-                                                className={({ isActive }) =>
-                                                    `block rounded-none py-3 text-base ${FOCUS_RING} ${isActive
-                                                        ? 'font-semibold text-ink'
-                                                        : 'font-medium text-muted hover:text-ink'
-                                                    }`
-                                                }
-                                                onClick={() => setIsMobileMenuOpen(false)}
-                                            >
-                                                {link.name}
-                                            </NavLink>
-                                        </li>
-                                    ))}
+                                    {NAV_LINKS.map((link) =>
+                                        isNavGroup(link) ? (
+                                            <li key={link.name}>
+                                                {/* Mobile: flat hierarchy under a
+                                                    non-interactive group label so the
+                                                    panel does not nest a second
+                                                    disclosure inside the menu disclosure. */}
+                                                <div
+                                                    id={COLLABORATE_PANEL_ID}
+                                                    className="pt-2"
+                                                >
+                                                    <p className="px-0 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+                                                        {link.name}
+                                                    </p>
+                                                    <ul className="border-l border-rule pl-3">
+                                                        {link.children.map((child) => (
+                                                            <li key={child.name}>
+                                                                <NavLink
+                                                                    to={child.href}
+                                                                    className={({ isActive }) =>
+                                                                        `block rounded-none py-3 text-base ${FOCUS_RING} ${
+                                                                            isActive
+                                                                                ? 'font-semibold text-ink'
+                                                                                : 'font-medium text-muted hover:text-ink'
+                                                                        }`
+                                                                    }
+                                                                    onClick={() =>
+                                                                        setIsMobileMenuOpen(false)
+                                                                    }
+                                                                >
+                                                                    {child.name}
+                                                                </NavLink>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        ) : (
+                                            <li key={link.name}>
+                                                <NavLink
+                                                    to={link.href}
+                                                    className={({ isActive }) =>
+                                                        `block rounded-none py-3 text-base ${FOCUS_RING} ${
+                                                            isActive
+                                                                ? 'font-semibold text-ink'
+                                                                : 'font-medium text-muted hover:text-ink'
+                                                        }`
+                                                    }
+                                                    onClick={() => setIsMobileMenuOpen(false)}
+                                                >
+                                                    {link.name}
+                                                </NavLink>
+                                            </li>
+                                        ),
+                                    )}
                                 </ul>
                                 <div className="pt-4">
                                     <ButtonLink

@@ -12,7 +12,7 @@ Audit `/workspace/ifn-audits/2026-09-24-ifn-community-critical-audit.md` ranks c
 - Library claims → in-progress / first access when published across membership Offer, FAQ, llms, home strip, benefits seed.
 - Static accessible H1; client-only word animation; no crawler concatenation.
 - Delete `public/logo.png`; OG stays `og-image.png`.
-- Nav: Workshops, Sponsors, Gallery; Resources demoted.
+- Nav: Workshops top-level; Collaborate → Sponsors + Partners; Gallery up; Resources demoted.
 
 **Non-Goals:**
 - Neon events store; Stripe webhook prove; contact email secrets; Dec 24 Luma edit; Resources CMS; Vol.10 posters; Gallery mosaic re-author; inventing workshop SKUs or public sponsor dollar amounts.
@@ -39,10 +39,13 @@ Keep private channel + monthly office hours as solid benefits. Resource benefit 
 ### 6. Contact intent prefills
 `/contact?intent=sponsor|workshops` prefills the message textarea with framing; no API schema change (email wiring still ops).
 
+### 7. Collaborate nav parent
+Primary nav ships a **Collaborate** disclosure (WAI-ARIA disclosure, not menu) with Sponsors and Partners. Workshops never nests under Events. Partners joins primary nav under Collaborate rather than remaining footer-only. Footer gains a matching Collaborate column (Sponsors + Partners) while About/Contact move under Community so the four-column grid is preserved.
+
 ## Risks / Trade-offs
 
 - Stripe metadata may still claim a full library until ops re-seeds — mitigated by updating fallback JSON + generated snapshot and calling out in PR.
-- Six primary nav links are tight at md — accept; Resources/Partners live in footer.
+- Collaborate disclosure keeps the top bar to one extra control instead of two flat links; Resources stays footer-only.
 - Draft sponsor prices exist off-repo; publishing them would contradict "hypotheses / not a public offer."
 
 ## Migration Plan

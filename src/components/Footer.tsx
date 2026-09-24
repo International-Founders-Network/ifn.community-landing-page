@@ -39,6 +39,8 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
             { name: 'Meetup Photographs', href: '/gallery' },
             { name: 'Membership', href: '/membership' },
             { name: 'Workshops', href: '/workshops' },
+            { name: 'About Us', href: '/about' },
+            { name: 'Contact', href: '/contact' },
             { name: 'Code of Conduct', href: '/code-of-conduct' },
         ],
     },
@@ -51,13 +53,13 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
         ],
     },
     {
-        id: 'company',
-        heading: 'Company',
+        // Matches primary-nav Collaborate parent: Sponsors + Partners only.
+        // Stays a fourth column so md:grid-cols-4 does not wrap.
+        id: 'collaborate',
+        heading: 'Collaborate',
         links: [
-            { name: 'About Us', href: '/about' },
-            { name: 'Partners', href: '/partners' },
             { name: 'Sponsors', href: '/sponsors' },
-            { name: 'Contact', href: '/contact' },
+            { name: 'Partners', href: '/partners' },
         ],
     },
     {

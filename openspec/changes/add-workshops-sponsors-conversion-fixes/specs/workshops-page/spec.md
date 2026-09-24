@@ -15,7 +15,7 @@ The system SHALL render `/workshops` as an indexable page that explains who work
 - **AND** it offers a contact path with workshop intent (e.g. `/contact?intent=workshops`)
 
 ### Requirement: Workshops route is wired for SEO and navigation
-The system SHALL register `/workshops` in the app router, in `ROUTE_SEO` as indexable, and in primary navigation and footer so sitemap, prerender, and `llms.txt` include it.
+The system SHALL register `/workshops` in the app router, in `ROUTE_SEO` as indexable, and as a **top-level** primary navigation item (never nested under Events or Collaborate) and in the footer so sitemap, prerender, and `llms.txt` include it.
 
 #### Scenario: Discoverability
 - **WHEN** the site is built

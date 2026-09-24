@@ -9,7 +9,7 @@ The 2026-09-24 critical audit found IFN.community converting like a brochure wit
 - Add `/workshops` — honest interest + member-fit framing (office hours / practical sessions); no invented dates, prices, or instructors; clear paths to Luma RSVP and `/membership`.
 - Add `/sponsors` — distinct from `/partners`; audience facts (100–300), meetup cadence, deliverable menu, tier structure without public dollar amounts ("packages start on request"); CTA to `/contact?intent=sponsor`.
 - Wire both into `App.tsx`, `ROUTE_SEO` (sitemap/prerender/llms), Navbar, Footer.
-- Nav IA (F12): add Workshops, Sponsors, Gallery; demote Resources to footer/secondary; keep `/partners` for Station/Reuneo/Yani collaborators.
+- Nav IA (F12): Workshops top-level; Gallery up; Resources footer-only; **Collaborate** parent disclosure with Sponsors (`/sponsors`) + Partners (`/partners`).
 - CTA hierarchy (F01/F07): primary home/events CTAs toward Luma RSVP; secondary Become a member → `/membership`; demote "Join the community" join-modal as the loudest CTA.
 - Stop selling a shipped library (F02): rewrite membership copy, Offer JSON-LD, FAQ, `llms.txt`, home resources strip to "in progress / first access when published".
 - Fix prerendered H1 carousel garbage (F06); drop "Grow and Succeed" slogan weight where touched (F18).

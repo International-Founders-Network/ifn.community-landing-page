@@ -15,7 +15,7 @@ The system SHALL render `/sponsors` with: honest audience facts (about 100–300
 - **AND** `/partners` remains the surface for Station / Reuneo / Yani collaborators
 
 ### Requirement: Sponsors route is wired for SEO and navigation
-The system SHALL register `/sponsors` in the app router, in `ROUTE_SEO` as indexable, and in primary navigation and footer.
+The system SHALL register `/sponsors` in the app router, in `ROUTE_SEO` as indexable, under the primary-nav **Collaborate** disclosure (with Partners), and in the footer Collaborate column.
 
 #### Scenario: Discoverability
 - **WHEN** the site is built
