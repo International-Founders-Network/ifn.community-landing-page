@@ -7,6 +7,6 @@ export default defineConfig({
     // functions directory as a function, and a name containing a dot
     // ("contact.test") fails its "alphanumeric, hyphen & underscore" rule,
     // which blocks the whole deploy.
-    include: ['netlify/tests/**/*.test.ts'],
+    include: ['netlify/tests/**/*.test.ts', 'src/**/*.test.ts'],
   },
 })

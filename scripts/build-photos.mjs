@@ -165,6 +165,13 @@ async function validateSlot(slot, manifest, sourceRoot) {
           `because the jpeg is written at the fallback tier only and the tile is the element that needs it.`,
       )
     }
+    // subjectScale is optional on hang-authored slots and required for honest
+    // overflow mosaic packing. When present it must be one of lg|md|sm.
+    if (g.subjectScale !== undefined && !['lg', 'md', 'sm'].includes(g.subjectScale)) {
+      problems.push(
+        `${where}: gallery.subjectScale "${g.subjectScale}" must be one of lg, md, sm`,
+      )
+    }
   }
 
   // The tree is at zero em dash and en dash characters and stays there. Alt text
@@ -310,6 +317,7 @@ function generateGallery(built, manifest, publicPath) {
         slot: slot.name,
         source: slot.source,
         alt: slot.alt,
+        subjectScale: slot.gallery.subjectScale,
         tile,
         view,
         tileBytesAvif: bytes(tile.width, 'avif'),
@@ -326,6 +334,9 @@ function generateGallery(built, manifest, publicPath) {
         `  {`,
         `    slot: ${tsString(frame.slot)},`,
         `    alt: ${tsString(frame.alt)},`,
+        ...(frame.subjectScale
+          ? [`    subjectScale: ${tsString(frame.subjectScale)},`]
+          : []),
         `    tile: { width: ${frame.tile.width}, height: ${frame.tile.height},`,
         `      src: ${url(frame.slot, frame.tile.width, 'jpg')},`,
         `      avif: ${url(frame.slot, frame.tile.width, 'avif')},`,
@@ -539,10 +550,18 @@ export type GalleryImage = {
   webp: string
 }
 
+export type SubjectScale = 'lg' | 'md' | 'sm'
+
 export type GalleryFrame = {
   slot: PhotoSlot
   /** Hand written, describes the room, names no individual, no venue and no date. */
   alt: string
+  /**
+   * Audited subject scale for mosaic packing. Present on overflow frames
+   * (Vol. 08/09 and later). Hang-authored frames omit it; their size is the
+   * cell they were written into, not a scale class.
+   */
+  subjectScale?: SubjectScale
   /** Grid cell. ONE tier, sized to this frame's cell. Carries the jpeg fallback. */
   tile: GalleryImage & { src: string }
   /** Enlarged view. Fetched on interaction, never in the grid. */

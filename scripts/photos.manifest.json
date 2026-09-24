@@ -1,12 +1,16 @@
 {
   "$about": [
+    "UPDATED 2026-09-24: overflow gallery slots carry gallery.subjectScale (lg|md|sm) so",
+    "Gallery.tsx can pack Vol. 08/09 into a subject-scale mosaic rather than full-measure solos.",
+    "Hang slots are unchanged. Desktop mosaic spans stay ≤6 so existing 640w tiles remain ≥1x.",
+    "",
     "ADDED 2026-09-24: IFN Vol. 09 (Sep 23 2026, Station Austin / Capital Factory)",
     "founder-approved album of 8 frames. Rejects 002,003,005,009,010,011,012,015",
     "excluded and never copied into photos-source. Sources land in meetups/ under",
     "camera timestamps (20260923_*). Eight gallery-sep-* slots ship. Gallery.tsx",
     "overflow rows place the Vol. 09 frames; the authored hang is untouched.",
     "",
-    "TRIMMED 2026-09-15: IFN Vol. 08 (Aug 27 2026) curated album reduced 21 \u2192 18.",
+    "TRIMMED 2026-09-15: IFN Vol. 08 (Aug 27 2026) curated album reduced 21 → 18.",
     "Dropped gallery-aug-speaker (20260827_190507), gallery-aug-window-seat",
     "(20260827_191000), and gallery-aug-lights (20260827_201646) per founder trim.",
     "Remaining eighteen ship as gallery slots. Sources land in meetups/ under camera",
@@ -154,7 +158,7 @@
       }
     ],
     "$galleryNote": [
-      "RESTATED 2026-09-15 for the Vol. 08 curated album (trimmed 21 \u2192 18).",
+      "RESTATED 2026-09-15 for the Vol. 08 curated album (trimmed 21 → 18).",
       "",
       "It was 286,720 bytes against fifteen frames measuring 272,765. Adding the eighteen",
       "Vol. 08 frames as 640w gallery tiles raises the full-scroll tile sum. The cap",
@@ -1057,7 +1061,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "lg"
       }
     },
     {
@@ -1093,7 +1098,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "lg"
       }
     },
     {
@@ -1129,7 +1135,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "lg"
       }
     },
     {
@@ -1165,7 +1172,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "lg"
       }
     },
     {
@@ -1201,7 +1209,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "md"
       }
     },
     {
@@ -1237,7 +1246,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "md"
       }
     },
     {
@@ -1273,7 +1283,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "lg"
       }
     },
     {
@@ -1309,7 +1320,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "md"
       }
     },
     {
@@ -1345,7 +1357,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "md"
       }
     },
     {
@@ -1381,7 +1394,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "sm"
       }
     },
     {
@@ -1417,7 +1431,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "sm"
       }
     },
     {
@@ -1453,7 +1468,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "sm"
       }
     },
     {
@@ -1489,7 +1505,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "md"
       }
     },
     {
@@ -1525,7 +1542,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "sm"
       }
     },
     {
@@ -1561,7 +1579,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "md"
       }
     },
     {
@@ -1597,7 +1616,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "sm"
       }
     },
     {
@@ -1633,7 +1653,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "md"
       }
     },
     {
@@ -1669,7 +1690,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "md"
       }
     },
     {
@@ -1705,7 +1727,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "lg"
       }
     },
     {
@@ -1741,7 +1764,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "lg"
       }
     },
     {
@@ -1777,7 +1801,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "lg"
       }
     },
     {
@@ -1813,7 +1838,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "sm"
       }
     },
     {
@@ -1849,7 +1875,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "sm"
       }
     },
     {
@@ -1885,7 +1912,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "sm"
       }
     },
     {
@@ -1921,7 +1949,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "sm"
       }
     },
     {
@@ -1957,7 +1986,8 @@
       "fetchPriority": "auto",
       "gallery": {
         "tileWidth": 640,
-        "viewWidth": 1280
+        "viewWidth": 1280,
+        "subjectScale": "lg"
       }
     },
     {
