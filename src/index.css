@@ -127,13 +127,11 @@
    -------------------------------------------------------------------------- */
 
 :root {
-  /* Tell the UA both modes are supported so it themes the things CSS cannot
-     reach: form control internals, scrollbars, the caret, and the popup list of
-     the native `<select>` in `JoinModal`. Without this the select renders as a
-     white system dropdown in the middle of the conversion path on a dark page.
-     The two attribute rules further down narrow this to a single scheme when a
-     manual choice has been made, so a chosen mode themes its controls too. */
-  color-scheme: light dark;
+  /* Light is the site default. The `:root[data-theme="dark"]` rule further
+     down flips `color-scheme` when the reader chooses dark, so form control
+     internals, scrollbars, the caret, and the native `<select>` popup in
+     `JoinModal` follow the chosen mode. No prefers-color-scheme auto-switch. */
+  color-scheme: light;
 
   /* Grounds and type. Two grounds per mode, no more. Every neutral is locked
      to hue 60 so warm and cool greys cannot mix. */
@@ -187,6 +185,12 @@
    DARK PALETTE. LIVE as of Phase 2. Nine properties, one per row of
    REDESIGN-PLAN.md section 4.1. Nothing else in the tree is mode aware.
 
+   Activated ONLY by `:root[data-theme="dark"]`. There is no
+   `@media (prefers-color-scheme: dark)` auto-switch — system preference is
+   not a site mode. Light is the default (bare `:root` above); the document
+   always carries an explicit `data-theme` of `light` or `dark` from the
+   bootstrap script / ThemeToggle.
+
    Why it is only nine rows
    ------------------------
    `--accent-plate`, `--on-plate` and `--scrim` are absent BY MEASUREMENT, not
@@ -210,14 +214,6 @@
    single 2px line. An earlier draft of the plan specified that reversal and it
    was a bug. The layers contrast with each other at 17.965 in both modes.
 
-   Why the guard is written twice
-   ------------------------------
-   The `@media` rule is scoped to `:root:not([data-theme="light"])` and the
-   attribute rule is a separate, unmediated selector, so a manual choice wins in
-   BOTH directions: light chosen on a dark system, and dark chosen on a light
-   one. A single `@media` block with an attribute override inside it can only
-   win one of those.
-
    Recomputed with the WCAG relative luminance formula rather than copied
    forward: --ink on --paper 17.965, --ink on --band 16.318, --muted on --paper
    7.496, --muted on --band 6.808, --accent as type on --paper 5.517 and on
@@ -227,21 +223,8 @@
    inner against outer 17.965.
    -------------------------------------------------------------------------- */
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #131311;
-    --band: #1D1D1A;
-    --ink: #FBFBFA;
-    --muted: #A5A59C;
-    --rule: #75756D;
-    --edge: #82827A;
-    --accent: #E85C77;
-    --accent-press: #EF7389;
-    --on-accent: #131311;
-  }
-}
-
 :root[data-theme="dark"] {
+  color-scheme: dark;
   --paper: #131311;
   --band: #1D1D1A;
   --ink: #FBFBFA;
@@ -253,16 +236,8 @@
   --on-accent: #131311;
 }
 
-/* A chosen mode narrows `color-scheme` from `light dark` to the one that was
-   chosen, so form control internals, scrollbars and the native `<select>`
-   popup follow the choice rather than the system. Without these two rows a
-   reader who picks light on a dark system gets dark widgets on a light page. */
 :root[data-theme="light"] {
   color-scheme: light;
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
 }
 
 
