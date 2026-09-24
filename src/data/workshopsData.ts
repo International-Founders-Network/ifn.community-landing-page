@@ -54,7 +54,7 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
         id: 'hiring-ops',
         title: 'Hiring & ops',
         summary:
-            'First hires, contractors, and the ops that keep a remote-or-hybrid team honest.',
+            'First hires, contractors, and the ops that keep a remote-or-hybrid team on track.',
         types: [
             { label: 'First US hire vs contractor (when each breaks)' },
             { label: 'Offer letters, equity basics, and payroll setup for small teams' },
