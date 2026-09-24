@@ -37,24 +37,27 @@ const DELIVERABLES = [
 const PACKAGES = [
     {
         name: 'Night',
-        price: 'from $1,000',
-        summary: 'One meetup night: logo, shoutout, listing presence.',
+        price: 'Starting from $1,000',
+        summary:
+            'Be in the room on one meetup night: logo on the listing, a host shoutout, and presence with founders who already feel the problem you solve.',
     },
     {
         name: 'Workshop',
-        price: 'from $2,000',
-        summary: 'Underwrite a practical workshop session.',
+        price: 'Starting from $2,000',
+        summary:
+            'Put your name on a practical session founders came to learn from. You look useful, not salesy.',
     },
     {
         name: 'Category Exclusive',
-        price: 'from $3,500',
+        price: 'Starting from $3,500',
         summary:
-            'Own a category for a window. Housing / immigration / banking categories from $4,500.',
+            'Be the only sponsor in your category for a set window. Housing, immigration, and banking start from $4,500.',
     },
     {
         name: 'Title / annual',
-        price: 'from $12,000/yr',
-        summary: 'Year-long title association.',
+        price: 'Starting from $12,000/yr',
+        summary:
+            'Stay top of mind all year as the title association across the season, not a one-night flash.',
     },
 ] as const;
 
@@ -134,11 +137,13 @@ export function Sponsors() {
 
             <Container className="mb-20">
                 <h2 className="text-2xl font-bold tracking-tight text-ink">
-                    Packages (starting-at floors)
+                    Packages starting from
                 </h2>
                 <p className="mt-3 max-w-3xl text-lg leading-relaxed text-muted">
-                    Full deliverable matrix and add-ons (Signal, content, multi-night, etc.) stay on the
-                    private rate card. Ask and we send the deck.
+                    Choose how visible you want to be with international and immigrant founders in
+                    Austin. Start with a single night or go year-long. The full matrix plus Signal,
+                    content, and multi-night options live on the private rate card. Ask and we send the
+                    deck.
                 </p>
                 <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {PACKAGES.map((pkg) => (
