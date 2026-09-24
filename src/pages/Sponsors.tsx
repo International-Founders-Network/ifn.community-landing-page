@@ -118,12 +118,12 @@ export function Sponsors() {
                             <h2 className="text-xl font-bold text-ink">Hard boundaries</h2>
                             <ul className="mt-4 space-y-3 leading-relaxed text-muted">
                                 <li>
-                                    Advertising and event presence. Not IFN endorsing outcomes.
+                                    Sponsors buy visibility at meetups and on the site. That is
+                                    advertising, not IFN endorsing a product or result.
                                 </li>
-                                <li>Not a law firm, CPA, bank, or immigration practice.</li>
-                                <li>No scraped attendee lists; no guaranteed lead counts.</li>
                                 <li>
-                                    Station Austin / Reuneo roles are not logo buyouts.
+                                    We do not share attendee lists. Lead counts are never
+                                    guaranteed.
                                 </li>
                             </ul>
                         </div>
