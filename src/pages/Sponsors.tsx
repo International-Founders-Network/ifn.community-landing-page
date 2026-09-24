@@ -5,12 +5,12 @@ import { Link } from 'react-router-dom';
 
 /**
  * /sponsors — category sponsorship with starting-at floors (Venkat Q2).
- * Full SKU / Signal / Content / 3-night stay deck-only.
+ * Full SKU / Signal / Content / multi-event options deck-only.
  */
 const DELIVERABLES = [
     {
         title: 'Logo on the meetup listing',
-        detail: 'Presence on the Luma (and Meetup) event page for the covered nights.',
+        detail: 'Presence on the Luma (and Meetup) event page for the covered meetup(s).',
     },
     {
         title: 'Host shoutout in the room',
@@ -30,16 +30,16 @@ const DELIVERABLES = [
     },
     {
         title: 'Optional short founder Q&A',
-        detail: 'A scoped 5-minute seat on a relevant night. Education, not a pitch deck.',
+        detail: 'A scoped 5-minute seat at a relevant meetup. Education, not a pitch deck.',
     },
 ] as const;
 
 const PACKAGES = [
     {
-        name: 'Night',
+        name: 'Event',
         price: 'Starting from $1,000',
         summary:
-            'Be in the room on one meetup night: logo on the listing, a host shoutout, and presence with founders who already feel the problem you solve.',
+            'Be in the room at one meetup: logo on the listing, a host shoutout, and presence with founders who already feel the problem you solve.',
     },
     {
         name: 'Workshop',
@@ -57,7 +57,7 @@ const PACKAGES = [
         name: 'Title / annual',
         price: 'Starting from $12,000/yr',
         summary:
-            'Stay top of mind all year as the title association across the season, not a one-night flash.',
+            'Stay top of mind all year as the title association across the season, not a one-meetup flash.',
     },
 ] as const;
 
@@ -140,10 +140,8 @@ export function Sponsors() {
                     Packages starting from
                 </h2>
                 <p className="mt-3 max-w-3xl text-lg leading-relaxed text-muted">
-                    Choose how visible you want to be with international and immigrant founders in
-                    Austin. Start with a single night or go year-long. The full matrix plus Signal,
-                    content, and multi-night options live on the private rate card. Ask and we send the
-                    deck.
+                    Start with a single event or go year-long. Want the full matrix, Signal, content, or
+                    multi-event options? Request a more detailed rate card and we send the deck.
                 </p>
                 <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {PACKAGES.map((pkg) => (
@@ -163,8 +161,8 @@ export function Sponsors() {
                 <div className="mx-auto max-w-2xl">
                     <h2 className="text-2xl font-bold text-ink">Request a package</h2>
                     <p className="mt-4 text-muted">
-                        Tell us category + package (Night, Workshop, Category Exclusive, or Title). A
-                        person from IFN replies with the full deck and available nights.
+                        Tell us category + package (Event, Workshop, Category Exclusive, or Title). A
+                        person from IFN replies with the full deck and available dates.
                     </p>
                     <ButtonLink
                         to="/contact?intent=sponsor"
