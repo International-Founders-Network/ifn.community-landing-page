@@ -112,7 +112,7 @@ export function Membership() {
                             Membership
                         </h1>
                         <p className="text-xl leading-relaxed text-muted">
-                            Three ways to plug into IFN.
+                            Guest for free meetups. Member for year-round access. Founder in Residence when you want priority seats and warm intros. Application required.
                         </p>
                     </div>
                 </Container>
