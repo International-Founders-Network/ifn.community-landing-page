@@ -104,6 +104,14 @@
   to = "/index.html"
   status = 200
 
+# The member center. Not prerendered (a members area has no business in a
+# search index), so it needs this rewrite or a direct hit would answer 404
+# while rendering the page perfectly.
+[[redirects]]
+  from = "/members"
+  to = "/index.html"
+  status = 200
+
 # THE CATCH-ALL, AND THE ONE CHARACTER THAT MATTERS: status = 404, not 200.
 #
 # This rule used to be `status = 200`. Because it matches EVERYTHING that is not
@@ -219,3 +227,16 @@
   for = "/admin/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+# The member center. `follow`, not `nofollow`: the page links out to /membership
+# and /resources, and those links are worth following even though this URL is
+# not worth indexing.
+[[headers]]
+  for = "/members"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/members/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"

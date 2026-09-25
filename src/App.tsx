@@ -22,6 +22,7 @@ const Events = lazy(() => import('./pages/Events').then(module => ({ default: mo
 const Gallery = lazy(() => import('./pages/Gallery').then(module => ({ default: module.Gallery })));
 const Newsletter = lazy(() => import('./pages/Newsletter').then(module => ({ default: module.Newsletter })));
 const Membership = lazy(() => import('./pages/Membership').then(module => ({ default: module.Membership })));
+const Members = lazy(() => import('./pages/Members').then(module => ({ default: module.Members })));
 const Mentorship = lazy(() => import('./pages/Mentorship').then(module => ({ default: module.Mentorship })));
 const Chapters = lazy(() => import('./pages/Chapters').then(module => ({ default: module.Chapters })));
 const CodeOfConduct = lazy(() => import('./pages/CodeOfConduct').then(module => ({ default: module.CodeOfConduct })));
@@ -144,6 +145,11 @@ function App() {
                         <Route path="/resources" element={<ResourcesHub />} />
                         <Route path="/newsletter" element={<Newsletter />} />
                         <Route path="/membership" element={<Membership />} />
+                        {/* The member center. Inside Layout, unlike /admin: it is a
+                            public-facing page that a non-member is expected to land
+                            on, so it needs the navbar, the footer and the join modal
+                            wiring. Entitlement is stubbed; see Members.tsx. */}
+                        <Route path="/members" element={<Members />} />
                         <Route path="/mentorship" element={<Mentorship />} />
                         <Route path="/chapters" element={<Chapters />} />
                         <Route path="/code-of-conduct" element={<CodeOfConduct />} />

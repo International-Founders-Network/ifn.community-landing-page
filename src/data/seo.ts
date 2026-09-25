@@ -219,6 +219,17 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
         description: 'Internal dashboard.',
         indexable: false,
     },
+    /**
+     * The member center. `indexable: false` while entitlement is a stub: the
+     * page is real and renders, but a members area has nothing a search result
+     * should ever point at, and prerendering it would bake the non-member view
+     * into static HTML as if it were the page.
+     */
+    '/members': {
+        title: `Member center | ${SITE_NAME}`,
+        description: 'Full guides for IFN members.',
+        indexable: false,
+    },
 };
 
 /**
@@ -226,7 +237,8 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
  *
  * The six placeholders are real URLs with a "coming soon" body. /admin is an
  * internal dashboard whose real access control is server-side; the exclusion
- * here only keeps it out of search results.
+ * here only keeps it out of search results. /members is the member center,
+ * whose entitlement check is still a stub.
  *
  * These are held separately from ROUTE_SEO rather than as `indexable: false`
  * entries because nothing should have to remember to filter them: if a path is
@@ -241,6 +253,7 @@ export const NOINDEX_PATHS = [
     '/newsletter',
     '/playbooks',
     '/admin',
+    '/members',
 ] as const;
 
 /** Every path that should be prerendered to static HTML and listed in the sitemap. */
