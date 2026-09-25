@@ -9,6 +9,9 @@
  *
  * It is committed so that a build without Stripe credentials, or during a
  * Stripe outage, still produces a site with a real price rather than a blank.
+ *
+ * 2026-09-24 copy pack: public label is Membership (not Founding Member);
+ * channel = private member channel; call = monthly members-only call.
  */
 
 export interface GeneratedBenefit {
@@ -32,13 +35,13 @@ export interface GeneratedPlan {
 export const GENERATED_PLANS: Record<string, GeneratedPlan> = {
     'founding-member': {
         lookupKey: 'founding_member_annual',
-        label: "Founding Member",
+        label: "Membership",
         /** Benefit cards, from the Stripe product's metadata when it carries any. */
         benefits: [
             {
                     "id": "community",
                     "title": "Private member channel",
-                    "description": "A members-only channel on Slack or Discord. Ask your question on a Tuesday instead of holding it until the next meetup, and get an answer from someone who has already been through the same step.",
+                    "description": "Ask mid-week; get answers from other international founders. Share intros and names that actually helped. Remote OK. The platform launches after you join. We do not name a tool until it is live.",
                     "included": [
                             "Ask questions between meetups and get answers from other international founders",
                             "Share introductions, referrals and the names of people who actually helped you",
@@ -47,21 +50,21 @@ export const GENERATED_PLANS: Record<string, GeneratedPlan> = {
             },
             {
                     "id": "resources",
-                    "title": "Resource library",
-                    "description": "Written notes, templates and checklists built from six months of IFN meetups in Austin: the questions founders brought to the room, and the answers that turned out to work.",
+                    "title": "Guides as they publish",
+                    "description": "Library is in progress. Members get first access when each guide ships. We do not claim a finished library today.",
                     "included": [
-                            "Visa and immigration questions founders raised, and how they were handled",
-                            "Opening a U.S. bank account and setting up a U.S. company as a non-citizen",
-                            "Hiring and paying people across borders as a small, new company"
+                            "First access to guides as they publish, starting with the questions founders raise most",
+                            "Topics in progress: U.S. banking and forming a U.S. company as a non-citizen",
+                            "Topics in progress: hiring and paying across borders as a small, new company"
                     ]
             },
             {
                     "id": "office-hours",
-                    "title": "Monthly office hours",
-                    "description": "One members-only call every month. Bring whatever you are working through and get a direct answer on your own situation.",
+                    "title": "Monthly members-only call",
+                    "description": "One online call per month for members. No fixed day, time, or named host on the site. Details land in the private member channel when the next call is set.",
                     "included": [
                             "One call every month, for members only",
-                            "Held by the people who run IFN",
+                            "Details shared in the private member channel when scheduled",
                             "Join from anywhere: the call is online"
                     ]
             }

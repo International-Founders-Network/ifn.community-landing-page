@@ -68,6 +68,13 @@ function PartnerLogo({ partner }: { partner: Partner }) {
 
            `width`/`height` come from the data and fix the aspect ratio so the
            box is reserved before the file loads. */
+        /* opticalScale (Yani: 1.4) fills more of the 56px well so padded artwork
+           matches Station / Reuneo weight; peers stay at max-h-10 / max-w-12. */
+        const scale = partner.logo.opticalScale ?? 1;
+        const imgClass =
+            scale === 1
+                ? 'max-h-10 max-w-12 object-contain'
+                : 'max-h-14 max-w-14 object-contain';
         return (
             <div className={`${well} border-rule`}>
                 <img
@@ -75,7 +82,7 @@ function PartnerLogo({ partner }: { partner: Partner }) {
                     alt={`${partner.name} logo`}
                     width={partner.logo.width}
                     height={partner.logo.height}
-                    className="max-h-10 max-w-12 object-contain"
+                    className={imgClass}
                     loading="lazy"
                     decoding="async"
                 />
@@ -120,12 +127,14 @@ export function Partners() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--muted),transparent_70%)] opacity-10" />
                 <Container className="relative z-10">
                     <div className="max-w-3xl">
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted mb-4">
+                            Working collaborators
+                        </p>
                         <h1 className="text-5xl md:text-6xl font-bold text-ink mb-6 tracking-tight">
-                            Our <Emphasis>Partners</Emphasis>
+                            Partners who help run the <Emphasis>room</Emphasis>
                         </h1>
                         <p className="text-xl text-muted leading-relaxed">
-                            The venues, tools, and companies that help IFN run its monthly meetups for
-                            international founders in Austin.
+                            Working relationships: venue, format, ops. Paid logo packages live on Sponsors.
                         </p>
                     </div>
                 </Container>
@@ -187,16 +196,19 @@ export function Partners() {
 
             <Container className="text-center">
                 <div className="max-w-2xl mx-auto">
-                    <h2 className="text-2xl font-bold text-ink mb-4">Interested in partnering with IFN?</h2>
+                    <h2 className="text-2xl font-bold text-ink mb-4">Want to collaborate?</h2>
                     <p className="text-muted mb-8">
-                        We're always looking for venues, tools, and service providers who want to support international founders in Austin.
+                        Venues, format tools, and operators who support international founders in Austin.
+                        If you want a paid category seat (logo, shoutout, packages) → Sponsors.
                     </p>
-                    {/* shadow-* is DESIGN.md's Action Glow, the one persistent elevation
-                        in the system. buttonClasses() does not carry it, so it is passed
-                        per call site rather than baked into every primary button. */}
-                    <ButtonLink to="/contact" variant="primary" size="lg" className="shadow-lg">
-                        Get in Touch
-                    </ButtonLink>
+                    <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+                        <ButtonLink to="/contact?intent=partner" variant="primary" size="lg" className="shadow-lg">
+                            Propose a collaboration
+                        </ButtonLink>
+                        <ButtonLink to="/sponsors" variant="outline" size="lg">
+                            See sponsorship packages
+                        </ButtonLink>
+                    </div>
                 </div>
             </Container>
         </div>

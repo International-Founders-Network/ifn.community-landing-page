@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import { motion, useReducedMotion, type MotionProps } from 'framer-motion';
 import { Container } from '../components/Container';
+import { ButtonLink } from '../components/ButtonLink';
+import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 import { GalleryLightbox } from '../components/GalleryLightbox';
 import { galleryFrames, type GalleryFrame } from '../data/photos.generated';
 import {
@@ -465,13 +467,8 @@ const HANG: Row[] = [
         cells: [
             {
                 slots: ['gallery-apr-profile'],
-                place: 'sm:col-start-1 sm:col-span-5 lg:col-start-1 lg:col-span-5',
+                place: 'sm:col-start-1 sm:col-span-7 lg:col-start-1 lg:col-span-6',
                 phone: INSET_LEFT,
-            },
-            {
-                slots: ['gallery-apr-floor'],
-                place: 'sm:col-start-6 sm:col-span-7 lg:col-start-7 lg:col-span-6',
-                phone: MEASURE,
             },
         ],
     },
@@ -705,11 +702,10 @@ export function Gallery() {
                     been. */}
                 <header className="max-w-[62ch]">
                     <h1 className="text-[clamp(2.25rem,4.6vw,4rem)] font-medium leading-[1.02] tracking-[-0.025em] text-ink">
-                        Photographs from the meetups
+                        The room
                     </h1>
                     <p className="mt-6 text-lg leading-relaxed text-muted">
-                        Frames from IFN meetups in Austin. Meetups have run without a camera in the
-                        room, so this is a selection rather than a record of every one.
+                        Frames from IFN meetups in Austin. A selection. Not every night had a camera.
                     </p>
                 </header>
 
@@ -815,6 +811,16 @@ export function Gallery() {
                         </div>
                     </>
                 )}
+
+                <div className="mt-16 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+                    <ButtonLink href={LUMA_CALENDAR_URL} size="lg" className="shadow-lg">
+                        Come see it in person · Register on Luma
+                    </ButtonLink>
+                    <ButtonLink to="/membership" variant="outline" size="lg">
+                        Become a member
+                    </ButtonLink>
+                </div>
+
             </Container>
 
             <GalleryLightbox

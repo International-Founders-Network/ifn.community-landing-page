@@ -38,12 +38,12 @@ export const MEMBERSHIP_PRICE_MINOR = DEFAULT.amountMinor;
 export const MEMBERSHIP_PRICE_CURRENCY = DEFAULT.currency.toUpperCase();
 
 /**
- * The public tier name. Deliberately NOT taken from Stripe: the Stripe product
- * is called "IFN Membership", which is a billing label, while this is the
- * marketing name the site has committed to. Syncing it would silently rename
- * the offer on the page the next time someone tidied the Stripe catalogue.
+ * The public tier name. Locked to "Membership" (Venkat Q6, 2026-09-24): never
+ * print "Founding Member" on the public site. Stripe product / lookup slug may
+ * stay founding-member internally; plans.json + pricing.generated carry the
+ * same public label for Offer JSON-LD consumers that read DEFAULT.label.
  */
-export const MEMBERSHIP_TIER_NAME = DEFAULT.label;
+export const MEMBERSHIP_TIER_NAME = 'Membership';
 
 /**
  * The benefit cards. Read from the Stripe product's metadata when it carries

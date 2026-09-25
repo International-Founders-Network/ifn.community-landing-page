@@ -33,7 +33,7 @@ export const SITE_NAME = 'International Founders Network';
  * than an empty tag.
  */
 export const DEFAULT_DESCRIPTION =
-    'A community of international and immigrant founders in Austin, Texas. Monthly in-person meetups, a founder resource library, and a paid membership.';
+    'A community of international and immigrant founders in Austin, Texas. Monthly in-person meetups, an optional membership, and practical sessions between gatherings.';
 
 export interface RouteSeo {
     /** The full <title>. Written out rather than templated so each can be tuned. */
@@ -68,9 +68,9 @@ export interface RouteSeo {
  */
 export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/': {
-        title: 'International Founders Network | Founder Community in Austin, Texas',
+        title: 'International Founders Network | Free monthly meetups in Austin',
         description:
-            'A community for international and immigrant founders in Austin, Texas. Monthly in-person meetups at Station Austin, a founder resource library, and a paid membership.',
+            'Free in-person meetups for international and immigrant founders in Austin. Optional $149/year membership. Next date on Luma.',
         indexable: true,
         priority: 1.0,
         changefreq: 'weekly',
@@ -78,23 +78,23 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/about': {
         title: `About IFN | ${SITE_NAME}`,
         description:
-            'Built in Austin, for founders who came from somewhere else. How the International Founders Network started, who it is for, and what happens when you show up.',
+            'Built in Austin for founders who came from somewhere else. Free monthly meetups. Optional membership. No equity. No invented claims.',
         indexable: true,
         priority: 0.8,
         changefreq: 'monthly',
     },
     '/events': {
-        title: `Monthly Founder Meetups in Austin, Texas | ${SITE_NAME}`,
+        title: `Monthly founder meetups in Austin | ${SITE_NAME}`,
         description:
-            'The IFN meetup runs every month in Austin, Texas, for international and immigrant founders. See upcoming dates, the venue, and how to register.',
+            'Free monthly meetups for international founders in Austin. Register on Luma. That calendar is the source of truth.',
         indexable: true,
         priority: 0.9,
         changefreq: 'weekly',
     },
     '/membership': {
-        title: `Membership | ${SITE_NAME}`,
+        title: `Membership | IFN.community`,
         description:
-            'IFN membership for international founders in Austin: a private member channel, the full resource library, and introductions between meetups. One annual price, one tier.',
+            'Guest meetups are free. Member is $149/year. Founder in Residence starts from $1,800/year by application.',
         indexable: true,
         priority: 0.8,
         changefreq: 'monthly',
@@ -108,9 +108,9 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
         changefreq: 'monthly',
     },
     '/gallery': {
-        title: `Photographs from the Meetups | ${SITE_NAME}`,
+        title: `Meetup photos | ${SITE_NAME}`,
         description:
-            'Photographs from the monthly International Founders Network meetups in Austin, Texas. The rooms, the conversations, and the people who keep showing up.',
+            'Photographs from IFN’s monthly international founder meetups in Austin.',
         indexable: true,
         priority: 0.5,
         changefreq: 'monthly',
@@ -118,15 +118,31 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/partners': {
         title: `Partners | ${SITE_NAME}`,
         description:
-            'The venues, firms and organisations that make the International Founders Network meetups in Austin possible, and what each of them does for founders.',
+            'Working collaborators who help run IFN meetups in Austin: Station Austin, Reuneo, Yani Partners. Not paid sponsorship.',
         indexable: true,
         priority: 0.6,
+        changefreq: 'monthly',
+    },
+    '/workshops': {
+        title: `Workshops for international founders in Austin | ${SITE_NAME}`,
+        description:
+            'Practical IFN workshops on visas, banking, housing, hiring, fundraising, US market entry, and entity setup. Price per session on Luma. Members get discount or free entry when the session offers it.',
+        indexable: true,
+        priority: 0.7,
+        changefreq: 'monthly',
+    },
+    '/sponsors': {
+        title: `Sponsor IFN meetups in Austin | ${SITE_NAME}`,
+        description:
+            'Sponsor Austin’s monthly international founder meetups. Event from $1,000. Category exclusive from $3,500. Title from $12,000/year. Audience 100–300.',
+        indexable: true,
+        priority: 0.7,
         changefreq: 'monthly',
     },
     '/contact': {
         title: `Contact | ${SITE_NAME}`,
         description:
-            'Get in touch with the International Founders Network in Austin, Texas. Questions about the meetups, membership, partnering, or speaking.',
+            'Email hello@ifn.community for a reply. Or leave a message on the form. Saved for organizers (not emailed).',
         indexable: true,
         priority: 0.5,
         changefreq: 'yearly',

@@ -1,7 +1,8 @@
 import { useId } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Button } from './Button';
+import { ButtonLink } from './ButtonLink';
+import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 import { Container } from './Container';
 import { photos } from '../data/photos.generated';
 
@@ -53,7 +54,8 @@ interface HowItWorksProps {
  * section ground, not a plate sitting inside one, so plan section 4.2's
  * mandatory 1px plate border does not apply and none is drawn.
  */
-export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
+export function HowItWorks(_props?: HowItWorksProps) {
+    void _props;
     const headingId = useId();
     const reduce = useReducedMotion();
     const photo = photos['how-it-works-middle'];
@@ -72,36 +74,33 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
     // which is the founder journey rather than the event lifecycle.
     const steps = [
         {
-            key: 'sign-up',
-            title: 'Sign up',
+            key: 'show-up',
+            title: 'Show up',
             body: (
                 <>
-                    A short form: your name, your email, your LinkedIn address, and the stage
-                    your company is at. Nothing else.
+                    Register on Luma first, then come to the room. Free. No membership required to
+                    walk in.
                 </>
             ),
         },
         {
-            key: 'meetup',
-            title: 'Come to a meetup',
+            key: 'paired',
+            title: 'Short paired conversations',
             body: (
                 <>
-                    We meet in person once a month in downtown Austin, at the address on the
-                    next meetup listing below. The speed-networking part is run by our format
-                    partner, so you are paired into short one-to-one conversations rather than
-                    left to introduce yourself to strangers on your own.
+                    Our format partner runs structured one-to-ones so you leave having talked to
+                    people, not standing around hoping someone starts a conversation.
                 </>
             ),
         },
         {
-            key: 'keep-going',
-            title: 'Keep the conversations going',
+            key: 'open-room',
+            title: 'Open room',
             body: (
                 <>
-                    The useful part usually happens after the evening ends: an introduction to
-                    someone who has raised here, a founder who will read your offer letter, an
-                    answer to the question you could not search for. Membership adds the private
-                    member channel, the resource library, and a members-only call each month.
+                    Founders who already opened the bank account, filed the paperwork, made the
+                    first hire. Membership adds the private member channel, monthly members-only
+                    call, and first access to guides as they publish.
                 </>
             ),
         },
@@ -151,14 +150,12 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
                     >
                         {/* Emphasis is a weight step inside Archivo, never a second
                             family and never colour alone (plan section 4.3). */}
-                        <span className="font-medium">What you actually </span>
-                        <span className="font-extrabold">get</span>
+                        <span className="font-medium">How a night </span>
+                        <span className="font-extrabold">works</span>
                     </h2>
                     <p className="mt-6 text-lg leading-relaxed text-muted">
-                        Sign up, meet founders working through the same things you are, and keep
-                        the ones worth keeping. Everything after that (the member channel, the
-                        library, the monthly call) is optional, and you decide from there whether
-                        it is worth paying for.
+                        Free monthly meetup. Structured one-to-ones, then open room. Membership is
+                        optional for the weeks between.
                     </p>
                 </motion.div>
 
@@ -269,10 +266,15 @@ export function HowItWorks({ onJoinClick }: HowItWorksProps = {}) {
                             <li key={line}>{line}</li>
                         ))}
                     </ul>
-                    <Button variant="primary" size="lg" onClick={onJoinClick}>
-                        Join the community
-                        <ArrowRight className="ml-2 h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-                    </Button>
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                        <ButtonLink href={LUMA_CALENDAR_URL} size="lg">
+                            Register on Luma
+                            <ArrowRight className="ml-2 h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                        </ButtonLink>
+                        <ButtonLink to="/membership" variant="outline" size="lg">
+                            Become a member
+                        </ButtonLink>
+                    </div>
                 </motion.div>
             </Container>
         </section>

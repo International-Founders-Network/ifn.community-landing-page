@@ -105,7 +105,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 {
                     id: 'comp-analysis',
                     title: 'Competitive Analysis Template',
-                    description: 'Map your competitive landscape to find your differentiated position.',
+                    description: 'Map who you compete with so you can state a clear position.',
                     icon: Layout,
                     tag: 'Template'
                 },
@@ -230,7 +230,7 @@ export const RESOURCES_DATA: Record<string, Segment> = {
                 },
                 {
                     id: 'comp-mapping',
-                    title: 'Competitive Landscape Mapping Tool',
+                    title: 'Competitive Position Mapping Tool',
                     description: 'Visualize where competitors sit and identify your whitespace opportunity.',
                     icon: Map,
                     tag: 'Template'

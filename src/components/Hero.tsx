@@ -402,12 +402,12 @@ export function Hero({ onJoinClick }: HeroProps) {
                                         ButtonLink shares buttonClasses with
                                         Button so the two can never drift. */}
                                     <ButtonLink
-                                        to="/resources"
+                                        to="/membership"
                                         variant="outline"
                                         size="lg"
                                         className="w-full sm:w-auto"
                                     >
-                                        Browse our resources
+                                        Become a member
                                     </ButtonLink>
                                 </div>
                             </div>

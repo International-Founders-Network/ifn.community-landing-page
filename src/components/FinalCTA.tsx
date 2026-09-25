@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { Button } from './Button';
+import { ButtonLink } from './ButtonLink';
+import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 import { Container } from './Container';
 import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
 
@@ -107,7 +108,7 @@ import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
 const PROOF = [
     {
         title: 'Every month, in person',
-        detail: 'More than six months of monthly meetups, all of them in Austin.',
+        detail: 'Monthly meetups in Austin since January 2026.',
     },
     {
         title: 'Hosted by our venue partner',
@@ -178,10 +179,11 @@ const REVEAL_LAST = {
 };
 
 interface FinalCTAProps {
-    onJoinClick: () => void;
+    onJoinClick?: () => void;
 }
 
-export function FinalCTA({ onJoinClick }: FinalCTAProps) {
+export function FinalCTA(_props?: FinalCTAProps) {
+    void _props;
     return (
         <section className="flex min-h-[100dvh] flex-col justify-between bg-accent-plate py-20 text-on-plate md:py-28">
 
@@ -220,8 +222,8 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         Bolding the trailing "here." instead would have put the
                         weight back on the place the sentence just demoted. */}
                     <h2 className="text-[clamp(2.25rem,4.6vw,4rem)] font-medium leading-[1.02] tracking-[-0.025em] lg:max-w-[62%]">
-                        Join the network. Meet the{' '}
-                        <span className="font-extrabold">founders building here.</span>
+                        Next step: register for the{' '}
+                        <span className="font-extrabold">Austin meetup</span>
                     </h2>
 
                     {/* 52ch, not the 65ch cap: at 1280px the h2's 62% measure
@@ -230,10 +232,8 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         column instead of a statement standing over a measure.
                         52ch is about 551px, which stages them. */}
                     <p className="mt-8 max-w-[52ch] text-lg leading-[1.55] md:text-xl">
-                        Founders who moved here to build are working through the same things you
-                        are: visa questions, bank paperwork, first hires across borders, and first
-                        raises in a market that has never heard of them. Join the network, and meet
-                        them at the next gathering.
+                        Free to attend. Membership is optional and separate: private member channel,
+                        monthly members-only call, first access to guides when they publish.
                     </p>
 
                     {/* ONE action. "Join the community" is the settled label for
@@ -269,15 +269,24 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         the four colour utilities are overridden, and twMerge
                         drops the primary variant's own three. */}
                     <div className="mt-10">
-                        <Button
-                            size="lg"
-                            variant="primary"
-                            onClick={onJoinClick}
-                            className="w-full gap-3 border-2 border-on-plate bg-on-plate text-accent-plate hover:bg-accent-plate hover:text-on-plate sm:w-auto"
-                        >
-                            Join the community
-                            <ArrowRight className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
-                        </Button>
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                            <ButtonLink
+                                href={LUMA_CALENDAR_URL}
+                                size="lg"
+                                className="w-full gap-3 border-2 border-on-plate bg-on-plate text-accent-plate hover:bg-accent-plate hover:text-on-plate sm:w-auto"
+                            >
+                                Register on Luma
+                                <ArrowRight className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                            </ButtonLink>
+                            <ButtonLink
+                                to="/membership"
+                                variant="outline"
+                                size="lg"
+                                className="w-full sm:w-auto"
+                            >
+                                Become a member ($149/yr)
+                            </ButtonLink>
+                        </div>
                     </div>
                 </motion.div>
             </Container>
@@ -342,7 +351,7 @@ export function FinalCTA({ onJoinClick }: FinalCTAProps) {
                         className="mt-14 max-w-[62ch] text-[0.9375rem] leading-[1.55]"
                     >
                         Membership is the paid layer and it is optional: the private member
-                        channel, the resource library and monthly office hours.
+                        channel, monthly members-only call, and first access to guides when they are published.
                     </motion.p>
                 </motion.div>
             </Container>

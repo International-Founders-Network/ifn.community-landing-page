@@ -200,9 +200,9 @@ export function Resources() {
                         you are, and see what the library covers.
                     </p>
                     <p className="mt-6 text-base text-muted leading-relaxed border-t border-rule pt-6">
-                        Being honest about where this stands: most of these guides are still being
-                        written. We work through them in the order the questions come up at our
-                        monthly meetups in Austin, and members receive each one as it is finished.
+                        Most of these guides are still being written. We work through them in the
+                        order the questions come up at our monthly meetups in Austin, and members
+                        receive each one as it is finished.
                     </p>
                 </div>
 

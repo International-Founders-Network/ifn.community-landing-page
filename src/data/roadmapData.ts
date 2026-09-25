@@ -13,7 +13,7 @@ export const ROADMAP_TIERS: RoadmapTier[] = [
     {
         tier: 'Paid Membership',
         stage: 'v2 (now)',
-        includes: 'Private Slack/Discord, informal resource library, monthly office hours. $149/yr',
+        includes: 'Private member channel, guides as they publish, monthly members-only call. $149/yr',
     },
     {
         tier: 'IFN Pro',
@@ -28,6 +28,6 @@ export const ROADMAP_TIERS: RoadmapTier[] = [
     {
         tier: 'Platform migration',
         stage: 'v3 (Month 13-36)',
-        includes: 'Slack/Discord → Circle.so once subscribers cross ~150-200',
+        includes: 'Private member channel → dedicated community platform once subscribers cross ~150-200',
     },
 ];

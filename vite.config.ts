@@ -73,7 +73,7 @@ function seoAssets(): Plugin {
             const llms = [
                 `# ${SITE_NAME}`,
                 '',
-                `> A community of international and immigrant founders based in Austin, Texas. IFN runs a free in-person meetup every month, publishes a resource library for founders building in the United States from somewhere else, and offers one paid annual membership tier.`,
+                `> A community of international and immigrant founders based in Austin, Texas. IFN runs a free in-person meetup every month and offers one paid annual membership. A founder guide library is in progress — members get first access as guides publish.`,
                 '',
                 '## What IFN is',
                 '',

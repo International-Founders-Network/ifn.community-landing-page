@@ -1,18 +1,69 @@
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { Container } from '../components/Container';
 import { Button } from '../components/Button';
-import { Emphasis } from '../components/Emphasis';
-import {
-    MEMBERSHIP_BENEFITS,
-    MEMBERSHIP_PRICE_STANDARD,
-    MEMBERSHIP_TIER_NAME,
-} from '../data/membershipData';
+import { ButtonLink } from '../components/ButtonLink';
+import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
+import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 
 /** The one published plan slug. Resolved server-side; see netlify/functions/checkout.ts. */
 const PLAN_SLUG = 'founding-member';
+
+const GUEST_INCLUSIONS = [
+    'Free monthly meetups in Austin (confirm dates on Luma)',
+    'Open workshops when a session is open to guests',
+    'Public site resources you can browse anytime',
+] as const;
+
+const MEMBER_INCLUSIONS = [
+    'Private member channel (access after checkout)',
+    'Monthly members-only call',
+    'Member resources as we publish them',
+    'Workshop member pricing when a session offers it',
+] as const;
+
+const FIR_INCLUSIONS = [
+    'Everything in Member',
+    'Priority workshop seats (before general registration)',
+    'Up to 4 curated warm intros per year, each with a written ask',
+    'Co-host one workshop or fireside with IFN this year',
+    'Open-to-intros badge in the member channel',
+] as const;
+
+/**
+ * Every tier card repeats the same header rows in the same order, so the title,
+ * the price and the horizontal rule land on one Y across all three columns.
+ * The min-heights reserve the tallest wrap a row reaches at that breakpoint: a
+ * card whose eyebrow or title is shorter would otherwise pull its rule upward.
+ */
+const EYEBROW_ROW =
+    'min-h-8 text-xs font-bold uppercase leading-4 tracking-[0.1em] text-muted lg:min-h-4';
+const TITLE_ROW = 'mt-2 min-h-16 text-2xl font-bold leading-8 text-ink xl:min-h-8';
+const PRICE_ROW =
+    'mt-2 min-h-14 text-lg font-semibold leading-7 tabular-nums text-ink xl:min-h-7';
+/** One line of text-sm/leading-relaxed; two below xl, where the FiR quote wraps. */
+const PRICE_DETAIL_ROW =
+    'mt-1 min-h-[2.875rem] text-sm leading-relaxed text-muted xl:min-h-[1.4375rem]';
+const CARD_RULE = 'mt-6 border-0 border-t border-rule';
+const BLURB_ROW = 'mt-6 leading-relaxed text-muted';
+
+function InclusionList({ items }: { items: readonly string[] }) {
+    return (
+        <ul className="mt-6 flex flex-col gap-3">
+            {items.map((line) => (
+                <li key={line} className="flex gap-3 text-sm leading-relaxed text-muted">
+                    <Check
+                        className="mt-1 h-4 w-4 shrink-0 text-muted"
+                        strokeWidth={2}
+                        aria-hidden="true"
+                    />
+                    <span>{line}</span>
+                </li>
+            ))}
+        </ul>
+    );
+}
 
 export function Membership() {
     const [searchParams] = useSearchParams();
@@ -20,14 +71,9 @@ export function Membership() {
     const [checkoutState, setCheckoutState] = useState<'idle' | 'starting' | 'error'>('idle');
 
     /**
-     * Starts Stripe Checkout. The browser sends a plan SLUG and nothing else —
-     * no price, no amount, no Stripe id — because a client that can name a price
-     * can choose what it pays. The server resolves the slug through its own
-     * allowlist.
-     *
-     * On failure this deliberately does not retry silently or leave a dead
-     * button: it surfaces a plain message and keeps /contact reachable, which is
-     * the flow that sold every membership before this existed.
+     * Starts Stripe Checkout. The browser sends a plan SLUG and nothing else:
+     * no price, no amount, no Stripe id. The server resolves the slug through
+     * its own allowlist.
      */
     async function startCheckout() {
         setCheckoutState('starting');
@@ -50,54 +96,42 @@ export function Membership() {
         }
     }
 
-    const container = {
-        hidden: { opacity: 0 },
-        show: { opacity: 1, transition: { staggerChildren: 0.1 } },
-    };
-    const item = {
-        hidden: { opacity: 0, y: 20 },
-        show: { opacity: 1, y: 0 },
-    };
+    const checkoutLabel =
+        checkoutState === 'starting' ? 'Opening checkout…' : 'Become a member';
 
     return (
         <div className="pt-24 pb-20">
-            <section className="bg-band py-20 mb-20 relative overflow-hidden">
+            <section className="relative mb-20 overflow-hidden bg-band py-20">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--muted),transparent_70%)] opacity-10" />
                 <Container className="relative z-10">
                     <div className="max-w-3xl">
-                        <h1 className="text-5xl md:text-6xl font-bold text-ink mb-6 tracking-tight">
-                            IFN <Emphasis>Membership</Emphasis>
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+                            Guest · Member · Founder in Residence
+                        </p>
+                        <h1 className="mb-6 text-5xl font-bold tracking-tight text-ink md:text-6xl">
+                            Membership
                         </h1>
-                        <p className="text-xl text-muted leading-relaxed">
-                            The monthly IFN meetup in Austin is open to everyone, and it stays that way.
-                            Membership is what happens in between: a private channel with other international
-                            founders, a written library built from six months of those meetups, and one
-                            members-only call a month.
+                        <p className="text-xl leading-relaxed text-muted">
+                            Guest for free meetups. Member for year-round access. Founder in Residence when you want priority seats and warm intros. Application required.
                         </p>
                     </div>
                 </Container>
             </section>
 
-            {/* Where Stripe sends the reader back to. Without this a member who has
-                just paid lands on an unchanged pricing page and cannot tell whether
-                it worked — the single most alarming moment in any checkout.
-
-                This reports what STRIPE said, not what IFN's database knows. The
-                webhook that records the membership may not have landed yet, and it
-                arrives out of band, so promising "you are now a member" here would
-                be a claim this page cannot check. It confirms the payment and says
-                what happens next instead. */}
+            {/* Where Stripe sends the reader back to. Reports what STRIPE said,
+                not what IFN's database knows yet. */}
             {checkoutResult === 'success' && (
                 <Container className="mb-12">
                     <div
                         role="status"
-                        className="mx-auto max-w-2xl p-6 rounded-2xl border border-rule bg-paper"
+                        className="mx-auto max-w-2xl rounded-2xl border border-rule bg-paper p-6"
                     >
-                        <h2 className="text-lg font-bold text-ink mb-2">Payment received</h2>
-                        <p className="text-muted leading-relaxed">
-                            Thank you for joining IFN. Stripe has emailed you a receipt. A person from the
-                            IFN team will be in touch with your invitation to the private member channel
-                            and the resource library.
+                        <h2 className="mb-2 text-lg font-bold text-ink">Payment received</h2>
+                        <p className="leading-relaxed text-muted">
+                            Thank you for joining IFN. Stripe has emailed you a receipt. Private member
+                            channel access comes after checkout. Details for the next members-only call
+                            land in the channel when scheduled. Cancel anytime via the Stripe customer
+                            portal or email hello@ifn.community.
                         </p>
                     </div>
                 </Container>
@@ -107,10 +141,10 @@ export function Membership() {
                 <Container className="mb-12">
                     <div
                         role="status"
-                        className="mx-auto max-w-2xl p-6 rounded-2xl border border-rule bg-paper"
+                        className="mx-auto max-w-2xl rounded-2xl border border-rule bg-paper p-6"
                     >
-                        <h2 className="text-lg font-bold text-ink mb-2">Checkout cancelled</h2>
-                        <p className="text-muted leading-relaxed">
+                        <h2 className="mb-2 text-lg font-bold text-ink">Checkout cancelled</h2>
+                        <p className="leading-relaxed text-muted">
                             Nothing was charged. You are welcome to start again below, or{' '}
                             <Link to="/contact" className="underline underline-offset-2">
                                 send us a message
@@ -121,138 +155,129 @@ export function Membership() {
                 </Container>
             )}
 
-            <Container className="mb-24">
-                <div className="max-w-3xl mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold text-ink tracking-tight mb-4">
-                        What you get for the year
-                    </h2>
-                    <p className="text-lg text-muted leading-relaxed">
-                        Three things, and only three. All of them cover the weeks between one monthly
-                        meetup and the next.
-                    </p>
-                </div>
-
-                <motion.div
-                    variants={container}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: '-100px' }}
-                    className="grid md:grid-cols-3 gap-8"
-                >
-                    {MEMBERSHIP_BENEFITS.map((benefit) => (
-                        <motion.div
-                            key={benefit.id}
-                            variants={item}
-                            className="p-8 rounded-2xl border border-rule bg-paper hover:shadow-xl hover:border-edge transition-all flex flex-col gap-4"
-                        >
-                            <h3 className="text-xl font-bold text-ink">{benefit.title}</h3>
-                            <p className="text-muted leading-relaxed">{benefit.description}</p>
-                            <ul className="mt-2 flex flex-col gap-3 border-t border-rule pt-6">
-                                {benefit.included.map((line) => (
-                                    <li key={line} className="flex gap-3 text-sm text-muted leading-relaxed">
-                                        <Check
-                                            className="w-4 h-4 mt-1 shrink-0 text-muted"
-                                            strokeWidth={2}
-                                            aria-hidden="true"
-                                        />
-                                        <span>{line}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </motion.div>
-                    ))}
-                </motion.div>
-            </Container>
-
-            {/* THE PURCHASE BLOCK IS HIDDEN AFTER A SUCCESSFUL CHECKOUT, and that is
-                not tidiness. It ends in a live "Become a member" button, and Stripe
-                does not deduplicate subscriptions by customer: a member who just
-                paid, scrolled down and clicked it would be charged a second time and
-                hold two subscriptions. Restating the price under a "payment
-                received" notice is also its own small lie, because the price is not
-                what they paid — sales tax is added at checkout.
-
-                `cancelled` deliberately keeps the block: that reader has not paid and
-                came back to decide. */}
+            {/* Purchase / tier block hidden after successful checkout so a just-paid
+                member cannot start a second subscription from the same page. */}
             {checkoutResult !== 'success' && (
-            <section className="bg-band py-20">
-                <Container>
-                    <div className="max-w-3xl mx-auto text-center">
-                        <h2 className="text-3xl md:text-4xl font-bold text-ink tracking-tight mb-4">
-                            What it costs
-                        </h2>
-                        <p className="text-lg text-muted leading-relaxed mb-10">
-                            Membership runs for a full year.
-                        </p>
-
-                        {/* One price plate, not a tier grid: this was a `grid sm:grid-cols-2` and
-                            only one price is public. See membershipData.ts for the standing rule.
-                            There is no multi-column layout left in this block, so the plate is a
-                            single centred column at every width and nothing collapses.
-                            The 1px `--rule` border is mandatory rather than decorative, per
-                            REDESIGN-PLAN section 4.2: `--band` against `--paper` is 1.103:1, so
-                            ground tone alone cannot make a plate perceivable. */}
-                        <div className="mx-auto max-w-sm p-8 rounded-2xl border border-rule bg-paper flex flex-col gap-3 text-left">
-                            <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
-                                {MEMBERSHIP_TIER_NAME}
-                            </h3>
-                            <p className="text-4xl font-bold text-ink tracking-tight tabular-nums">
-                                {MEMBERSHIP_PRICE_STANDARD}
-                                <span className="text-base font-semibold text-muted"> / year</span>
-                            </p>
-                        </div>
-
-                        {/* "charged once" was true of the one-off annual charge this page
-                            used to describe. Billing is a Stripe subscription now, so the
-                            sentence would be false: it renews. Saying so here rather than
-                            only on Stripe's page is the point — the reader agrees to a
-                            recurring charge before they reach checkout, not during it. */}
-                        <p className="mt-6 text-sm text-muted leading-relaxed">
-                            The price covers a full year and renews annually until you cancel. IFN does not take
-                            equity in your company, and you do not need to be a member to come to a meetup.
-                        </p>
-
-                        <div className="mt-12">
-                            {/* A <Button>, where this was a <ButtonLink to="/contact">.
-                                The old comment argued for a link because the CTA was
-                                navigation and had to be copyable and openable in a new tab.
-                                That reasoning was right and no longer applies: this performs
-                                an action — it POSTs, gets a single-use session URL back, and
-                                redirects. A URL like that is meaningless copied or shared, so
-                                a button is the honest element and the correct role to
-                                announce. shadow-* is DESIGN.md's Action Glow, which
-                                buttonClasses() does not carry. */}
-                            <Button
-                                variant="primary"
-                                size="lg"
-                                className="shadow-lg"
-                                onClick={startCheckout}
-                                disabled={checkoutState === 'starting'}
-                            >
-                                {checkoutState === 'starting' ? 'Opening checkout…' : 'Become a member'}
-                            </Button>
-
-                            {checkoutState === 'error' && (
-                                <p
-                                    role="alert"
-                                    className="mt-6 mx-auto max-w-xl text-muted leading-relaxed"
-                                >
-                                    We could not open checkout just now. Please try again, or{' '}
-                                    <Link to="/contact" className="underline underline-offset-2">
-                                        send us a message
-                                    </Link>{' '}
-                                    and a person from the IFN team will help you join.
+                <>
+                    <Container className="mb-16">
+                        {/* Guest | Member | FiR: exactly three tier cards. */}
+                        <div className="grid items-stretch gap-8 md:grid-cols-3">
+                            {/* Guest */}
+                            <div className="flex h-full flex-col rounded-2xl border border-rule bg-paper p-8">
+                                <p className={EYEBROW_ROW} aria-hidden="true">
+                                    &nbsp;
                                 </p>
-                            )}
+                                <h3 className={TITLE_ROW}>Guest</h3>
+                                <p className={PRICE_ROW}>Free</p>
+                                <p className={PRICE_DETAIL_ROW} aria-hidden="true">
+                                    &nbsp;
+                                </p>
+                                <hr className={CARD_RULE} />
+                                <p className={BLURB_ROW}>
+                                    Meetup access. Paid tiers unlock the rest.
+                                </p>
+                                <InclusionList items={GUEST_INCLUSIONS} />
+                                <div className="mt-auto pt-8">
+                                    <ButtonLink
+                                        href={LUMA_CALENDAR_URL}
+                                        variant="secondary"
+                                        size="lg"
+                                        className="w-full"
+                                    >
+                                        Register on Luma
+                                    </ButtonLink>
+                                </div>
+                            </div>
 
-                            <p className="mt-6 mx-auto max-w-xl text-muted leading-relaxed">
-                                Payment is handled by Stripe. You will be asked to confirm the price before
-                                anything is charged, and you can cancel your membership at any time.
-                            </p>
+                            {/* Member (default / emphasized) */}
+                            <div className="flex h-full flex-col rounded-2xl border border-ink bg-paper p-8 shadow-lg ring-1 ring-ink">
+                                <p className={EYEBROW_ROW}>Popular</p>
+                                <h3 className={TITLE_ROW}>Member</h3>
+                                <p className={PRICE_ROW}>{MEMBERSHIP_PRICE_STANDARD}/year</p>
+                                <p className={PRICE_DETAIL_ROW} aria-hidden="true">
+                                    &nbsp;
+                                </p>
+                                <hr className={CARD_RULE} />
+                                <p className={BLURB_ROW}>
+                                    Year-round IFN. Channel, call, and member resources.
+                                </p>
+                                <InclusionList items={MEMBER_INCLUSIONS} />
+                                <div className="mt-auto pt-8">
+                                    <Button
+                                        variant="primary"
+                                        size="lg"
+                                        className="w-full shadow-lg"
+                                        onClick={startCheckout}
+                                        disabled={checkoutState === 'starting'}
+                                    >
+                                        {checkoutLabel}
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {/* Founder in Residence */}
+                            <div
+                                id="founder-in-residence"
+                                className="flex h-full flex-col rounded-2xl border border-rule bg-paper p-8"
+                            >
+                                <p className={EYEBROW_ROW}>Limited seats · Apply</p>
+                                <h3 className={TITLE_ROW}>Founder in Residence</h3>
+                                <p className={PRICE_ROW}>Starting from $1,800/year</p>
+                                <p className={PRICE_DETAIL_ROW} aria-hidden="true">
+                                    &nbsp;
+                                </p>
+                                <hr className={CARD_RULE} />
+                                <p className={BLURB_ROW}>
+                                    Priority workshop seats, capped warm intros, one co-host
+                                    slot per year. Seats limited.
+                                </p>
+                                <InclusionList items={FIR_INCLUSIONS} />
+                                <div className="mt-auto pt-8">
+                                    <ButtonLink
+                                        to="/contact?intent=founder-in-residence"
+                                        variant="outline"
+                                        size="lg"
+                                        className="w-full"
+                                    >
+                                        Apply for Founder in Residence
+                                    </ButtonLink>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </Container>
-            </section>
+
+                        {checkoutState === 'error' && (
+                            <p
+                                role="alert"
+                                className="mx-auto mt-8 max-w-xl text-center leading-relaxed text-muted"
+                            >
+                                We could not open checkout just now. Please try again, or{' '}
+                                <Link to="/contact" className="underline underline-offset-2">
+                                    send us a message
+                                </Link>{' '}
+                                and a person from the IFN team will help you join.
+                            </p>
+                        )}
+
+                        <p className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-muted">
+                            Billed yearly through Stripe. Cancel anytime.
+                        </p>
+                    </Container>
+
+                    <Container className="mb-16">
+                        <div className="mx-auto max-w-2xl rounded-2xl border border-rule bg-paper p-8">
+                            <h2 className="text-xl font-bold text-ink">After you join</h2>
+                            <ol className="mt-4 list-decimal space-y-2 pl-5 leading-relaxed text-muted">
+                                <li>You&apos;ll get a receipt from Stripe.</li>
+                                <li>We&apos;ll open your private member channel after checkout.</li>
+                                <li>
+                                    When the next members-only call is set, details show up in the
+                                    channel.
+                                </li>
+                                <li>Cancel anytime in Stripe, or email hello@ifn.community.</li>
+                            </ol>
+                        </div>
+                    </Container>
+                </>
             )}
         </div>
     );

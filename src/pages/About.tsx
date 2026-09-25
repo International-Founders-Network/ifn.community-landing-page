@@ -39,7 +39,7 @@ export function About() {
         {
             label: 'How often',
             value: 'Once a month',
-            detail: 'One in-person meetup, every month, for more than six months so far.',
+            detail: 'Monthly meetups in Austin since January 2026. Usually 4th Thursday. Confirm on Luma.',
         },
         {
             label: 'What happens',
@@ -48,8 +48,8 @@ export function About() {
         },
         {
             label: 'Who runs it',
-            value: 'A small founding team',
-            detail: 'The same people who founded Yani Partners, a fractional technology firm. We say so because you should know who is behind this.',
+            value: 'A small Austin team',
+            detail: 'Organizers who host the monthly meetup and keep membership running. Reach us at hello@ifn.community.',
         },
     ];
 
@@ -64,7 +64,7 @@ export function About() {
             icon: <CalendarDays className="w-6 h-6" aria-hidden="true" />,
             title: 'One meetup a month',
             description:
-                'A single date, every month, in person. One date a month is something a small team can actually keep to, which is why it has held for more than six months rather than fading out.',
+                'A single date, every month, in person. One date a month is something a small team can actually keep to, which is why it has held since January 2026 rather than fading out.',
         },
         {
             icon: <Compass className="w-6 h-6" aria-hidden="true" />,
@@ -103,9 +103,8 @@ export function About() {
                             Built in <Emphasis>Austin</Emphasis>, for founders who came from somewhere else
                         </h1>
                         <p className="text-xl text-muted leading-relaxed">
-                            The International Founders Network (IFN) runs a monthly in-person meetup in Austin, Texas
-                            for people building a company in a country they did not grow up in. We have run it every
-                            month for more than six months.
+                            IFN runs a free monthly in-person meetup for people building a company in a country
+                            they didn&apos;t grow up in. First meetup: January 2026.
                         </p>
                     </div>
                 </Container>
@@ -215,18 +214,32 @@ export function About() {
                 <div className="max-w-2xl mx-auto">
                     <h2 className="text-3xl font-bold text-ink mb-6 tracking-tight">Come to the next meetup</h2>
                     <p className="text-lg text-muted mb-10 leading-relaxed">
-                        The honest way to find out whether IFN is useful to you is to spend one evening in the room and
+                        The clearest way to find out whether IFN is useful to you is to spend one evening in the room and
                         talk to the people there. One city, one venue, once a month. You do not have to be selected to
                         come.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button size="lg" onClick={openJoinModal}>
-                            Join IFN
-                        </Button>
-                        <ButtonLink to="/events" variant="outline" size="lg">
-                            See upcoming meetups
+                        <ButtonLink href={LUMA_CALENDAR_URL} external size="lg" className="shadow-lg">
+                            Register on Luma
+                        </ButtonLink>
+                        <ButtonLink to="/membership" variant="outline" size="lg">
+                            Become a member
+                        </ButtonLink>
+                        <ButtonLink to="/contact" variant="ghost" size="lg">
+                            Contact
                         </ButtonLink>
                     </div>
+                    <p className="mt-8 text-sm text-muted">
+                        IFN Global LLC · Hosted by Venkat V. ·{' '}
+                        <a href="mailto:hello@ifn.community" className="underline underline-offset-2">
+                            hello@ifn.community
+                        </a>
+                    </p>
+                    <p className="mt-4">
+                        <Button variant="ghost" size="sm" onClick={openJoinModal}>
+                            Leave your details
+                        </Button>
+                    </p>
                 </div>
             </Container>
         </div>

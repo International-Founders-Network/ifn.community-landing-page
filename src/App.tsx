@@ -13,6 +13,8 @@ const Home = lazy(() => import('./pages/Home').then(module => ({ default: module
 const About = lazy(() => import('./pages/About').then(module => ({ default: module.About })));
 const Careers = lazy(() => import('./pages/Careers').then(module => ({ default: module.Careers })));
 const Partners = lazy(() => import('./pages/Partners').then(module => ({ default: module.Partners })));
+const Workshops = lazy(() => import('./pages/Workshops').then(module => ({ default: module.Workshops })));
+const Sponsors = lazy(() => import('./pages/Sponsors').then(module => ({ default: module.Sponsors })));
 const Contact = lazy(() => import('./pages/Contact').then(module => ({ default: module.Contact })));
 const Blog = lazy(() => import('./pages/Blog').then(module => ({ default: module.Blog })));
 const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ default: module.Playbooks })));
@@ -83,7 +85,7 @@ function Layout() {
             >
                 Skip to main content
             </a>
-            <Navbar onJoinClick={openJoinModal} />
+            <Navbar />
             <main id="main-content" className="flex-grow">
                 <Suspense fallback={<PageFallback />}>
                     <Outlet context={{ openJoinModal }} />
@@ -126,6 +128,8 @@ function App() {
                         <Route path="/about" element={<About />} />
                         <Route path="/careers" element={<Careers />} />
                         <Route path="/partners" element={<Partners />} />
+                        <Route path="/workshops" element={<Workshops />} />
+                        <Route path="/sponsors" element={<Sponsors />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/playbooks" element={<Playbooks />} />
