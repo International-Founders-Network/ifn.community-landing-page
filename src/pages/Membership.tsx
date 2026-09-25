@@ -20,16 +20,15 @@ const MEMBER_INCLUSIONS = [
     'Private member channel (access after checkout)',
     'Monthly members-only call',
     'Member resources as we publish them',
-    'Member discounts or free seats on paid workshops when a session offers them',
-    'Meetup access stays free (same as Guest)',
+    'Workshop member pricing when a session offers it',
 ] as const;
 
 const FIR_INCLUSIONS = [
     'Everything in Member',
-    'Priority seats on IFN workshops (before general registration opens)',
-    'Up to 4 curated warm intros per year (attorney, banker, operator, or investor-adjacent), each with a written ask',
-    'Co-host one workshop or fireside with IFN in the membership year',
-    'Open-to-intros badge in the member channel (and optional listing in the members directory when that surface is live)',
+    'Priority workshop seats (before general registration)',
+    'Up to 4 curated warm intros per year, each with a written ask',
+    'Co-host one workshop or fireside with IFN this year',
+    'Open-to-intros badge in the member channel',
 ] as const;
 
 function InclusionList({ items }: { items: readonly string[] }) {
@@ -90,14 +89,13 @@ export function Membership() {
                 <Container className="relative z-10">
                     <div className="max-w-3xl">
                         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                            Optional · Guest · Member · Founder in Residence
+                            Guest · Member · Founder in Residence
                         </p>
                         <h1 className="mb-6 text-5xl font-bold tracking-tight text-ink md:text-6xl">
                             Membership
                         </h1>
                         <p className="text-xl leading-relaxed text-muted">
-                            Meetups stay free. Member is the year-round layer. Founder in Residence is
-                            a small, apply-only circle above that.
+                            Three ways to plug into IFN.
                         </p>
                     </div>
                 </Container>
@@ -145,7 +143,9 @@ export function Membership() {
             {checkoutResult !== 'success' && (
                 <>
                     <Container className="mb-16">
-                        <div className="grid gap-8 md:grid-cols-2">
+                        {/* Guest | Member | FiR: three equal-weight tier cards.
+                            Thin teaser sits directly above FiR (between Member and FiR on mobile). */}
+                        <div className="grid items-start gap-8 md:grid-cols-3">
                             {/* Guest */}
                             <div className="flex flex-col rounded-2xl border border-rule bg-paper p-8">
                                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
@@ -154,10 +154,10 @@ export function Membership() {
                                 <h3 className="mt-2 text-2xl font-bold text-ink">Guest</h3>
                                 <p className="mt-2 text-lg font-semibold tabular-nums text-ink">Free</p>
                                 <p className="mt-4 leading-relaxed text-muted">
-                                    Come to the meetups. Upgrade when you want IFN between meetups.
+                                    Meetup access. Paid tiers unlock the rest.
                                 </p>
                                 <InclusionList items={GUEST_INCLUSIONS} />
-                                <div className="mt-8 flex flex-col gap-3">
+                                <div className="mt-auto flex flex-col gap-3 pt-8">
                                     <Button
                                         variant="primary"
                                         size="lg"
@@ -178,19 +178,15 @@ export function Membership() {
 
                             {/* Member (default / emphasized) */}
                             <div className="flex flex-col rounded-2xl border-2 border-ink bg-paper p-8 shadow-lg ring-1 ring-ink/10">
-                                <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
-                                    Most founders choose this
-                                </p>
-                                <h3 className="mt-2 text-2xl font-bold text-ink">Member</h3>
+                                <h3 className="text-2xl font-bold text-ink">Member</h3>
                                 <p className="mt-2 text-lg font-semibold tabular-nums text-ink">
                                     {MEMBERSHIP_PRICE_STANDARD}/year
                                 </p>
                                 <p className="mt-4 leading-relaxed text-muted">
-                                    The working layer for founders who want IFN year-round, not only at
-                                    the monthly meetup.
+                                    Year-round IFN. Channel, call, and member resources.
                                 </p>
                                 <InclusionList items={MEMBER_INCLUSIONS} />
-                                <div className="mt-8">
+                                <div className="mt-auto pt-8">
                                     <Button
                                         variant="primary"
                                         size="lg"
@@ -200,6 +196,58 @@ export function Membership() {
                                     >
                                         {checkoutLabel}
                                     </Button>
+                                </div>
+                            </div>
+
+                            {/* Thin teaser + FiR column */}
+                            <div className="flex flex-col gap-4">
+                                <aside className="rounded-xl border border-rule bg-paper px-5 py-4 text-center">
+                                    <p className="text-sm font-bold text-ink">Need more than Member?</p>
+                                    <p className="mt-2 text-sm leading-relaxed text-muted">
+                                        Founder in Residence adds priority workshop seats, capped warm
+                                        intros, and one co-host slot per year. Seats are limited.
+                                    </p>
+                                    <a
+                                        href="#founder-in-residence"
+                                        className="mt-3 inline-block text-sm font-semibold text-ink underline underline-offset-4"
+                                    >
+                                        See Founder in Residence
+                                    </a>
+                                </aside>
+
+                                <div
+                                    id="founder-in-residence"
+                                    className="flex scroll-mt-28 flex-col rounded-2xl border border-rule bg-paper p-8"
+                                >
+                                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
+                                        Limited seats · Apply
+                                    </p>
+                                    <h3 className="mt-2 text-2xl font-bold text-ink">
+                                        Founder in Residence
+                                    </h3>
+                                    <p className="mt-2 text-lg font-semibold tabular-nums text-ink">
+                                        Starting from $1,800/year
+                                    </p>
+                                    <p className="mt-1 text-sm leading-relaxed text-muted">
+                                        $1,800–$2,400/year. Quote on application.
+                                    </p>
+                                    <p className="mt-4 leading-relaxed text-muted">
+                                        Scarce. Priority access and curated warm intros.
+                                    </p>
+                                    <InclusionList items={FIR_INCLUSIONS} />
+                                    <div className="mt-auto pt-8">
+                                        <ButtonLink
+                                            to="/contact?intent=founder-in-residence"
+                                            variant="primary"
+                                            size="lg"
+                                            className="shadow-lg"
+                                        >
+                                            Apply for Founder in Residence
+                                        </ButtonLink>
+                                        <p className="mt-4 text-sm leading-relaxed text-muted">
+                                            Limited seats. Application required.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -218,80 +266,21 @@ export function Membership() {
                         )}
 
                         <p className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-muted">
-                            Member renews annually until you cancel. Payment is handled by Stripe. You
-                            confirm the price before anything is charged. IFN does not take equity, and
-                            you do not need to be a member to come to a meetup.
+                            Billed yearly through Stripe. Cancel anytime. Meetups stay free either way.
                         </p>
-                    </Container>
-
-                    {/* Teaser → FiR */}
-                    <Container className="mb-16">
-                        <div className="mx-auto max-w-2xl rounded-2xl border border-rule bg-paper p-8 text-center">
-                            <h2 className="text-2xl font-bold text-ink">Need more than Member?</h2>
-                            <p className="mt-4 leading-relaxed text-muted">
-                                Member gets you the channel, the monthly call, and resources as they
-                                publish. Founder in Residence is a small inner circle: priority workshop
-                                seats, a capped set of warm intros, and a chance to co-host one session
-                                with IFN. Seats are limited.
-                            </p>
-                            <a
-                                href="#founder-in-residence"
-                                className="mt-6 inline-block font-semibold text-ink underline underline-offset-4"
-                            >
-                                See Founder in Residence
-                            </a>
-                        </div>
-                    </Container>
-
-                    {/* Founder in Residence */}
-                    <Container className="mb-16">
-                        <div
-                            id="founder-in-residence"
-                            className="scroll-mt-28 mx-auto max-w-2xl rounded-2xl border border-rule bg-paper p-8"
-                        >
-                            <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
-                                Limited seats · Apply
-                            </p>
-                            <h2 className="mt-2 text-2xl font-bold text-ink">Founder in Residence</h2>
-                            <p className="mt-2 text-lg font-semibold tabular-nums text-ink">
-                                Starting from $1,800/year
-                            </p>
-                            <p className="mt-1 text-sm leading-relaxed text-muted">
-                                Typical band $1,800–$2,400/year. Final quote on application.
-                            </p>
-                            <p className="mt-4 leading-relaxed text-muted">
-                                A scarce inner circle for founders who want priority access and real warm
-                                handoffs, not a prettier Member badge.
-                            </p>
-                            <InclusionList items={FIR_INCLUSIONS} />
-                            <div className="mt-8">
-                                <ButtonLink
-                                    to="/contact?intent=founder-in-residence"
-                                    variant="primary"
-                                    size="lg"
-                                    className="shadow-lg"
-                                >
-                                    Apply for Founder in Residence
-                                </ButtonLink>
-                                <p className="mt-4 text-sm leading-relaxed text-muted">
-                                    Seats are limited. We review fit before we accept.
-                                </p>
-                            </div>
-                        </div>
                     </Container>
 
                     <Container className="mb-16">
                         <div className="mx-auto max-w-2xl rounded-2xl border border-rule bg-paper p-8">
                             <h2 className="text-xl font-bold text-ink">After you pay</h2>
                             <ol className="mt-4 list-decimal space-y-2 pl-5 leading-relaxed text-muted">
-                                <li>Stripe receipt by email.</li>
+                                <li>Stripe sends a receipt.</li>
+                                <li>You get private member channel access after checkout.</li>
                                 <li>
-                                    Private member channel access after checkout (no 24h/48h promise).
+                                    Members-only call details land in the channel when the next one is
+                                    set.
                                 </li>
-                                <li>Next members-only call details in the channel when scheduled.</li>
-                                <li>
-                                    Cancel anytime via Stripe customer portal / email hello@ifn.community.
-                                </li>
+                                <li>Cancel anytime in Stripe, or email hello@ifn.community.</li>
                             </ol>
                         </div>
                     </Container>

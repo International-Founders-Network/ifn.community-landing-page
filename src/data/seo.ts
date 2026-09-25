@@ -94,7 +94,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/membership': {
         title: `Membership | IFN.community`,
         description:
-            'Guest meetups are free. Member is $149/year for the private channel, monthly call, and resources. Founder in Residence starts from $1,800/year by application.',
+            'Guest meetups are free. Member is $149/year. Founder in Residence starts from $1,800/year by application.',
         indexable: true,
         priority: 0.8,
         changefreq: 'monthly',
