@@ -144,9 +144,9 @@ export function Membership() {
                 <>
                     <Container className="mb-16">
                         {/* Guest | Member | FiR: exactly three tier cards. */}
-                        <div className="grid items-start gap-8 md:grid-cols-3">
+                        <div className="grid items-stretch gap-8 md:grid-cols-3">
                             {/* Guest */}
-                            <div className="flex flex-col rounded-2xl border border-rule bg-paper p-8">
+                            <div className="flex h-full flex-col rounded-2xl border border-rule bg-paper p-8">
                                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
                                     Free
                                 </p>
@@ -156,19 +156,12 @@ export function Membership() {
                                     Meetup access. Paid tiers unlock the rest.
                                 </p>
                                 <InclusionList items={GUEST_INCLUSIONS} />
-                                <div className="mt-auto flex flex-col gap-3 pt-8">
-                                    <Button
-                                        variant="primary"
-                                        size="lg"
-                                        onClick={startCheckout}
-                                        disabled={checkoutState === 'starting'}
-                                    >
-                                        {checkoutLabel}
-                                    </Button>
+                                <div className="mt-auto pt-8">
                                     <ButtonLink
                                         href={LUMA_CALENDAR_URL}
-                                        variant="outline"
+                                        variant="secondary"
                                         size="lg"
+                                        className="w-full"
                                     >
                                         Register on Luma
                                     </ButtonLink>
@@ -176,7 +169,7 @@ export function Membership() {
                             </div>
 
                             {/* Member (default / emphasized) */}
-                            <div className="flex flex-col rounded-2xl border-2 border-ink bg-paper p-8 shadow-lg ring-1 ring-ink/10">
+                            <div className="flex h-full flex-col rounded-2xl border-2 border-ink bg-paper p-8 shadow-lg ring-1 ring-ink/10">
                                 <h3 className="text-2xl font-bold text-ink">Member</h3>
                                 <p className="mt-2 text-lg font-semibold tabular-nums text-ink">
                                     {MEMBERSHIP_PRICE_STANDARD}/year
@@ -201,7 +194,7 @@ export function Membership() {
                             {/* Founder in Residence */}
                             <div
                                 id="founder-in-residence"
-                                className="flex flex-col rounded-2xl border border-rule bg-paper p-8"
+                                className="flex h-full flex-col rounded-2xl border border-rule bg-paper p-8"
                             >
                                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
                                     Limited seats · Apply
@@ -223,9 +216,9 @@ export function Membership() {
                                 <div className="mt-auto pt-8">
                                     <ButtonLink
                                         to="/contact?intent=founder-in-residence"
-                                        variant="primary"
+                                        variant="outline"
                                         size="lg"
-                                        className="shadow-lg"
+                                        className="w-full"
                                     >
                                         Apply for Founder in Residence
                                     </ButtonLink>
@@ -250,19 +243,19 @@ export function Membership() {
                         )}
 
                         <p className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-muted">
-                            Billed yearly through Stripe. Cancel anytime. Meetups stay free either way.
+                            Billed yearly through Stripe. Cancel anytime.
                         </p>
                     </Container>
 
                     <Container className="mb-16">
                         <div className="mx-auto max-w-2xl rounded-2xl border border-rule bg-paper p-8">
-                            <h2 className="text-xl font-bold text-ink">After you pay</h2>
+                            <h2 className="text-xl font-bold text-ink">After you join</h2>
                             <ol className="mt-4 list-decimal space-y-2 pl-5 leading-relaxed text-muted">
-                                <li>Stripe sends a receipt.</li>
-                                <li>You get private member channel access after checkout.</li>
+                                <li>You&apos;ll get a receipt from Stripe.</li>
+                                <li>We&apos;ll open your private member channel after checkout.</li>
                                 <li>
-                                    Members-only call details land in the channel when the next one is
-                                    set.
+                                    When the next members-only call is set, details show up in the
+                                    channel.
                                 </li>
                                 <li>Cancel anytime in Stripe, or email hello@ifn.community.</li>
                             </ol>
