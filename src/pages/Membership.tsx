@@ -143,8 +143,7 @@ export function Membership() {
             {checkoutResult !== 'success' && (
                 <>
                     <Container className="mb-16">
-                        {/* Guest | Member | FiR: three equal-weight tier cards.
-                            Thin teaser sits directly above FiR (between Member and FiR on mobile). */}
+                        {/* Guest | Member | FiR: exactly three tier cards. */}
                         <div className="grid items-start gap-8 md:grid-cols-3">
                             {/* Guest */}
                             <div className="flex flex-col rounded-2xl border border-rule bg-paper p-8">
@@ -199,55 +198,40 @@ export function Membership() {
                                 </div>
                             </div>
 
-                            {/* Thin teaser + FiR column */}
-                            <div className="flex flex-col gap-4">
-                                <aside className="rounded-xl border border-rule bg-paper px-5 py-4 text-center">
-                                    <p className="text-sm font-bold text-ink">Need more than Member?</p>
-                                    <p className="mt-2 text-sm leading-relaxed text-muted">
-                                        Founder in Residence adds priority workshop seats, capped warm
-                                        intros, and one co-host slot per year. Seats are limited.
-                                    </p>
-                                    <a
-                                        href="#founder-in-residence"
-                                        className="mt-3 inline-block text-sm font-semibold text-ink underline underline-offset-4"
+                            {/* Founder in Residence */}
+                            <div
+                                id="founder-in-residence"
+                                className="flex flex-col rounded-2xl border border-rule bg-paper p-8"
+                            >
+                                <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
+                                    Limited seats · Apply
+                                </p>
+                                <h3 className="mt-2 text-2xl font-bold text-ink">
+                                    Founder in Residence
+                                </h3>
+                                <p className="mt-2 text-lg font-semibold tabular-nums text-ink">
+                                    Starting from $1,800/year
+                                </p>
+                                <p className="mt-1 text-sm leading-relaxed text-muted">
+                                    $1,800–$2,400/year. Quote on application.
+                                </p>
+                                <p className="mt-4 leading-relaxed text-muted">
+                                    Priority workshop seats, capped warm intros, one co-host
+                                    slot per year. Seats limited.
+                                </p>
+                                <InclusionList items={FIR_INCLUSIONS} />
+                                <div className="mt-auto pt-8">
+                                    <ButtonLink
+                                        to="/contact?intent=founder-in-residence"
+                                        variant="primary"
+                                        size="lg"
+                                        className="shadow-lg"
                                     >
-                                        See Founder in Residence
-                                    </a>
-                                </aside>
-
-                                <div
-                                    id="founder-in-residence"
-                                    className="flex scroll-mt-28 flex-col rounded-2xl border border-rule bg-paper p-8"
-                                >
-                                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
-                                        Limited seats · Apply
+                                        Apply for Founder in Residence
+                                    </ButtonLink>
+                                    <p className="mt-4 text-sm leading-relaxed text-muted">
+                                        Limited seats. Application required.
                                     </p>
-                                    <h3 className="mt-2 text-2xl font-bold text-ink">
-                                        Founder in Residence
-                                    </h3>
-                                    <p className="mt-2 text-lg font-semibold tabular-nums text-ink">
-                                        Starting from $1,800/year
-                                    </p>
-                                    <p className="mt-1 text-sm leading-relaxed text-muted">
-                                        $1,800–$2,400/year. Quote on application.
-                                    </p>
-                                    <p className="mt-4 leading-relaxed text-muted">
-                                        Scarce. Priority access and curated warm intros.
-                                    </p>
-                                    <InclusionList items={FIR_INCLUSIONS} />
-                                    <div className="mt-auto pt-8">
-                                        <ButtonLink
-                                            to="/contact?intent=founder-in-residence"
-                                            variant="primary"
-                                            size="lg"
-                                            className="shadow-lg"
-                                        >
-                                            Apply for Founder in Residence
-                                        </ButtonLink>
-                                        <p className="mt-4 text-sm leading-relaxed text-muted">
-                                            Limited seats. Application required.
-                                        </p>
-                                    </div>
                                 </div>
                             </div>
                         </div>
