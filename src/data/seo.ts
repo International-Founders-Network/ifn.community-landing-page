@@ -238,7 +238,8 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
  * The six placeholders are real URLs with a "coming soon" body. /admin is an
  * internal dashboard whose real access control is server-side; the exclusion
  * here only keeps it out of search results. /members is the member center,
- * whose entitlement check is still a stub.
+ * which renders per-visitor state from /api/member-me and has nothing a search
+ * result should ever point at.
  *
  * These are held separately from ROUTE_SEO rather than as `indexable: false`
  * entries because nothing should have to remember to filter them: if a path is
