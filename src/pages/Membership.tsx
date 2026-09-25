@@ -12,8 +12,8 @@ const PLAN_SLUG = 'founding-member';
 
 const GUEST_INCLUSIONS = [
     'Free monthly meetups in Austin (confirm dates on Luma)',
-    'Open workshops when a session is free to attend',
-    'Public site resources you can browse without paying',
+    'Open workshops when a session is open to guests',
+    'Public site resources you can browse anytime',
 ] as const;
 
 const MEMBER_INCLUSIONS = [
@@ -80,7 +80,7 @@ export function Membership() {
     }
 
     const checkoutLabel =
-        checkoutState === 'starting' ? 'Opening checkout…' : 'Become a member ($149/year)';
+        checkoutState === 'starting' ? 'Opening checkout…' : 'Become a member';
 
     return (
         <div className="pt-24 pb-20">
@@ -147,11 +147,7 @@ export function Membership() {
                         <div className="grid items-stretch gap-8 md:grid-cols-3">
                             {/* Guest */}
                             <div className="flex h-full flex-col rounded-2xl border border-rule bg-paper p-8">
-                                <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
-                                    Free
-                                </p>
-                                <h3 className="mt-2 text-2xl font-bold text-ink">Guest</h3>
-                                <p className="mt-2 text-lg font-semibold tabular-nums text-ink">Free</p>
+                                <h3 className="text-2xl font-bold text-ink">Guest</h3>
                                 <p className="mt-4 leading-relaxed text-muted">
                                     Meetup access. Paid tiers unlock the rest.
                                 </p>
@@ -222,9 +218,6 @@ export function Membership() {
                                     >
                                         Apply for Founder in Residence
                                     </ButtonLink>
-                                    <p className="mt-4 text-sm leading-relaxed text-muted">
-                                        Limited seats. Application required.
-                                    </p>
                                 </div>
                             </div>
                         </div>
