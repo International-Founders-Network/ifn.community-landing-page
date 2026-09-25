@@ -223,8 +223,8 @@ export function Membership() {
                                 <p className={EYEBROW_ROW}>Limited seats · Apply</p>
                                 <h3 className={TITLE_ROW}>Founder in Residence</h3>
                                 <p className={PRICE_ROW}>Starting from $1,800/year</p>
-                                <p className={PRICE_DETAIL_ROW}>
-                                    $1,800–$2,400/year. Quote on application.
+                                <p className={PRICE_DETAIL_ROW} aria-hidden="true">
+                                    &nbsp;
                                 </p>
                                 <hr className={CARD_RULE} />
                                 <p className={BLURB_ROW}>
