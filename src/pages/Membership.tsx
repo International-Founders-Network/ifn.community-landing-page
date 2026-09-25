@@ -31,9 +31,26 @@ const FIR_INCLUSIONS = [
     'Open-to-intros badge in the member channel',
 ] as const;
 
+/**
+ * Every tier card repeats the same header rows in the same order, so the title,
+ * the price and the horizontal rule land on one Y across all three columns.
+ * The min-heights reserve the tallest wrap a row reaches at that breakpoint: a
+ * card whose eyebrow or title is shorter would otherwise pull its rule upward.
+ */
+const EYEBROW_ROW =
+    'min-h-8 text-xs font-bold uppercase leading-4 tracking-[0.1em] text-muted lg:min-h-4';
+const TITLE_ROW = 'mt-2 min-h-16 text-2xl font-bold leading-8 text-ink xl:min-h-8';
+const PRICE_ROW =
+    'mt-2 min-h-14 text-lg font-semibold leading-7 tabular-nums text-ink xl:min-h-7';
+/** One line of text-sm/leading-relaxed; two below xl, where the FiR quote wraps. */
+const PRICE_DETAIL_ROW =
+    'mt-1 min-h-[2.875rem] text-sm leading-relaxed text-muted xl:min-h-[1.4375rem]';
+const CARD_RULE = 'mt-6 border-0 border-t border-rule';
+const BLURB_ROW = 'mt-6 leading-relaxed text-muted';
+
 function InclusionList({ items }: { items: readonly string[] }) {
     return (
-        <ul className="mt-6 flex flex-col gap-3 border-t border-rule pt-6">
+        <ul className="mt-6 flex flex-col gap-3">
             {items.map((line) => (
                 <li key={line} className="flex gap-3 text-sm leading-relaxed text-muted">
                     <Check
@@ -147,8 +164,16 @@ export function Membership() {
                         <div className="grid items-stretch gap-8 md:grid-cols-3">
                             {/* Guest */}
                             <div className="flex h-full flex-col rounded-2xl border border-rule bg-paper p-8">
-                                <h3 className="text-2xl font-bold text-ink">Guest</h3>
-                                <p className="mt-4 leading-relaxed text-muted">
+                                <p className={EYEBROW_ROW} aria-hidden="true">
+                                    &nbsp;
+                                </p>
+                                <h3 className={TITLE_ROW}>Guest</h3>
+                                <p className={PRICE_ROW}>Free</p>
+                                <p className={PRICE_DETAIL_ROW} aria-hidden="true">
+                                    &nbsp;
+                                </p>
+                                <hr className={CARD_RULE} />
+                                <p className={BLURB_ROW}>
                                     Meetup access. Paid tiers unlock the rest.
                                 </p>
                                 <InclusionList items={GUEST_INCLUSIONS} />
@@ -165,12 +190,15 @@ export function Membership() {
                             </div>
 
                             {/* Member (default / emphasized) */}
-                            <div className="flex h-full flex-col rounded-2xl border-2 border-ink bg-paper p-8 shadow-lg ring-1 ring-ink/10">
-                                <h3 className="text-2xl font-bold text-ink">Member</h3>
-                                <p className="mt-2 text-lg font-semibold tabular-nums text-ink">
-                                    {MEMBERSHIP_PRICE_STANDARD}/year
+                            <div className="flex h-full flex-col rounded-2xl border border-ink bg-paper p-8 shadow-lg ring-1 ring-ink">
+                                <p className={EYEBROW_ROW}>Popular</p>
+                                <h3 className={TITLE_ROW}>Member</h3>
+                                <p className={PRICE_ROW}>{MEMBERSHIP_PRICE_STANDARD}/year</p>
+                                <p className={PRICE_DETAIL_ROW} aria-hidden="true">
+                                    &nbsp;
                                 </p>
-                                <p className="mt-4 leading-relaxed text-muted">
+                                <hr className={CARD_RULE} />
+                                <p className={BLURB_ROW}>
                                     Year-round IFN. Channel, call, and member resources.
                                 </p>
                                 <InclusionList items={MEMBER_INCLUSIONS} />
@@ -192,19 +220,14 @@ export function Membership() {
                                 id="founder-in-residence"
                                 className="flex h-full flex-col rounded-2xl border border-rule bg-paper p-8"
                             >
-                                <p className="text-xs font-bold uppercase tracking-[0.1em] text-muted">
-                                    Limited seats · Apply
-                                </p>
-                                <h3 className="mt-2 text-2xl font-bold text-ink">
-                                    Founder in Residence
-                                </h3>
-                                <p className="mt-2 text-lg font-semibold tabular-nums text-ink">
-                                    Starting from $1,800/year
-                                </p>
-                                <p className="mt-1 text-sm leading-relaxed text-muted">
+                                <p className={EYEBROW_ROW}>Limited seats · Apply</p>
+                                <h3 className={TITLE_ROW}>Founder in Residence</h3>
+                                <p className={PRICE_ROW}>Starting from $1,800/year</p>
+                                <p className={PRICE_DETAIL_ROW}>
                                     $1,800–$2,400/year. Quote on application.
                                 </p>
-                                <p className="mt-4 leading-relaxed text-muted">
+                                <hr className={CARD_RULE} />
+                                <p className={BLURB_ROW}>
                                     Priority workshop seats, capped warm intros, one co-host
                                     slot per year. Seats limited.
                                 </p>
