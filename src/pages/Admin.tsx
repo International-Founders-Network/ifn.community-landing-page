@@ -5,6 +5,7 @@ import { Button } from '../components/Button';
 import { ButtonLink } from '../components/ButtonLink';
 import { ROADMAP_TIERS } from '../data/roadmapData';
 import { COMPETITORS, type Competitor } from '../data/competitorsData';
+import { getOutboundLinkRows, type OutboundLinkRow } from '../data/linkAllowlistData';
 
 declare global {
     interface Window {
@@ -53,8 +54,8 @@ interface Submissions {
     eventSignups: EventSignup[];
 }
 
-type Tab = 'contact' | 'join' | 'events' | 'roadmap' | 'competitors';
-type DataTab = Exclude<Tab, 'roadmap' | 'competitors'>;
+type Tab = 'contact' | 'join' | 'events' | 'roadmap' | 'competitors' | 'links';
+type DataTab = Exclude<Tab, 'roadmap' | 'competitors' | 'links'>;
 
 const TAB_META: Record<Tab, { label: string; one: string; many: string }> = {
     contact: { label: 'Contact messages', one: 'contact message', many: 'contact messages' },
@@ -62,6 +63,7 @@ const TAB_META: Record<Tab, { label: string; one: string; many: string }> = {
     events: { label: 'Event signups', one: 'event signup', many: 'event signups' },
     roadmap: { label: 'Roadmap', one: 'tier', many: 'tiers' },
     competitors: { label: 'Competitors', one: 'competitor', many: 'competitors' },
+    links: { label: 'Links', one: 'link', many: 'links' },
 };
 
 function countLabel(n: number, tab: Tab) {
@@ -442,6 +444,58 @@ function CompetitorsPanel({ rows, searching }: { rows: Competitor[]; searching: 
  * pulse never carries the message on its own: the panel's status line says
  * "Loading submissions…" in text, and this is hidden from assistive tech.
  */
+
+function linkSearchFields(row: OutboundLinkRow): (string | null)[] {
+    return [
+        row.name,
+        row.kind,
+        row.website ?? null,
+        row.status,
+        row.notes ?? null,
+        row.allowOutboundLink ? 'outbound-yes' : 'outbound-no',
+    ];
+}
+
+function LinksPanel({ rows, searching }: { rows: OutboundLinkRow[]; searching: boolean }) {
+    return (
+        <table className="w-full text-sm">
+            <thead>
+                <tr className="border-b border-rule text-left text-muted">
+                    <th scope="col" className={TH}>Name</th>
+                    <th scope="col" className={TH}>Kind</th>
+                    <th scope="col" className={TH}>Website</th>
+                    <th scope="col" className={TH}>Status</th>
+                    <th scope="col" className={TH}>Allow outbound</th>
+                    <th scope="col" className={TH}>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows.length === 0 && <EmptyRow colSpan={6} searching={searching} />}
+                {rows.map((row) => (
+                    <tr key={row.id} className="border-b border-rule align-top">
+                        <td className="py-2 pr-4 font-medium">{row.name}</td>
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.kind}</td>
+                        <td className="py-2 pr-4">
+                            {row.website ? (
+                                <ExternalLink href={row.website}>{row.website.replace(/^https?:\/\//, '')}</ExternalLink>
+                            ) : (
+                                <span className="text-muted">-</span>
+                            )}
+                        </td>
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.status}</td>
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">
+                            {row.allowOutboundLink ? 'yes' : 'no'}
+                        </td>
+                        <td className="py-2 pr-4">
+                            <p className="max-w-md text-xs font-normal text-muted">{row.notes || '-'}</p>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+}
+
 function TableSkeleton() {
     return (
         <div className="motion-status animate-pulse space-y-3" aria-hidden="true">
@@ -494,6 +548,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
             { key: 'events' as Tab, count: data?.eventSignups.length ?? null },
             { key: 'roadmap' as Tab, count: null },
             { key: 'competitors' as Tab, count: COMPETITORS.length },
+            { key: 'links' as Tab, count: getOutboundLinkRows().length },
         ],
         [data]
     );
@@ -518,6 +573,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         [query]
     );
 
+    const outboundRows = useMemo(() => getOutboundLinkRows(), []);
+    const filteredLinks = useMemo(
+        () => outboundRows.filter((r) => matches(query, linkSearchFields(r))),
+        [outboundRows, query]
+    );
+
     const totals: Record<DataTab, number> = {
         contact: data?.contactMessages.length ?? 0,
         join: data?.joinApplications.length ?? 0,
@@ -536,6 +597,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
             return query
                 ? `Showing ${shown} of ${countLabel(COMPETITORS.length, 'competitors')}`
                 : countLabel(COMPETITORS.length, 'competitors');
+        }
+        if (tab === 'links') {
+            const shown = filteredLinks.length;
+            return query
+                ? `Showing ${shown} of ${countLabel(outboundRows.length, 'links')}`
+                : countLabel(outboundRows.length, 'links');
         }
         if (!filtered) return error ? 'Could not load submissions.' : 'Loading submissions…';
         const shown = filtered[tab].length;
@@ -632,6 +699,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                             rows={filteredCompetitors}
                             searching={query !== ''}
                         />
+                    ) : tab === 'links' ? (
+                        <LinksPanel rows={filteredLinks} searching={query !== ''} />
                     ) : filtered ? (
                         <SubmissionTable tab={tab} rows={filtered} searching={query !== ''} />
                     ) : (
