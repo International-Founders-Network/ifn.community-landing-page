@@ -1,28 +1,37 @@
 /**
- * Read-only consumer of the members app's Pack A public catalog.
+ * Read-only consumer of the members app's library public catalog.
  *
- * `GET {MEMBERS_APP_ORIGIN}/api/public/library` returns per-asset flags. The
- * ONLY place those flags are edited is the members app's `/admin/library`.
- * Landing Admin must never grow a second toggle for them.
+ * `GET {MEMBERS_APP_ORIGIN}/api/public/library` returns per-asset flags for
+ * Pack A and any other R2-discovered assets. The ONLY place those flags are
+ * edited is the members app's `/admin/library`. Landing Admin must never grow
+ * a second toggle for them.
  *
- * Rules for anything built on this module:
+ * Downloads are flag-gated and served by the members app, never by landing:
  *
- * - Teasers are parked. Do not render a teaser download or link until Content
- *   has published the file under `pack-a/teasers/` AND `teaserPublic` is on
- *   for that asset. Gate on `isTeaserPublic()`, which accepts `true` only;
- *   anything else (false, missing, unknown id, failed fetch) means hide it.
- * - `memberDownloadable` is NOT a landing full-PDF grant. Full Pack A PDFs are
- *   served by the members app only; send entitled users to
- *   https://members.ifn.community/library.
- * - The fetch soft-fails with a typed result so a members outage never breaks
- *   a landing page.
+ * - Teaser: `GET {MEMBERS}/api/public/library/{id}/teaser`, only when
+ *   `teaserPublic` is on. Gate on `isTeaserPublic()`.
+ * - Full: `GET {MEMBERS}/api/public/library/{id}/full`, only when
+ *   `landingFull` is on. Gate on `isLandingFull()`.
+ *
+ * Both gates accept `true` only; anything else (false, missing, unknown id,
+ * failed fetch) means hide the link. The members routes enforce the same flags
+ * server side, so a stale catalog can only produce a 403, never a leak.
+ *
+ * `memberDownloadable` is NOT a landing full-PDF grant. It only means members
+ * can download it inside the members app; send them to
+ * https://members.ifn.community/library.
+ *
+ * The fetch soft-fails with a typed result so a members outage never breaks a
+ * landing page.
  */
 
 export interface PublicLibraryAsset {
   id: string;
   title: string;
+  description?: string;
   memberDownloadable: boolean;
   teaserPublic: boolean;
+  landingFull: boolean;
   fullObjectKey: string;
   teaserObjectKey: string;
 }
@@ -54,9 +63,12 @@ function isAsset(value: unknown): value is PublicLibraryAsset {
   const a = value as Record<string, unknown>;
   return (
     typeof a.id === 'string' &&
+    a.id.length > 0 &&
     typeof a.title === 'string' &&
+    (a.description === undefined || typeof a.description === 'string') &&
     typeof a.memberDownloadable === 'boolean' &&
     typeof a.teaserPublic === 'boolean' &&
+    typeof a.landingFull === 'boolean' &&
     typeof a.fullObjectKey === 'string' &&
     typeof a.teaserObjectKey === 'string'
   );
@@ -104,4 +116,22 @@ export function isTeaserPublic(
   id: string,
 ): boolean {
   return assetById(catalog, id)?.teaserPublic === true;
+}
+
+/** The landing full-PDF gate. `true` only; `memberDownloadable` never counts. */
+export function isLandingFull(
+  catalog: PublicLibraryCatalog | null | undefined,
+  id: string,
+): boolean {
+  return assetById(catalog, id)?.landingFull === true;
+}
+
+/** Members route that 302s to the teaser PDF while `teaserPublic` is on. */
+export function teaserDownloadUrl(origin: string, id: string): string {
+  return `${origin}/api/public/library/${encodeURIComponent(id)}/teaser`;
+}
+
+/** Members route that 302s to the full PDF while `landingFull` is on. */
+export function fullDownloadUrl(origin: string, id: string): string {
+  return `${origin}/api/public/library/${encodeURIComponent(id)}/full`;
 }

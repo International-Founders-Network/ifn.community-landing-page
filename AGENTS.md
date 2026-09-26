@@ -164,21 +164,38 @@ would silently unpublish posts. See `openspec/changes/blog-editorial-publish/`.
 
 `db/migrations/*.sql` is the documented schema history. Each Netlify Function also runs its own `CREATE TABLE IF NOT EXISTS` at request time (idempotent, so the app works even against an empty database). These two can drift silently, so if you change a table's shape, update both, or at least check `db/README.md` for the current convention before assuming one is authoritative.
 
-## Pack A library flags live in the members app, not here
+## Library flags live in the members app, not here
 
 - **The single source of truth for library flags is members `/admin/library`.**
-  Never add a second library toggle to landing Admin.
-- Landing may read `GET {MEMBERS}/api/public/library` (flags only) through
+  Never add a library toggle to landing Admin, not even a read-only mirror.
+- Landing reads `GET {MEMBERS}/api/public/library` (flags only) through
   `src/lib/membersLibraryCatalog.ts`. The fetch returns a typed
-  `{ ok, data | error }` result so callers can soft-fail.
-- Gate any future teaser UI or link on `isTeaserPublic()` (`teaserPublic ===
-  true` only). If it is off, missing, or the fetch failed, hide the teaser or
-  dead-end it.
-- Full member PDFs are never served from landing, whatever
-  `memberDownloadable` says. Point entitled users to
-  `members.ifn.community/library`.
-- Teasers are parked: no static `pack-a/teasers` files in this repo until
-  Content publishes them and Venkat enables the flag.
+  `{ ok, data | error }` result so callers can soft-fail. The catalog is
+  Pack A plus anything the members app discovers in R2, so expect ids beyond
+  the original three.
+- Downloads are flag-gated and served by the members app, never from this repo:
+  - teaser: `{MEMBERS}/api/public/library/{id}/teaser`, only when
+    `isTeaserPublic()` (`teaserPublic === true`);
+  - full: `{MEMBERS}/api/public/library/{id}/full`, only when
+    `isLandingFull()` (`landingFull === true`).
+  Build URLs with `teaserDownloadUrl()` / `fullDownloadUrl()`. The members
+  routes enforce the same flags and 302 to a short-lived signed URL, so a stale
+  catalog produces a 403, not a leak.
+- **`memberDownloadable` is never a landing full grant.** On its own it only
+  earns a text link to `members.ifn.community/library` ("Full guide for
+  members").
+- **Resources is the browse UI.** `src/components/Resources.tsx` +
+  `src/data/resourcesData.ts` stay the source of truth for what landing lists.
+  The catalog only enhances a card whose `id` already exists in
+  `RESOURCES_DATA`: it adds "Download teaser PDF" / "Download full PDF" text
+  links to that card's footer. Catalog ids with no matching card are ignored;
+  do not build a second grid or list for them. To surface one, add a card to
+  `resourcesData.ts` with the same `id`.
+- No catalog (fetch failed, members down, prerender) means no download links:
+  cards fall back to their existing link / "Being written" footer. The
+  prerender aborts every `/api/` request, so download links are never baked
+  into the static HTML.
+- No static library PDFs in this repo (`pack-a/` or otherwise).
 - Optional env `VITE_MEMBERS_APP_URL` overrides the members origin (defaults
   to `https://members.ifn.community`).
 
