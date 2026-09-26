@@ -23,6 +23,8 @@
  * sitemap that goes stale.
  */
 
+import { BLOG_POSTS, getPostBySlug, type BlogPost } from './blog.generated';
+
 export const SITE_URL = 'https://ifn.community';
 export const SITE_NAME = 'International Founders Network';
 
@@ -172,6 +174,15 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
         changefreq: 'yearly',
     },
 
+    '/blog': {
+        title: `Blog | ${SITE_NAME}`,
+        description:
+            'Peer notes for international and immigrant founders in Austin: meetup field notes, landing ops, and orientation without legal advice.',
+        indexable: true,
+        priority: 0.7,
+        changefreq: 'weekly',
+    },
+
     /**
      * NON-INDEXABLE ROUTES. Present here so that Head.tsx has a correct title
      * and description for them, absent from the sitemap and the prerender list
@@ -184,11 +195,6 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
      * title afterwards from inside a lazily-loaded chunk, which corrects the
      * visible tab but arrives too late for the pageview.
      */
-    '/blog': {
-        title: `Blog | ${SITE_NAME}`,
-        description: 'Writing from the International Founders Network. Coming soon.',
-        indexable: false,
-    },
     '/careers': {
         title: `Careers | ${SITE_NAME}`,
         description: 'Roles at the International Founders Network. Coming soon.',
@@ -224,7 +230,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
 /**
  * Routes that exist and render, but must never be indexed or prerendered.
  *
- * The six placeholders are real URLs with a "coming soon" body. /admin is an
+ * The five remaining placeholders are real URLs with a "coming soon" body. `/blog` is a real indexable surface. /admin is an
  * internal dashboard whose real access control is server-side; the exclusion
  * here only keeps it out of search results.
  *
@@ -234,7 +240,6 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
  * stop, and this list is only consumed by the code that emits `noindex`.
  */
 export const NOINDEX_PATHS = [
-    '/blog',
     '/careers',
     '/chapters',
     '/mentorship',
@@ -243,10 +248,34 @@ export const NOINDEX_PATHS = [
     '/admin',
 ] as const;
 
-/** Every path that should be prerendered to static HTML and listed in the sitemap. */
-export const INDEXABLE_PATHS = Object.keys(ROUTE_SEO).filter(
-    (path) => ROUTE_SEO[path].indexable,
-);
+/** Path for a published blog post. */
+export function blogPostPath(slug: string): string {
+    return `/blog/${slug}`;
+}
+
+/** Published posts from the Markdown compile step (drafts already excluded). */
+export function publishedBlogPosts(): BlogPost[] {
+    return BLOG_POSTS;
+}
+
+function seoForBlogPost(post: BlogPost): RouteSeo {
+    return {
+        title: `${post.title} | ${SITE_NAME}`,
+        description: post.description,
+        indexable: true,
+        priority: 0.6,
+        changefreq: 'monthly',
+    };
+}
+
+/**
+ * Every path that should be prerendered to static HTML and listed in the sitemap.
+ * Static ROUTE_SEO indexables plus each published `/blog/:slug`.
+ */
+export const INDEXABLE_PATHS = [
+    ...Object.keys(ROUTE_SEO).filter((path) => ROUTE_SEO[path].indexable),
+    ...BLOG_POSTS.map((post) => blogPostPath(post.slug)),
+];
 
 /**
  * The canonical URL for a path.
@@ -258,11 +287,17 @@ export const INDEXABLE_PATHS = Object.keys(ROUTE_SEO).filter(
  * canonical for each, consolidating nothing. Passing an unknown path returns
  * the origin, which is correct for the 404 page — though the 404 also carries
  * `noindex`, so its canonical is academic.
+ *
+ * Published blog posts are matched by slug so each gets its own canonical.
  */
 export function canonicalFor(pathname: string): string {
     const normalised = normalisePath(pathname);
     if (normalised in ROUTE_SEO) {
         return normalised === '/' ? `${SITE_URL}/` : `${SITE_URL}${normalised}`;
+    }
+    const postMatch = normalised.match(/^\/blog\/([a-z0-9]+(?:-[a-z0-9]+)*)$/);
+    if (postMatch && getPostBySlug(postMatch[1])) {
+        return `${SITE_URL}${normalised}`;
     }
     return `${SITE_URL}/`;
 }
@@ -279,14 +314,23 @@ export function normalisePath(pathname: string): string {
     return lowered.endsWith('/') ? lowered.slice(0, -1) : lowered;
 }
 
-/** Metadata for a path, falling back to the homepage's for anything unmatched. */
+/**
+ * Metadata for a path. Static ROUTE_SEO first; then published blog posts from
+ * frontmatter so Head never advertises "Page not found" for a real slug.
+ */
 export function seoFor(pathname: string): RouteSeo {
     const normalised = normalisePath(pathname);
-    return (
-        ROUTE_SEO[normalised] ?? {
-            title: `Page not found | ${SITE_NAME}`,
-            description: DEFAULT_DESCRIPTION,
-            indexable: false,
-        }
-    );
+    if (normalised in ROUTE_SEO) {
+        return ROUTE_SEO[normalised];
+    }
+    const postMatch = normalised.match(/^\/blog\/([a-z0-9]+(?:-[a-z0-9]+)*)$/);
+    if (postMatch) {
+        const post = getPostBySlug(postMatch[1]);
+        if (post) return seoForBlogPost(post);
+    }
+    return {
+        title: `Page not found | ${SITE_NAME}`,
+        description: DEFAULT_DESCRIPTION,
+        indexable: false,
+    };
 }

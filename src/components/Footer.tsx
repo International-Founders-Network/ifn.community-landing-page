@@ -39,6 +39,7 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
             { name: 'Meetup Photographs', href: '/gallery' },
             { name: 'Membership', href: '/membership' },
             { name: 'Workshops', href: '/workshops' },
+            { name: 'Blog', href: '/blog' },
             { name: 'About Us', href: '/about' },
             { name: 'Contact', href: '/contact' },
             { name: 'Code of Conduct', href: '/code-of-conduct' },

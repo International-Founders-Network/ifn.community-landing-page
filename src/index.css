@@ -444,3 +444,60 @@
    already are. Add an invariant token pair and measure it in both modes rather
    than re-deriving a class-name bridge that cannot see a rename.
    ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   Blog post body (HTML from Markdown compile). Scoped under .blog-prose so
+   Tailwind scanning of content/*.md stays excluded via @source not.
+   --------------------------------------------------------------------------- */
+.blog-prose {
+  color: var(--muted);
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+.blog-prose > * + * {
+  margin-top: 1.25em;
+}
+.blog-prose h2 {
+  color: var(--ink);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+.blog-prose h3 {
+  color: var(--ink);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.75em;
+  margin-bottom: 0.5em;
+}
+.blog-prose p,
+.blog-prose li {
+  color: var(--muted);
+}
+.blog-prose a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.blog-prose ul,
+.blog-prose ol {
+  padding-left: 1.25em;
+}
+.blog-prose ul {
+  list-style: disc;
+}
+.blog-prose ol {
+  list-style: decimal;
+}
+.blog-prose li + li {
+  margin-top: 0.5em;
+}
+.blog-prose strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.blog-prose code {
+  font-size: 0.9em;
+}

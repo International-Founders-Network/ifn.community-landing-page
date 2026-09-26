@@ -17,6 +17,7 @@ const Workshops = lazy(() => import('./pages/Workshops').then(module => ({ defau
 const Sponsors = lazy(() => import('./pages/Sponsors').then(module => ({ default: module.Sponsors })));
 const Contact = lazy(() => import('./pages/Contact').then(module => ({ default: module.Contact })));
 const Blog = lazy(() => import('./pages/Blog').then(module => ({ default: module.Blog })));
+const BlogPost = lazy(() => import('./pages/BlogPost').then(module => ({ default: module.BlogPost })));
 const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ default: module.Playbooks })));
 const Events = lazy(() => import('./pages/Events').then(module => ({ default: module.Events })));
 const Gallery = lazy(() => import('./pages/Gallery').then(module => ({ default: module.Gallery })));
@@ -132,6 +133,7 @@ function App() {
                         <Route path="/sponsors" element={<Sponsors />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/blog" element={<Blog />} />
+                        <Route path="/blog/:slug" element={<BlogPost />} />
                         <Route path="/playbooks" element={<Playbooks />} />
                         <Route path="/events" element={<Events />} />
                         {/* ADDED, not moved. Every existing route, slug and

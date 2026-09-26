@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { NOINDEX_PATHS, canonicalFor, normalisePath, seoFor } from '../data/seo';
+import { NOINDEX_PATHS, SITE_URL, canonicalFor, normalisePath, seoFor } from '../data/seo';
 import { graphFor } from '../data/structuredData';
 import { trackPageview } from '../lib/analytics';
 
@@ -111,6 +111,23 @@ function setRobots(shouldNoindex: boolean) {
  * behind from the previous route (an Offer on a page with no price, say) is a
  * structured-data policy problem, not merely untidy.
  */
+
+function setAlternateRss(href: string | null) {
+    const existing = document.head.querySelector('link[rel="alternate"][type="application/rss+xml"]');
+    if (!href) {
+        if (existing?.hasAttribute('data-head-managed')) existing.remove();
+        return;
+    }
+    const element = upsert('link[rel="alternate"][type="application/rss+xml"]', () => {
+        const link = document.createElement('link');
+        link.setAttribute('rel', 'alternate');
+        link.setAttribute('type', 'application/rss+xml');
+        link.setAttribute('title', 'IFN Blog');
+        return link;
+    });
+    element.setAttribute('href', href);
+}
+
 function setStructuredData(pathname: string) {
     const id = 'ifn-structured-data';
     let script = document.getElementById(id) as HTMLScriptElement | null;
@@ -144,6 +161,7 @@ export function Head() {
         setMetaByName('twitter:description', seo.description);
 
         setRobots(isNoindex);
+        setAlternateRss(normalised === '/blog' ? `${SITE_URL}/rss.xml` : null);
         setStructuredData(pathname);
 
         /**
