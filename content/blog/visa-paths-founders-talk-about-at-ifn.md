@@ -35,7 +35,7 @@ Founders at IFN tend to talk in paths and constraints:
 - Who petitions: me, my company, an employer, or a family member?
 - When do I stop brainstorming and hire counsel?
 
-Peer stories help you ask better questions. They do not replace a case assessment. Law firm explainers on foreign founders, visas, and corporate structure can be useful public orientation. Read them that way. Your attorney still owns your case.
+Peer stories help you ask better questions. They do not replace a case assessment. A careful public overview is Cooley's [June 2025 note on foreign founders, visas, and corporate structure](https://www.cooley.com/news/insight/2025/2025-06-03-what-foreign-founders-need-to-know-about-us-visas-and-corporate-structure). Read it as orientation. Your attorney still owns your case.
 
 The room also compares notes on timing: when to talk to counsel relative to incorporation, fundraising, or a planned trip. That timing talk stays peer pattern. It is never a filing calendar.
 
@@ -81,3 +81,4 @@ Bring one status question to the next IFN meetup. Guests stay free via the meetu
 - USCIS, [L-1A](https://www.uscis.gov/working-in-the-united-states/temporary-workers/l-1a-intracompany-transferee-executive-or-manager)
 - USCIS, [L-1B](https://www.uscis.gov/working-in-the-united-states/temporary-workers/l-1b-intracompany-transferee-specialized-knowledge)
 - US Department of State, [Treaty Countries](https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/fees/treaty.html)
+- Cooley, [US visas and corporate structure](https://www.cooley.com/news/insight/2025/2025-06-03-what-foreign-founders-need-to-know-about-us-visas-and-corporate-structure) (orientation; not IFN advice)

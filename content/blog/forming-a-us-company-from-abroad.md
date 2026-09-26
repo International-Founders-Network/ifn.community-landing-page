@@ -41,7 +41,7 @@ Mixing those tracks is where people get surprised. Formation can happen while yo
 
 No two founders run the same order. A pattern still shows up often enough that newcomers ask for it:
 
-1. **Decide what job the entity has to do** in the next 12 to 24 months (raise, serve US customers from abroad, support a later visa conversation without inventing eligibility, or keep a simple operating company). Peer pattern talk, not a recommendation. Law firm explainers on foreign founders and corporate structure can be useful orientation; your advisors still own the call.
+1. **Decide what job the entity has to do** in the next 12 to 24 months (raise, serve US customers from abroad, support a later visa conversation without inventing eligibility, or keep a simple operating company). Peer pattern talk, not a recommendation. Cooley's [June 2025 note on US visas and corporate structure](https://www.cooley.com/news/insight/2025/2025-06-03-what-foreign-founders-need-to-know-about-us-visas-and-corporate-structure) is useful orientation; your advisors still own the call.
 
 2. **Pick a formation state as an ops decision**, not a brand decision. Delaware shows up because investors and counsel know it. Other states show up for cost or stack. Texas shows up when people already live or plan to live in Austin. Consistency with what you later show banks matters more than the logo on the filing. Delaware's Division of Corporations publishes [how to form a new business entity](https://corp.delaware.gov/howtoform/); your own state's filing office is the source for non-Delaware filings.
 
@@ -78,3 +78,4 @@ Come to the next IFN meetup with one concrete formation question. Guests are wel
 - Delaware Division of Corporations, [How to form a new business entity](https://corp.delaware.gov/howtoform/)
 - FinCEN, [Beneficial Ownership Information Reporting](https://www.fincen.gov/boi)
 - FinCEN, [BOI FAQs](https://www.fincen.gov/boi-faqs)
+- Cooley, [What Foreign Founders Need to Know About US Visas and Corporate Structure](https://www.cooley.com/news/insight/2025/2025-06-03-what-foreign-founders-need-to-know-about-us-visas-and-corporate-structure) (orientation; not IFN advice)

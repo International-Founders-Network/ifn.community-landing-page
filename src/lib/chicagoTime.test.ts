@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { chicagoDateKey, chicagoWallTimeToIso, isoToChicagoWallTime } from './chicagoTime';
+import { chicagoDateKey, chicagoWallTimeToIso, defaultPublishWallTime, isoToChicagoWallTime } from './chicagoTime';
 
 describe('chicagoWallTimeToIso (openspec/changes/blog-editorial-publish)', () => {
     it('uses CDT (-05:00) in summer time', () => {
@@ -37,5 +37,25 @@ describe('chicagoWallTimeToIso (openspec/changes/blog-editorial-publish)', () =>
 describe('chicagoWallTimeToIso fall-back ambiguity', () => {
     it('picks the first (CDT) occurrence of a repeated hour', () => {
         expect(chicagoWallTimeToIso('2026-11-01T01:30')).toBe('2026-11-01T01:30:00-05:00');
+    });
+});
+
+describe('defaultPublishWallTime (openspec/changes/admin-ux-blog-links-review)', () => {
+    it('prefills 09:00 on the frontmatter date when publishAt is empty', () => {
+        expect(defaultPublishWallTime(null, '2026-10-01')).toBe('2026-10-01T09:00');
+    });
+
+    it('keeps an existing publishAt, shown in Chicago wall time', () => {
+        expect(defaultPublishWallTime('2026-10-03T19:30:00Z', '2026-10-01')).toBe('2026-10-03T14:30');
+    });
+
+    it('resolves to the right Chicago offset on either side of DST', () => {
+        expect(chicagoWallTimeToIso(defaultPublishWallTime(null, '2026-09-29'))).toBe('2026-09-29T09:00:00-05:00');
+        expect(chicagoWallTimeToIso(defaultPublishWallTime(null, '2026-12-01'))).toBe('2026-12-01T09:00:00-06:00');
+    });
+
+    it('leaves the picker empty when the date is unusable', () => {
+        expect(defaultPublishWallTime(null, '')).toBe('');
+        expect(defaultPublishWallTime(null, '2026-10-01T09:00')).toBe('');
     });
 });

@@ -1,6 +1,7 @@
 import { Handler, HandlerEvent } from '@netlify/functions';
 import { neon } from '@neondatabase/serverless';
 import { getSessionEmail } from './_lib/auth';
+import { loadPostBody } from './_lib/blogBodies';
 import {
     BLOG_ACTIONS,
     applyAction,
@@ -8,10 +9,11 @@ import {
     loadOverlay,
     loadQueue,
     mergeOverlay,
-    triggerBuildHook,
     upsertOverlay,
     type BlogAction,
+    type OverlayRow,
 } from './_lib/blogEditorial';
+import { triggerBuildHook } from './_lib/buildHook';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
 
@@ -21,8 +23,10 @@ function json(statusCode: number, body: unknown) {
 
 /**
  * Admin → Blog. GET lists every post (queue metadata merged with the Neon
- * overlay); PATCH applies one editorial action. Allowlisted session required
- * for both, exactly like admin-submissions. There is no Content-callable path.
+ * overlay, no HTML); GET ?slug= adds that one post's compiled body for the
+ * review drawer; PATCH applies one editorial action. Allowlisted session
+ * required for all three, exactly like admin-submissions. There is no
+ * Content-callable path, and no public route serves an unpublished body.
  */
 export const handler: Handler = async (event: HandlerEvent) => {
     if (event.httpMethod !== 'GET' && event.httpMethod !== 'PATCH') {
@@ -36,19 +40,33 @@ export const handler: Handler = async (event: HandlerEvent) => {
     const dbUrl = process.env.NETLIFY_DATABASE_URL;
 
     if (event.httpMethod === 'GET') {
-        if (!dbUrl) {
-            // Read-only view still works from frontmatter; writes will 503.
-            return json(200, { posts: mergeOverlay(queue, []), overlayAvailable: false });
+        // Without a database the read-only view still works from frontmatter;
+        // writes will 503.
+        let overlay: OverlayRow[] = [];
+        if (dbUrl) {
+            try {
+                const sql = neon(dbUrl);
+                await ensureTable(sql);
+                overlay = await loadOverlay(sql);
+            } catch (error) {
+                console.error('Admin blog load error:', error);
+                return json(500, { error: 'Failed to load blog queue' });
+            }
         }
-        try {
-            const sql = neon(dbUrl);
-            await ensureTable(sql);
-            const overlay = await loadOverlay(sql);
-            return json(200, { posts: mergeOverlay(queue, overlay), overlayAvailable: true });
-        } catch (error) {
-            console.error('Admin blog load error:', error);
-            return json(500, { error: 'Failed to load blog queue' });
-        }
+        const posts = mergeOverlay(queue, overlay);
+        const overlayAvailable = Boolean(dbUrl);
+
+        const slug = event.queryStringParameters?.slug;
+        if (slug === undefined) return json(200, { posts, overlayAvailable });
+
+        const post = posts.find((p) => p.slug === slug);
+        const body = post ? loadPostBody(slug) : undefined;
+        if (!post || !body) return json(404, { error: 'Unknown slug' });
+        return json(200, {
+            post,
+            body: { description: body.description, html: body.html, heldLinks: body.heldLinks },
+            overlayAvailable,
+        });
     }
 
     if (!dbUrl) {

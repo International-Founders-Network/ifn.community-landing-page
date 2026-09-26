@@ -6,9 +6,9 @@ import {
     loadOverlay,
     loadQueue,
     mergeOverlay,
-    triggerBuildHook,
     upsertOverlay,
 } from './_lib/blogEditorial';
+import { triggerBuildHook } from './_lib/buildHook';
 
 /**
  * Every 15 minutes: promote `scheduled` posts whose publishAt has passed to

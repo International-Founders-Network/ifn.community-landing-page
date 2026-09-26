@@ -78,6 +78,20 @@ export function isoToChicagoWallTime(iso: string): string {
     return `${p.date}T${p.time}`;
 }
 
+/** Wall time the Admin picker proposes when a post has no publishAt yet. */
+export const DEFAULT_PUBLISH_TIME = '09:00';
+
+/**
+ * Initial value for a post's publish picker: its publishAt in Chicago wall time
+ * when set, otherwise 09:00 Chicago on the post's written frontmatter date, so
+ * the picker opens on the intended day instead of on today. '' when neither is
+ * usable.
+ */
+export function defaultPublishWallTime(publishAt: string | null, date: string): string {
+    if (publishAt) return isoToChicagoWallTime(publishAt);
+    return /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date}T${DEFAULT_PUBLISH_TIME}` : '';
+}
+
 /** ISO instant → Chicago calendar day "YYYY-MM-DD", for grouping by day. */
 export function chicagoDateKey(iso: string): string {
     return chicagoParts(Date.parse(iso)).date;

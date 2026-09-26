@@ -31,7 +31,7 @@ A common story in the room: form a US LLC or C-corp from abroad, upload a passpo
 
 Peers who cleared remote onboarding usually rewrite that story: the underwriter could not reconcile an incomplete company file. Nationality still matters for some products. Incomplete paper fails more often than founders expect.
 
-Startup banks many founders try, and formation-service banking guides, publish remote-opening writeups. Useful as category orientation. Your bank's checklist still wins.
+Industry examples (not IFN endorsements): Mercury's [How to open a U.S. bank account remotely](https://mercury.com/blog/open-us-bank-account) and OtoCo's [2026 foreign-owned LLC banking guide](https://blog.otoco.io/how-to-open-us-bank-account-foreign-owned-llc-2026/). Your bank's checklist still wins.
 
 ## What peers tend to gather (overview, not a pack)
 
@@ -79,5 +79,7 @@ Bring your banking-prep questions (not your passport data) to the next IFN meetu
 
 ## Sources
 
+- Mercury, [How to open a U.S. bank account remotely](https://mercury.com/blog/open-us-bank-account)
+- OtoCo, [How to Open a US Bank Account for a Foreign-Owned LLC (2026 Guide)](https://blog.otoco.io/how-to-open-us-bank-account-foreign-owned-llc-2026/)
 - IRS, [Employer identification number](https://www.irs.gov/businesses/employer-identification-number)
 - IRS, [Instructions for Form SS-4](https://www.irs.gov/instructions/iss4)

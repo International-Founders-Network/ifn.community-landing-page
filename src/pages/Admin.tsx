@@ -6,6 +6,7 @@ import { ButtonLink } from '../components/ButtonLink';
 import { ROADMAP_TIERS } from '../data/roadmapData';
 import { COMPETITORS, type Competitor } from '../data/competitorsData';
 import { AdminBlogPanel } from '../components/admin/AdminBlogPanel';
+import { buildNote } from '../components/admin/buildNote';
 import { getOutboundLinkRows, type OutboundLinkRow } from '../data/linkAllowlistData';
 
 declare global {
@@ -458,43 +459,218 @@ function linkSearchFields(row: OutboundLinkRow): (string | null)[] {
     ];
 }
 
-function LinksPanel({ rows, searching }: { rows: OutboundLinkRow[]; searching: boolean }) {
+/** A row from GET /api/admin-links: the seed merged with the Neon overlay. */
+interface AdminLinkRow extends OutboundLinkRow {
+    actionable: boolean;
+    source: 'overlay' | 'seed';
+    updatedAt: string | null;
+    updatedBy: string | null;
+}
+
+type LinkAction = 'approve' | 'hold';
+
+function linkHost(website: string | undefined) {
+    if (!website) return '';
+    try {
+        return new URL(website).hostname.replace(/^www\./, '');
+    } catch {
+        return website;
+    }
+}
+
+/**
+ * Admin → Links state (openspec/changes/admin-ux-blog-links-review). Rows come
+ * from /api/admin-links rather than the static seed, so an Approve shows here
+ * at once. Published posts follow on the rebuild it requests, because the
+ * outbound gate runs when compile-blog renders post HTML.
+ */
+function useAdminLinks(onUnauthorized: () => void) {
+    const [rows, setRows] = useState<AdminLinkRow[] | null>(null);
+    const [overlayAvailable, setOverlayAvailable] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [notice, setNotice] = useState<string | null>(null);
+    const [busyId, setBusyId] = useState<string | null>(null);
+
+    const load = async () => {
+        setError(null);
+        try {
+            const res = await fetch('/api/admin-links', { credentials: 'same-origin' });
+            if (res.status === 401) {
+                onUnauthorized();
+                return;
+            }
+            if (!res.ok) throw new Error('Failed to load links');
+            const body = (await res.json()) as { rows: AdminLinkRow[]; overlayAvailable: boolean };
+            setRows(body.rows);
+            setOverlayAvailable(body.overlayAvailable);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to load links');
+        }
+    };
+
+    const act = async (row: AdminLinkRow, action: LinkAction) => {
+        setError(null);
+        setNotice(null);
+        const host = linkHost(row.website);
+        if (
+            action === 'approve' &&
+            !window.confirm(`Let blog posts link to ${host}? Published posts change when the rebuild this requests finishes.`)
+        ) {
+            return;
+        }
+
+        setBusyId(row.id);
+        try {
+            const res = await fetch('/api/admin-links', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ id: row.id, action }),
+            });
+            if (res.status === 401) {
+                onUnauthorized();
+                return;
+            }
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || 'Update failed');
+            const updated = data.row as AdminLinkRow;
+            setRows((prev) => prev?.map((r) => (r.id === updated.id ? updated : r)) ?? prev);
+            setNotice(
+                action === 'approve'
+                    ? `${updated.name}: approved. Posts link to ${host} from the next build.${buildNote(data.build)}`
+                    : `${updated.name}: held. Links to ${host} become plain text from the next build.${buildNote(data.build)}`
+            );
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Update failed');
+        } finally {
+            setBusyId(null);
+        }
+    };
+
+    return { rows, overlayAvailable, error, notice, busyId, load, act };
+}
+
+function LinksPanel({
+    rows,
+    searching,
+    overlayAvailable,
+    error,
+    notice,
+    busyId,
+    onAct,
+}: {
+    rows: AdminLinkRow[] | null;
+    searching: boolean;
+    overlayAvailable: boolean;
+    error: string | null;
+    notice: string | null;
+    busyId: string | null;
+    onAct: (row: AdminLinkRow, action: LinkAction) => void;
+}) {
     return (
-        <table className="w-full text-sm">
-            <thead>
-                <tr className="border-b border-rule text-left text-muted">
-                    <th scope="col" className={TH}>Name</th>
-                    <th scope="col" className={TH}>Kind</th>
-                    <th scope="col" className={TH}>Website</th>
-                    <th scope="col" className={TH}>Status</th>
-                    <th scope="col" className={TH}>Allow outbound</th>
-                    <th scope="col" className={TH}>Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                {rows.length === 0 && <EmptyRow colSpan={6} searching={searching} />}
-                {rows.map((row) => (
-                    <tr key={row.id} className="border-b border-rule align-top">
-                        <td className="py-2 pr-4 font-medium">{row.name}</td>
-                        <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.kind}</td>
-                        <td className="py-2 pr-4">
-                            {row.website ? (
-                                <ExternalLink href={row.website}>{row.website.replace(/^https?:\/\//, '')}</ExternalLink>
-                            ) : (
-                                <span className="text-muted">-</span>
-                            )}
-                        </td>
-                        <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.status}</td>
-                        <td className="whitespace-nowrap py-2 pr-4 text-muted">
-                            {row.allowOutboundLink ? 'yes' : 'no'}
-                        </td>
-                        <td className="py-2 pr-4">
-                            <p className="max-w-md text-xs font-normal text-muted">{row.notes || '-'}</p>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <div className="space-y-4">
+            <div className="rounded-lg border border-rule bg-band px-4 py-3 text-sm text-muted">
+                <p>
+                    Approve lets blog posts link to a sponsor or potential; Hold turns those links back into
+                    plain text. Post HTML is compiled at build time, so either change reaches published posts
+                    when the rebuild it requests finishes. Partners with a website are always linkable and are
+                    edited in code.
+                </p>
+                {!overlayAvailable && (
+                    <p className="mt-2 text-ink">
+                        Link store unavailable (NETLIFY_DATABASE_URL is not configured). Showing the seed
+                        only; actions are disabled.
+                    </p>
+                )}
+            </div>
+
+            {error && (
+                <p role="alert" className="border-l-[3px] border-l-ink py-1 pl-4 text-sm text-ink">
+                    {error}
+                </p>
+            )}
+            <p role="status" className="text-sm text-muted">
+                {notice ?? ''}
+            </p>
+
+            {rows === null ? (
+                error ? null : <TableSkeleton />
+            ) : (
+                <table className="w-full text-sm">
+                    <thead>
+                        <tr className="border-b border-rule text-left text-muted">
+                            <th scope="col" className={TH}>Name</th>
+                            <th scope="col" className={TH}>Kind</th>
+                            <th scope="col" className={TH}>Website</th>
+                            <th scope="col" className={TH}>Status</th>
+                            <th scope="col" className={TH}>Allow outbound</th>
+                            <th scope="col" className={TH}>Notes</th>
+                            <th scope="col" className={TH}>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows.length === 0 && <EmptyRow colSpan={7} searching={searching} />}
+                        {rows.map((row) => {
+                            const disabled = busyId === row.id || !overlayAvailable;
+                            const approved = row.status === 'verified' && row.allowOutboundLink;
+                            return (
+                                <tr key={row.id} className="border-b border-rule align-top">
+                                    <td className="py-2 pr-4 font-medium">{row.name}</td>
+                                    <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.kind}</td>
+                                    <td className="py-2 pr-4">
+                                        {row.website ? (
+                                            <ExternalLink href={row.website}>{row.website.replace(/^https?:\/\//, '')}</ExternalLink>
+                                        ) : (
+                                            <span className="text-muted">-</span>
+                                        )}
+                                    </td>
+                                    <td className="py-2 pr-4 text-muted">
+                                        <div className="whitespace-nowrap">{row.status}</div>
+                                        {row.source === 'overlay' && row.updatedAt && (
+                                            <div className="text-xs">
+                                                {row.updatedBy ? `${row.updatedBy}, ` : ''}
+                                                <time dateTime={row.updatedAt}>{formatDate(row.updatedAt)}</time>
+                                            </div>
+                                        )}
+                                    </td>
+                                    <td className="whitespace-nowrap py-2 pr-4 text-muted">
+                                        {row.allowOutboundLink ? 'yes' : 'no'}
+                                    </td>
+                                    <td className="py-2 pr-4">
+                                        <p className="max-w-md text-xs font-normal text-muted">{row.notes || '-'}</p>
+                                    </td>
+                                    <td className="py-2 pr-4">
+                                        {row.actionable ? (
+                                            <div className="flex flex-wrap gap-2">
+                                                {!approved && (
+                                                    <Button size="sm" onClick={() => onAct(row, 'approve')} disabled={disabled}>
+                                                        Approve<span className="sr-only"> {row.name}</span>
+                                                    </Button>
+                                                )}
+                                                {(row.allowOutboundLink || row.status === 'verified') && (
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        onClick={() => onAct(row, 'hold')}
+                                                        disabled={disabled}
+                                                    >
+                                                        Hold<span className="sr-only"> {row.name}</span>
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <span className="text-xs text-muted">
+                                                {row.kind === 'partner' ? 'Partner, set in code' : 'No website'}
+                                            </span>
+                                        )}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            )}
+        </div>
     );
 }
 
@@ -521,6 +697,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     const [search, setSearch] = useState('');
     // Blog panel fetches its own data; bumping this reloads it from Refresh.
     const [blogRefresh, setBlogRefresh] = useState(0);
+    const links = useAdminLinks(onLogout);
 
     const load = async () => {
         setError(null);
@@ -544,6 +721,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         load();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Links load the first time their tab opens; Refresh reloads them after.
+    useEffect(() => {
+        if (tab === 'links' && links.rows === null) links.load();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tab]);
 
     const tabs = useMemo(
         () => [
@@ -578,10 +761,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         [query]
     );
 
-    const outboundRows = useMemo(() => getOutboundLinkRows(), []);
     const filteredLinks = useMemo(
-        () => outboundRows.filter((r) => matches(query, linkSearchFields(r))),
-        [outboundRows, query]
+        () => links.rows?.filter((r) => matches(query, linkSearchFields(r))) ?? null,
+        [links.rows, query]
     );
 
     const totals: Record<DataTab, number> = {
@@ -605,10 +787,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                 : countLabel(COMPETITORS.length, 'competitors');
         }
         if (tab === 'links') {
+            if (!links.rows || !filteredLinks) return links.error ? 'Could not load links.' : 'Loading links…';
             const shown = filteredLinks.length;
             return query
-                ? `Showing ${shown} of ${countLabel(outboundRows.length, 'links')}`
-                : countLabel(outboundRows.length, 'links');
+                ? `Showing ${shown} of ${countLabel(links.rows.length, 'links')}`
+                : countLabel(links.rows.length, 'links');
         }
         if (!filtered) return error ? 'Could not load submissions.' : 'Loading submissions…';
         const shown = filtered[tab].length;
@@ -678,7 +861,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={tab === 'blog' ? () => setBlogRefresh((n) => n + 1) : load}
+                        onClick={
+                            tab === 'blog' ? () => setBlogRefresh((n) => n + 1) : tab === 'links' ? links.load : load
+                        }
                         disabled={refreshing}
                     >
                         <RefreshCw
@@ -713,7 +898,15 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                             searching={query !== ''}
                         />
                     ) : tab === 'links' ? (
-                        <LinksPanel rows={filteredLinks} searching={query !== ''} />
+                        <LinksPanel
+                            rows={filteredLinks}
+                            searching={query !== ''}
+                            overlayAvailable={links.overlayAvailable}
+                            error={links.error}
+                            notice={links.notice}
+                            busyId={links.busyId}
+                            onAct={links.act}
+                        />
                     ) : filtered ? (
                         <SubmissionTable tab={tab} rows={filtered} searching={query !== ''} />
                     ) : (

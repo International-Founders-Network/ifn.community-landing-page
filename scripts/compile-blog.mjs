@@ -26,6 +26,18 @@
  * read by the admin-blog function only; nothing under src/ imports it, so draft
  * copy never ships in the client bundle.
  *
+ * Output: netlify/functions/_data/blog-bodies.json (committed; server-only)
+ *
+ * Every post's compiled HTML, drafts included, keyed by slug, for the Admin
+ * review drawer (GET /api/admin-blog?slug=). Same rule as the queue: imported
+ * by admin-blog through _lib/blogBodies.ts only, never from src/.
+ *
+ * OUTBOUND GATE (openspec/changes/admin-ux-blog-links-review). Anchors to a
+ * sponsor or potential host are unwrapped to plain text unless that row is
+ * approved in Admin → Links (seed from src/data/linkAllowlistData.ts, merged
+ * with the Neon `link_allowlist` overlay). See scripts/lib/outboundGate.mjs.
+ * Decided per build: an approval reaches a live post on the next rebuild.
+ *
  * Filename stem is the slug unless frontmatter.slug overrides it. Body is
  * compiled to HTML with remark/rehype so React can render without a runtime
  * Markdown parser.
@@ -37,19 +49,17 @@ import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from 
 import { dirname, join, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkGfm from 'remark-gfm';
-import remarkRehype from 'remark-rehype';
-import rehypeSanitize from 'rehype-sanitize';
-import rehypeStringify from 'rehype-stringify';
 import { neon } from '@neondatabase/serverless';
+import { runnerImport } from 'vite';
+import { buildOutboundGate, markdownToHtml } from './lib/outboundGate.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const CONTENT_DIR = join(ROOT, 'content', 'blog');
 const OUT_PATH = join(ROOT, 'src', 'data', 'blog.generated.ts');
 const QUEUE_PATH = join(ROOT, 'netlify', 'functions', '_data', 'blog-queue.json');
+const BODIES_PATH = join(ROOT, 'netlify', 'functions', '_data', 'blog-bodies.json');
+const LINK_LIB_PATH = join(ROOT, 'netlify', 'functions', '_lib', 'linkAllowlist.ts');
 
 const STATUSES = ['draft', 'in_review', 'approved', 'scheduled', 'live'];
 const SYNDICATION_CHANNELS = ['medium', 'linkedin', 'x', 'instagram'];
@@ -58,17 +68,6 @@ const ISO_WITH_OFFSET = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z
 
 function escapeTsString(value) {
     return JSON.stringify(value ?? '');
-}
-
-async function mdToHtml(markdown) {
-    const file = await unified()
-        .use(remarkParse)
-        .use(remarkGfm)
-        .use(remarkRehype)
-        .use(rehypeSanitize)
-        .use(rehypeStringify)
-        .process(markdown);
-    return String(file);
 }
 
 function slugifyStem(filename) {
@@ -146,10 +145,8 @@ function isPublic(status, publishAt, nowMs) {
  * every post that went live through Admin, and a failed build leaves the
  * previous deploy serving instead.
  */
-async function loadOverlay() {
-    const url = process.env.NETLIFY_DATABASE_URL;
-    if (!url) return new Map();
-    const sql = neon(url);
+async function loadOverlay(sql) {
+    if (!sql) return new Map();
     try {
         const rows = await sql`SELECT slug, status, publish_at FROM blog_editorial`;
         const overlay = new Map();
@@ -171,13 +168,45 @@ async function loadOverlay() {
     }
 }
 
+/**
+ * Effective Admin → Links rows: the seed (src/data/linkAllowlistData.ts)
+ * merged with the Neon `link_allowlist` overlay by the same module admin-links
+ * serves from. That module is TypeScript, so it is loaded through Vite's
+ * runnerImport (no vite.config, nothing written to disk) rather than
+ * duplicated here.
+ *
+ * Same failure policy as the editorial overlay: no database => seed only; table
+ * not created yet => seed only; any other error fails the build. Dropping the
+ * overlay silently would strip every link Venkat approved, and would reopen a
+ * link he held on any sponsor seeded as verified.
+ */
+async function loadLinkRows(sql) {
+    const { module: links } = await runnerImport(LINK_LIB_PATH);
+    const seed = links.loadLinkSeed();
+    if (!sql) return links.mergeLinkOverlay(seed, []);
+    try {
+        const overlay = await links.loadLinkOverlay(sql);
+        console.log(`Link allowlist overlay: ${overlay.length} row(s) from Neon.`);
+        return links.mergeLinkOverlay(seed, overlay);
+    } catch (err) {
+        if (err && err.code === '42P01') {
+            console.warn('Link allowlist overlay: link_allowlist table not found; using the seed only.');
+            return links.mergeLinkOverlay(seed, []);
+        }
+        throw err;
+    }
+}
+
 async function compile() {
     if (!existsSync(CONTENT_DIR)) {
         mkdirSync(CONTENT_DIR, { recursive: true });
     }
 
     const files = readdirSync(CONTENT_DIR).filter((name) => name.endsWith('.md'));
-    const overlay = await loadOverlay();
+    const dbUrl = process.env.NETLIFY_DATABASE_URL;
+    const sql = dbUrl ? neon(dbUrl) : null;
+    const overlay = await loadOverlay(sql);
+    const gate = buildOutboundGate(await loadLinkRows(sql));
     const nowMs = Date.now();
     const posts = [];
 
@@ -222,7 +251,11 @@ async function compile() {
         if (!description) throw new Error(`${file}: frontmatter description is required`);
         if (!date) throw new Error(`${file}: frontmatter date (YYYY-MM-DD) is required`);
 
-        const html = await mdToHtml(content.trim());
+        const { html, held } = await markdownToHtml(content.trim(), gate);
+        if (held.length > 0) {
+            const hosts = [...new Set(held.map((link) => link.host))].join(', ');
+            console.log(`${file}: ${held.length} outbound link(s) held as plain text, not approved in Admin → Links: ${hosts}`);
+        }
         const excerpt =
             description.length > 180 ? `${description.slice(0, 177)}…` : description;
 
@@ -240,6 +273,7 @@ async function compile() {
             tags,
             ogImage,
             html,
+            heldLinks: held,
             isPublic: isPublic(status, publishAt, nowMs),
         });
     }
@@ -315,6 +349,28 @@ export function getPostBySlug(slug: string): BlogPost | undefined {
     mkdirSync(dirname(QUEUE_PATH), { recursive: true });
     writeFileSync(QUEUE_PATH, `${JSON.stringify({ posts: queue }, null, 2)}\n`, 'utf8');
     console.log(`Wrote ${queue.length} post(s) to the editorial queue → netlify/functions/_data/blog-queue.json`);
+
+    // Full bodies for the Admin review drawer, drafts included. The HTML is the
+    // gated HTML this build would publish; heldLinks lists what the gate held.
+    const bodies = Object.fromEntries(
+        [...posts]
+            .sort((a, b) => a.slug.localeCompare(b.slug))
+            .map((post) => [
+                post.slug,
+                {
+                    slug: post.slug,
+                    title: post.title,
+                    description: post.description,
+                    date: post.date,
+                    status: post.status,
+                    publishAt: post.publishAt,
+                    html: post.html,
+                    heldLinks: post.heldLinks,
+                },
+            ]),
+    );
+    writeFileSync(BODIES_PATH, `${JSON.stringify({ posts: bodies }, null, 2)}\n`, 'utf8');
+    console.log(`Wrote ${posts.length} post bod${posts.length === 1 ? 'y' : 'ies'} for Admin review → netlify/functions/_data/blog-bodies.json`);
 }
 
 compile().catch((err) => {
