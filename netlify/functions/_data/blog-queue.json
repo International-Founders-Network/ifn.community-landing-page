@@ -1,0 +1,24 @@
+{
+  "posts": [
+    {
+      "slug": "welcome-to-the-ifn-blog",
+      "title": "Welcome to the IFN blog",
+      "date": "2026-09-26",
+      "status": "live",
+      "publishAt": null,
+      "tags": [
+        "austin",
+        "landing",
+        "community"
+      ],
+      "draft": false,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": true
+    }
+  ]
+}

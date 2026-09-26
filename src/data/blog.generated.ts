@@ -4,7 +4,8 @@
  * Written by scripts/compile-blog.mjs from content/blog/*.md.
  * Regenerate with: node scripts/compile-blog.mjs
  *
- * Draft posts are excluded. Filename stem is the default slug.
+ * Only public posts are included: status live, or scheduled with publishAt
+ * already past. Drafts, in-review and approved posts never appear here.
  */
 
 export interface BlogPost {
