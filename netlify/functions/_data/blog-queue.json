@@ -1,0 +1,87 @@
+{
+  "posts": [
+    {
+      "slug": "us-business-banking-document-pack",
+      "title": "US business banking for international founders: what peers gather first",
+      "date": "2026-10-03",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "banking",
+        "finance",
+        "operations",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "visa-paths-founders-talk-about-at-ifn",
+      "title": "Visa paths founders talk about at IFN (and when we stop talking)",
+      "date": "2026-10-01",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "visas",
+        "immigration",
+        "peer-notes",
+        "orientation"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "forming-a-us-company-from-abroad",
+      "title": "Forming a US company from abroad: what peers actually sequence",
+      "date": "2026-09-29",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "entity",
+        "formation",
+        "us-market-entry",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "welcome-to-the-ifn-blog",
+      "title": "Welcome to the IFN blog",
+      "date": "2026-09-26",
+      "status": "live",
+      "publishAt": null,
+      "tags": [
+        "austin",
+        "landing",
+        "community"
+      ],
+      "draft": false,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": true
+    }
+  ]
+}
