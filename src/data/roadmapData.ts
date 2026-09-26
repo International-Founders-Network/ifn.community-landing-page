@@ -13,7 +13,7 @@ export const ROADMAP_TIERS: RoadmapTier[] = [
     {
         tier: 'Paid Membership',
         stage: 'v2 (now)',
-        includes: 'Private member channel, guides as they publish, monthly members-only call. $149/yr',
+        includes: 'Private member channel, guides as they publish, monthly members-only call',
     },
     {
         tier: 'IFN Pro',

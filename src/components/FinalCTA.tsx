@@ -284,7 +284,7 @@ export function FinalCTA(_props?: FinalCTAProps) {
                                 size="lg"
                                 className="w-full sm:w-auto"
                             >
-                                Become a member ($149/yr)
+                                Become a member
                             </ButtonLink>
                         </div>
                     </div>

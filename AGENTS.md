@@ -148,6 +148,18 @@ stopgap: **fix the venue on the Luma records**, then add Event markup. Marking
 up a venue that contradicts the rendered page is a structured-data policy
 violation, not merely untidy.
 
+## Blog posts publish by editorial status, not by merge
+
+`scripts/compile-blog.mjs` puts a post in `BLOG_POSTS` only when its status is
+`live`, or `scheduled` with `publishAt` already past. Status comes from
+frontmatter, overridden per slug by the Neon `blog_editorial` overlay that
+Admin → Blog writes. Content PRs set `status: in_review`, `draft: true`,
+`publishAt: null` and never set `scheduled`, `live`, or a real `publishAt`.
+`blog-publish-due` (every 15 min) promotes due scheduled posts and fires
+`NETLIFY_BUILD_HOOK_URL`. If the overlay read fails at build for any reason
+other than a missing table, the build fails on purpose: dropping the overlay
+would silently unpublish posts. See `openspec/changes/blog-editorial-publish/`.
+
 ## Database schema is intentionally defined twice
 
 `db/migrations/*.sql` is the documented schema history. Each Netlify Function also runs its own `CREATE TABLE IF NOT EXISTS` at request time (idempotent, so the app works even against an empty database). These two can drift silently, so if you change a table's shape, update both, or at least check `db/README.md` for the current convention before assuming one is authoritative.

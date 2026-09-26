@@ -63,7 +63,7 @@ export function BlogPost() {
                             Come to the next meetup
                         </ButtonLink>
                         <ButtonLink to="/membership" variant="outline" size="lg">
-                            Become a member ($149/year)
+                            Become a member
                         </ButtonLink>
                         <ButtonLink to="/resources" variant="outline" size="lg">
                             Browse Resources

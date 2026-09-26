@@ -45,7 +45,7 @@ export function Workshops() {
                                 See upcoming on Luma
                             </ButtonLink>
                             <ButtonLink to="/membership" variant="outline" size="lg">
-                                Become a member ($149/year)
+                                Become a member
                             </ButtonLink>
                         </div>
                     </div>
@@ -174,7 +174,7 @@ export function Workshops() {
                             Members get better workshop access
                         </h2>
                         <p className="mt-3 leading-relaxed text-muted">
-                            Membership is $149/year. When a workshop offers member pricing, you get
+                            Optional membership unlocks member pricing when a workshop offers it. You get
                             the discount or free entry listed on that Luma page. You also get the
                             private member channel and the monthly members-only call.
                         </p>
@@ -185,7 +185,7 @@ export function Workshops() {
                         size="lg"
                         className="mt-6 shrink-0 md:mt-0"
                     >
-                        Become a member ($149/year)
+                        Become a member
                     </ButtonLink>
                 </div>
             </Container>

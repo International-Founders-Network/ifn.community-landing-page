@@ -14,6 +14,16 @@ All schema changes should be documented in `db/migrations/`.
 
 - `00_initial_schema.sql`: Contains the current production-ready schema.
 - `03_memberships.sql`: Membership subscriptions (2026-08-27).
+- `04_blog_editorial.sql`: Blog editorial overlay (2026-09-26). Admin → Blog
+  writes `status` / `publish_at` per slug; `scripts/compile-blog.mjs` merges it
+  over Markdown frontmatter at build time. Also created at request time by
+  `netlify/functions/_lib/blogEditorial.ts`.
+- `05_link_allowlist.sql`: Outbound-link allowlist overlay (2026-09-26). Admin →
+  Links writes `status` / `allow_outbound` per sponsor or potential id;
+  `scripts/compile-blog.mjs` merges it over `src/data/linkAllowlistData.ts` and
+  keeps an outbound anchor only when its host is approved. Takes effect on the
+  next build. Also created at request time by
+  `netlify/functions/_lib/linkAllowlist.ts`.
 - `01_qr_links.sql`: Schema for the QR code generator in `apps/qr`.
 - `02_event_venue_station_austin.sql`: **Data** migration, not schema. Rewrites
   the two historical `Capital Factory` values in `events.location_name` to
@@ -55,6 +65,9 @@ why a re-sync from Luma can undo it are written up in `AGENTS.md` under
    `stripe_subscription_id` is UNIQUE because it is the `ON CONFLICT` target that
    makes the webhook idempotent, and `last_event_at` guards the update so a
    stale, out-of-order event cannot revive a cancelled member.
+6. **`link_allowlist`**: Admin → Links overrides for sponsor / potential rows
+   (`id` is the seed row id). Read at build time by `compile-blog.mjs`, so a
+   change only reaches published HTML after a rebuild.
 
 ## 🌍 Environment Separation
 
