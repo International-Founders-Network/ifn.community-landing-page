@@ -3,7 +3,7 @@ title: "Visa paths founders talk about at IFN (and when we stop talking)"
 description: "A peer map of visa paths founders discuss at IFN meetups, and the moments the room hands the conversation to immigration counsel."
 date: 2026-10-01
 updated: null
-draft: true
+draft: false
 tags: [visas, immigration, peer-notes, orientation]
 ogImage: /blog/visa-paths-founders-talk-about-at-ifn-og.png
 ---
