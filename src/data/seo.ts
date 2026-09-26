@@ -70,7 +70,7 @@ export interface RouteSeo {
  */
 export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/': {
-        title: 'International Founders Network | Free monthly meetups in Austin',
+        title: 'International Founders Network | Austin meetups',
         description:
             'Free in-person meetups for international and immigrant founders in Austin. Optional $149/year membership. Next date on Luma.',
         indexable: true,
@@ -86,7 +86,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
         changefreq: 'monthly',
     },
     '/events': {
-        title: `Monthly founder meetups in Austin | ${SITE_NAME}`,
+        title: 'Monthly founder meetups in Austin | IFN',
         description:
             'Free monthly meetups for international founders in Austin. Register on Luma. That calendar is the source of truth.',
         indexable: true,
@@ -102,7 +102,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
         changefreq: 'monthly',
     },
     '/resources': {
-        title: `Founder Resources for International Founders | ${SITE_NAME}`,
+        title: 'Resources for international founders | IFN',
         description:
             'A resource library for international and immigrant founders: incorporating in the US as a non-resident, banking, visas, fundraising, and the first hires.',
         indexable: true,
@@ -126,15 +126,15 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
         changefreq: 'monthly',
     },
     '/workshops': {
-        title: `Workshops for international founders in Austin | ${SITE_NAME}`,
+        title: 'Workshops for international founders | IFN',
         description:
-            'Practical IFN workshops on visas, banking, housing, hiring, fundraising, US market entry, and entity setup. Price per session on Luma. Members get discount or free entry when the session offers it.',
+            'Practical workshops for international founders in Austin: visas, banking, hiring, fundraising. Price on Luma. Ask about hosting.',
         indexable: true,
         priority: 0.7,
         changefreq: 'monthly',
     },
     '/sponsors': {
-        title: `Sponsor IFN meetups in Austin | ${SITE_NAME}`,
+        title: 'Sponsor IFN meetups in Austin | IFN',
         description:
             'Sponsor Austin’s monthly international founder meetups. Event from $1,000. Category exclusive from $3,500. Title from $12,000/year. Audience 100–300.',
         indexable: true,

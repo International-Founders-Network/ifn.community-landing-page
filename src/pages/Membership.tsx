@@ -167,7 +167,7 @@ export function Membership() {
                                 <p className={EYEBROW_ROW} aria-hidden="true">
                                     &nbsp;
                                 </p>
-                                <h3 className={TITLE_ROW}>Guest</h3>
+                                <h2 className={TITLE_ROW}>Guest</h2>
                                 <p className={PRICE_ROW}>Free</p>
                                 <p className={PRICE_DETAIL_ROW} aria-hidden="true">
                                     &nbsp;
@@ -192,7 +192,7 @@ export function Membership() {
                             {/* Member (default / emphasized) */}
                             <div className="flex h-full flex-col rounded-2xl border border-ink bg-paper p-8 shadow-lg ring-1 ring-ink">
                                 <p className={EYEBROW_ROW}>Popular</p>
-                                <h3 className={TITLE_ROW}>Member</h3>
+                                <h2 className={TITLE_ROW}>Member</h2>
                                 <p className={PRICE_ROW}>{MEMBERSHIP_PRICE_STANDARD}/year</p>
                                 <p className={PRICE_DETAIL_ROW} aria-hidden="true">
                                     &nbsp;
@@ -221,7 +221,7 @@ export function Membership() {
                                 className="flex h-full flex-col rounded-2xl border border-rule bg-paper p-8"
                             >
                                 <p className={EYEBROW_ROW}>Limited seats · Apply</p>
-                                <h3 className={TITLE_ROW}>Founder in Residence</h3>
+                                <h2 className={TITLE_ROW}>Founder in Residence</h2>
                                 <p className={PRICE_ROW}>Starting from $1,800/year</p>
                                 <p className={PRICE_DETAIL_ROW} aria-hidden="true">
                                     &nbsp;

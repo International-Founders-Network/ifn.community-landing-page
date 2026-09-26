@@ -25,8 +25,8 @@ export const BLOG_POSTS: BlogPost[] = [
     {
         slug: "welcome-to-the-ifn-blog",
         title: "Welcome to the IFN blog",
-        description: "Peer notes for international and immigrant founders building in Austin: what comes up at the monthly meetup, written down so you can read it before you walk into the room.",
-        excerpt: "Peer notes for international and immigrant founders building in Austin: what comes up at the monthly meetup, written down so you can read it before you walk into the room.",
+        description: "Peer notes from IFN meetups in Austin for international founders. Field notes you can read before you walk into the room.",
+        excerpt: "Peer notes from IFN meetups in Austin for international founders. Field notes you can read before you walk into the room.",
         date: "2026-09-26",
         updated: null,
         tags: ["austin","landing","community"],
