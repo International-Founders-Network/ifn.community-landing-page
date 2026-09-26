@@ -72,7 +72,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/': {
         title: 'International Founders Network | Free monthly meetups in Austin',
         description:
-            'Free in-person meetups for international and immigrant founders in Austin. Optional $149/year membership. Next date on Luma.',
+            'Free in-person meetups for international and immigrant founders in Austin. Optional membership. Next date on Luma.',
         indexable: true,
         priority: 1.0,
         changefreq: 'weekly',
