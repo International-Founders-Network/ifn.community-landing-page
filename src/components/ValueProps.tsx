@@ -370,11 +370,7 @@ export function ValueProps() {
         },
         {
             place: 'md:col-start-3 md:col-span-8',
-            title: (
-                <>
-                    Optional membership <Mark reduce={reduce}>$149/year</Mark>
-                </>
-            ),
+            title: 'Optional membership',
             body: 'Private member channel, monthly members-only call, first access to guides when they publish.',
         },
         {
