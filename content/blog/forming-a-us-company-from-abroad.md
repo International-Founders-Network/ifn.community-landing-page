@@ -3,9 +3,9 @@ title: "Forming a US company from abroad: what peers actually sequence"
 description: "What international founders at IFN Austin tend to sequence when forming a US company from abroad, and when they stop and call counsel."
 date: 2026-09-29
 updated: null
-draft: false
+draft: true
 tags: [entity, formation, us-market-entry, peer-notes]
-ogImage: /og-image.png
+ogImage: /blog/forming-a-us-company-from-abroad-og.png
 ---
 
 At almost every IFN Austin meetup, someone still abroad asks the same cluster: Can I form a United States company before I have work authorization? LLC or C-corp? Which state? When does the EIN happen? How do people avoid confusing formation with permission to work?
@@ -26,21 +26,21 @@ Founders who have been through it often separate three tracks early:
 2. **Personal status** (visa, work authorization, travel)
 3. **Money rails** (banking, payments, how customers pay)
 
-Mixing those tracks is where people get surprised. Formation can happen while you are still abroad. Work authorization is a different conversation. For the visa side, see [Visa paths founders talk about at IFN](/blog/visa-paths-founders-talk-about-at-ifn). For banking prep at overview level, see [US business banking for international founders](/blog/us-business-banking-document-pack).
+Mixing those tracks is where people get surprised. Formation can happen while you are still abroad. Work authorization is a different conversation. Banking prep is another. Meetup peers talk about all three; counsel owns the hard calls on each.
 
 ## What people tend to sequence (high level)
 
 No two founders run the same order. A pattern still shows up often enough that newcomers ask for it:
 
-1. **Decide what job the entity has to do** in the next 12 to 24 months (raise, serve US customers from abroad, support a later visa conversation without inventing eligibility, or keep a simple operating company). Peer pattern talk, not a recommendation. Cooley's [June 2025 note on US visas and corporate structure](https://www.cooley.com/news/insight/2025/2025-06-03-what-foreign-founders-need-to-know-about-us-visas-and-corporate-structure) is useful orientation; your advisors still own the call.
+1. **Decide what job the entity has to do** in the next 12 to 24 months (raise, serve US customers from abroad, support a later visa conversation without inventing eligibility, or keep a simple operating company). Peer pattern talk, not a recommendation. Law firm explainers on foreign founders and corporate structure can be useful orientation; your advisors still own the call.
 
-2. **Pick a formation state as an ops decision**, not a brand decision. Delaware shows up because investors and counsel know it. Other states show up for cost or stack. Texas shows up when people already live or plan to live in Austin. Consistency with what you later show banks matters more than the logo on the filing.
+2. **Pick a formation state as an ops decision**, not a brand decision. Delaware shows up because investors and counsel know it. Other states show up for cost or stack. Texas shows up when people already live or plan to live in Austin. Consistency with what you later show banks matters more than the logo on the filing. Delaware's Division of Corporations publishes [how to form a new business entity](https://corp.delaware.gov/howtoform/); your own state's filing office is the source for non-Delaware filings.
 
 3. **File, freeze the legal name, then get an EIN.** Banks and the IRS notice character-level name mismatches. Founders abroad often learn online EIN eligibility depends on US presence and a suitable taxpayer ID for the responsible party. Start at the IRS [EIN overview](https://www.irs.gov/businesses/employer-identification-number) and [Form SS-4 instructions](https://www.irs.gov/instructions/iss4).
 
 4. **Keep ownership clear, and check current FinCEN BOI rules for your facts.** Rules have changed. Start at FinCEN [BOI reporting](https://www.fincen.gov/boi) and [FAQs](https://www.fincen.gov/boi-faqs), then ask counsel whether your facts still create a filing duty.
 
-5. **Only then move toward banking.** Incomplete company paper is an expensive way to learn. The companion post stays at overview level on purpose.
+5. **Only then move toward banking.** Incomplete company paper is an expensive way to learn. Peers gather formation evidence, EIN confirmation, ownership clarity, and a real operating address before they apply. The item-by-item pack language lives deeper with membership and Resources, not in this orientation post.
 
 ## LLC vs C-corp as founders discuss it
 
@@ -60,7 +60,7 @@ Corporate counsel, immigration counsel, and a CPA who has worked with non-reside
 
 ## Soft next steps
 
-Come to the next IFN meetup with one concrete formation question. Guests are welcome; register on Luma or check dates on [ifn.community](https://ifn.community). If you want the private member channel and members-only call, [Become a member ($149/year)](/membership). Fuller formation checklists and teaser PDFs live with membership and the [Resources](/resources) hub as that catalog fills in.
+Come to the next IFN meetup with one concrete formation question. Guests are welcome; register on Luma or check dates on [ifn.community](/). If you want the private member channel and members-only call, [Become a member](/membership). Fuller formation checklists and teaser PDFs live with membership and the [Resources](/resources) hub as that catalog fills in.
 
 ## Sources
 
@@ -69,4 +69,3 @@ Come to the next IFN meetup with one concrete formation question. Guests are wel
 - Delaware Division of Corporations, [How to form a new business entity](https://corp.delaware.gov/howtoform/)
 - FinCEN, [Beneficial Ownership Information Reporting](https://www.fincen.gov/boi)
 - FinCEN, [BOI FAQs](https://www.fincen.gov/boi-faqs)
-- Cooley, [What Foreign Founders Need to Know About US Visas and Corporate Structure](https://www.cooley.com/news/insight/2025/2025-06-03-what-foreign-founders-need-to-know-about-us-visas-and-corporate-structure) (orientation; not IFN advice)
