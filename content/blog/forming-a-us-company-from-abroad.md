@@ -3,7 +3,7 @@ title: "Forming a US company from abroad: what peers actually sequence"
 description: "What international founders at IFN Austin tend to sequence when forming a US company from abroad, and when they stop and call counsel."
 date: 2026-09-29
 updated: null
-draft: true
+draft: false
 tags: [entity, formation, us-market-entry, peer-notes]
 ogImage: /blog/forming-a-us-company-from-abroad-og.png
 ---
