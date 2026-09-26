@@ -2,7 +2,8 @@ import { writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
-import { INDEXABLE_PATHS, ROUTE_SEO, SITE_NAME, SITE_URL } from './src/data/seo'
+import { BLOG_POSTS } from './src/data/blog.generated'
+import { INDEXABLE_PATHS, SITE_NAME, SITE_URL, seoFor } from './src/data/seo'
 
 /**
  * Emit the crawler-facing files that must exist as REAL FILES rather than as
@@ -27,18 +28,22 @@ function seoAssets(): Plugin {
             const outDir = resolve(__dirname, 'dist')
 
             /**
-             * `lastmod` is the build date. It is honest: this site's pages
-             * change when the site is rebuilt and deployed, and there is no
-             * per-page modification timestamp to draw on. Google treats
-             * lastmod as a hint and ignores it outright when it looks
-             * uniformly faked, so a single accurate build date is worth more
-             * than eleven invented per-page dates.
+             * Default `lastmod` is the build date for static pages. Blog posts
+             * use frontmatter `updated` or `date` when present so the sitemap
+             * reflects editorial change rather than every deploy.
              */
-            const lastmod = new Date().toISOString().split('T')[0]
+            const buildLastmod = new Date().toISOString().split('T')[0]
+            const postByPath = new Map<string, (typeof BLOG_POSTS)[number]>(
+                BLOG_POSTS.map((post) => [`/blog/${post.slug}`, post]),
+            )
 
             const urls = INDEXABLE_PATHS.map((path) => {
-                const seo = ROUTE_SEO[path]
+                const seo = seoFor(path)
                 const loc = path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`
+                const post = postByPath.get(path)
+                const lastmod = post
+                    ? (post.updated || post.date)
+                    : buildLastmod
                 return [
                     '  <url>',
                     `    <loc>${loc}</loc>`,
@@ -86,7 +91,7 @@ function seoAssets(): Plugin {
                 '## Primary pages',
                 '',
                 ...INDEXABLE_PATHS.map((path) => {
-                    const seo = ROUTE_SEO[path]
+                    const seo = seoFor(path)
                     const loc = path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`
                     const label = seo.title.split('|')[0].trim()
                     return `- [${label}](${loc}): ${seo.description}`
@@ -107,6 +112,51 @@ function seoAssets(): Plugin {
              * prerendered pages and the set of sitemapped pages are the same
              * set by construction, not by two lists agreeing.
              */
+
+            /**
+             * RSS for published blog posts. Advertised from /blog via
+             * rel="alternate". Path is /rss.xml at the site root.
+             */
+            const escapeXml = (value: string) =>
+                value
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&apos;')
+
+            const rssItems = BLOG_POSTS.map((post) => {
+                const link = `${SITE_URL}/blog/${post.slug}`
+                const pubDate = new Date(`${post.date}T12:00:00.000Z`).toUTCString()
+                return [
+                    '    <item>',
+                    `      <title>${escapeXml(post.title)}</title>`,
+                    `      <link>${link}</link>`,
+                    `      <guid isPermaLink="true">${link}</guid>`,
+                    `      <pubDate>${pubDate}</pubDate>`,
+                    `      <description>${escapeXml(post.description)}</description>`,
+                    '    </item>',
+                ].join('\n')
+            }).join('\n')
+
+            writeFileSync(
+                resolve(outDir, 'rss.xml'),
+                [
+                    '<?xml version="1.0" encoding="UTF-8"?>',
+                    '<rss version="2.0">',
+                    '  <channel>',
+                    `    <title>${escapeXml(SITE_NAME)} Blog</title>`,
+                    `    <link>${SITE_URL}/blog</link>`,
+                    `    <description>${escapeXml('Peer notes for international and immigrant founders in Austin.')}</description>`,
+                    '    <language>en-us</language>',
+                    rssItems,
+                    '  </channel>',
+                    '</rss>',
+                    '',
+                ].join('\n'),
+                'utf8',
+            )
+
             writeFileSync(
                 resolve(outDir, 'prerender-routes.json'),
                 JSON.stringify(INDEXABLE_PATHS, null, 2),

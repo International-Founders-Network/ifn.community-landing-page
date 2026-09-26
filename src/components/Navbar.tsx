@@ -6,8 +6,8 @@ import { ButtonLink } from './ButtonLink';
 
 
 // Primary nav: conversion surfaces a visitor needs, plus Collaborate as a
-// disclosure for Sponsors + Partners (locked IA). Workshops and Resources are
-// top-level. Footer still lists Resources too. One action at the right edge.
+// disclosure for Sponsors + Partners (locked IA). Workshops, Resources, and
+// Blog are top-level. Footer may also list Blog. One action at the right edge.
 type NavLinkItem = { name: string; href: string };
 type NavGroupItem = { name: string; children: NavLinkItem[] };
 type NavItem = NavLinkItem | NavGroupItem;
@@ -28,6 +28,7 @@ const NAV_LINKS: NavItem[] = [
         ],
     },
     { name: 'Resources', href: '/resources' },
+    { name: 'Blog', href: '/blog' },
     { name: 'Gallery', href: '/gallery' },
     { name: 'About', href: '/about' },
 ];

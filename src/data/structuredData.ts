@@ -30,6 +30,7 @@ import {
     MEMBERSHIP_TIER_NAME,
 } from './membershipData';
 import { SOCIAL_LINKS } from './socialLinks';
+import { getPostBySlug } from './blog.generated';
 import { SITE_NAME, SITE_URL, canonicalFor, normalisePath, seoFor } from './seo';
 
 const ORGANIZATION_ID = `${SITE_URL}/#organization`;
@@ -132,6 +133,33 @@ export function breadcrumbSchema(pathname: string) {
     /** The page's own crumb uses its H1-ish short name, not the full <title>. */
     const shortName = seo.title.split('|')[0].trim();
 
+    const postMatch = normalised.match(/^\/blog\/([a-z0-9]+(?:-[a-z0-9]+)*)$/);
+    if (postMatch && getPostBySlug(postMatch[1])) {
+        return {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                {
+                    '@type': 'ListItem',
+                    position: 1,
+                    name: 'Home',
+                    item: `${SITE_URL}/`,
+                },
+                {
+                    '@type': 'ListItem',
+                    position: 2,
+                    name: 'Blog',
+                    item: `${SITE_URL}/blog`,
+                },
+                {
+                    '@type': 'ListItem',
+                    position: 3,
+                    name: shortName,
+                    item: canonicalFor(pathname),
+                },
+            ],
+        };
+    }
+
     return {
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -218,6 +246,34 @@ export function faqPageSchema(entries: FaqEntry[]) {
  * so the organisation is defined once and pointed at thereafter, which is both
  * smaller and less likely to produce two conflicting Organization entities.
  */
+
+/**
+ * BlogPosting for a published post. Headline and description match frontmatter
+ * and the rendered page. Peer editorial only; no invented advice claims.
+ */
+export function blogPostingSchema(pathname: string) {
+    const normalised = normalisePath(pathname);
+    const match = normalised.match(/^\/blog\/([a-z0-9]+(?:-[a-z0-9]+)*)$/);
+    if (!match) return null;
+    const post = getPostBySlug(match[1]);
+    if (!post) return null;
+
+    return {
+        '@type': 'BlogPosting',
+        '@id': `${canonicalFor(pathname)}#blogposting`,
+        headline: post.title,
+        description: post.description,
+        datePublished: post.date,
+        ...(post.updated ? { dateModified: post.updated } : { dateModified: post.date }),
+        mainEntityOfPage: { '@id': `${canonicalFor(pathname)}#webpage` },
+        author: { '@id': ORGANIZATION_ID },
+        publisher: { '@id': ORGANIZATION_ID },
+        inLanguage: 'en-US',
+        isPartOf: { '@id': WEBSITE_ID },
+        url: canonicalFor(pathname),
+    };
+}
+
 export function graphFor(pathname: string, faq: FaqEntry[] = []) {
     const normalised = normalisePath(pathname);
 
@@ -233,6 +289,9 @@ export function graphFor(pathname: string, faq: FaqEntry[] = []) {
     if (normalised === '/membership') {
         nodes.push(membershipOfferSchema());
     }
+
+    const blogPosting = blogPostingSchema(pathname);
+    if (blogPosting) nodes.push(blogPosting);
 
     /** The FAQ component renders on the homepage, so its markup belongs there. */
     if (normalised === '/') {

@@ -61,19 +61,15 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
-# The routes that are real but deliberately not prerendered: six placeholder
-# pages with no content yet, and the internal admin dashboard. They must return
+# The routes that are real but deliberately not prerendered: five remaining
+# placeholder pages with no content yet, and the internal admin dashboard.
+# /blog is prerendered and indexable; it is not listed here. They must return
 # 200 and the SPA shell, because they render fine client-side — they simply must
 # not be indexed, which the X-Robots-Tag headers below take care of.
 #
 # These have to be listed BEFORE the catch-all, because the catch-all now
 # returns 404. Without these entries every one of them would answer 404 while
 # still rendering its page, which is the worst of both worlds.
-[[redirects]]
-  from = "/blog"
-  to = "/index.html"
-  status = 200
-
 [[redirects]]
   from = "/careers"
   to = "/index.html"
@@ -133,7 +129,8 @@
 # HEADERS
 # ---------------------------------------------------------------------------
 
-# The six placeholder routes and the admin dashboard.
+# The five remaining placeholder routes and the admin dashboard.
+# /blog noindex headers were removed when the blog host became indexable.
 #
 # NOTE ON WHAT CHANGED IN public/robots.txt ALONGSIDE THIS. These paths used to
 # be listed as `Disallow:` in robots.txt AND sent `X-Robots-Tag: noindex` here.
@@ -143,20 +140,9 @@
 # The Disallow lines were deleted so that these headers can actually be read.
 #
 # Each path is listed twice, bare and globbed. The glob is not redundant: a
-# `Disallow: /blog` prefix-matched /blog, /blog/ and /blog/anything, while a
-# header rule `for = "/blog"` matches only the exact path. Dropping the Disallow
-# without adding the glob would have left every subpath crawlable and
-# non-noindexed.
-[[headers]]
-  for = "/blog"
-  [headers.values]
-    X-Robots-Tag = "noindex, follow"
-
-[[headers]]
-  for = "/blog/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, follow"
-
+# Example: a former `Disallow: /blog` prefix-matched /blog and subpaths, while a
+# header rule `for = "/blog"` matches only the exact path. Remaining placeholders
+# still list bare + glob so subpaths stay noindexed.
 [[headers]]
   for = "/careers"
   [headers.values]
