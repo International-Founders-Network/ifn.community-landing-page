@@ -3,7 +3,7 @@ title: "US business banking for international founders: what peers gather first"
 description: "What international founders at IFN tend to gather before they walk into a US business banking conversation, at overview level."
 date: 2026-10-03
 updated: null
-draft: true
+draft: false
 tags: [banking, finance, operations, peer-notes]
 ogImage: /blog/us-business-banking-document-pack-og.png
 ---
