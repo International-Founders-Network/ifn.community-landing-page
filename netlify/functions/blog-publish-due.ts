@@ -11,15 +11,21 @@ import {
 import { triggerBuildHook } from './_lib/buildHook';
 
 /**
- * Every 15 minutes: promote `scheduled` posts whose publishAt has passed to
- * `live` in the Neon overlay, then request a rebuild so compile-blog includes
- * them. Only `scheduled` is ever promoted; draft / in_review / approved are
- * never touched, so nothing publishes without an admin approval first.
+ * Once daily: promote `scheduled` posts whose publishAt has passed to `live`
+ * in the Neon overlay, then request a rebuild so compile-blog includes them.
+ * Only `scheduled` is ever promoted; draft / in_review / approved are never
+ * touched, so nothing publishes without an admin approval first.
+ *
+ * Cron is UTC-only (Netlify). `5 14 * * *` = 14:05 UTC =
+ * 9:05 America/Chicago during CDT (UTC-5); 8:05 during CST (UTC-6).
+ * Empty runs still invoke the function (credits) but do NOT fire the build
+ * hook — rebuilds are gated on due.length > 0 below. Admin mark_live /
+ * schedule / hold still fire the hook immediately via admin-blog.
  *
  * Netlify runs scheduled functions on the production deploy only, not on
  * Deploy Previews.
  */
-export const handler = schedule('*/15 * * * *', async () => {
+export const handler = schedule('5 14 * * *', async () => {
     const dbUrl = process.env.NETLIFY_DATABASE_URL;
     if (!dbUrl) {
         console.warn('blog-publish-due: NETLIFY_DATABASE_URL is not set; nothing to do.');

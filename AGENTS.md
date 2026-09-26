@@ -155,7 +155,7 @@ violation, not merely untidy.
 frontmatter, overridden per slug by the Neon `blog_editorial` overlay that
 Admin → Blog writes. Content PRs set `status: in_review`, `draft: true`,
 `publishAt: null` and never set `scheduled`, `live`, or a real `publishAt`.
-`blog-publish-due` (every 15 min) promotes due scheduled posts and fires
+`blog-publish-due` (daily `5 14 * * *` UTC ≈ 9:05 America/Chicago CDT) promotes due scheduled posts and fires
 `NETLIFY_BUILD_HOOK_URL`. If the overlay read fails at build for any reason
 other than a missing table, the build fails on purpose: dropping the overlay
 would silently unpublish posts. See `openspec/changes/blog-editorial-publish/`.
