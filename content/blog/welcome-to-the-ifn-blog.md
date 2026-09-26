@@ -4,8 +4,17 @@ description: "Peer notes for international and immigrant founders building in Au
 date: 2026-09-26
 updated: null
 draft: false
+status: live
+publishAt: null
 tags: [austin, landing, community]
 ogImage: null
+
+# Phase 2 stubs only (defaults false; syndication is not wired yet)
+syndication:
+  medium: false
+  linkedin: false
+  x: false
+  instagram: false
 ---
 
 IFN runs a free monthly meetup in Austin for international and immigrant founders. The same questions show up every month: how people register a company in the United States, how they stay inside visa limits while they build, how they open a bank account, and how local funding conversations differ from the ones they had at home.

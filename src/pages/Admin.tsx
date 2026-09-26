@@ -5,6 +5,7 @@ import { Button } from '../components/Button';
 import { ButtonLink } from '../components/ButtonLink';
 import { ROADMAP_TIERS } from '../data/roadmapData';
 import { COMPETITORS, type Competitor } from '../data/competitorsData';
+import { AdminBlogPanel } from '../components/admin/AdminBlogPanel';
 
 declare global {
     interface Window {
@@ -53,8 +54,8 @@ interface Submissions {
     eventSignups: EventSignup[];
 }
 
-type Tab = 'contact' | 'join' | 'events' | 'roadmap' | 'competitors';
-type DataTab = Exclude<Tab, 'roadmap' | 'competitors'>;
+type Tab = 'contact' | 'join' | 'events' | 'roadmap' | 'competitors' | 'blog';
+type DataTab = Exclude<Tab, 'roadmap' | 'competitors' | 'blog'>;
 
 const TAB_META: Record<Tab, { label: string; one: string; many: string }> = {
     contact: { label: 'Contact messages', one: 'contact message', many: 'contact messages' },
@@ -62,6 +63,7 @@ const TAB_META: Record<Tab, { label: string; one: string; many: string }> = {
     events: { label: 'Event signups', one: 'event signup', many: 'event signups' },
     roadmap: { label: 'Roadmap', one: 'tier', many: 'tiers' },
     competitors: { label: 'Competitors', one: 'competitor', many: 'competitors' },
+    blog: { label: 'Blog', one: 'post', many: 'posts' },
 };
 
 function countLabel(n: number, tab: Tab) {
@@ -463,6 +465,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     const [refreshing, setRefreshing] = useState(false);
     const [tab, setTab] = useState<Tab>('contact');
     const [search, setSearch] = useState('');
+    // Blog panel fetches its own data; bumping this reloads it from Refresh.
+    const [blogRefresh, setBlogRefresh] = useState(0);
 
     const load = async () => {
         setError(null);
@@ -494,6 +498,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
             { key: 'events' as Tab, count: data?.eventSignups.length ?? null },
             { key: 'roadmap' as Tab, count: null },
             { key: 'competitors' as Tab, count: COMPETITORS.length },
+            { key: 'blog' as Tab, count: null },
         ],
         [data]
     );
@@ -531,6 +536,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
      */
     const statusText = (() => {
         if (tab === 'roadmap') return countLabel(ROADMAP_TIERS.length, 'roadmap');
+        if (tab === 'blog') return 'Editorial queue and schedule';
         if (tab === 'competitors') {
             const shown = filteredCompetitors.length;
             return query
@@ -587,7 +593,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    {tab !== 'roadmap' && (
+                    {tab !== 'roadmap' && tab !== 'blog' && (
                         <>
                             <label htmlFor="admin-search" className="sr-only">
                                 Search {TAB_META[tab].many}
@@ -602,7 +608,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                             />
                         </>
                     )}
-                    <Button variant="outline" size="sm" onClick={load} disabled={refreshing}>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={tab === 'blog' ? () => setBlogRefresh((n) => n + 1) : load}
+                        disabled={refreshing}
+                    >
                         <RefreshCw
                             className={`mr-2 h-4 w-4 ${refreshing ? 'animate-spin motion-status' : ''}`}
                             aria-hidden="true"
@@ -627,6 +638,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                 <div className="overflow-x-auto p-4">
                     {tab === 'roadmap' ? (
                         <RoadmapPanel />
+                    ) : tab === 'blog' ? (
+                        <AdminBlogPanel refreshKey={blogRefresh} onUnauthorized={onLogout} />
                     ) : tab === 'competitors' ? (
                         <CompetitorsPanel
                             rows={filteredCompetitors}

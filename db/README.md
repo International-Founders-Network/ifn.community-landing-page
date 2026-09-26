@@ -14,6 +14,10 @@ All schema changes should be documented in `db/migrations/`.
 
 - `00_initial_schema.sql`: Contains the current production-ready schema.
 - `03_memberships.sql`: Membership subscriptions (2026-08-27).
+- `04_blog_editorial.sql`: Blog editorial overlay (2026-09-26). Admin → Blog
+  writes `status` / `publish_at` per slug; `scripts/compile-blog.mjs` merges it
+  over Markdown frontmatter at build time. Also created at request time by
+  `netlify/functions/_lib/blogEditorial.ts`.
 - `01_qr_links.sql`: Schema for the QR code generator in `apps/qr`.
 - `02_event_venue_station_austin.sql`: **Data** migration, not schema. Rewrites
   the two historical `Capital Factory` values in `events.location_name` to
