@@ -3,9 +3,18 @@ title: "US business banking for international founders: what peers gather first"
 description: "What international founders at IFN tend to gather before they walk into a US business banking conversation, at overview level."
 date: 2026-10-03
 updated: null
-draft: false
+draft: true
+status: in_review
+publishAt: null
 tags: [banking, finance, operations, peer-notes]
 ogImage: /blog/us-business-banking-document-pack-og.png
+
+# Phase 2 stubs only (defaults false; syndication is not wired yet)
+syndication:
+  medium: false
+  linkedin: false
+  x: false
+  instagram: false
 ---
 
 After formation and EIN talk, banking is the next wall at IFN Austin meetups. Founders often say they assumed the hard part was "being foreign." What they describe afterward sounds more like incomplete company paper: mismatched names, a registered-agent address used as the operating address, missing EIN confirmation, or ownership docs that do not match passport spellings.

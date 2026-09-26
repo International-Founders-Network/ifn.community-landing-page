@@ -3,9 +3,18 @@ title: "Visa paths founders talk about at IFN (and when we stop talking)"
 description: "A peer map of visa paths founders discuss at IFN meetups, and the moments the room hands the conversation to immigration counsel."
 date: 2026-10-01
 updated: null
-draft: false
+draft: true
+status: in_review
+publishAt: null
 tags: [visas, immigration, peer-notes, orientation]
 ogImage: /blog/visa-paths-founders-talk-about-at-ifn-og.png
+
+# Phase 2 stubs only (defaults false; syndication is not wired yet)
+syndication:
+  medium: false
+  linkedin: false
+  x: false
+  instagram: false
 ---
 
 Visa questions arrive early at IFN Austin meetups. Someone is still on a student timeline. Someone else is abroad and wondering whether to form a company first. Someone on an employer-sponsored status asks what they can do for a side project without putting their status at risk.

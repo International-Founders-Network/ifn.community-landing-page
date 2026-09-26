@@ -3,9 +3,18 @@ title: "Forming a US company from abroad: what peers actually sequence"
 description: "What international founders at IFN Austin tend to sequence when forming a US company from abroad, and when they stop and call counsel."
 date: 2026-09-29
 updated: null
-draft: false
+draft: true
+status: in_review
+publishAt: null
 tags: [entity, formation, us-market-entry, peer-notes]
 ogImage: /blog/forming-a-us-company-from-abroad-og.png
+
+# Phase 2 stubs only (defaults false; syndication is not wired yet)
+syndication:
+  medium: false
+  linkedin: false
+  x: false
+  instagram: false
 ---
 
 At almost every IFN Austin meetup, someone still abroad asks the same cluster: Can I form a United States company before I have work authorization? LLC or C-corp? Which state? When does the EIN happen? How do people avoid confusing formation with permission to work?
