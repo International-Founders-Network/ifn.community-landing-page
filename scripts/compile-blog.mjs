@@ -4,9 +4,31 @@
  * Source: content/blog/<slug>.md (YAML frontmatter + Markdown body)
  * Output: src/data/blog.generated.ts (committed, like pricing/photos)
  *
- * Drafts (draft: true) are excluded from the published list. Filename stem is
- * the slug unless frontmatter.slug overrides it. Body is compiled to HTML with
- * remark/rehype so React can render without a runtime Markdown parser.
+ * Output: netlify/functions/_data/blog-queue.json (committed; metadata only)
+ *
+ * EDITORIAL GATE (openspec/changes/blog-editorial-publish). Every post carries a
+ * `status` (draft | in_review | approved | scheduled | live) and an optional
+ * `publishAt` (ISO-8601 with offset). A post reaches BLOG_POSTS, and therefore
+ * the public bundle, prerender, sitemap and RSS, only when
+ *   status === 'live', or
+ *   status === 'scheduled' AND publishAt <= now.
+ * draft / in_review / approved never publish, whatever else is set.
+ *
+ * Legacy `draft` boolean: with no `status`, draft: true => draft and
+ * draft: false/omitted => live (the welcome post predates `status`). When
+ * `status` is present it wins.
+ *
+ * Neon overlay: when NETLIFY_DATABASE_URL is set, rows in `blog_editorial`
+ * override frontmatter `status` / `publishAt` by slug (never body or title).
+ * That is how Admin approvals reach the build without editing Markdown.
+ *
+ * The queue JSON lists ALL posts, including drafts, but carries no HTML. It is
+ * read by the admin-blog function only; nothing under src/ imports it, so draft
+ * copy never ships in the client bundle.
+ *
+ * Filename stem is the slug unless frontmatter.slug overrides it. Body is
+ * compiled to HTML with remark/rehype so React can render without a runtime
+ * Markdown parser.
  *
  * Runs before tsc/vite in `npm run build`. Safe to run alone: `node scripts/compile-blog.mjs`.
  */
@@ -21,11 +43,18 @@ import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeSanitize from 'rehype-sanitize';
 import rehypeStringify from 'rehype-stringify';
+import { neon } from '@neondatabase/serverless';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const CONTENT_DIR = join(ROOT, 'content', 'blog');
 const OUT_PATH = join(ROOT, 'src', 'data', 'blog.generated.ts');
+const QUEUE_PATH = join(ROOT, 'netlify', 'functions', '_data', 'blog-queue.json');
+
+const STATUSES = ['draft', 'in_review', 'approved', 'scheduled', 'live'];
+const SYNDICATION_CHANNELS = ['medium', 'linkedin', 'x', 'instagram'];
+/** ISO-8601 date-time that states its offset. A bare local time is ambiguous. */
+const ISO_WITH_OFFSET = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})$/;
 
 function escapeTsString(value) {
     return JSON.stringify(value ?? '');
@@ -64,12 +93,92 @@ function toIsoDate(value) {
     return null;
 }
 
+function parseStatus(data, file) {
+    if (data.status === undefined || data.status === null || data.status === '') {
+        return data.draft ? 'draft' : 'live';
+    }
+    const status = String(data.status).trim().toLowerCase();
+    if (STATUSES.includes(status)) return status;
+    // Fail closed: an unrecognised status must never make a post public.
+    console.warn(`${file}: unknown status "${data.status}"; treating as draft.`);
+    return 'draft';
+}
+
+/**
+ * Normalise publishAt to an ISO string, or null. YAML parses an unquoted
+ * timestamp into a Date (instant preserved, offset dropped), so accept that too.
+ */
+function parsePublishAt(value, label) {
+    if (value === undefined || value === null || value === '') return null;
+    if (value instanceof Date) {
+        if (!Number.isNaN(value.getTime())) return value.toISOString();
+    } else if (typeof value === 'string') {
+        const trimmed = value.trim();
+        if (ISO_WITH_OFFSET.test(trimmed) && !Number.isNaN(Date.parse(trimmed))) return trimmed;
+    }
+    console.warn(`${label}: invalid publishAt ${JSON.stringify(value)}; ignoring (needs ISO-8601 with offset).`);
+    return null;
+}
+
+function parseSyndication(value) {
+    const out = {};
+    for (const channel of SYNDICATION_CHANNELS) {
+        out[channel] = Boolean(value && typeof value === 'object' && value[channel] === true);
+    }
+    return out;
+}
+
+/**
+ * The single public gate. publishAt carries its own offset, so comparing
+ * instants IS comparing against "now in America/Chicago": 09:00-05:00 and
+ * 14:00Z are the same moment. No wall-clock conversion is needed or wanted.
+ */
+function isPublic(status, publishAt, nowMs) {
+    if (status === 'live') return true;
+    if (status === 'scheduled' && publishAt) return Date.parse(publishAt) <= nowMs;
+    return false;
+}
+
+/**
+ * Editorial overlay from Neon. No database configured => frontmatter only
+ * (local dev, CI). Table not created yet => frontmatter only. Any OTHER failure
+ * fails the build on purpose: silently dropping the overlay would unpublish
+ * every post that went live through Admin, and a failed build leaves the
+ * previous deploy serving instead.
+ */
+async function loadOverlay() {
+    const url = process.env.NETLIFY_DATABASE_URL;
+    if (!url) return new Map();
+    const sql = neon(url);
+    try {
+        const rows = await sql`SELECT slug, status, publish_at FROM blog_editorial`;
+        const overlay = new Map();
+        for (const row of rows) {
+            if (!STATUSES.includes(row.status)) continue;
+            overlay.set(row.slug, {
+                status: row.status,
+                publishAt: row.publish_at ? new Date(row.publish_at).toISOString() : null,
+            });
+        }
+        console.log(`Blog editorial overlay: ${overlay.size} row(s) from Neon.`);
+        return overlay;
+    } catch (err) {
+        if (err && err.code === '42P01') {
+            console.warn('Blog editorial overlay: blog_editorial table not found; using frontmatter only.');
+            return new Map();
+        }
+        throw err;
+    }
+}
+
 async function compile() {
     if (!existsSync(CONTENT_DIR)) {
         mkdirSync(CONTENT_DIR, { recursive: true });
     }
 
     const files = readdirSync(CONTENT_DIR).filter((name) => name.endsWith('.md'));
+    const overlay = await loadOverlay();
+    const nowMs = Date.now();
     const posts = [];
 
     for (const file of files) {
@@ -86,6 +195,16 @@ async function compile() {
         }
 
         const draft = Boolean(data.draft);
+        let status = parseStatus(data, file);
+        let publishAt = parsePublishAt(data.publishAt, file);
+        const override = overlay.get(slug);
+        if (override) {
+            status = override.status;
+            publishAt = override.publishAt;
+        }
+        if (status === 'scheduled' && !publishAt) {
+            console.warn(`${file}: status scheduled without publishAt; not public.`);
+        }
         const title = typeof data.title === 'string' ? data.title.trim() : '';
         const description =
             typeof data.description === 'string' ? data.description.trim() : '';
@@ -115,14 +234,18 @@ async function compile() {
             date,
             updated,
             draft,
+            status,
+            publishAt,
+            syndication: parseSyndication(data.syndication),
             tags,
             ogImage,
             html,
+            isPublic: isPublic(status, publishAt, nowMs),
         });
     }
 
     const published = posts
-        .filter((post) => !post.draft)
+        .filter((post) => post.isPublic)
         .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.slug.localeCompare(b.slug)));
 
     const body = `/**
@@ -131,7 +254,8 @@ async function compile() {
  * Written by scripts/compile-blog.mjs from content/blog/*.md.
  * Regenerate with: node scripts/compile-blog.mjs
  *
- * Draft posts are excluded. Filename stem is the default slug.
+ * Only public posts are included: status live, or scheduled with publishAt
+ * already past. Drafts, in-review and approved posts never appear here.
  */
 
 export interface BlogPost {
@@ -173,6 +297,24 @@ export function getPostBySlug(slug: string): BlogPost | undefined {
 
     writeFileSync(OUT_PATH, body, 'utf8');
     console.log(`Compiled ${published.length} published blog post(s) → src/data/blog.generated.ts`);
+
+    // Metadata only. No html, no description body text beyond what Admin lists.
+    const queue = posts
+        .map((post) => ({
+            slug: post.slug,
+            title: post.title,
+            date: post.date,
+            status: post.status,
+            publishAt: post.publishAt,
+            tags: post.tags,
+            draft: post.draft,
+            syndication: post.syndication,
+            publicInBuild: post.isPublic,
+        }))
+        .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.slug.localeCompare(b.slug)));
+    mkdirSync(dirname(QUEUE_PATH), { recursive: true });
+    writeFileSync(QUEUE_PATH, `${JSON.stringify({ posts: queue }, null, 2)}\n`, 'utf8');
+    console.log(`Wrote ${queue.length} post(s) to the editorial queue → netlify/functions/_data/blog-queue.json`);
 }
 
 compile().catch((err) => {
