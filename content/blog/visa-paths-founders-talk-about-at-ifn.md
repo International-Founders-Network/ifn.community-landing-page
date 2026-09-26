@@ -3,9 +3,9 @@ title: "Visa paths founders talk about at IFN (and when we stop talking)"
 description: "A peer map of visa paths founders discuss at IFN meetups, and the moments the room hands the conversation to immigration counsel."
 date: 2026-10-01
 updated: null
-draft: false
+draft: true
 tags: [visas, immigration, peer-notes, orientation]
-ogImage: /og-image.png
+ogImage: /blog/visa-paths-founders-talk-about-at-ifn-og.png
 ---
 
 Visa questions arrive early at IFN Austin meetups. Someone is still on a student timeline. Someone else is abroad and wondering whether to form a company first. Someone on an employer-sponsored status asks what they can do for a side project without putting their status at risk.
@@ -26,7 +26,9 @@ Founders at IFN tend to talk in paths and constraints:
 - Who petitions: me, my company, an employer, or a family member?
 - When do I stop brainstorming and hire counsel?
 
-Peer stories help you ask better questions. They do not replace a case assessment. A careful public overview is Cooley's [June 2025 note on foreign founders, visas, and corporate structure](https://www.cooley.com/news/insight/2025/2025-06-03-what-foreign-founders-need-to-know-about-us-visas-and-corporate-structure). Read it as orientation. Your attorney still owns your case.
+Peer stories help you ask better questions. They do not replace a case assessment. Law firm explainers on foreign founders, visas, and corporate structure can be useful public orientation. Read them that way. Your attorney still owns your case.
+
+The room also compares notes on timing: when to talk to counsel relative to incorporation, fundraising, or a planned trip. That timing talk stays peer pattern. It is never a filing calendar.
 
 ## Paths that come up often (names + official links only)
 
@@ -43,7 +45,7 @@ The names below are classifications founders discuss at meetups. Official pages 
 
 A recurring IFN lesson: people form a US company and then assume the visa problem is solved. It is not.
 
-Company paper and personal status move on different clocks. Peers who stay calm tend to keep a written list of what their current status allows, form the entity only when it serves a clear ops or fundraising job ([forming a US company from abroad](/blog/forming-a-us-company-from-abroad)), gather banking materials after the entity exists ([banking overview](/blog/us-business-banking-document-pack)), and book immigration counsel before they restructure equity "for a visa story."
+Company paper and personal status move on different clocks. Peers who stay calm tend to keep a written list of what their current status allows, form the entity only when it serves a clear ops or fundraising job, gather banking materials after the entity exists, and book immigration counsel before they restructure equity "for a visa story."
 
 ## When we stop talking
 
@@ -60,7 +62,7 @@ IFN is a peer room. Counsel is a licensed professional with your facts and your 
 
 ## Soft next steps
 
-Bring one status question to the next IFN meetup. Guests stay free via the meetup; register on Luma or see dates on [ifn.community](https://ifn.community). If you want the private member channel and members-only call, [Become a member ($149/year)](/membership). Deeper visa pathway maps and teaser PDFs live with membership and [Resources](/resources) as that hub fills in.
+Bring one status question to the next IFN meetup. Guests stay free via the meetup; register on Luma or see dates on [ifn.community](/). If you want the private member channel and members-only call, [Become a member](/membership). Deeper visa pathway maps and teaser PDFs live with membership and [Resources](/resources) as that hub fills in.
 
 ## Sources
 
@@ -70,4 +72,3 @@ Bring one status question to the next IFN meetup. Guests stay free via the meetu
 - USCIS, [L-1A](https://www.uscis.gov/working-in-the-united-states/temporary-workers/l-1a-intracompany-transferee-executive-or-manager)
 - USCIS, [L-1B](https://www.uscis.gov/working-in-the-united-states/temporary-workers/l-1b-intracompany-transferee-specialized-knowledge)
 - US Department of State, [Treaty Countries](https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/fees/treaty.html)
-- Cooley, [US visas and corporate structure](https://www.cooley.com/news/insight/2025/2025-06-03-what-foreign-founders-need-to-know-about-us-visas-and-corporate-structure) (orientation; not IFN advice)
