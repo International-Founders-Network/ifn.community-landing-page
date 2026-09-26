@@ -4,6 +4,7 @@ import { Container } from '../components/Container';
 import { Button } from '../components/Button';
 import { ButtonLink } from '../components/ButtonLink';
 import { ROADMAP_TIERS } from '../data/roadmapData';
+import { COMPETITORS, type Competitor } from '../data/competitorsData';
 
 declare global {
     interface Window {
@@ -52,14 +53,15 @@ interface Submissions {
     eventSignups: EventSignup[];
 }
 
-type Tab = 'contact' | 'join' | 'events' | 'roadmap';
-type DataTab = Exclude<Tab, 'roadmap'>;
+type Tab = 'contact' | 'join' | 'events' | 'roadmap' | 'competitors';
+type DataTab = Exclude<Tab, 'roadmap' | 'competitors'>;
 
 const TAB_META: Record<Tab, { label: string; one: string; many: string }> = {
     contact: { label: 'Contact messages', one: 'contact message', many: 'contact messages' },
     join: { label: 'Join applications', one: 'join application', many: 'join applications' },
     events: { label: 'Event signups', one: 'event signup', many: 'event signups' },
     roadmap: { label: 'Roadmap', one: 'tier', many: 'tiers' },
+    competitors: { label: 'Competitors', one: 'competitor', many: 'competitors' },
 };
 
 function countLabel(n: number, tab: Tab) {
@@ -335,6 +337,104 @@ function RoadmapPanel() {
     );
 }
 
+function competitorSearchFields(row: Competitor): (string | null)[] {
+    return [
+        row.name,
+        row.kind,
+        row.overlap,
+        row.summary,
+        row.geography,
+        row.venueNote,
+        row.notes,
+        row.status,
+        row.activityStatus,
+        row.lastReviewed,
+        ...row.compareOn,
+        ...row.sources,
+        row.url,
+        row.eventsUrl,
+    ];
+}
+
+function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
+    return (
+        <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-ink underline decoration-rule underline-offset-2 hover:decoration-ink"
+        >
+            {children}
+        </a>
+    );
+}
+
+function CompetitorsPanel({ rows, searching }: { rows: Competitor[]; searching: boolean }) {
+    return (
+        <table className="w-full text-sm">
+            <thead>
+                <tr className="border-b border-rule text-left text-muted">
+                    <th scope="col" className={TH}>Name</th>
+                    <th scope="col" className={TH}>Kind</th>
+                    <th scope="col" className={TH}>Overlap</th>
+                    <th scope="col" className={TH}>Geography</th>
+                    <th scope="col" className={TH}>Compare-on</th>
+                    <th scope="col" className={TH}>Activity</th>
+                    <th scope="col" className={TH}>Status</th>
+                    <th scope="col" className={TH}>Last reviewed</th>
+                    <th scope="col" className={TH}>Links</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows.length === 0 && <EmptyRow colSpan={9} searching={searching} />}
+                {rows.map((row) => (
+                    <tr key={row.id} className="border-b border-rule align-top">
+                        <td className="py-2 pr-4 font-medium">
+                            <div>{row.name}</div>
+                            <p className="mt-1 max-w-xs text-xs font-normal text-muted">{row.summary}</p>
+                        </td>
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.kind}</td>
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.overlap}</td>
+                        <td className="py-2 pr-4">{row.geography}</td>
+                        <td className="py-2 pr-4">
+                            <ul className="flex max-w-xs flex-wrap gap-1">
+                                {row.compareOn.map((chip) => (
+                                    <li
+                                        key={chip}
+                                        className="rounded border border-rule bg-band px-1.5 py-0.5 text-xs text-muted"
+                                    >
+                                        {chip}
+                                    </li>
+                                ))}
+                            </ul>
+                        </td>
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.activityStatus}</td>
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">{row.status}</td>
+                        <td className="whitespace-nowrap py-2 pr-4 text-muted">
+                            <time dateTime={row.lastReviewed}>{row.lastReviewed}</time>
+                        </td>
+                        <td className="py-2 pr-4">
+                            <ul className="space-y-1">
+                                {row.url && (
+                                    <li>
+                                        <ExternalLink href={row.url}>Site</ExternalLink>
+                                    </li>
+                                )}
+                                {row.eventsUrl && (
+                                    <li>
+                                        <ExternalLink href={row.eventsUrl}>Events</ExternalLink>
+                                    </li>
+                                )}
+                                {!row.url && !row.eventsUrl && <li className="text-muted">-</li>}
+                            </ul>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+}
+
 /**
  * Placeholder rows while the first load runs. `motion-status` keeps the pulse
  * alive under prefers-reduced-motion: the global rule collapses animations to
@@ -393,6 +493,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
             { key: 'join' as Tab, count: data?.joinApplications.length ?? null },
             { key: 'events' as Tab, count: data?.eventSignups.length ?? null },
             { key: 'roadmap' as Tab, count: null },
+            { key: 'competitors' as Tab, count: COMPETITORS.length },
         ],
         [data]
     );
@@ -412,6 +513,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         };
     }, [data, query]);
 
+    const filteredCompetitors = useMemo(
+        () => COMPETITORS.filter((r) => matches(query, competitorSearchFields(r))),
+        [query]
+    );
+
     const totals: Record<DataTab, number> = {
         contact: data?.contactMessages.length ?? 0,
         join: data?.joinApplications.length ?? 0,
@@ -425,6 +531,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
      */
     const statusText = (() => {
         if (tab === 'roadmap') return countLabel(ROADMAP_TIERS.length, 'roadmap');
+        if (tab === 'competitors') {
+            const shown = filteredCompetitors.length;
+            return query
+                ? `Showing ${shown} of ${countLabel(COMPETITORS.length, 'competitors')}`
+                : countLabel(COMPETITORS.length, 'competitors');
+        }
         if (!filtered) return error ? 'Could not load submissions.' : 'Loading submissions…';
         const shown = filtered[tab].length;
         return query
@@ -515,6 +627,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                 <div className="overflow-x-auto p-4">
                     {tab === 'roadmap' ? (
                         <RoadmapPanel />
+                    ) : tab === 'competitors' ? (
+                        <CompetitorsPanel
+                            rows={filteredCompetitors}
+                            searching={query !== ''}
+                        />
                     ) : filtered ? (
                         <SubmissionTable tab={tab} rows={filtered} searching={query !== ''} />
                     ) : (
