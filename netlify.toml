@@ -6,7 +6,7 @@
   # left to chance. If it is missing the prerender fails the build loudly, which
   # is correct — silently shipping the empty SPA shell is the failure this whole
   # change exists to prevent.
-  # @ifn/ui is private (git+https). See scripts/netlify-build.sh + IFN_UI_READ_TOKEN.
+  # @ifn/ui is public (git+https). IFN_UI_READ_TOKEN / GIT_CONFIG_* no longer required.
   command = "bash scripts/netlify-build.sh"
   publish = "dist"
 

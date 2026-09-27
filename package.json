@@ -15,8 +15,7 @@
     "prerender": "node scripts/prerender.mjs",
     "sync-pricing": "node scripts/sync-pricing.mjs",
     "check-pricing-drift": "node scripts/check-pricing-drift.mjs",
-    "compile-blog": "node scripts/compile-blog.mjs",
-    "preinstall": "bash scripts/auth-private-github.sh"
+    "compile-blog": "node scripts/compile-blog.mjs"
   },
   "dependencies": {
     "@ifn/ui": "github:International-Founders-Network/ifn-ui#47bd91708ac88c978c7e31e50dae68ae4a60da77",
