@@ -577,23 +577,25 @@ right aligned to the action. It is 44rem wide (capped at the viewport less
 2px `--ink` bar under whichever trigger is open, sitting on the panel's top
 edge, so trigger and panel read as one piece.
 
-Panels show photos, not icons. Every row leads with a frame reused from the
-gallery derivatives in `public/photos/`, decorative (`alt=""`) because the
-link already names its destination. No new photography, and no lucide icon
-tiles as the primary visual.
+Panels keep photography to one place: the Events left feature. Every
+destination row leads with the IFN period-mark on a soft tile (band, paper,
+ink wash, or accent wash), decorative because the link already names its
+destination. No gallery thumbs on rows, and no lucide icon tiles as the
+primary visual.
 
 The Events panel is two columns. On the left, a feature photo under an `--ink`
 bottom scrim carries the group label and intro in `--paper`; it sets the scene
 and is not a link. On the right, a vertical list of Meetups, Accountability Pod
-and Workshops, each a small photo thumb, the name, and one `--muted` line
+and Workshops, each a small square mark tile, the name, and one `--muted` line
 paraphrased from that route's `ROUTE_SEO` description. Resources and
 Collaborate open with the group label (uppercase `--muted`) and one `--ink`
-intro line, then their two rows as cards, photo on top. The accessible name is
-the item name alone and the line is its description. On hover and focus a row
-fills with `--band`, its photo scales to 1.05 inside a clipped box, and in the
-Events list an arrow slides in. The current route adds a 2px `--ink` edge (left
-in the list, top on a card) and semibold weight so it does not rely on tone.
-The accent never appears in a panel.
+intro line, then their two rows as cards, a tall mark tile on top. The
+accessible name is the item name alone and the line is its description. On
+hover and focus a row fills with `--band`, its mark scales to 1.05 inside a
+clipped box, and in the Events list an arrow slides in. The current route adds
+a 2px `--ink` edge (left in the list, top on a card) and semibold weight so it
+does not rely on tone. The accent never fills a panel tile; it only appears as
+the period inside the mark, or as a soft wash behind it.
 
 **Viewport and Indicator now earn their place.** The first grouped version
 skipped both, rendering each panel inline in its `<li>` and positioning it by
@@ -617,9 +619,9 @@ height so the switch stays a slide, not a resize. Every animation is
 `motion-safe:` and at rest under reduced motion.
 
 On mobile the same table renders as flat sections under uppercase `--muted`
-labels (Events, Resources, Collaborate), each row led by a small photo thumb,
-with Gallery and About as plain rows in their table positions and the pill
-last. Never a
+labels (Events, Resources, Collaborate), each row led by a small period-mark
+tile, with Gallery and About as plain rows in their table positions and the
+pill last. Never a
 disclosure inside the menu disclosure.
 
 ### The modal

@@ -7,9 +7,11 @@ and how visitors reach them by pointer, keyboard and touch on desktop and mobile
 
 Revision 3 (Kyra and Venkat feedback on PR #38) locks the IA below: Events
 gains Accountability Pod, Sponsors and Partners move out of About into a
-Collaborate menu, About becomes a plain link, and panel rows lead with gallery
-photos rather than icon tiles. The requirements are written against that
-final state.
+Collaborate menu, and About becomes a plain link. Revision 4 keeps that IA and
+trims panel visuals: only the Events feature column may use a gallery photo;
+destination row leading visuals are abstract brand marks (period-mark on soft
+tiles), not gallery frames and not lucide icon tiles as primary. The
+requirements are written against that final state.
 
 ## ADDED Requirements
 
@@ -58,11 +60,12 @@ pod exists, any member count or any schedule. It SHALL be listed in
 ### Requirement: Desktop group menus
 On desktop, each group SHALL open a panel listing its links when the visitor
 hovers or clicks its trigger, or activates it with Enter or Space. Each panel
-link SHALL show a decorative photo from the in-repo gallery frames (not an
-icon tile), the item name and a one line description, and SHALL expose the item
-name as its accessible name. The Events panel SHALL be two columns: a feature
-photo carrying the group intro on the left, and its three links as a vertical
-list on the right. Escape SHALL
+link SHALL show a decorative abstract brand mark (the IFN period-mark on a soft
+tile), the item name and a one line description, and SHALL expose the item name
+as its accessible name. Panel links SHALL NOT lead with gallery photos or with
+lucide icon tiles as the primary visual. The Events panel SHALL be two columns:
+a feature photo carrying the group intro on the left (the only gallery photo in
+the nav), and its three links as a vertical list on the right. Escape SHALL
 close an open panel and return focus to its trigger. Every group's panel SHALL
 render in one shared panel under the bar that lies wholly inside the viewport
 at 768px and wider, and an indicator SHALL mark the open trigger. Clicking outside SHALL
@@ -73,6 +76,10 @@ a trigger whose panel is already open SHALL NOT close it. Triggers SHALL expose
 #### Scenario: Keyboard open and Escape
 - **WHEN** a keyboard user focuses the Events trigger, presses Enter, then presses Escape
 - **THEN** the panel opens showing Meetups, Accountability Pod and Workshops, then closes, and focus is on the Events trigger
+
+#### Scenario: Only Events feature uses a gallery photo
+- **WHEN** a visitor opens Events, Resources and Collaborate in turn
+- **THEN** Events shows one feature photo on the left with mark tiles on its rows, and Resources and Collaborate rows lead with mark tiles and no gallery photos
 
 #### Scenario: Shared panel and indicator
 - **WHEN** a visitor on a 768px viewport opens Events and then moves to Collaborate

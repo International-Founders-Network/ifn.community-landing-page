@@ -129,26 +129,27 @@ exactly like `/mentorship`: lazy route, non-indexable `ROUTE_SEO` entry,
 `NOINDEX_PATHS`, a 200 rewrite ahead of the 404 catch-all, and
 `X-Robots-Tag: noindex, follow` on the bare path and `/*`.
 
-**Photos, not icon tiles.** Rows lead with a gallery frame instead of a lucide
-icon tile, so the panels show the actual room. Frames come from the existing
-tile derivatives in `public/photos/` (avif, webp, jpeg fallback). The paths are
-built in `Navbar.tsx` from slot and tile width rather than imported from
-`src/data/photos.generated.ts`, because the nav ships in the entry chunk and
-that module (with every alt text) does not. Images are decorative (`alt=""`,
-hidden) because the link's name already says where it goes, and `lazy`, which
-matters little since panels mount only when opened.
+**One photo hero; mark tiles elsewhere (revision 4).** Only the Events left
+feature uses a gallery frame from `public/photos/` (slot + tile path built in
+`Navbar.tsx`, decorative and `lazy`). Every destination row leads with the IFN
+period-mark on a soft tile instead of a gallery thumb or a lucide icon tile.
+The mark is drawn inline from the brand master geometry (same as
+`public/favicon.svg` / ifn-brand `ifn-period-mark.svg`) so disc, ring and
+period follow `--paper` / `--band` / `--ink` / `--accent`. Row tiles vary
+lightly across band, paper, ink wash and accent wash so neighbours do not read
+as clones. Accent never fills a tile.
 
 **Events: feature plus vertical list.** The Events panel is a two column grid:
 a 17rem feature photo (the 1280 view tier, so it stays sharp on 2x) under an
 `--ink` bottom scrim carrying the group label and intro in `--paper`, and the
-three rows stacked on the right, each a small thumb, name and line, with the
-arrow sliding in on hover and focus. The feature is not a link. Resources and
-Collaborate keep the label and intro strip and set their two rows as cards,
-photo on top. Every panel is 44rem wide (capped at `100vw - 3rem`) and at least
-16rem tall, so the Viewport switch stays close to a pure slide. The active row
-carries a 2px `--ink` edge (left in the list, top on a card) plus semibold.
-Thumbs scale 1.05 on hover inside a clipped box, transform only and
-`motion-safe:`. Mobile rows swap the icon tile for a small thumb.
+three rows stacked on the right, each a small square mark tile, name and line,
+with the arrow sliding in on hover and focus. The feature is not a link.
+Resources and Collaborate keep the label and intro strip and set their two rows
+as cards, tall mark tile on top. Every panel is 44rem wide (capped at
+`100vw - 3rem`) and at least 16rem tall, so the Viewport switch stays close to a
+pure slide. The active row carries a 2px `--ink` edge (left in the list, top on
+a card) plus semibold. Marks scale 1.05 on hover inside a clipped box,
+transform only and `motion-safe:`. Mobile rows use a small mark tile.
 
 ## Risks / Trade-offs
 
@@ -165,9 +166,10 @@ Thumbs scale 1.05 on hover inside a clipped box, transform only and
 - [About is now a menu, so `/about` takes two actions from the bar instead of
   one] → Resolved in revision 3: About is a link again and Sponsors and
   Partners sit under Collaborate.
-- [Nav photo paths are strings, not imports from the generated photo module]
-  → If `npm run photos` renames a slot or tile width, a nav thumb 404s without
-  failing the build. Accepted to keep the photo module out of the entry chunk;
+- [Events feature photo path is a string, not an import from the generated photo module]
+  → If `npm run photos` renames that slot or tile width, the one nav feature
+  photo 404s without failing the build. Accepted to keep the photo module out
+  of the entry chunk; row visuals no longer depend on gallery frames.
   the slots used are listed in one table in `Navbar.tsx`.
 - [Accountability Pod links to a placeholder] → Better than a dead link, and
   the page says plainly that pods are not open yet.

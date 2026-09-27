@@ -6,7 +6,8 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ButtonLink } from './ButtonLink';
 
 
-// Primary nav IA (openspec/changes/nav-ia-grouped-menu, revision 3): an Events
+// Primary nav IA (openspec/changes/nav-ia-grouped-menu, revision 3; visuals
+// revision 4): an Events
 // menu, a Resources menu, a Gallery link, a Collaborate menu holding Sponsors
 // and Partners, an About link, then one action. There is no separate
 // Membership link because "Become a member" already carries that intent.
@@ -24,11 +25,17 @@ function photoPath(photo: NavPhoto, width: number, ext: 'avif' | 'webp' | 'jpg')
     return `/photos/gallery-${photo.slot}-${width}w.${ext}`;
 }
 
-type NavChildItem = NavLinkItem & { description: string; photo: NavPhoto };
+// The ground of a row's period-mark tile (revision 4). Rows vary it lightly so
+// neighbouring tiles do not read as clones. Every value is a brand token or a
+// low opacity wash of one; the accent only ever washes, it never fills a tile.
+type MarkTone = 'band' | 'paper' | 'ink' | 'accent';
+
+type NavChildItem = NavLinkItem & { description: string; tone: MarkTone };
 // `intro` is the one line that heads the group's desktop panel. Like the row
 // descriptions it is paraphrased from ROUTE_SEO. `feature` puts a large photo
-// in a left column with the rows stacked beside it; groups without one lay
-// their rows out two across under the intro.
+// in a left column with the rows stacked beside it, and it is the only photo
+// anywhere in the nav; groups without one lay their rows out two across under
+// the intro.
 type NavGroupItem = {
     name: string;
     intro: string;
@@ -53,19 +60,19 @@ const NAV_ITEMS: NavItem[] = [
                 name: 'Meetups',
                 href: '/events',
                 description: 'Free monthly evenings in Austin',
-                photo: { slot: 'aug-networking', tile: 640 },
+                tone: 'band',
             },
             {
                 name: 'Accountability Pod',
                 href: '/accountability-pods',
                 description: 'Small founder groups checking in on goals. Coming soon',
-                photo: { slot: 'apr-gesture', tile: 704 },
+                tone: 'accent',
             },
             {
                 name: 'Workshops',
                 href: '/workshops',
                 description: 'Visas, banking, hiring, fundraising',
-                photo: { slot: 'aug-room', tile: 640 },
+                tone: 'ink',
             },
         ],
     },
@@ -77,13 +84,13 @@ const NAV_ITEMS: NavItem[] = [
                 name: 'Library',
                 href: '/resources',
                 description: 'Guides for founders building in the US',
-                photo: { slot: 'feb-slide', tile: 640 },
+                tone: 'band',
             },
             {
                 name: 'Blogs',
                 href: '/blog',
                 description: 'Peer notes from founders in Austin',
-                photo: { slot: 'sep-talk', tile: 640 },
+                tone: 'accent',
             },
         ],
     },
@@ -96,13 +103,13 @@ const NAV_ITEMS: NavItem[] = [
                 name: 'Sponsors',
                 href: '/sponsors',
                 description: 'Back the monthly meetups',
-                photo: { slot: 'aug-group', tile: 640 },
+                tone: 'ink',
             },
             {
                 name: 'Partners',
                 href: '/partners',
                 description: 'Collaborators who help run IFN',
-                photo: { slot: 'jul-hall', tile: 640 },
+                tone: 'paper',
             },
         ],
     },
@@ -110,9 +117,10 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 /**
- * A decorative gallery frame. The link around it already carries the name, so
- * the image is alt="" and hidden from the accessibility tree. Panels mount only
- * when opened, so `lazy` keeps every frame off the first load.
+ * The Events feature photo, the one gallery frame in the nav. It is decorative
+ * (alt="", hidden from the accessibility tree) because the panel's text carries
+ * the meaning. Panels mount only when opened, so `lazy` keeps it off the first
+ * load.
  */
 function NavPicture({
     photo,
@@ -137,6 +145,47 @@ function NavPicture({
                 className={className}
             />
         </picture>
+    );
+}
+
+// Tile ground per tone, and the disc fill that stays visible on it: the mark's
+// large disc is --band in the brand master, which would vanish on a --band
+// tile, so every non-paper ground takes a --paper disc instead.
+const MARK_TONES: Record<MarkTone, { tile: string; disc: string }> = {
+    band: { tile: 'bg-band', disc: 'var(--paper)' },
+    paper: { tile: 'bg-paper border border-rule/40', disc: 'var(--band)' },
+    ink: { tile: 'bg-ink/[0.06]', disc: 'var(--paper)' },
+    accent: { tile: 'bg-accent/[0.06]', disc: 'var(--paper)' },
+};
+
+/**
+ * A row's leading visual: the IFN period-mark on a soft tile. Geometry is the
+ * brand master (ifn-brand assets/logo/ifn-period-mark.svg, same as
+ * public/favicon.svg): a band disc, an ink ring and an accent period. It is
+ * drawn inline with the colour tokens rather than loaded as an <img>, so it
+ * follows the dark theme, which a file with baked in hex values cannot.
+ * Decorative, because the link already names its destination.
+ */
+function NavMark({
+    tone,
+    className,
+    markClassName,
+}: {
+    tone: MarkTone;
+    className: string;
+    markClassName: string;
+}) {
+    const { tile, disc } = MARK_TONES[tone];
+    return (
+        <span aria-hidden="true" className={`flex shrink-0 overflow-hidden ${tile} ${className}`}>
+            <svg viewBox="0 0 72 72" className={markClassName} focusable="false">
+                <g transform="translate(6, 11)">
+                    <circle cx="19" cy="31" r="19" fill={disc} />
+                    <circle cx="41" cy="15" r="15" fill="none" stroke="var(--ink)" strokeWidth="1.25" />
+                    <circle cx="58" cy="36" r="6" fill="var(--accent)" />
+                </g>
+            </svg>
+        </span>
     );
 }
 
@@ -207,9 +256,9 @@ const PANEL_WIDTH = 'w-[min(44rem,calc(100vw-3rem))]';
 
 /**
  * The destination rows of one desktop panel. `stack` is the vertical list
- * beside a feature photo: a small thumb, the name and a one line description
- * in a row. `grid` sets them two across under the intro as cards, the photo
- * wide on top, so a two item panel fills the same height as Events.
+ * beside a feature photo: a small square mark tile, the name and a one line
+ * description in a row. `grid` sets them two across under the intro as cards,
+ * a tall mark tile on top, so a two item panel fills the same height as Events.
  */
 function PanelRows({
     group,
@@ -270,21 +319,22 @@ function PanelRows({
                                         : 'border-transparent hover:bg-band'
                                 }`}
                             >
-                                {/* The thumb scales up a touch on hover and
-                                    focus inside its own clipped box, transform
-                                    only. */}
-                                <span
-                                    aria-hidden="true"
-                                    className={`block shrink-0 overflow-hidden bg-band ${
-                                        layout === 'stack' ? 'h-14 w-20' : 'h-32 w-full'
-                                    }`}
-                                >
-                                    <NavPicture
-                                        photo={child.photo}
-                                        width={child.photo.tile}
-                                        className="size-full object-cover motion-safe:transition-transform motion-safe:duration-300 group-hover/row:scale-105 group-focus-visible/row:scale-105"
-                                    />
-                                </span>
+                                {/* The mark scales up a touch on hover and
+                                    focus inside its own clipped tile, transform
+                                    only. Centred in a square tile in the stack;
+                                    offset to the lower right on a card so the
+                                    tall tile does not read as a placeholder. */}
+                                <NavMark
+                                    tone={child.tone}
+                                    className={
+                                        layout === 'stack'
+                                            ? 'size-14 items-center justify-center'
+                                            : 'h-32 w-full items-end justify-end p-3'
+                                    }
+                                    markClassName={`${
+                                        layout === 'stack' ? 'size-11' : 'size-20'
+                                    } motion-safe:transition-transform motion-safe:duration-300 group-hover/row:scale-105 group-focus-visible/row:scale-105`}
+                                />
                                 <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                                     <span
                                         id={`${id}-name`}
@@ -299,7 +349,7 @@ function PanelRows({
                                     </span>
                                 </span>
                                 {/* The arrow belongs to the row form; a
-                                    card's hover cue is its photo. */}
+                                    card's hover cue is its mark. */}
                                 {layout === 'stack' && (
                                     <ArrowRight
                                         aria-hidden="true"
@@ -656,20 +706,15 @@ export function Navbar() {
                                                                     setIsMobileMenuOpen(false)
                                                                 }
                                                             >
-                                                                {/* The same gallery
-                                                                    thumb as the desktop
-                                                                    row, smaller, so the
-                                                                    two read as one menu. */}
-                                                                <span
-                                                                    aria-hidden="true"
-                                                                    className="block h-8 w-12 shrink-0 overflow-hidden bg-band"
-                                                                >
-                                                                    <NavPicture
-                                                                        photo={child.photo}
-                                                                        width={child.photo.tile}
-                                                                        className="size-full object-cover"
-                                                                    />
-                                                                </span>
+                                                                {/* The same mark tile
+                                                                    as the desktop row,
+                                                                    smaller, so the two
+                                                                    read as one menu. */}
+                                                                <NavMark
+                                                                    tone={child.tone}
+                                                                    className="size-8 items-center justify-center"
+                                                                    markClassName="size-7"
+                                                                />
                                                                 {child.name}
                                                             </NavLink>
                                                         </li>

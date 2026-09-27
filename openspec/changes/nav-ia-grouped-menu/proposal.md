@@ -90,6 +90,19 @@ menu above:
   still capped at `100vw - 3rem`.
 - Still no Discover and no separate Membership link.
 
+
+## Revision 4 (Kyra and Venkat feedback on PR #38)
+
+Menus felt heavy with gallery photos on every row. Visuals only; IA unchanged.
+
+- Keep the Events left feature photo (one hero max for the whole nav).
+- Replace gallery photo thumbs on Events list rows, Resources cards,
+  Collaborate cards, and mobile row thumbs with the IFN period-mark on soft
+  tiles (band / paper / ink wash / accent wash). Drawn inline from the brand
+  master geometry so it follows theme tokens.
+- No lucide icon tiles as the primary visual. Workshops page and the
+  `/accountability-pods` stub stay untouched. Radix Viewport and Indicator stay.
+
 ## Capabilities
 
 ### New Capabilities
@@ -104,7 +117,7 @@ None. No existing spec describes the nav or the banner.
 ## Impact
 
 - `src/components/Navbar.tsx` (rewritten around Radix Navigation Menu, then
-  its Viewport and Indicator, then the revision 3 IA and photo panels).
+  its Viewport and Indicator, then the revision 3 IA, then revision 4 mark tiles).
 - `src/index.css` (`nav-*` keyframes for the Viewport, panels and Indicator).
 - `src/components/Footer.tsx` (one code comment that named the old Collaborate
   nav group).

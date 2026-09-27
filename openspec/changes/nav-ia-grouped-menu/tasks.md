@@ -47,3 +47,11 @@
 - [x] 7.4 Mobile: same table, Collaborate label with Sponsors and Partners, About as a plain row, small photo thumbs
 - [x] 7.5 Update the DESIGN.md Navigation section and this change's proposal, design and spec delta
 - [x] 7.6 Run `npx tsc -b`, `npm run lint`, `npm test`, `npm run build`, and a headless check of the Events panel at 1280px and 768px and the mobile menu at 390px
+
+## 8. Revision 4 (trim menu photos to Events hero; brand marks elsewhere)
+
+- [x] 8.1 Keep Events left feature photo; replace row `photo` fields with mark tones
+- [x] 8.2 Add `NavMark` (inline period-mark on soft tiles); use it for Events stack rows, Resources/Collaborate cards, and mobile thumbs; keep `NavPicture` for the feature only
+- [x] 8.3 Update DESIGN.md Navigation section and this change's proposal, design and spec delta
+- [x] 8.4 Run `npx tsc -b`, lint, `npm test`, `npm run build`; confirm PR #38 stays draft
+
