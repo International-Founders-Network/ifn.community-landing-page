@@ -19,7 +19,7 @@
     "preinstall": "bash scripts/auth-private-github.sh"
   },
   "dependencies": {
-    "@ifn/ui": "git+https://github.com/International-Founders-Network/ifn-ui.git#47bd91708ac88c978c7e31e50dae68ae4a60da77",
+    "@ifn/ui": "github:International-Founders-Network/ifn-ui#47bd91708ac88c978c7e31e50dae68ae4a60da77",
     "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-navigation-menu": "^1.2.22",
     "clsx": "^2.1.1",
