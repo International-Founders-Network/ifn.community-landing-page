@@ -52,24 +52,44 @@ pointers, a click on an already open trigger is ignored (the menu still closes
 on pointer leave, outside click, Escape). Keyboard and touch clicks toggle
 normally.
 
-**Motion.** Desktop panels fade and drop 4px on enter over 150ms using
-framer-motion inside `Content`; under `useReducedMotion` they render at rest.
+**Motion.** Desktop panels fade and drop 6px on enter over 180ms using
+framer-motion inside `Content`, and their rows follow 40ms apart; under
+`useReducedMotion` the panel and rows render at rest.
 The mobile panel keeps its height/opacity animation; under reduced motion the
 transition duration is 0. No new animation library.
 
 **Active state.** A trigger renders in the active treatment (`font-semibold
 text-ink`) when any child route matches `pathname` exactly or as a prefix
-(`/blog/:slug` keeps Discover active). Child links are `NavLink`s wrapped in
+(`/blog/:slug` keeps Resources active; `/sponsors` keeps About active). Child links are `NavLink`s wrapped in
 Radix `Link asChild`, so `aria-current="page"` comes from React Router.
 
-**Mobile structure.** Group labels are plain uppercase muted text above a
-left-ruled list, the existing Collaborate treatment applied to Discover too.
-About is a plain row after the groups. No nested disclosure.
+**Mobile structure.** Group labels (Events, Resources, About) are plain
+uppercase muted text above a left-ruled list. Gallery is a plain row between
+Resources and About. No nested disclosure.
+
+**Sponsors and Partners under About (revision).** About becomes a menu whose
+first row is About IFN `/about`, followed by Sponsors and Partners. This keeps
+both one click from the bar without a fifth top-level entry. The trigger is a
+button, so `/about` is reached through its first row, the same as every other
+group. Footer only was the alternative; it was rejected because it would drop
+both pages out of the bar entirely.
+
+**Richer panels (revision).** Each row is a lucide icon in a square `--rule`
+tile (ink, stroke 1.5, never the accent), the item name, and one `--muted`
+line paraphrased from the route's `ROUTE_SEO` description so the panel never
+claims more than the page. The link is `aria-labelledby` the name and
+`aria-describedby` the line, so screen readers hear a short name. The active
+row gets a `--band` fill plus a 2px `--ink` left edge. The About panel is
+anchored to its trigger's right edge (`align: 'end'`) so it stays inside a
+768px viewport.
 
 ## Risks / Trade-offs
 
 - [Radix adds a visually hidden focus proxy next to an open trigger] → It is
   part of Radix's Tab order handling and is not announced; accepted.
+- [About is now a menu, so `/about` takes two actions from the bar instead of
+  one] → Accepted to keep Sponsors and Partners in the bar; the footer still
+  links About Us directly.
 - [Hover-open can feel twitchy] → Radix default 200ms open delay and 150ms
   close delay kept.
 - [Privacy policy copy is otherwise out of scope] → Only the two quoted button

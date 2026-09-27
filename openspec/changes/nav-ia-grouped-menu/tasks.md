@@ -20,3 +20,12 @@
 ## 4. Verification
 
 - [x] 4.1 Run `npm test`, `npx tsc -b`, eslint on touched files, and `npm run build` (prerender) and verify all pass
+
+## 5. IA revision (Events, Resources, Gallery, About)
+
+- [x] 5.1 Replace Discover and Collaborate in `NAV_ITEMS` with Events (Meetups, Workshops), Resources (Library, Blogs), Gallery, and About (About IFN, Sponsors, Partners), and verify every href is a `<Route>` in `src/App.tsx`
+- [x] 5.2 Give each panel row a lucide icon, name and one line description sourced from `ROUTE_SEO`, with the name as accessible name and the line as description, and verify with `npx tsc -b`
+- [x] 5.3 Stagger row entrance after the panel, at rest under reduced motion, and pin the About panel to the trigger's right edge
+- [x] 5.4 Render the same table on mobile (Events, Resources, About labels, Gallery row, pill last) with no nested disclosure
+- [x] 5.5 Update the DESIGN.md Navigation section and the Footer comment that named the old Collaborate nav group
+- [x] 5.6 Run `npm test`, `npx tsc -b`, eslint on touched files, `npm run build`, and a headless check that the bar reads Events, Resources, Gallery, About plus the action with no Discover or Collaborate

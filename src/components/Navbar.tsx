@@ -1,52 +1,116 @@
 import { useState, useEffect, useRef, type MouseEvent } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import {
+    Menu,
+    X,
+    ChevronDown,
+    Users,
+    Presentation,
+    BookOpen,
+    PenLine,
+    Globe,
+    Award,
+    Handshake,
+    type LucideIcon,
+} from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ButtonLink } from './ButtonLink';
 
 
-// Primary nav IA (openspec/changes/nav-ia-grouped-menu): two groups, one link,
-// one action. DESIGN.md caps the bar at about five entries plus the action, so
-// the public pages sit under Discover and the sponsor/partner pages under
-// Collaborate. There is no separate Membership link because "Become a member"
-// already carries that intent. Desktop and mobile both render from this one
-// table so they cannot drift.
+// Primary nav IA (openspec/changes/nav-ia-grouped-menu, revised): Events and
+// Resources menus, a Gallery link, an About menu that also holds Sponsors and
+// Partners, then one action. There is no separate Membership link because
+// "Become a member" already carries that intent. Desktop and mobile both
+// render from this one table so they cannot drift.
 type NavLinkItem = { name: string; href: string };
-type NavGroupItem = { name: string; children: NavLinkItem[] };
+type NavChildItem = NavLinkItem & { description: string; icon: LucideIcon };
+// `align: 'end'` pins the panel to the trigger's right edge. The last group
+// sits next to the action, and a left anchored panel would run off the
+// viewport at 768px.
+type NavGroupItem = { name: string; children: NavChildItem[]; align?: 'start' | 'end' };
 type NavItem = NavLinkItem | NavGroupItem;
 
 function isNavGroup(item: NavItem): item is NavGroupItem {
     return 'children' in item;
 }
 
+// Descriptions are paraphrased from each route's ROUTE_SEO entry in
+// src/data/seo.ts, so the panel never promises something the page does not.
 const NAV_ITEMS: NavItem[] = [
     {
-        name: 'Discover',
+        name: 'Events',
         children: [
-            { name: 'Events', href: '/events' },
-            { name: 'Workshops', href: '/workshops' },
-            { name: 'Gallery', href: '/gallery' },
-            { name: 'Blog', href: '/blog' },
-            { name: 'Resources', href: '/resources' },
+            {
+                name: 'Meetups',
+                href: '/events',
+                description: 'Free monthly evenings in Austin',
+                icon: Users,
+            },
+            {
+                name: 'Workshops',
+                href: '/workshops',
+                description: 'Visas, banking, hiring, fundraising',
+                icon: Presentation,
+            },
         ],
     },
     {
-        name: 'Collaborate',
+        name: 'Resources',
         children: [
-            { name: 'Sponsors', href: '/sponsors' },
-            { name: 'Partners', href: '/partners' },
+            {
+                name: 'Library',
+                href: '/resources',
+                description: 'Guides for founders building in the US',
+                icon: BookOpen,
+            },
+            {
+                name: 'Blogs',
+                href: '/blog',
+                description: 'Peer notes from founders in Austin',
+                icon: PenLine,
+            },
         ],
     },
-    { name: 'About', href: '/about' },
+    { name: 'Gallery', href: '/gallery' },
+    {
+        name: 'About',
+        align: 'end',
+        children: [
+            {
+                name: 'About IFN',
+                href: '/about',
+                description: 'For founders from somewhere else',
+                icon: Globe,
+            },
+            {
+                name: 'Sponsors',
+                href: '/sponsors',
+                description: 'Back the monthly meetups',
+                icon: Award,
+            },
+            {
+                name: 'Partners',
+                href: '/partners',
+                description: 'Collaborators who help run IFN',
+                icon: Handshake,
+            },
+        ],
+    },
 ];
 
 const MOBILE_MENU_ID = 'primary-navigation-menu';
 
-// Prefix match, the same rule NavLink uses, so /blog/:slug keeps Blog (and
-// therefore Discover) active.
+// Prefix match, the same rule NavLink uses, so /blog/:slug keeps Blogs (and
+// therefore Resources) active.
 function isRouteActive(pathname: string, href: string): boolean {
     return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+// Stable id stem for a panel row, used to split its accessible name from its
+// description.
+function rowId(href: string): string {
+    return `nav-row${href.replace(/\//g, '-')}`;
 }
 
 // REDESIGN-PLAN.md section 4.2's focus ring, written once and shared by every
@@ -85,7 +149,7 @@ function navLinkClass(isActive: boolean): string {
     }`;
 }
 
-// Mobile rows share one class so the group children and the top-level About
+// Mobile rows share one class so the group children and the top-level Gallery
 // row cannot drift into two treatments.
 function mobileLinkClass(isActive: boolean): string {
     return `block rounded-none py-3 text-base ${FOCUS_RING} ${
@@ -141,37 +205,81 @@ function DesktopGroup({
                 />
             </NavigationMenu.Trigger>
             <NavigationMenu.Content asChild>
-                {/* Enter only: a 4px drop and fade over 150ms, transform and
-                    opacity, in the installed framer-motion. Under reduced
-                    motion the panel renders at rest. */}
+                {/* Enter only: a 6px drop and fade over 180ms, then the rows
+                    follow 40ms apart, transform and opacity only, in the
+                    installed framer-motion. Under reduced motion the panel and
+                    its rows render at rest. */}
                 <motion.div
-                    initial={reduceMotion ? false : { opacity: 0, y: -4 }}
+                    initial={reduceMotion ? false : { opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.15, ease: 'easeOut' }}
-                    className="absolute left-0 top-full z-50 min-w-[11rem] border border-rule bg-paper py-1"
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    className={`absolute top-full z-50 w-72 border border-rule bg-paper p-2 ${
+                        group.align === 'end' ? 'right-0' : 'left-0'
+                    }`}
                 >
-                    <ul>
-                        {group.children.map((child) => {
+                    <ul className="flex flex-col gap-1">
+                        {group.children.map((child, index) => {
                             const isActive = isRouteActive(pathname, child.href);
+                            const id = rowId(child.href);
+                            const Icon = child.icon;
                             return (
-                                <li key={child.name}>
+                                <motion.li
+                                    key={child.name}
+                                    initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{
+                                        duration: 0.18,
+                                        ease: 'easeOut',
+                                        delay: 0.04 * (index + 1),
+                                    }}
+                                >
                                     {/* Radix Slot merges className as a string, so
                                         NavLink gets a computed string here rather
                                         than its function form. NavLink still sets
-                                        aria-current="page" on the active route. */}
+                                        aria-current="page" on the active route.
+                                        The accessible name is the item name
+                                        alone; the one line description is wired
+                                        as its description rather than folded
+                                        into the name. The active row carries a
+                                        2px --ink edge as well as the --band
+                                        fill, so it does not depend on tone
+                                        alone. */}
                                     <NavigationMenu.Link asChild active={isActive}>
                                         <NavLink
                                             to={child.href}
-                                            className={`flex min-h-11 items-center px-4 py-2 text-sm whitespace-nowrap ${FOCUS_RING} ${
+                                            aria-labelledby={`${id}-name`}
+                                            aria-describedby={`${id}-desc`}
+                                            className={`flex min-h-11 items-start gap-3 rounded-none border-l-2 px-3 py-2.5 transition-colors ${FOCUS_RING} ${
                                                 isActive
-                                                    ? 'font-semibold text-ink'
-                                                    : 'font-medium text-muted hover:text-ink'
+                                                    ? 'border-ink bg-band'
+                                                    : 'border-transparent hover:bg-band'
                                             }`}
                                         >
-                                            {child.name}
+                                            <span
+                                                aria-hidden="true"
+                                                className="mt-0.5 flex size-8 shrink-0 items-center justify-center border border-rule bg-paper text-ink"
+                                            >
+                                                <Icon strokeWidth={1.5} className="size-4" />
+                                            </span>
+                                            <span className="flex min-w-0 flex-col">
+                                                <span
+                                                    id={`${id}-name`}
+                                                    className={`text-sm text-ink ${
+                                                        isActive ? 'font-semibold' : 'font-medium'
+                                                    }`}
+                                                >
+                                                    {child.name}
+                                                </span>
+                                                <span
+                                                    id={`${id}-desc`}
+                                                    className="text-xs leading-5 text-muted"
+                                                >
+                                                    {child.description}
+                                                </span>
+                                            </span>
                                         </NavLink>
                                     </NavigationMenu.Link>
-                                </li>
+                                </motion.li>
                             );
                         })}
                     </ul>

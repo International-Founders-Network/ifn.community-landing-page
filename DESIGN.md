@@ -544,22 +544,43 @@ Fixed, 64px at rest plus a 1px `--rule` bottom edge, flat, solid `--paper`, one
 line at `lg`, no transparent state, no backdrop blur, no height change on
 scroll, and therefore no scroll listener. One action at the right edge.
 
-**The bar is full.** Five links plus the action already squeeze at exactly
-768px, which is why the gaps step down at `md` rather than a link being dropped.
-A sixth primary link breaks the one-line-at-desktop rule, so a new route reaches
-readers through the footer and through the one on-page link that belongs to it.
-`/gallery` is the worked example: it sits in the footer's Community group and is
-linked once from EventsPreview, under the same label in both places.
+**The bar is full.** About five top-level entries plus the action is the most
+that holds one line at exactly 768px, which is why the gaps step down at `md`
+rather than an entry being dropped. A new route joins a menu, or reaches
+readers through the footer and the one on-page link that belongs to it, rather
+than adding a top-level entry.
 
-**The bar is grouped** (`openspec/changes/nav-ia-grouped-menu`). Three entries
-plus the action: **Discover** (Events, Workshops, Gallery, Blog, Resources),
-**Collaborate** (Sponsors, Partners), **About**, then the "Become a member"
-pill. There is no separate Membership link, because the action already carries
-that intent. A new public route joins a group rather than the top level. On
-desktop the groups are Radix Navigation Menu panels (links, not menu items;
-Escape returns focus to the trigger). On mobile the same table renders as flat
-sections under uppercase `--muted` labels, never a disclosure inside the menu
-disclosure.
+**The bar is grouped** (`openspec/changes/nav-ia-grouped-menu`, revised after
+PR #36). Four entries plus the action, in this order:
+
+| Top level | Kind | Contents |
+| --- | --- | --- |
+| Events | menu | Meetups `/events`, Workshops `/workshops` |
+| Resources | menu | Library `/resources`, Blogs `/blog` |
+| Gallery | link | `/gallery` |
+| About | menu | About IFN `/about`, Sponsors `/sponsors`, Partners `/partners` |
+| Become a member | pill action | `/membership` |
+
+There is no Discover and no Collaborate group, and no separate Membership link,
+because the action already carries that intent. Sponsors and Partners live
+under About so they stay one click from the bar; the footer lists them too. A
+new public route joins one of these menus rather than the top level. The About
+panel is pinned to its trigger's right edge so it cannot run past the viewport
+at 768px.
+
+On desktop each menu is a Radix Navigation Menu panel (links, not menu items;
+Escape returns focus to the trigger). A panel row is a square `--rule` icon
+tile holding a lucide icon in `--ink` at stroke 1.5, the item name, and one
+`--muted` line paraphrased from that route's `ROUTE_SEO` description. The
+accessible name is the item name alone and the line is its description. Rows
+fill with `--band` on hover; the current route adds a 2px `--ink` left edge and
+semibold weight so it does not rely on tone. Icons never take the accent. The
+panel drops 6px and fades in over 180ms, then its rows follow 40ms apart,
+transform and opacity only, enter only, and at rest under reduced motion.
+
+On mobile the same table renders as flat sections under uppercase `--muted`
+labels (Events, Resources, About), with Gallery as a plain row and the pill
+last. Never a disclosure inside the menu disclosure.
 
 ### The modal
 
