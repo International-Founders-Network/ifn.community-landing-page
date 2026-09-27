@@ -262,7 +262,7 @@ function mobileLinkClass(isActive: boolean): string {
 }
 
 // Every panel is one width and one minimum height, whether it has a feature
-// column (Events, Collaborate) or stacks its rows under an intro header
+// column (Events, Collaborate) or a two-column icon grid under the intro
 // (Resources), so the shared Viewport changes panels with little or no change
 // in size. That keeps the switch a slide and not a resize.
 const PANEL_WIDTH = 'w-[min(44rem,calc(100vw-3rem))]';
