@@ -29,3 +29,12 @@
 - [x] 5.4 Render the same table on mobile (Events, Resources, About labels, Gallery row, pill last) with no nested disclosure
 - [x] 5.5 Update the DESIGN.md Navigation section and the Footer comment that named the old Collaborate nav group
 - [x] 5.6 Run `npm test`, `npx tsc -b`, eslint on touched files, `npm run build`, and a headless check that the bar reads Events, Resources, Gallery, About plus the action with no Discover or Collaborate
+
+## 6. Mega panel (Radix Viewport and Indicator)
+
+- [x] 6.1 Render the Root onto the desktop cluster and add one `NavigationMenu.Viewport` hanging from its right edge, 40rem capped at `100vw - 3rem`, `box-content` so the border does not clip measured content, and verify with a headless check that the panel stays inside a 768px viewport
+- [x] 6.2 Add `NavigationMenu.Indicator` as a 2px `--ink` bar on the panel's top edge, drop `relative` from Items so offsets measure against the track, and verify it moves between triggers
+- [x] 6.3 Add `nav-*` keyframes (Viewport scale and fade, `data-motion` slides, Indicator fade), transform and opacity only, all `motion-safe:`, and verify panels still open and close under reduced motion
+- [x] 6.4 Rebuild panel content as a group label, intro line and one row of equal height icon tiles (hover inverts the icon tile, arrow slides in, active tile has a top edge), remove `align`, and add icon tiles to mobile rows without nesting
+- [x] 6.5 Reverse "No Radix Viewport" in design.md and update the DESIGN.md Navigation section
+- [x] 6.6 Run `npm test`, `npx tsc -b`, eslint on touched files, `npm run build`, and a headless check of the bar entries, keyboard open, Escape focus return, hover then click, and route change close

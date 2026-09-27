@@ -50,6 +50,16 @@ considered and not taken. Discover and Collaborate are gone from the nav. The
 panels also gained icons, descriptions and a staggered entrance. The consent
 banner requirements are unchanged by the revision.
 
+## Revision 2 (mega panel)
+
+The IA above stays locked. The desktop menus now use Radix Navigation Menu's
+shared `Viewport` and `Indicator`, reversing the first design's "No Radix
+Viewport" call: one mega panel under the bar holds every menu, panels slide
+between menus in the direction of travel, and an ink indicator travels under
+the open trigger. Each panel gains a group label and intro line above one row
+of icon tiles. Mobile rows gain the same icon tile, and stay flat. No new
+dependency; a few CSS keyframes are added to `src/index.css`.
+
 ## Capabilities
 
 ### New Capabilities
@@ -63,7 +73,9 @@ None. No existing spec describes the nav or the banner.
 
 ## Impact
 
-- `src/components/Navbar.tsx` (rewritten around Radix Navigation Menu).
+- `src/components/Navbar.tsx` (rewritten around Radix Navigation Menu, then
+  its Viewport and Indicator).
+- `src/index.css` (`nav-*` keyframes for the Viewport, panels and Indicator).
 - `src/components/Footer.tsx` (one code comment that named the old Collaborate
   nav group).
 - `src/components/ConsentBanner.tsx` (strings only).

@@ -32,10 +32,33 @@ triggers, hover intent with open/close delays). Headless UI's `Menu` applies
 leave hover intent and roving focus to us. Radix is also tree-shakable per
 primitive, so the cost is one package.
 
-**No Radix Viewport.** Without a `Viewport`, each `Content` renders inline in
-its `Item` and we position it absolutely under the trigger. A shared viewport
-would animate size between panels, which is more motion than two short lists
-need.
+**Radix Viewport and Indicator (reverses the earlier "No Radix Viewport").**
+The first version rendered each `Content` inline in its `Item` and positioned
+it by hand, on the grounds that a shared viewport was more motion than two
+short lists need. The panels are no longer two short lists: they carry icon
+tiles, an intro line and up to three destinations, and visitors move between
+three menus. One shared `Viewport` now holds every panel, and an `Indicator`
+marks the open trigger:
+
+- Panels cross with Radix's `data-motion` (`from-start`, `from-end`,
+  `to-start`, `to-end`) as a 32px directional slide plus fade, instead of one
+  unmounting and the next mounting.
+- The Indicator, a 2px `--ink` bar on the panel's top edge, travels between
+  triggers, so the open menu is marked without a custom underline.
+- The panel sits in one place at one size, which is what reads as a mega panel
+  rather than three dropdowns.
+
+The Root is rendered onto the whole desktop cluster (list plus action), and the
+Viewport hangs from the cluster's right edge at the bar's bottom line, 40rem
+wide and capped at `100vw - 3rem`, so it stays on screen at 768px without a
+per-panel `align`. Its size comes from Radix's measured
+`--radix-navigation-menu-viewport-*` variables and is not transitioned (width
+and height are layout properties; MOTION_INTENSITY 4 animates transform and
+opacity only). Tiles share a minimum height and each panel is one row of
+tiles, so every panel measures the same and the switch never resizes. Items
+are not `relative`, because the Indicator reads each trigger's `offsetLeft`
+against the List's track. Open, close and focus handling stay Radix's; nothing
+here is hand-built. No new dependency.
 
 **Root rendered as a `div`.** Radix Root renders `<nav aria-label="Main">` by
 default, but the bar is already `<nav aria-label="Main">`. `asChild` onto a
@@ -52,9 +75,14 @@ pointers, a click on an already open trigger is ignored (the menu still closes
 on pointer leave, outside click, Escape). Keyboard and touch clicks toggle
 normally.
 
-**Motion.** Desktop panels fade and drop 6px on enter over 180ms using
-framer-motion inside `Content`, and their rows follow 40ms apart; under
-`useReducedMotion` the panel and rows render at rest.
+**Motion.** Radix unmounts the Viewport, Content and Indicator through
+Presence, which waits for a CSS `animationend`, so their enter and exit are CSS
+keyframes (`nav-*` in `src/index.css`), not framer-motion. The Viewport scales
+0.98 to 1 from its top right corner and fades over 200ms, reversing over 140ms;
+panels slide 32px between menus; the Indicator fades and its transform
+transitions over 200ms. Every call site is `motion-safe:`, and the global
+reduced motion rule flattens them regardless. Tiles inside a panel still follow
+40ms apart with a 6px rise in framer-motion, at rest under `useReducedMotion`.
 The mobile panel keeps its height/opacity animation; under reduced motion the
 transition duration is 0. No new animation library.
 
@@ -74,16 +102,26 @@ button, so `/about` is reached through its first row, the same as every other
 group. Footer only was the alternative; it was rejected because it would drop
 both pages out of the bar entirely.
 
-**Richer panels (revision).** Each row is a lucide icon in a square `--rule`
-tile (ink, stroke 1.5, never the accent), the item name, and one `--muted`
-line paraphrased from the route's `ROUTE_SEO` description so the panel never
-claims more than the page. The link is `aria-labelledby` the name and
-`aria-describedby` the line, so screen readers hear a short name. The active
-row gets a `--band` fill plus a 2px `--ink` left edge. The About panel is
-anchored to its trigger's right edge (`align: 'end'`) so it stays inside a
-768px viewport.
+**Richer panels (revision).** Each panel opens with the group label and one
+intro line, then one row of tiles (two across for Events and Resources, three
+for About). A tile is a lucide icon in a square `--rule` tile (ink, stroke 1.5,
+never the accent), the item name, and one `--muted` line; the intro and the
+lines are paraphrased from `ROUTE_SEO` so the panel never claims more than the
+page. The link is `aria-labelledby` the name and `aria-describedby` the line,
+so screen readers hear a short name. Hover and focus fill the tile with
+`--band`, invert the icon tile to `--ink`, and slide in an arrow. The active
+tile keeps the inverted icon tile and adds a 2px `--ink` top edge. Mobile rows
+carry a smaller copy of the icon tile, still flat.
 
 ## Risks / Trade-offs
+
+- [The shared panel is right aligned, so the Events panel does not start under
+  the Events trigger] → The 40rem panel spans the whole cluster at every width
+  from 768px up, so it always sits beneath every trigger, and the Indicator
+  marks which one is open.
+- [Indicator width snaps rather than animating] → Only its transform is
+  transitioned, to stay within transform and opacity; a 2px bar's width change
+  reads as part of the slide.
 
 - [Radix adds a visually hidden focus proxy next to an open trigger] → It is
   part of Radix's Tab order handling and is not announced; accepted.

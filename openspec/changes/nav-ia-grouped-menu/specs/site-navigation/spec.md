@@ -35,7 +35,9 @@ On desktop, each group SHALL open a panel listing its links when the visitor
 hovers or clicks its trigger, or activates it with Enter or Space. Each panel
 link SHALL show an icon, the item name and a one line description, and SHALL
 expose the item name as its accessible name. Escape SHALL
-close an open panel and return focus to its trigger. Clicking outside SHALL
+close an open panel and return focus to its trigger. Every group's panel SHALL
+render in one shared panel under the bar that lies wholly inside the viewport
+at 768px and wider, and an indicator SHALL mark the open trigger. Clicking outside SHALL
 close it. Following a link or any route change SHALL close it. A mouse click on
 a trigger whose panel is already open SHALL NOT close it. Triggers SHALL expose
 `aria-expanded`, and the panels SHALL contain plain links, not menu items.
@@ -43,6 +45,10 @@ a trigger whose panel is already open SHALL NOT close it. Triggers SHALL expose
 #### Scenario: Keyboard open and Escape
 - **WHEN** a keyboard user focuses the Events trigger, presses Enter, then presses Escape
 - **THEN** the panel opens showing Meetups and Workshops, then closes, and focus is on the Events trigger
+
+#### Scenario: Shared panel and indicator
+- **WHEN** a visitor on a 768px viewport opens Events and then moves to About
+- **THEN** both open in the same panel, the panel stays inside the viewport, and the indicator moves from under Events to under About
 
 #### Scenario: Hover then click
 - **WHEN** a mouse user hovers Events until its panel opens and then clicks the trigger
