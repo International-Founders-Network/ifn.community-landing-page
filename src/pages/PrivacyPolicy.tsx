@@ -106,7 +106,7 @@ export function PrivacyPolicy() {
                             <li>
                                 <strong className="text-ink">Google Analytics</strong> counts visits to
                                 this site. It is switched off until you allow it: nothing is stored on your
-                                device and no cookie is set unless you choose &ldquo;Allow analytics&rdquo;.
+                                device and no cookie is set unless you choose &ldquo;OK&rdquo;.
                                 Even then, we never send it your name, your email address, or anything you
                                 typed into a form. If you choose &ldquo;No thanks&rdquo;, we still receive an
                                 anonymous count of the page being viewed, with nothing stored on your device
@@ -131,7 +131,7 @@ export function PrivacyPolicy() {
                         <p className={BODY}>
                             This site sets no cookies of its own. The only cookies that can ever be set here
                             belong to Google Analytics, and they are set only after you choose
-                            &ldquo;Allow analytics&rdquo; in the banner at the bottom of the page. Until you
+                            &ldquo;OK&rdquo; in the banner at the bottom of the page. Until you
                             do, Google Analytics runs in a mode that stores nothing on your device.
                         </p>
                         <p className={`mt-4 ${BODY}`}>
