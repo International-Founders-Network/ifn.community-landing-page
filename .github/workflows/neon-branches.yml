@@ -1,0 +1,67 @@
+# Creates a Neon database branch for each pull request and deletes it when the
+# PR closes. See https://neon.com/docs/guides/branching-github-actions
+#
+# WHAT THIS DOES NOT DO: it does not wire the branch into anything. Netlify
+# builds Deploy Previews through its own git integration (see AGENTS.md) and
+# reads NETLIFY_DATABASE_URL from the Netlify dashboard, so the preview site
+# keeps talking to the production database. The branch created here is only
+# useful to steps added inside THIS workflow — e.g. applying db/migrations/*.sql
+# against the fresh branch to catch drift between the .sql files and the
+# CREATE TABLE IF NOT EXISTS statements in netlify/functions/.
+#
+# Requires two repository settings that are NOT in this repo:
+#   vars.NEON_PROJECT_ID   (Settings -> Secrets and variables -> Actions -> Variables)
+#   secrets.NEON_API_KEY   (same page -> Secrets)
+# Without them the job fails on every PR.
+name: Neon PR Branches
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  create_neon_branch:
+    name: Create Neon Branch
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get branch expiration date as an env variable (2 weeks from now)
+        run: echo "EXPIRES_AT=$(date -u --date '+14 days' +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_ENV"
+
+      - name: Create Neon Branch
+        id: create_neon_branch
+        uses: neondatabase/create-branch-action@v6
+        with:
+          project_id: ${{ vars.NEON_PROJECT_ID }}
+          branch_name: preview/pr-${{ github.event.number }}-${{ github.head_ref }}
+          api_key: ${{ secrets.NEON_API_KEY }}
+          expires_at: ${{ env.EXPIRES_AT }}
+
+      # The connection string is available to later steps as
+      # steps.create_neon_branch.outputs.db_url_with_pooler (pooled) or
+      # .db_url (direct). Never echo it — it contains credentials.
+      #
+      # There is deliberately no "Run Migrations" step: package.json has no
+      # db:migrate script, and db/migrations/*.sql have no runner wired up here.
+
+  delete_neon_branch:
+    name: Delete Neon Branch
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Neon Branch
+        uses: neondatabase/delete-branch-action@v3
+        with:
+          project_id: ${{ vars.NEON_PROJECT_ID }}
+          branch: preview/pr-${{ github.event.number }}-${{ github.head_ref }}
+          api_key: ${{ secrets.NEON_API_KEY }}
