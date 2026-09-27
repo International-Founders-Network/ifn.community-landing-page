@@ -284,6 +284,15 @@ export const INDEXABLE_PATHS = [
 ];
 
 /**
+ * Every path the build prerenders to static HTML: INDEXABLE_PATHS plus
+ * `/accountability-pods`. That stub stays noindex and out of the sitemap, but
+ * without its own HTML file crawlers that skip JS were served the homepage
+ * shell and read the homepage canonical. Prerendering it bakes in its
+ * self-canonical and robots noindex. The other ComingSoon stubs are unchanged.
+ */
+export const PRERENDER_PATHS = [...INDEXABLE_PATHS, '/accountability-pods'];
+
+/**
  * The canonical URL for a path.
  *
  * Derived from the MATCHED ROUTE, never from `location.pathname` directly.

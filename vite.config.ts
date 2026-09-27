@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { BLOG_POSTS } from './src/data/blog.generated'
-import { INDEXABLE_PATHS, SITE_NAME, SITE_URL, seoFor } from './src/data/seo'
+import { INDEXABLE_PATHS, PRERENDER_PATHS, SITE_NAME, SITE_URL, seoFor } from './src/data/seo'
 
 /**
  * Emit the crawler-facing files that must exist as REAL FILES rather than as
@@ -78,14 +78,14 @@ function seoAssets(): Plugin {
             const llms = [
                 `# ${SITE_NAME}`,
                 '',
-                `> A community of international and immigrant founders based in Austin, Texas. IFN runs a free in-person meetup every month and offers one paid annual membership. A founder guide library is in progress — members get first access as guides publish.`,
+                `> A community of international and immigrant founders based in Austin, Texas. IFN runs free monthly in-person meetups. Guest access is free. Member is $149/year. Founder in Residence starts from $1,800/year by application. A founder guide library is in progress; members get first access as guides publish.`,
                 '',
                 '## What IFN is',
                 '',
                 '- Founded and based in Austin, Texas.',
                 '- The monthly meetup is in person and open to attend; registration is through Luma.',
                 '- The audience is specifically international and immigrant founders: people incorporating in the US as non-residents, navigating founder visas, opening US banking, and raising from US investors without a US network.',
-                '- There is one published membership tier. There is no free/paid tier ladder.',
+                '- Three published access levels on /membership: Guest (free meetups), Member ($149/year), and Founder in Residence (starting from $1,800/year by application).',
                 '- IFN is a community, not an accelerator, a fund, or an immigration service. It does not take equity and does not provide legal or immigration advice.',
                 '',
                 '## Primary pages',
@@ -159,7 +159,7 @@ function seoAssets(): Plugin {
 
             writeFileSync(
                 resolve(outDir, 'prerender-routes.json'),
-                JSON.stringify(INDEXABLE_PATHS, null, 2),
+                JSON.stringify(PRERENDER_PATHS, null, 2),
                 'utf8',
             )
         },
