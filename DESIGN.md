@@ -551,6 +551,16 @@ readers through the footer and through the one on-page link that belongs to it.
 `/gallery` is the worked example: it sits in the footer's Community group and is
 linked once from EventsPreview, under the same label in both places.
 
+**The bar is grouped** (`openspec/changes/nav-ia-grouped-menu`). Three entries
+plus the action: **Discover** (Events, Workshops, Gallery, Blog, Resources),
+**Collaborate** (Sponsors, Partners), **About**, then the "Become a member"
+pill. There is no separate Membership link, because the action already carries
+that intent. A new public route joins a group rather than the top level. On
+desktop the groups are Radix Navigation Menu panels (links, not menu items;
+Escape returns focus to the trigger). On mobile the same table renders as flat
+sections under uppercase `--muted` labels, never a disclosure inside the menu
+disclosure.
+
 ### The modal
 
 `--paper` surface, `--band` field fills, a 1px `--rule` border, over a

@@ -80,9 +80,12 @@ export function ConsentBanner() {
         >
             <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm leading-relaxed text-muted">
-                    We use Google Analytics to count visits and understand which
-                    pages are useful. Nothing you type into a form is ever sent
-                    to it. You can say no and the site works exactly the same.{' '}
+                    {/* Copy locked as Option B in
+                        ifn-copy/2026-09-26-analytics-consent-banner.md. The
+                        vendor name and the form-fields promise live in the
+                        Privacy policy, not in the bar. */}
+                    Optional analytics help us improve the site. Decline
+                    anytime.{' '}
                     <Link
                         to="/privacy-policy"
                         className="font-medium text-ink underline decoration-rule decoration-1 underline-offset-4 transition-colors hover:decoration-ink focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
@@ -108,7 +111,7 @@ export function ConsentBanner() {
                         onClick={() => decide('granted')}
                         className="rounded-lg border border-ink bg-ink px-4 py-2 text-sm font-semibold text-paper transition-opacity hover:opacity-90 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
                     >
-                        Allow analytics
+                        OK
                     </button>
                 </div>
             </div>
