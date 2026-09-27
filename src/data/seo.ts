@@ -195,6 +195,11 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
      * title afterwards from inside a lazily-loaded chunk, which corrects the
      * visible tab but arrives too late for the pageview.
      */
+    '/accountability-pods': {
+        title: `Accountability Pods | ${SITE_NAME}`,
+        description: 'Small peer groups of founders who check in on goals regularly. Not open for signup yet. Coming soon.',
+        indexable: false,
+    },
     '/careers': {
         title: `Careers | ${SITE_NAME}`,
         description: 'Roles at the International Founders Network. Coming soon.',
@@ -230,7 +235,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
 /**
  * Routes that exist and render, but must never be indexed or prerendered.
  *
- * The five remaining placeholders are real URLs with a "coming soon" body. `/blog` is a real indexable surface. /admin is an
+ * The six remaining placeholders are real URLs with a "coming soon" body. `/blog` is a real indexable surface. /admin is an
  * internal dashboard whose real access control is server-side; the exclusion
  * here only keeps it out of search results.
  *
@@ -240,6 +245,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
  * stop, and this list is only consumed by the code that emits `noindex`.
  */
 export const NOINDEX_PATHS = [
+    '/accountability-pods',
     '/careers',
     '/chapters',
     '/mentorship',

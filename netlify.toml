@@ -72,6 +72,11 @@
 # returns 404. Without these entries every one of them would answer 404 while
 # still rendering its page, which is the worst of both worlds.
 [[redirects]]
+  from = "/accountability-pods"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
   from = "/careers"
   to = "/index.html"
   status = 200
@@ -130,7 +135,7 @@
 # HEADERS
 # ---------------------------------------------------------------------------
 
-# The five remaining placeholder routes and the admin dashboard.
+# The six remaining placeholder routes and the admin dashboard.
 # /blog noindex headers were removed when the blog host became indexable.
 #
 # NOTE ON WHAT CHANGED IN public/robots.txt ALONGSIDE THIS. These paths used to
@@ -151,6 +156,16 @@
 
 [[headers]]
   for = "/careers/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/accountability-pods"
+  [headers.values]
+    X-Robots-Tag = "noindex, follow"
+
+[[headers]]
+  for = "/accountability-pods/*"
   [headers.values]
     X-Robots-Tag = "noindex, follow"
 

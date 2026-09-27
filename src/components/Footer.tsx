@@ -54,7 +54,8 @@ const FOOTER_LINKS: { id: string; heading: string; links: FooterLink[] }[] = [
         ],
     },
     {
-        // Matches primary-nav Collaborate parent: Sponsors + Partners only.
+        // Sponsors and Partners, the same two routes and the same heading as
+        // the primary nav's Collaborate menu, so bar and footer agree.
         // Stays a fourth column so md:grid-cols-4 does not wrap.
         id: 'collaborate',
         heading: 'Collaborate',

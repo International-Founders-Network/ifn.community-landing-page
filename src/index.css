@@ -339,6 +339,61 @@
 }
 
 
+/* ----------------------------------------------------------------------------
+   PRIMARY NAV MEGA PANEL KEYFRAMES (src/components/Navbar.tsx)
+
+   Radix Navigation Menu's Viewport, Content and Indicator unmount through
+   Presence, which waits for a CSS animationend, so their enter and exit are
+   keyframes rather than framer-motion. Transform and opacity only
+   (MOTION_INTENSITY 4). Exits fill forwards so nothing flashes back to rest
+   before it unmounts. Every call site is `motion-safe:`, and the blanket
+   reduced motion rule below flattens them regardless.
+   -------------------------------------------------------------------------- */
+
+@theme {
+  --animate-nav-viewport-in: nav-viewport-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-nav-viewport-out: nav-viewport-out 140ms ease-in forwards;
+  --animate-nav-from-start: nav-from-start 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-nav-from-end: nav-from-end 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-nav-to-start: nav-to-start 200ms ease-in forwards;
+  --animate-nav-to-end: nav-to-end 200ms ease-in forwards;
+  --animate-nav-fade-in: nav-fade-in 200ms ease-out;
+  --animate-nav-fade-out: nav-fade-out 140ms ease-in forwards;
+
+  @keyframes nav-viewport-in {
+    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes nav-viewport-out {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  }
+  @keyframes nav-from-start {
+    from { opacity: 0; transform: translateX(-32px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes nav-from-end {
+    from { opacity: 0; transform: translateX(32px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes nav-to-start {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(-32px); }
+  }
+  @keyframes nav-to-end {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(32px); }
+  }
+  @keyframes nav-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes nav-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+}
+
 @layer base {
   body {
     font-family: var(--font-sans);

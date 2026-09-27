@@ -1,52 +1,220 @@
 import { useState, useEffect, useRef, type MouseEvent } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import {
+    Menu,
+    X,
+    ChevronDown,
+    ArrowRight,
+    Users,
+    Target,
+    Presentation,
+    BookOpen,
+    PenLine,
+    Award,
+    Handshake,
+    type LucideIcon,
+} from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ButtonLink } from './ButtonLink';
 
 
-// Primary nav IA (openspec/changes/nav-ia-grouped-menu): two groups, one link,
-// one action. DESIGN.md caps the bar at about five entries plus the action, so
-// the public pages sit under Discover and the sponsor/partner pages under
-// Collaborate. There is no separate Membership link because "Become a member"
-// already carries that intent. Desktop and mobile both render from this one
-// table so they cannot drift.
+// Primary nav IA (openspec/changes/nav-ia-grouped-menu, revision 3; visuals
+// revision 8): an Events
+// menu, a Resources menu, a Gallery link, a Collaborate menu holding Sponsors
+// and Partners, an About link, then one action. There is no separate
+// Membership link because "Become a member" already carries that intent.
+// Desktop and mobile both render from this one table so they cannot drift.
 type NavLinkItem = { name: string; href: string };
-type NavGroupItem = { name: string; children: NavLinkItem[] };
+
+// A gallery frame already in public/photos, named by its slot and the width of
+// its tile tier (see galleryFrames in src/data/photos.generated.ts). The paths
+// are built here rather than read from that module because the nav ships in
+// the entry chunk and the module, with every alt text, does not. Every tier is
+// 16:9 and carries avif, webp and a jpeg fallback, so one pattern covers them.
+type NavPhoto = { slot: string; tile: number };
+
+function photoPath(photo: NavPhoto, width: number, ext: 'avif' | 'webp' | 'jpg'): string {
+    return `/photos/gallery-${photo.slot}-${width}w.${ext}`;
+}
+
+// Every row has its own icon, so no two rows read as the same drawing
+// (revision 7).
+type NavChildItem = NavLinkItem & {
+    description: string;
+    icon: LucideIcon;
+};
+// `intro` is the one line that heads the group's desktop panel. Like the row
+// descriptions it is paraphrased from ROUTE_SEO. `feature` puts a large photo
+// in a left column with the rows stacked beside it; groups without one stack
+// their rows vertically under the intro. Photos are on the Events and
+// Collaborate features only; every row is an icon tile.
+type NavGroupItem = {
+    name: string;
+    intro: string;
+    feature?: NavPhoto;
+    children: NavChildItem[];
+};
 type NavItem = NavLinkItem | NavGroupItem;
 
 function isNavGroup(item: NavItem): item is NavGroupItem {
     return 'children' in item;
 }
 
+// Descriptions are paraphrased from each route's ROUTE_SEO entry in
+// src/data/seo.ts, so the panel never promises something the page does not.
 const NAV_ITEMS: NavItem[] = [
     {
-        name: 'Discover',
+        name: 'Events',
+        intro: 'In person in Austin. Register on Luma.',
+        feature: { slot: 'sep-group', tile: 640 },
         children: [
-            { name: 'Events', href: '/events' },
-            { name: 'Workshops', href: '/workshops' },
-            { name: 'Gallery', href: '/gallery' },
-            { name: 'Blog', href: '/blog' },
-            { name: 'Resources', href: '/resources' },
+            {
+                name: 'Meetups',
+                href: '/events',
+                description: 'Free monthly evenings in Austin',
+                icon: Users,
+            },
+            {
+                name: 'Accountability Pod',
+                href: '/accountability-pods',
+                description: 'Small founder groups checking in on goals. Coming soon',
+                icon: Target,
+            },
+            {
+                name: 'Workshops',
+                href: '/workshops',
+                description: 'Visas, banking, hiring, fundraising',
+                icon: Presentation,
+            },
         ],
     },
     {
-        name: 'Collaborate',
+        name: 'Resources',
+        intro: 'Written for international and immigrant founders.',
         children: [
-            { name: 'Sponsors', href: '/sponsors' },
-            { name: 'Partners', href: '/partners' },
+            {
+                name: 'Library',
+                href: '/resources',
+                description: 'Guides for founders building in the US',
+                icon: BookOpen,
+            },
+            {
+                name: 'Blogs',
+                href: '/blog',
+                description: 'Peer notes from founders in Austin',
+                icon: PenLine,
+            },
+        ],
+    },
+    { name: 'Gallery', href: '/gallery' },
+    {
+        name: 'Collaborate',
+        intro: 'The people who help the Austin meetups happen.',
+        feature: { slot: 'aug-networking', tile: 640 },
+        children: [
+            {
+                name: 'Sponsors',
+                href: '/sponsors',
+                description: 'Back the monthly meetups',
+                icon: Award,
+            },
+            {
+                name: 'Partners',
+                href: '/partners',
+                description: 'Collaborators who help run IFN',
+                icon: Handshake,
+            },
         ],
     },
     { name: 'About', href: '/about' },
 ];
 
+/**
+ * A gallery frame for a group feature (Events, Collaborate). Decorative
+ * (alt="", hidden from the accessibility tree) because the panel's text carries
+ * the meaning. Panels mount only when opened, so `lazy` keeps it off the first
+ * load.
+ */
+function NavPicture({
+    photo,
+    width,
+    className,
+}: {
+    photo: NavPhoto;
+    width: number;
+    className: string;
+}) {
+    return (
+        <picture aria-hidden="true">
+            <source type="image/avif" srcSet={photoPath(photo, width, 'avif')} />
+            <source type="image/webp" srcSet={photoPath(photo, width, 'webp')} />
+            <img
+                src={photoPath(photo, photo.tile, 'jpg')}
+                alt=""
+                width={16}
+                height={9}
+                loading="lazy"
+                decoding="async"
+                className={className}
+            />
+        </picture>
+    );
+}
+
+/**
+ * A row's leading visual where it has no photo: its lucide icon in a square
+ * tile with a 1px border. The icon is --ink and never takes the accent. On the
+ * desktop panel the tile inverts to an --ink fill on hover, focus and the
+ * current route; the mobile tile is smaller and stays at rest, because the
+ * mobile row carries its state in the link text. Decorative, because the link
+ * already names its destination.
+ */
+function NavIconTile({
+    icon: Icon,
+    size,
+    isActive = false,
+}: {
+    icon: LucideIcon;
+    size: 'panel' | 'mobile';
+    isActive?: boolean;
+}) {
+    if (size === 'mobile') {
+        return (
+            <span
+                aria-hidden="true"
+                className="flex size-8 shrink-0 items-center justify-center border border-rule bg-paper text-ink"
+            >
+                <Icon strokeWidth={1.5} className="size-4" />
+            </span>
+        );
+    }
+    return (
+        <span
+            aria-hidden="true"
+            className={`flex size-10 shrink-0 items-center justify-center border transition-colors ${
+                isActive
+                    ? 'border-ink bg-ink text-paper'
+                    : 'border-rule bg-paper text-ink group-hover/row:border-ink group-hover/row:bg-ink group-hover/row:text-paper group-focus-visible/row:border-ink group-focus-visible/row:bg-ink group-focus-visible/row:text-paper'
+            }`}
+        >
+            <Icon strokeWidth={1.5} className="size-5" />
+        </span>
+    );
+}
+
 const MOBILE_MENU_ID = 'primary-navigation-menu';
 
-// Prefix match, the same rule NavLink uses, so /blog/:slug keeps Blog (and
-// therefore Discover) active.
+// Prefix match, the same rule NavLink uses, so /blog/:slug keeps Blogs (and
+// therefore Resources) active.
 function isRouteActive(pathname: string, href: string): boolean {
     return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+// Stable id stem for a panel row, used to split its accessible name from its
+// description.
+function rowId(href: string): string {
+    return `nav-row${href.replace(/\//g, '-')}`;
 }
 
 // REDESIGN-PLAN.md section 4.2's focus ring, written once and shared by every
@@ -85,20 +253,151 @@ function navLinkClass(isActive: boolean): string {
     }`;
 }
 
-// Mobile rows share one class so the group children and the top-level About
+// Mobile rows share one class so the group children and the top-level Gallery
 // row cannot drift into two treatments.
 function mobileLinkClass(isActive: boolean): string {
-    return `block rounded-none py-3 text-base ${FOCUS_RING} ${
+    return `flex min-h-11 items-center gap-3 rounded-none py-2 text-base ${FOCUS_RING} ${
         isActive ? 'font-semibold text-ink' : 'font-medium text-muted hover:text-ink'
     }`;
 }
 
+// Every panel is one width and one minimum height, whether it has a feature
+// column (Events, Collaborate) or a two-column icon grid under the intro
+// (Resources), so the shared Viewport changes panels with little or no change
+// in size. That keeps the switch a slide and not a resize.
+const PANEL_WIDTH = 'w-[min(44rem,calc(100vw-3rem))]';
+
 /**
- * One desktop group: a Radix Navigation Menu trigger plus its panel. Radix
- * supplies the disclosure semantics (aria-expanded, links not menuitems),
- * Escape with focus back on the trigger, outside click, arrow keys between
- * triggers and hover intent. The panel renders inline in its <li> (there is no
- * Radix Viewport) and is positioned under the trigger.
+ * The destination rows of one desktop panel. Stack layout: icon tile, name and
+ * description in a horizontal row with ArrowRight, filling the column's height.
+ * Grid layout (Resources): two equal columns with icon tiles on top, each a
+ * vertical card with border-t-2 on hover/active (revision 8).
+ */
+function PanelRows({
+    group,
+    pathname,
+    layout = 'stack',
+}: {
+    group: NavGroupItem;
+    pathname: string;
+    layout?: 'stack' | 'grid';
+}) {
+    const reduceMotion = useReducedMotion();
+
+    if (layout === 'grid') {
+        return (
+            <ul className="grid flex-1 grid-cols-2 gap-1 pt-3">
+                {group.children.map((child, index) => {
+                    const isActive = isRouteActive(pathname, child.href);
+                    const id = rowId(child.href);
+                    return (
+                        <motion.li
+                            key={child.name}
+                            initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{
+                                duration: 0.2,
+                                ease: 'easeOut',
+                                delay: 0.04 * (index + 1),
+                            }}
+                        >
+                            <NavigationMenu.Link asChild active={isActive}>
+                                <NavLink
+                                    to={child.href}
+                                    aria-labelledby={`${id}-name`}
+                                    aria-describedby={`${id}-desc`}
+                                    className={`group/row flex h-full flex-col gap-3 rounded-none border-t-2 p-3 transition-colors ${FOCUS_RING} ${
+                                        isActive
+                                            ? 'border-ink bg-band'
+                                            : 'border-transparent hover:bg-band'
+                                    }`}
+                                >
+                                    <NavIconTile icon={child.icon} size="panel" isActive={isActive} />
+                                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                                        <span
+                                            id={`${id}-name`}
+                                            className={`text-sm text-ink ${
+                                                isActive ? 'font-semibold' : 'font-medium'
+                                            }`}
+                                        >
+                                            {child.name}
+                                        </span>
+                                        <span id={`${id}-desc`} className="text-xs leading-5 text-muted">
+                                            {child.description}
+                                        </span>
+                                    </span>
+                                </NavLink>
+                            </NavigationMenu.Link>
+                        </motion.li>
+                    );
+                })}
+            </ul>
+        );
+    }
+
+    return (
+        <ul className="flex h-full flex-col gap-1">
+            {group.children.map((child, index) => {
+                const isActive = isRouteActive(pathname, child.href);
+                const id = rowId(child.href);
+                return (
+                    <motion.li
+                        key={child.name}
+                        className="flex-1"
+                        initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                            duration: 0.2,
+                            ease: 'easeOut',
+                            delay: 0.04 * (index + 1),
+                        }}
+                    >
+                        <NavigationMenu.Link asChild active={isActive}>
+                            <NavLink
+                                to={child.href}
+                                aria-labelledby={`${id}-name`}
+                                aria-describedby={`${id}-desc`}
+                                className={`group/row flex h-full items-center gap-4 rounded-none border-l-2 p-2 transition-colors ${FOCUS_RING} ${
+                                    isActive
+                                        ? 'border-ink bg-band'
+                                        : 'border-transparent hover:bg-band'
+                                }`}
+                            >
+                                <NavIconTile icon={child.icon} size="panel" isActive={isActive} />
+                                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                                    <span
+                                        id={`${id}-name`}
+                                        className={`text-sm text-ink ${
+                                            isActive ? 'font-semibold' : 'font-medium'
+                                        }`}
+                                    >
+                                        {child.name}
+                                    </span>
+                                    <span id={`${id}-desc`} className="text-xs leading-5 text-muted">
+                                        {child.description}
+                                    </span>
+                                </span>
+                                <ArrowRight
+                                    aria-hidden="true"
+                                    strokeWidth={1.5}
+                                    className="size-4 shrink-0 -translate-x-1 text-ink opacity-0 motion-safe:transition-[opacity,transform] group-hover/row:translate-x-0 group-hover/row:opacity-100 group-focus-visible/row:translate-x-0 group-focus-visible/row:opacity-100"
+                                />
+                            </NavLink>
+                        </NavigationMenu.Link>
+                    </motion.li>
+                );
+            })}
+        </ul>
+    );
+}
+
+/**
+ * One desktop group: a Radix Navigation Menu trigger plus its panel content.
+ * Radix supplies the disclosure semantics (aria-expanded, links not
+ * menuitems), Escape with focus back on the trigger, outside click, arrow keys
+ * between triggers and hover intent. The content does not render in this <li>:
+ * Radix moves it into the one shared Viewport under the bar, and the Indicator
+ * slides under whichever trigger is open.
  */
 function DesktopGroup({
     group,
@@ -109,7 +408,6 @@ function DesktopGroup({
     pathname: string;
     open: boolean;
 }) {
-    const reduceMotion = useReducedMotion();
     const pointerTypeRef = useRef<string>('');
     const childActive = group.children.some((child) => isRouteActive(pathname, child.href));
 
@@ -124,10 +422,13 @@ function DesktopGroup({
         }
     };
 
+    // No `relative` on the Item: the Indicator measures each trigger's
+    // offsetLeft against the List's track, and a positioned <li> would make
+    // every offset 0.
     return (
-        <NavigationMenu.Item value={group.name} className="relative">
+        <NavigationMenu.Item value={group.name}>
             <NavigationMenu.Trigger
-                className={`group ${navLinkClass(childActive)} gap-1`}
+                className={`group ${navLinkClass(childActive)} gap-1 data-[state=open]:text-ink`}
                 onPointerDown={(event) => {
                     pointerTypeRef.current = event.pointerType;
                 }}
@@ -140,42 +441,57 @@ function DesktopGroup({
                     className="size-3.5 shrink-0 motion-safe:transition-transform group-data-[state=open]:rotate-180"
                 />
             </NavigationMenu.Trigger>
-            <NavigationMenu.Content asChild>
-                {/* Enter only: a 4px drop and fade over 150ms, transform and
-                    opacity, in the installed framer-motion. Under reduced
-                    motion the panel renders at rest. */}
-                <motion.div
-                    initial={reduceMotion ? false : { opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.15, ease: 'easeOut' }}
-                    className="absolute left-0 top-full z-50 min-w-[11rem] border border-rule bg-paper py-1"
-                >
-                    <ul>
-                        {group.children.map((child) => {
-                            const isActive = isRouteActive(pathname, child.href);
-                            return (
-                                <li key={child.name}>
-                                    {/* Radix Slot merges className as a string, so
-                                        NavLink gets a computed string here rather
-                                        than its function form. NavLink still sets
-                                        aria-current="page" on the active route. */}
-                                    <NavigationMenu.Link asChild active={isActive}>
-                                        <NavLink
-                                            to={child.href}
-                                            className={`flex min-h-11 items-center px-4 py-2 text-sm whitespace-nowrap ${FOCUS_RING} ${
-                                                isActive
-                                                    ? 'font-semibold text-ink'
-                                                    : 'font-medium text-muted hover:text-ink'
-                                            }`}
-                                        >
-                                            {child.name}
-                                        </NavLink>
-                                    </NavigationMenu.Link>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </motion.div>
+            {/* Absolute so the outgoing and incoming panels overlap while they
+                cross. Radix sets data-motion from the direction of travel
+                between triggers, and each value maps to a 32px slide plus fade
+                (the nav-* keyframes in index.css). The first open has no
+                data-motion; the Viewport's own entrance covers it. */}
+            <NavigationMenu.Content
+                className={
+                    `absolute top-0 left-0 ${PANEL_WIDTH} p-3 ` +
+                    'motion-safe:data-[motion=from-start]:animate-nav-from-start ' +
+                    'motion-safe:data-[motion=from-end]:animate-nav-from-end ' +
+                    'motion-safe:data-[motion=to-start]:animate-nav-to-start ' +
+                    'motion-safe:data-[motion=to-end]:animate-nav-to-end'
+                }
+            >
+                {group.feature ? (
+                    // Feature column on the left, rows stacked on the right.
+                    // The feature is not a link: it sets the scene and carries
+                    // the group intro, and every destination is a row.
+                    <div className="grid min-h-64 grid-cols-[minmax(0,17rem)_minmax(0,1fr)] gap-3">
+                        <div className="relative overflow-hidden bg-ink">
+                            <NavPicture
+                                photo={group.feature}
+                                width={1280}
+                                className="absolute inset-0 size-full object-cover"
+                            />
+                            {/* A bottom scrim so the --paper intro reads on any
+                                frame. The scrim is --ink, never the accent. */}
+                            <div
+                                aria-hidden="true"
+                                className="absolute inset-0 bg-linear-to-t from-ink/85 via-ink/35 to-transparent"
+                            />
+                            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4">
+                                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-paper/80">
+                                    {group.name}
+                                </p>
+                                <p className="text-sm font-medium text-paper">{group.intro}</p>
+                            </div>
+                        </div>
+                        <PanelRows group={group} pathname={pathname} layout="stack" />
+                    </div>
+                ) : (
+                    <div className="flex min-h-64 flex-col">
+                        <div className="flex items-baseline justify-between gap-6 border-b border-rule px-3 pt-1 pb-3">
+                            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+                                {group.name}
+                            </p>
+                            <p className="text-sm text-ink">{group.intro}</p>
+                        </div>
+                        <PanelRows group={group} pathname={pathname} layout="grid" />
+                    </div>
+                )}
             </NavigationMenu.Content>
         </NavigationMenu.Item>
     );
@@ -261,73 +577,96 @@ export function Navbar() {
                     {/* Desktop Nav */}
                     {/* Radix Root renders <nav aria-label="Main"> by default. This
                         element is already that landmark, so the Root is rendered
-                        as a plain div with the label cleared rather than nesting
-                        a second "Main" navigation inside the first. */}
-                    <div className="hidden md:flex items-center gap-5 lg:gap-8">
-                        <NavigationMenu.Root
-                            asChild
-                            aria-label={undefined}
-                            value={openGroup}
-                            onValueChange={setOpenGroup}
-                        >
-                            <div>
-                                <NavigationMenu.List className="flex items-center gap-4 lg:gap-6">
-                                    {NAV_ITEMS.map((item) =>
-                                        isNavGroup(item) ? (
-                                            <DesktopGroup
-                                                key={item.name}
-                                                group={item}
-                                                pathname={pathname}
-                                                open={openGroup === item.name}
-                                            />
-                                        ) : (
-                                            <NavigationMenu.Item key={item.name}>
-                                                {/* py-3 lifts the 20px text line to a 44px hit
-                                                    area inside the 64px bar, and `min-h-11`
-                                                    holds that floor independently of the type
-                                                    ramp, so a later line-height change on
-                                                    text-sm cannot silently fail WCAG 2.5.5.
-                                                    `flex` rather than `inline-flex`: an inline
-                                                    level box inside this `li` would let the
-                                                    strut's descender grow the row past 44px and
-                                                    drop the label off the bar's centreline.
-                                                    The active state is carried by weight as
-                                                    well as by tone so it does not depend on
-                                                    colour alone. --ink on --paper 17.965,
-                                                    --muted 6.601. */}
-                                                <NavigationMenu.Link
-                                                    asChild
-                                                    active={isRouteActive(pathname, item.href)}
+                        onto the desktop cluster div with the label cleared rather
+                        than nesting a second "Main" navigation inside the first.
+                        The Root is the whole cluster, action included, so the
+                        Viewport below can hang from the cluster's right edge. */}
+                    <NavigationMenu.Root
+                        asChild
+                        aria-label={undefined}
+                        value={openGroup}
+                        onValueChange={setOpenGroup}
+                    >
+                        <div className="relative hidden md:flex self-stretch items-center gap-5 lg:gap-8">
+                            <NavigationMenu.List className="flex items-center gap-4 lg:gap-6">
+                                {NAV_ITEMS.map((item) =>
+                                    isNavGroup(item) ? (
+                                        <DesktopGroup
+                                            key={item.name}
+                                            group={item}
+                                            pathname={pathname}
+                                            open={openGroup === item.name}
+                                        />
+                                    ) : (
+                                        <NavigationMenu.Item key={item.name}>
+                                            {/* py-3 lifts the 20px text line to a 44px hit
+                                                area inside the 64px bar, and `min-h-11`
+                                                holds that floor independently of the type
+                                                ramp, so a later line-height change on
+                                                text-sm cannot silently fail WCAG 2.5.5.
+                                                `flex` rather than `inline-flex`: an inline
+                                                level box inside this `li` would let the
+                                                strut's descender grow the row past 44px and
+                                                drop the label off the bar's centreline.
+                                                The active state is carried by weight as
+                                                well as by tone so it does not depend on
+                                                colour alone. --ink on --paper 17.965,
+                                                --muted 6.601. */}
+                                            <NavigationMenu.Link
+                                                asChild
+                                                active={isRouteActive(pathname, item.href)}
+                                            >
+                                                <NavLink
+                                                    to={item.href}
+                                                    className={navLinkClass(
+                                                        isRouteActive(pathname, item.href),
+                                                    )}
                                                 >
-                                                    <NavLink
-                                                        to={item.href}
-                                                        className={navLinkClass(
-                                                            isRouteActive(pathname, item.href),
-                                                        )}
-                                                    >
-                                                        {item.name}
-                                                    </NavLink>
-                                                </NavigationMenu.Link>
-                                            </NavigationMenu.Item>
-                                        ),
-                                    )}
-                                </NavigationMenu.List>
+                                                    {item.name}
+                                                </NavLink>
+                                            </NavigationMenu.Link>
+                                        </NavigationMenu.Item>
+                                    ),
+                                )}
+                                {/* The Indicator is portalled into the List's track and
+                                    placed by Radix under the open trigger. It
+                                    fills the 10px from the trigger's bottom to the
+                                    bar's edge and draws a 2px --ink bar that sits
+                                    on the panel's top rule, so trigger and panel
+                                    read as one piece. Only its transform is
+                                    transitioned; Radix sets its width directly. */}
+                                <NavigationMenu.Indicator className="top-full z-10 flex h-2.5 items-end motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out motion-safe:data-[state=visible]:animate-nav-fade-in motion-safe:data-[state=hidden]:animate-nav-fade-out">
+                                    <span className="h-0.5 w-full bg-ink" />
+                                </NavigationMenu.Indicator>
+                            </NavigationMenu.List>
+                            {/* One label per intent across nav, hero, HowItWorks and
+                                FinalCTA (plan section 11). rounded-full is the plan's
+                                discrete control shape; buttonStyles.ts still ships
+                                rounded-lg in BASE, and cn() is tailwind-merge, so this
+                                wins cleanly and becomes redundant when that file lands
+                                the pill globally. */}
+                            <ButtonLink
+                                to="/membership"
+                                size="sm"
+                                className="whitespace-nowrap rounded-full"
+                            >
+                                Become a member
+                            </ButtonLink>
+                            {/* The one shared panel. It hangs from the bar's bottom
+                                edge, right aligned to the action, so a 44rem panel
+                                spans the whole cluster and stays on screen at
+                                768px. Its size comes from Radix's measured
+                                viewport variables and is not transitioned; it
+                                scales in from its top right corner and fades,
+                                transform and opacity only. Its 1px top border lands
+                                on the bar's own --rule hairline. `box-content`
+                                because Radix measures the content alone, and under
+                                border-box the 1px border would clip it. */}
+                            <div className="absolute top-full right-0 flex justify-end">
+                                <NavigationMenu.Viewport className="relative box-content h-[var(--radix-navigation-menu-viewport-height)] w-[var(--radix-navigation-menu-viewport-width)] origin-top-right overflow-hidden border border-rule bg-paper motion-safe:data-[state=open]:animate-nav-viewport-in motion-safe:data-[state=closed]:animate-nav-viewport-out" />
                             </div>
-                        </NavigationMenu.Root>
-                        {/* One label per intent across nav, hero, HowItWorks and
-                            FinalCTA (plan section 11). rounded-full is the plan's
-                            discrete control shape; buttonStyles.ts still ships
-                            rounded-lg in BASE, and cn() is tailwind-merge, so this
-                            wins cleanly and becomes redundant when that file lands
-                            the pill globally. */}
-                        <ButtonLink
-                            to="/membership"
-                            size="sm"
-                            className="whitespace-nowrap rounded-full"
-                        >
-                            Become a member
-                        </ButtonLink>
-                    </div>
+                        </div>
+                    </NavigationMenu.Root>
 
                     {/* Mobile Menu Button */}
                     <button
@@ -392,6 +731,15 @@ export function Navbar() {
                                                                     setIsMobileMenuOpen(false)
                                                                 }
                                                             >
+                                                                {/* The same icon tile
+                                                                    as the desktop row,
+                                                                    smaller and never a
+                                                                    photo, so the two
+                                                                    read as one menu. */}
+                                                                <NavIconTile
+                                                                    icon={child.icon}
+                                                                    size="mobile"
+                                                                />
                                                                 {child.name}
                                                             </NavLink>
                                                         </li>

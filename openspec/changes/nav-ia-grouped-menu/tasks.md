@@ -20,3 +20,64 @@
 ## 4. Verification
 
 - [x] 4.1 Run `npm test`, `npx tsc -b`, eslint on touched files, and `npm run build` (prerender) and verify all pass
+
+## 5. IA revision (Events, Resources, Gallery, About)
+
+- [x] 5.1 Replace Discover and Collaborate in `NAV_ITEMS` with Events (Meetups, Workshops), Resources (Library, Blogs), Gallery, and About (About IFN, Sponsors, Partners), and verify every href is a `<Route>` in `src/App.tsx`
+- [x] 5.2 Give each panel row a lucide icon, name and one line description sourced from `ROUTE_SEO`, with the name as accessible name and the line as description, and verify with `npx tsc -b`
+- [x] 5.3 Stagger row entrance after the panel, at rest under reduced motion, and pin the About panel to the trigger's right edge
+- [x] 5.4 Render the same table on mobile (Events, Resources, About labels, Gallery row, pill last) with no nested disclosure
+- [x] 5.5 Update the DESIGN.md Navigation section and the Footer comment that named the old Collaborate nav group
+- [x] 5.6 Run `npm test`, `npx tsc -b`, eslint on touched files, `npm run build`, and a headless check that the bar reads Events, Resources, Gallery, About plus the action with no Discover or Collaborate
+
+## 6. Mega panel (Radix Viewport and Indicator)
+
+- [x] 6.1 Render the Root onto the desktop cluster and add one `NavigationMenu.Viewport` hanging from its right edge, 40rem capped at `100vw - 3rem`, `box-content` so the border does not clip measured content, and verify with a headless check that the panel stays inside a 768px viewport
+- [x] 6.2 Add `NavigationMenu.Indicator` as a 2px `--ink` bar on the panel's top edge, drop `relative` from Items so offsets measure against the track, and verify it moves between triggers
+- [x] 6.3 Add `nav-*` keyframes (Viewport scale and fade, `data-motion` slides, Indicator fade), transform and opacity only, all `motion-safe:`, and verify panels still open and close under reduced motion
+- [x] 6.4 Rebuild panel content as a group label, intro line and one row of equal height icon tiles (hover inverts the icon tile, arrow slides in, active tile has a top edge), remove `align`, and add icon tiles to mobile rows without nesting
+- [x] 6.5 Reverse "No Radix Viewport" in design.md and update the DESIGN.md Navigation section
+- [x] 6.6 Run `npm test`, `npx tsc -b`, eslint on touched files, `npm run build`, and a headless check of the bar entries, keyboard open, Escape focus return, hover then click, and route change close
+
+## 7. Revision 3 (Collaborate menu, Accountability Pods, photo panels)
+
+- [x] 7.1 Set `NAV_ITEMS` to Events (Meetups, Accountability Pod, Workshops), Resources (Library, Blogs), Gallery, Collaborate (Sponsors, Partners), About link, and verify every href is a `<Route>` in `src/App.tsx`
+- [x] 7.2 Add `src/pages/AccountabilityPods.tsx` on `ComingSoon`, its lazy route, a non-indexable `ROUTE_SEO` entry, `NOINDEX_PATHS`, a 200 rewrite and `noindex, follow` headers (bare and `/*`) in `netlify.toml`; leave `Workshops.tsx` untouched
+- [x] 7.3 Replace lucide icon tiles with gallery frame photos; Events panel as feature photo plus vertical list, Resources and Collaborate as photo cards; remove unused lucide imports; widen the panel to 44rem capped at `100vw - 3rem`
+- [x] 7.4 Mobile: same table, Collaborate label with Sponsors and Partners, About as a plain row, small photo thumbs
+- [x] 7.5 Update the DESIGN.md Navigation section and this change's proposal, design and spec delta
+- [x] 7.6 Run `npx tsc -b`, `npm run lint`, `npm test`, `npm run build`, and a headless check of the Events panel at 1280px and 768px and the mobile menu at 390px
+
+## 8. Revision 4 (trim menu photos to Events hero; brand marks elsewhere)
+
+- [x] 8.1 Keep Events left feature photo; replace row `photo` fields with mark tones
+- [x] 8.2 Add `NavMark` (inline period-mark on soft tiles); use it for Events stack rows, Resources/Collaborate cards, and mobile thumbs; keep `NavPicture` for the feature only
+- [x] 8.3 Update DESIGN.md Navigation section and this change's proposal, design and spec delta
+- [x] 8.4 Run `npx tsc -b`, lint, `npm test`, `npm run build`; confirm PR #38 stays draft
+
+## 9. Revision 5 (varied mark compositions; Collaborate feature and Library photo)
+
+- [x] 9.1 Add `MarkCompose` and `MARK_COMPOSES` (crop, transform, soft geometry, card placement); give every row a distinct `compose`
+- [x] 9.2 Collaborate `feature` (`aug-networking`, tile 640) in the Events stack layout
+- [x] 9.3 Library card photo (`feb-slide`, tile 640) on the Resources grid; Blogs stays a mark; mobile keeps marks for every row
+- [x] 9.4 Update DESIGN.md Navigation section and this change's proposal, design and spec delta
+- [x] 9.5 Run `npx tsc -b`, lint, `npm test`, `npm run build`; confirm PR #38 stays draft
+
+## 10. Revision 7 (Resources icon stack; drop Library photo)
+
+- [x] 10.1 Drop `photo: { slot: 'feb-slide', tile: 640 }` from the Library child under Resources in `NAV_ITEMS`
+- [x] 10.2 Resources mega panel uses stack layout (vertical icon rows) instead of two-across grid cards; Library `BookOpen` and Blogs `PenLine` both as icon stack rows
+- [x] 10.3 Remove dead code: `photo` optional field on `NavChildItem`, `layout === 'grid' && child.photo` branch, `HOVER_SCALE` constant, grid layout path in `PanelRows`
+- [x] 10.4 Update comments: revision 6 → revision 7; NavPicture for group features only; photo slots = Events + Collaborate features only
+- [x] 10.5 Update DESIGN.md Navigation section, proposal.md (Revision 7), design.md, spec.md and tasks.md
+- [x] 10.6 Run `npx tsc -b` and verify pass
+
+## 11. Revision 8 (Resources horizontal Library|Blog icon columns)
+
+- [x] 11.1 Resources panel renders Library and Blogs as horizontal 2-column grid instead of vertical stack; both keep lucide icon tiles (`BookOpen`, `PenLine`)
+- [x] 11.2 Grid cards are vertical (icon tile on top, name/description below, border-t-2 on hover/active) instead of stack layout (border-l-2, ArrowRight)
+- [x] 11.3 `PanelRows` restores `layout` prop: Events/Collaborate pass `layout="stack"`, Resources passes `layout="grid"`
+- [x] 11.4 Update comments: revision 7 → revision 8
+- [x] 11.5 Update DESIGN.md Navigation section, proposal.md (Revision 8), design.md, spec.md and tasks.md
+- [x] 11.6 Run `npx tsc -b`, eslint on touched files, `npm test`, `npm run build`; commit and push to `feat/nav-ia-events-resources`; confirm PR #38 stays draft
+

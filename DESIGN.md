@@ -544,22 +544,98 @@ Fixed, 64px at rest plus a 1px `--rule` bottom edge, flat, solid `--paper`, one
 line at `lg`, no transparent state, no backdrop blur, no height change on
 scroll, and therefore no scroll listener. One action at the right edge.
 
-**The bar is full.** Five links plus the action already squeeze at exactly
-768px, which is why the gaps step down at `md` rather than a link being dropped.
-A sixth primary link breaks the one-line-at-desktop rule, so a new route reaches
-readers through the footer and through the one on-page link that belongs to it.
-`/gallery` is the worked example: it sits in the footer's Community group and is
-linked once from EventsPreview, under the same label in both places.
+**The bar is full.** About five top-level entries plus the action is the most
+that holds one line at exactly 768px, which is why the gaps step down at `md`
+rather than an entry being dropped. A new route joins a menu, or reaches
+readers through the footer and the one on-page link that belongs to it, rather
+than adding a top-level entry.
 
-**The bar is grouped** (`openspec/changes/nav-ia-grouped-menu`). Three entries
-plus the action: **Discover** (Events, Workshops, Gallery, Blog, Resources),
-**Collaborate** (Sponsors, Partners), **About**, then the "Become a member"
-pill. There is no separate Membership link, because the action already carries
-that intent. A new public route joins a group rather than the top level. On
-desktop the groups are Radix Navigation Menu panels (links, not menu items;
-Escape returns focus to the trigger). On mobile the same table renders as flat
-sections under uppercase `--muted` labels, never a disclosure inside the menu
-disclosure.
+**The bar is grouped** (`openspec/changes/nav-ia-grouped-menu`, revision 3).
+Five entries plus the action, in this order:
+
+| Top level | Kind | Contents |
+| --- | --- | --- |
+| Events | menu | Meetups `/events`, Accountability Pod `/accountability-pods`, Workshops `/workshops` |
+| Resources | menu | Library `/resources`, Blogs `/blog` |
+| Gallery | link | `/gallery` |
+| Collaborate | menu | Sponsors `/sponsors`, Partners `/partners` |
+| About | link | `/about` |
+| Become a member | pill action | `/membership` |
+
+There is no Discover group and no separate Membership link, because the action
+already carries that intent. Collaborate matches the footer's Collaborate
+group, so bar and footer agree. `/accountability-pods` is a ComingSoon
+placeholder, non-indexable, so the Events entry is never a dead link. A new
+public route joins one of these menus rather than the top level.
+
+On desktop the menus are one Radix Navigation Menu (links, not menu items;
+Escape returns focus to the trigger), and every panel renders inside Radix's
+shared `Viewport`, a single mega panel that hangs from the bar's bottom edge,
+right aligned to the action. It is 44rem wide (capped at the viewport less
+3rem), so it spans the whole cluster and stays on screen at 768px, and its 1px
+`--rule` border lands on the bar's own hairline. Radix's `Indicator` slides a
+2px `--ink` bar under whichever trigger is open, sitting on the panel's top
+edge, so trigger and panel read as one piece.
+
+Panels keep photography selective (revision 7): the Events feature
+(`sep-group`) and the Collaborate feature (`aug-networking`), both reused
+gallery frames, and nowhere else. Every destination row, including Library and
+Blogs on the Resources panel, leads with its own lucide icon in a square ink
+tile, a 1px `--rule` border on `--paper` with the icon in `--ink` at stroke
+1.5, decorative because the link already names its destination. No two rows
+share an icon: Meetups `Users`, Accountability Pod `Target`, Workshops
+`Presentation`, Library `BookOpen`, Blogs `PenLine`, Sponsors `Award`, Partners
+`Handshake`. Library `BookOpen` is desktop and mobile (revision 6 was
+mobile-only). The period-mark crops of revision 5 are gone; the mark stays in
+the wordmark, not in the menu.
+
+The Events and Collaborate panels are the same layout: two columns, a 17rem
+feature and the rows, 16rem minimum height. On the left, a feature photo under
+an `--ink` bottom scrim carries the group label and intro in `--paper`; it sets
+the scene and is not a link. On the right, the group's rows as a vertical list
+(Meetups, Accountability Pod and Workshops; Sponsors and Partners), each a
+40px icon tile, the name, and one `--muted` line paraphrased from that route's
+`ROUTE_SEO` description. Every row takes an equal share of the column's
+height, so Collaborate's two rows fill the column the way Events' three do
+rather than floating in the middle of it. Resources opens with the group label
+(uppercase `--muted`) and one `--ink` intro line, then its two items as a
+horizontal 2-column grid (revision 8): Library with `BookOpen` and Blogs with
+`PenLine` side by side, equal columns. Each is a vertical card with the icon
+tile on top, name and description stacked below, border-t-2 on hover/active/
+current. No ArrowRight in the grid cards, unlike the stack layout used for
+Events and Collaborate row panels. The accessible name is
+the item name alone and the line is its description. On hover and focus a row
+fills with `--band`, its icon tile inverts to an `--ink` fill with a `--paper`
+icon, and an arrow slides in. The current route adds a 2px `--ink` left edge,
+the inverted tile and semibold weight so it does not rely on tone. The accent
+never appears in a panel.
+
+**Viewport and Indicator now earn their place.** The first grouped version
+skipped both, rendering each panel inline in its `<li>` and positioning it by
+hand. With photo rows, an intro line and three menus that users move between,
+one shared panel does three things inline panels cannot: panels cross with a
+directional slide instead of blinking out and in, the indicator travels between
+triggers, and the panel sits at one fixed place and size, which is what makes it
+read as a mega panel rather than three dropdowns. All of it is Radix behaviour
+(`data-motion`, `data-state`, measured size variables), not hand-built open,
+close or focus logic.
+
+Motion is transform and opacity only. The Viewport scales from its top right
+corner (0.98 to 1) and fades over 200ms, and reverses over 140ms on close.
+Moving between menus, the outgoing panel slides 32px away and fades while the
+incoming one slides 32px in, in the direction of travel. The indicator's
+`transform` is transitioned over 200ms; its width is set by Radix and snaps.
+Rows follow the panel 40ms apart with a 6px rise. The Viewport's size is read
+from Radix's measured variables and is never transitioned, because width and
+height are layout properties; every panel shares one width and a 16rem minimum
+height so the switch stays a slide, not a resize. Every animation is
+`motion-safe:` and at rest under reduced motion.
+
+On mobile the same table renders as flat sections under uppercase `--muted`
+labels (Events, Resources, Collaborate), each row led by a 32px version of
+its icon tile (Library `BookOpen`, Blogs `PenLine`), with Gallery and About as
+plain rows in their table positions and the pill last. No photos in the mobile
+list. Never a disclosure inside the menu disclosure.
 
 ### The modal
 
