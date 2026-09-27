@@ -117,6 +117,28 @@ photography, but selectively. Visuals only; IA unchanged.
   of its mark tile. Blogs and every other row stay marks; mobile keeps marks
   throughout.
 
+## Revision 6 (PR #38 feedback)
+
+The period-mark crops still did not read as distinct destinations, and the
+Collaborate list looked loose next to Events. Visuals only; IA unchanged.
+
+- Drop every period-mark tile and composition. The mark stays in the wordmark,
+  not in the menu.
+- Bring back the lucide ink tile from revision 2 wherever a row has no photo,
+  with a different icon per row: Meetups `Users`, Accountability Pod `Target`,
+  Workshops `Presentation`, Library `BookOpen` (mobile), Blogs `PenLine`,
+  Sponsors `Award`, Partners `Handshake`. 40px on desktop, 32px on mobile,
+  stroke 1.5, inverting to an `--ink` fill on hover, focus and the current
+  route.
+- Photos only on three slots: the Events feature (`sep-group`), the
+  Collaborate feature (`aug-networking`) and the Library card (`feb-slide`).
+  No photo on any other row, and mobile uses icons only.
+- Collaborate matches Events exactly: same feature grid, and stack rows share
+  the column's height evenly, so two rows fill it the way three do instead of
+  floating in the middle.
+- Workshops page and the `/accountability-pods` stub stay untouched. Radix
+  Viewport and Indicator stay.
+
 ## Capabilities
 
 ### New Capabilities

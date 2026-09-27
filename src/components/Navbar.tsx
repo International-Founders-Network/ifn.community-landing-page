@@ -1,13 +1,26 @@
 import { useState, useEffect, useRef, type MouseEvent } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
-import { Menu, X, ChevronDown, ArrowRight } from 'lucide-react';
+import {
+    Menu,
+    X,
+    ChevronDown,
+    ArrowRight,
+    Users,
+    Target,
+    Presentation,
+    BookOpen,
+    PenLine,
+    Award,
+    Handshake,
+    type LucideIcon,
+} from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ButtonLink } from './ButtonLink';
 
 
 // Primary nav IA (openspec/changes/nav-ia-grouped-menu, revision 3; visuals
-// revision 5): an Events
+// revision 6): an Events
 // menu, a Resources menu, a Gallery link, a Collaborate menu holding Sponsors
 // and Partners, an About link, then one action. There is no separate
 // Membership link because "Become a member" already carries that intent.
@@ -25,30 +38,21 @@ function photoPath(photo: NavPhoto, width: number, ext: 'avif' | 'webp' | 'jpg')
     return `/photos/gallery-${photo.slot}-${width}w.${ext}`;
 }
 
-// The ground of a row's period-mark tile (revision 4). Every value is a brand
-// token or a low opacity wash of one; the accent only ever washes, it never
-// fills a tile.
-type MarkTone = 'band' | 'paper' | 'ink' | 'accent';
-
-// How the period-mark sits in its tile (revision 5). The ground alone was not
-// enough: every tile read as the same drawing. Each row takes its own
-// composition, a crop, scale, offset or rotation of the one brand geometry,
-// sometimes with a soft ink line behind it, and no two rows share one.
-type MarkCompose = 'whole' | 'orbit' | 'tilt' | 'disc' | 'period' | 'drift' | 'pair';
-
-// `photo` swaps the desktop card's mark tile for a gallery frame. Mobile keeps
-// the mark, so the flat list does not turn into a strip of thumbnails.
+// Every row has its own icon, so no two rows read as the same drawing
+// (revision 6). `photo` swaps the desktop card's icon tile for a gallery
+// frame. Mobile keeps the icon, so the flat list does not turn into a strip of
+// thumbnails.
 type NavChildItem = NavLinkItem & {
     description: string;
-    tone: MarkTone;
-    compose: MarkCompose;
+    icon: LucideIcon;
     photo?: NavPhoto;
 };
 // `intro` is the one line that heads the group's desktop panel. Like the row
 // descriptions it is paraphrased from ROUTE_SEO. `feature` puts a large photo
 // in a left column with the rows stacked beside it; groups without one lay
 // their rows out two across under the intro. Photos stay selective: the Events
-// and Collaborate features and the Library card, and every other row is a mark.
+// and Collaborate features and the Library card, and every other row is an
+// icon tile.
 type NavGroupItem = {
     name: string;
     intro: string;
@@ -73,22 +77,19 @@ const NAV_ITEMS: NavItem[] = [
                 name: 'Meetups',
                 href: '/events',
                 description: 'Free monthly evenings in Austin',
-                tone: 'band',
-                compose: 'whole',
+                icon: Users,
             },
             {
                 name: 'Accountability Pod',
                 href: '/accountability-pods',
                 description: 'Small founder groups checking in on goals. Coming soon',
-                tone: 'accent',
-                compose: 'orbit',
+                icon: Target,
             },
             {
                 name: 'Workshops',
                 href: '/workshops',
                 description: 'Visas, banking, hiring, fundraising',
-                tone: 'ink',
-                compose: 'tilt',
+                icon: Presentation,
             },
         ],
     },
@@ -100,16 +101,14 @@ const NAV_ITEMS: NavItem[] = [
                 name: 'Library',
                 href: '/resources',
                 description: 'Guides for founders building in the US',
-                tone: 'band',
-                compose: 'disc',
+                icon: BookOpen,
                 photo: { slot: 'feb-slide', tile: 640 },
             },
             {
                 name: 'Blogs',
                 href: '/blog',
                 description: 'Peer notes from founders in Austin',
-                tone: 'accent',
-                compose: 'period',
+                icon: PenLine,
             },
         ],
     },
@@ -123,15 +122,13 @@ const NAV_ITEMS: NavItem[] = [
                 name: 'Sponsors',
                 href: '/sponsors',
                 description: 'Back the monthly meetups',
-                tone: 'ink',
-                compose: 'drift',
+                icon: Award,
             },
             {
                 name: 'Partners',
                 href: '/partners',
                 description: 'Collaborators who help run IFN',
-                tone: 'paper',
-                compose: 'pair',
+                icon: Handshake,
             },
         ],
     },
@@ -170,167 +167,43 @@ function NavPicture({
     );
 }
 
-// Tile ground per tone, and the disc fill that stays visible on it: the mark's
-// large disc is --band in the brand master, which would vanish on a --band
-// tile, so every non-paper ground takes a --paper disc instead.
-const MARK_TONES: Record<MarkTone, { tile: string; disc: string }> = {
-    band: { tile: 'bg-band', disc: 'var(--paper)' },
-    paper: { tile: 'bg-paper border border-rule/40', disc: 'var(--band)' },
-    ink: { tile: 'bg-ink/[0.06]', disc: 'var(--paper)' },
-    accent: { tile: 'bg-accent/[0.06]', disc: 'var(--paper)' },
-};
-
-// The brand geometry always goes through translate(6 11), which centres it
-// near (38, 36) in the 72 unit box: disc at (25, 42) r19, ring at (47, 26)
-// r15, period at (64, 47) r6. A composition either crops that box (`viewBox`)
-// or moves the mark within it (`transform`, applied right to left, so
-// scale and rotate pivot on the centre). `soft` is an ink line or wash drawn
-// behind the mark in box units, never the accent. `bleed` crops fill their
-// whole tile in the square forms; `card` places the mark in a tall desktop
-// card, where the negative margins let it run off the clipped edge.
-const MARK = 'translate(6 11)';
-const ABOUT_CENTRE = (step: string) => `translate(38 36) ${step} translate(-38 -36) ${MARK}`;
-
-const MARK_COMPOSES: Record<
-    MarkCompose,
-    {
-        viewBox: string;
-        transform: string;
-        soft?: 'rings' | 'band' | 'echo';
-        bleed: boolean;
-        card: { tile: string; mark: string };
-    }
-> = {
-    // The full mark, centred: the brand as drawn.
-    whole: {
-        viewBox: '0 0 72 72',
-        transform: MARK,
-        bleed: false,
-        card: { tile: 'items-end justify-end p-3', mark: 'size-20' },
-    },
-    // Small, inside two soft rings: a group gathered round one point.
-    orbit: {
-        viewBox: '0 0 72 72',
-        transform: ABOUT_CENTRE('scale(0.58)'),
-        soft: 'rings',
-        bleed: false,
-        card: { tile: 'items-center justify-end pr-6', mark: 'size-24' },
-    },
-    // Rotated a quarter turn back and a size up, clipped at the corners.
-    tilt: {
-        viewBox: '0 0 72 72',
-        transform: `rotate(-24 38 36) ${ABOUT_CENTRE('scale(1.18)')}`,
-        bleed: true,
-        card: { tile: 'items-end justify-start', mark: 'size-28 -mb-5 -ml-3' },
-    },
-    // Cropped onto the disc, with the lower arc of the ring crossing it.
-    disc: {
-        viewBox: '4 16 48 48',
-        transform: MARK,
-        bleed: true,
-        card: { tile: 'items-end justify-start', mark: 'size-28 -mb-6 -ml-4' },
-    },
-    // Cropped onto the period and the right of the ring, the accent large.
-    period: {
-        viewBox: '34 16 38 38',
-        transform: MARK,
-        bleed: true,
-        card: { tile: 'items-center justify-end pr-4', mark: 'size-24' },
-    },
-    // Enlarged, turned and pushed up and left over a soft ink band.
-    drift: {
-        viewBox: '0 0 72 72',
-        transform: `translate(-8 -4) rotate(12 38 36) ${ABOUT_CENTRE('scale(1.3)')}`,
-        soft: 'band',
-        bleed: true,
-        card: { tile: 'items-end justify-start', mark: 'size-32 -mb-8 -ml-6' },
-    },
-    // The full mark with a second ring echoing the first: two parties.
-    pair: {
-        viewBox: '4 2 68 68',
-        transform: MARK,
-        soft: 'echo',
-        bleed: false,
-        card: { tile: 'items-start justify-end', mark: 'size-28 -mt-3 -mr-2' },
-    },
-};
-
-function MarkSoft({ kind }: { kind: 'rings' | 'band' | 'echo' }) {
-    if (kind === 'rings') {
+/**
+ * A row's leading visual where it has no photo: its lucide icon in a square
+ * tile with a 1px border. The icon is --ink and never takes the accent. On the
+ * desktop panel the tile inverts to an --ink fill on hover, focus and the
+ * current route; the mobile tile is smaller and stays at rest, because the
+ * mobile row carries its state in the link text. Decorative, because the link
+ * already names its destination.
+ */
+function NavIconTile({
+    icon: Icon,
+    size,
+    isActive = false,
+}: {
+    icon: LucideIcon;
+    size: 'panel' | 'mobile';
+    isActive?: boolean;
+}) {
+    if (size === 'mobile') {
         return (
-            <g fill="none" stroke="var(--ink)" strokeOpacity="0.16" strokeWidth="1">
-                <circle cx="38" cy="36" r="24" />
-                <circle cx="38" cy="36" r="32" />
-            </g>
+            <span
+                aria-hidden="true"
+                className="flex size-8 shrink-0 items-center justify-center border border-rule bg-paper text-ink"
+            >
+                <Icon strokeWidth={1.5} className="size-4" />
+            </span>
         );
     }
-    if (kind === 'band') {
-        return <rect x="0" y="46" width="72" height="14" fill="var(--ink)" fillOpacity="0.07" />;
-    }
     return (
-        <circle
-            cx="59"
-            cy="16"
-            r="15"
-            fill="none"
-            stroke="var(--ink)"
-            strokeOpacity="0.24"
-            strokeWidth="1.25"
-        />
-    );
-}
-
-// Tile and mark sizes for each place a mark appears. `row` is the square tile
-// in the Events list, `card` the tall tile on a desktop card, `mobile` the
-// small square in the mobile panel.
-const MARK_SIZES = {
-    row: { tile: 'size-14 items-center justify-center', mark: 'size-11', bleedMark: 'size-14' },
-    mobile: { tile: 'size-8 items-center justify-center', mark: 'size-7', bleedMark: 'size-8' },
-} as const;
-
-/**
- * A row's leading visual: the IFN period-mark on a soft tile. Geometry is the
- * brand master (ifn-brand assets/logo/ifn-period-mark.svg, same as
- * public/favicon.svg): a band disc, an ink ring and an accent period. It is
- * drawn inline with the colour tokens rather than loaded as an <img>, so it
- * follows the dark theme, which a file with baked in hex values cannot. The
- * geometry is never redrawn, only cropped, scaled, moved or turned per row.
- * Decorative, because the link already names its destination.
- */
-function NavMark({
-    tone,
-    compose,
-    size,
-    markClassName = '',
-}: {
-    tone: MarkTone;
-    compose: MarkCompose;
-    size: 'row' | 'card' | 'mobile';
-    markClassName?: string;
-}) {
-    const { tile, disc } = MARK_TONES[tone];
-    const c = MARK_COMPOSES[compose];
-    const place =
-        size === 'card'
-            ? { tile: `h-32 w-full ${c.card.tile}`, mark: c.card.mark }
-            : {
-                  tile: MARK_SIZES[size].tile,
-                  mark: c.bleed ? MARK_SIZES[size].bleedMark : MARK_SIZES[size].mark,
-              };
-    return (
-        <span aria-hidden="true" className={`flex shrink-0 overflow-hidden ${tile} ${place.tile}`}>
-            <svg
-                viewBox={c.viewBox}
-                className={`shrink-0 ${place.mark} ${markClassName}`}
-                focusable="false"
-            >
-                {c.soft && <MarkSoft kind={c.soft} />}
-                <g transform={c.transform}>
-                    <circle cx="19" cy="31" r="19" fill={disc} />
-                    <circle cx="41" cy="15" r="15" fill="none" stroke="var(--ink)" strokeWidth="1.25" />
-                    <circle cx="58" cy="36" r="6" fill="var(--accent)" />
-                </g>
-            </svg>
+        <span
+            aria-hidden="true"
+            className={`flex size-10 shrink-0 items-center justify-center border transition-colors ${
+                isActive
+                    ? 'border-ink bg-ink text-paper'
+                    : 'border-rule bg-paper text-ink group-hover/row:border-ink group-hover/row:bg-ink group-hover/row:text-paper group-focus-visible/row:border-ink group-focus-visible/row:bg-ink group-focus-visible/row:text-paper'
+            }`}
+        >
+            <Icon strokeWidth={1.5} className="size-5" />
         </span>
     );
 }
@@ -400,17 +273,18 @@ function mobileLinkClass(isActive: boolean): string {
 // MOTION_INTENSITY 4 animates transform and opacity only).
 const PANEL_WIDTH = 'w-[min(44rem,calc(100vw-3rem))]';
 
-// The hover and focus lift shared by a row's mark and a card's photo.
+// The hover and focus lift on a card's photo. Icon tiles invert instead.
 const HOVER_SCALE =
     'motion-safe:transition-transform motion-safe:duration-300 ' +
     'group-hover/row:scale-105 group-focus-visible/row:scale-105';
 
 /**
  * The destination rows of one desktop panel. `stack` is the vertical list
- * beside a feature photo: a small square mark tile, the name and a one line
- * description in a row. `grid` sets them two across under the intro as cards,
- * a tall mark tile (or the row's photo) on top, so a two item panel fills the
- * same height as Events.
+ * beside a feature photo: an icon tile, the name and a one line description in
+ * a row. Every row takes an equal share of the feature's height, so Collaborate's
+ * two rows fill the column the way Events' three do rather than floating in
+ * it. `grid` sets them two across under the intro as cards, the row's photo
+ * (Library) or its icon tile on top.
  */
 function PanelRows({
     group,
@@ -426,7 +300,7 @@ function PanelRows({
         <ul
             className={
                 layout === 'stack'
-                    ? 'flex flex-col justify-center gap-1'
+                    ? 'flex h-full flex-col gap-1'
                     : 'grid flex-1 grid-cols-2 gap-1 pt-3'
             }
         >
@@ -438,6 +312,7 @@ function PanelRows({
                     // transform and opacity only. At rest under reduced motion.
                     <motion.li
                         key={child.name}
+                        className={layout === 'stack' ? 'flex-1' : undefined}
                         initial={reduceMotion ? false : { opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{
@@ -453,7 +328,7 @@ function PanelRows({
                             alone; the one line description is wired as its
                             description rather than folded into the name. The
                             active row carries a 2px --ink edge (left in the
-                            stack, top on a card) and a
+                            stack, top on a card), an inverted icon tile and a
                             semibold name as well as the --band fill, so it does
                             not depend on tone alone. */}
                         <NavigationMenu.Link asChild active={isActive}>
@@ -471,10 +346,10 @@ function PanelRows({
                                         : 'border-transparent hover:bg-band'
                                 }`}
                             >
-                                {/* The mark, or a card's photo, scales up a
-                                    touch on hover and focus inside its own
-                                    clipped tile, transform only. Each row's
-                                    composition sets where its mark sits. */}
+                                {/* A card's photo scales up a touch on hover
+                                    and focus inside its own clipped tile,
+                                    transform only. Every other row leads with
+                                    its icon tile, which inverts instead. */}
                                 {layout === 'grid' && child.photo ? (
                                     <span className="block h-32 w-full shrink-0 overflow-hidden bg-ink">
                                         <NavPicture
@@ -484,12 +359,7 @@ function PanelRows({
                                         />
                                     </span>
                                 ) : (
-                                    <NavMark
-                                        tone={child.tone}
-                                        compose={child.compose}
-                                        size={layout === 'stack' ? 'row' : 'card'}
-                                        markClassName={HOVER_SCALE}
-                                    />
+                                    <NavIconTile icon={child.icon} size="panel" isActive={isActive} />
                                 )}
                                 <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                                     <span
@@ -505,7 +375,7 @@ function PanelRows({
                                     </span>
                                 </span>
                                 {/* The arrow belongs to the row form; a
-                                    card's hover cue is its mark. */}
+                                    card's hover cue is its photo or tile. */}
                                 {layout === 'stack' && (
                                     <ArrowRight
                                         aria-hidden="true"
@@ -862,13 +732,13 @@ export function Navbar() {
                                                                     setIsMobileMenuOpen(false)
                                                                 }
                                                             >
-                                                                {/* The same mark tile
+                                                                {/* The same icon tile
                                                                     as the desktop row,
-                                                                    smaller, so the two
+                                                                    smaller and never a
+                                                                    photo, so the two
                                                                     read as one menu. */}
-                                                                <NavMark
-                                                                    tone={child.tone}
-                                                                    compose={child.compose}
+                                                                <NavIconTile
+                                                                    icon={child.icon}
                                                                     size="mobile"
                                                                 />
                                                                 {child.name}

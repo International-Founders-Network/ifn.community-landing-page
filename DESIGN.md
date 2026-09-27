@@ -577,42 +577,34 @@ right aligned to the action. It is 44rem wide (capped at the viewport less
 2px `--ink` bar under whichever trigger is open, sitting on the panel's top
 edge, so trigger and panel read as one piece.
 
-Panels keep photography selective (revision 5): the Events feature
+Panels keep photography selective (revision 6): the Events feature
 (`sep-group`), the Collaborate feature (`aug-networking`) and the Library card
-(`feb-slide`), all reused gallery frames. Every other destination row leads
-with the IFN period-mark on a soft tile (band, paper, ink wash, or accent
-wash), decorative because the link already names its destination. No photo on
-every row, and no lucide icon tiles as the primary visual.
+(`feb-slide`), all reused gallery frames, and nowhere else. Every other
+destination row leads with its own lucide icon in a square ink tile, a 1px
+`--rule` border on `--paper` with the icon in `--ink` at stroke 1.5, decorative
+because the link already names its destination. No two rows share an icon:
+Meetups `Users`, Accountability Pod `Target`, Workshops `Presentation`, Library
+`BookOpen` (mobile only), Blogs `PenLine`, Sponsors `Award`, Partners
+`Handshake`. The period-mark crops of revision 5 are gone; the mark stays in the
+wordmark, not in the menu.
 
-The mark tiles must not read as clones, so each row takes its own composition
-of the one brand geometry as well as its own ground. The geometry is never
-redrawn, only cropped, scaled, moved or turned, and any soft extra is a low
-opacity `--ink` line or wash:
-
-| Row | Ground | Composition |
-| --- | --- | --- |
-| Meetups | band | `whole`: the full mark, centred |
-| Accountability Pod | accent wash | `orbit`: the mark small inside two soft ink rings |
-| Workshops | ink wash | `tilt`: turned back 24 degrees and a size up, clipped |
-| Library (mobile only) | band | `disc`: cropped onto the disc and the lower arc of the ring |
-| Blogs | accent wash | `period`: cropped onto the period and the right of the ring |
-| Sponsors | ink wash | `drift`: enlarged, turned and pushed off the edge over a soft ink band |
-| Partners | paper | `pair`: the full mark with a second ring echoing the first |
-
-The Events and Collaborate panels are two columns. On the left, a feature
-photo under an `--ink` bottom scrim carries the group label and intro in
-`--paper`; it sets the scene and is not a link. On the right, the group's rows
-as a vertical list (Meetups, Accountability Pod and Workshops; Sponsors and
-Partners), each a small square mark tile, the name, and one `--muted` line
-paraphrased from that route's `ROUTE_SEO` description. Resources opens with
-the group label (uppercase `--muted`) and one `--ink` intro line, then its two
-rows as cards: Library with its photo on top, Blogs with a tall mark tile. The
-accessible name is the item name alone and the line is its description. On
-hover and focus a row fills with `--band`, its mark or photo scales to 1.05
-inside a clipped box, and in a feature panel's list an arrow slides in. The current route adds
-a 2px `--ink` edge (left in the list, top on a card) and semibold weight so it
-does not rely on tone. The accent never fills a panel tile; it only appears as
-the period inside the mark, or as a soft wash behind it.
+The Events and Collaborate panels are the same layout: two columns, a 17rem
+feature and the rows, 16rem minimum height. On the left, a feature photo under
+an `--ink` bottom scrim carries the group label and intro in `--paper`; it sets
+the scene and is not a link. On the right, the group's rows as a vertical list
+(Meetups, Accountability Pod and Workshops; Sponsors and Partners), each a
+40px icon tile, the name, and one `--muted` line paraphrased from that route's
+`ROUTE_SEO` description. Every row takes an equal share of the column's
+height, so Collaborate's two rows fill the column the way Events' three do
+rather than floating in the middle of it. Resources opens with the group label
+(uppercase `--muted`) and one `--ink` intro line, then its two rows as cards:
+Library with its photo on top, Blogs with its icon tile on top. The accessible
+name is the item name alone and the line is its description. On hover and
+focus a row fills with `--band`, its icon tile inverts to an `--ink` fill with
+a `--paper` icon (a card's photo scales to 1.05 inside a clipped box instead),
+and in a feature panel's list an arrow slides in. The current route adds a 2px
+`--ink` edge (left in the list, top on a card), the inverted tile and semibold
+weight so it does not rely on tone. The accent never appears in a panel.
 
 **Viewport and Indicator now earn their place.** The first grouped version
 skipped both, rendering each panel inline in its `<li>` and positioning it by
@@ -636,9 +628,8 @@ height so the switch stays a slide, not a resize. Every animation is
 `motion-safe:` and at rest under reduced motion.
 
 On mobile the same table renders as flat sections under uppercase `--muted`
-labels (Events, Resources, Collaborate), each row led by a small period-mark
-tile in that row's composition (Library too, so the flat list carries no
-photos), with Gallery and About as plain rows in their table positions and the
+labels (Events, Resources, Collaborate), each row led by a 32px version of
+its icon tile (Library too, so the flat list carries no photos), with Gallery and About as plain rows in their table positions and the
 pill last. Never a disclosure inside the menu disclosure.
 
 ### The modal
