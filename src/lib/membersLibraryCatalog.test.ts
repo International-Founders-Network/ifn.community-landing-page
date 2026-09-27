@@ -4,9 +4,12 @@ import {
   MEMBERS_APP_ORIGIN,
   assetById,
   fetchMembersLibraryCatalog,
+  fullDownloadUrl,
+  isLandingFull,
   isTeaserPublic,
   parseCatalog,
   resolveMembersAppOrigin,
+  teaserDownloadUrl,
   type PublicLibraryCatalog,
 } from './membersLibraryCatalog';
 
@@ -15,6 +18,7 @@ const VISA = {
   title: 'Visa pathways',
   memberDownloadable: false,
   teaserPublic: false,
+  landingFull: false,
   fullObjectKey: 'pack-a/visa-pathways.pdf',
   teaserObjectKey: 'pack-a/teasers/visa-pathways.pdf',
 };
@@ -22,8 +26,17 @@ const BANKING = {
   ...VISA,
   id: 'banking',
   title: 'Banking',
+  description: 'Opening a US account from abroad.',
   memberDownloadable: true,
   teaserPublic: true,
+};
+const DISCOVERED = {
+  ...VISA,
+  id: 'hiring-abroad',
+  title: 'Hiring abroad',
+  landingFull: true,
+  fullObjectKey: 'library/hiring-abroad.pdf',
+  teaserObjectKey: 'library/teasers/hiring-abroad.pdf',
 };
 
 describe('members app origin', () => {
@@ -45,6 +58,22 @@ describe('parseCatalog', () => {
       assets: [VISA, { id: 'x', teaserPublic: 'yes' }, null],
     });
     expect(parsed).toEqual({ assets: [VISA] });
+  });
+
+  it('requires landingFull and a string-or-absent description', () => {
+    const { landingFull: _omit, ...noLandingFull } = VISA;
+    void _omit;
+    const parsed = parseCatalog({
+      assets: [
+        noLandingFull,
+        { ...VISA, landingFull: 'true' },
+        { ...VISA, description: 42 },
+        { ...VISA, id: '' },
+        BANKING,
+        DISCOVERED,
+      ],
+    });
+    expect(parsed).toEqual({ assets: [BANKING, DISCOVERED] });
   });
 
   it('rejects a body without an assets array', () => {
@@ -70,6 +99,43 @@ describe('teaser gate', () => {
   it('assetById finds by id', () => {
     expect(assetById(catalog, 'visa-pathways')).toEqual(VISA);
     expect(assetById(catalog, 'missing')).toBeUndefined();
+  });
+});
+
+describe('landing full gate', () => {
+  const catalog: PublicLibraryCatalog = { assets: [VISA, BANKING, DISCOVERED] };
+
+  it('opens only when landingFull is true', () => {
+    expect(isLandingFull(catalog, 'hiring-abroad')).toBe(true);
+    expect(isLandingFull(catalog, 'visa-pathways')).toBe(false);
+  });
+
+  it('never treats memberDownloadable as a landing full grant', () => {
+    expect(BANKING.memberDownloadable).toBe(true);
+    expect(isLandingFull(catalog, 'banking')).toBe(false);
+  });
+
+  it('stays closed for unknown ids and missing catalogs', () => {
+    expect(isLandingFull(catalog, 'missing')).toBe(false);
+    expect(isLandingFull(null, 'hiring-abroad')).toBe(false);
+    expect(isLandingFull(undefined, 'hiring-abroad')).toBe(false);
+  });
+});
+
+describe('download urls', () => {
+  it('points at the members public teaser and full routes', () => {
+    expect(teaserDownloadUrl(DEFAULT_MEMBERS_APP_ORIGIN, 'visa-pathways')).toBe(
+      'https://members.ifn.community/api/public/library/visa-pathways/teaser',
+    );
+    expect(fullDownloadUrl('http://localhost:8889', 'visa-pathways')).toBe(
+      'http://localhost:8889/api/public/library/visa-pathways/full',
+    );
+  });
+
+  it('encodes the id as one path segment', () => {
+    expect(fullDownloadUrl(DEFAULT_MEMBERS_APP_ORIGIN, 'a/b c')).toBe(
+      'https://members.ifn.community/api/public/library/a%2Fb%20c/full',
+    );
   });
 });
 

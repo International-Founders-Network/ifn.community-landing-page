@@ -9,7 +9,18 @@ import { Emphasis } from './Emphasis';
 import { RESOURCES_DATA } from '../data/resourcesData';
 import type { Resource } from '../data/resourcesData';
 import {
-    ChevronRight, ArrowRight, Search, Filter, Lock, ChevronDown, Clock,
+    MEMBERS_APP_ORIGIN,
+    MEMBERS_LIBRARY_URL,
+    assetById,
+    fetchMembersLibraryCatalog,
+    fullDownloadUrl,
+    isLandingFull,
+    isTeaserPublic,
+    teaserDownloadUrl,
+    type PublicLibraryCatalog,
+} from '../lib/membersLibraryCatalog';
+import {
+    ChevronRight, ArrowRight, Search, Filter, Lock, ChevronDown, Clock, Download,
     Sprout, Rocket, Store, PlaneLanding, Globe, Compass,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -83,6 +94,31 @@ const TEXT_LINK =
     'rounded focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink ' +
     'focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
 
+type LibraryLink = { key: string; href: string; label: string };
+
+/**
+ * Download links for a card whose `id` matches a members catalog asset. Every
+ * link is gated on a members flag that is `true` exactly; no catalog, or no
+ * matching asset, means no links and the card keeps its existing footer.
+ *
+ * `memberDownloadable` alone only earns a pointer to the members library,
+ * never a landing download.
+ */
+function libraryLinksFor(catalog: PublicLibraryCatalog | null, id: string): LibraryLink[] {
+    const asset = assetById(catalog, id);
+    if (!asset) return [];
+    const links: LibraryLink[] = [];
+    if (isTeaserPublic(catalog, id)) {
+        links.push({ key: 'teaser', href: teaserDownloadUrl(MEMBERS_APP_ORIGIN, id), label: 'Download teaser PDF' });
+    }
+    if (isLandingFull(catalog, id)) {
+        links.push({ key: 'full', href: fullDownloadUrl(MEMBERS_APP_ORIGIN, id), label: 'Download full PDF' });
+    } else if (asset.memberDownloadable === true) {
+        links.push({ key: 'members', href: MEMBERS_LIBRARY_URL, label: 'Full guide for members' });
+    }
+    return links;
+}
+
 export function Resources() {
     const { openJoinModal } = useOutletContext<{ openJoinModal?: () => void }>() || {};
     const segments = Object.values(RESOURCES_DATA);
@@ -93,6 +129,20 @@ export function Resources() {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const filterWrapRef = useRef<HTMLDivElement>(null);
     const filterTriggerRef = useRef<HTMLButtonElement>(null);
+    const [libraryCatalog, setLibraryCatalog] = useState<PublicLibraryCatalog | null>(null);
+
+    // Members catalog flags, fetched once. Soft-fails to null, which leaves
+    // every card as it was. The prerender aborts `/api/` requests, so these
+    // links are never baked into the static HTML and always reflect live flags.
+    useEffect(() => {
+        let cancelled = false;
+        fetchMembersLibraryCatalog().then(result => {
+            if (!cancelled && result.ok) setLibraryCatalog(result.data);
+        });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
     const closeFilter = (returnFocus = false) => {
         setIsFilterOpen(false);
@@ -163,7 +213,9 @@ export function Resources() {
     }, [stageResources, activeFilters, searchQuery]);
 
     const isFiltered = activeFilters.length > 0 || searchQuery.trim().length > 0;
-    const nothingPublishedHere = filteredResources.length > 0 && filteredResources.every(r => !r.link);
+    const nothingPublishedHere =
+        filteredResources.length > 0 &&
+        filteredResources.every(r => !r.link && libraryLinksFor(libraryCatalog, r.id).length === 0);
 
     const handleSegmentChange = (id: string) => {
         setActiveSegmentId(id);
@@ -442,6 +494,7 @@ export function Resources() {
                                                 {filteredResources.map((resource) => {
                                                     const ResourceIcon = resource.icon;
                                                     const isExternal = Boolean(resource.link && /^https?:/i.test(resource.link));
+                                                    const libraryLinks = libraryLinksFor(libraryCatalog, resource.id);
                                                     return (
                                                         <li
                                                             key={resource.id}
@@ -472,16 +525,35 @@ export function Resources() {
                                                             </p>
 
                                                             <div className="border-t border-rule pt-4">
-                                                                {resource.link ? (
-                                                                    <a
-                                                                        href={resource.link}
-                                                                        {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                                                                        className={cn(TEXT_LINK, 'inline-flex min-h-11 items-center gap-2 px-1')}
-                                                                    >
-                                                                        {resource.tag === 'Video' ? 'Watch the video' : 'Open the guide'}
-                                                                        <ArrowRight size={16} aria-hidden="true" />
-                                                                        {isExternal && <span className="sr-only">(opens in a new tab)</span>}
-                                                                    </a>
+                                                                {resource.link || libraryLinks.length > 0 ? (
+                                                                    <div className="flex flex-wrap gap-x-6">
+                                                                        {resource.link && (
+                                                                            <a
+                                                                                href={resource.link}
+                                                                                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                                                                                className={cn(TEXT_LINK, 'inline-flex min-h-11 items-center gap-2 px-1')}
+                                                                            >
+                                                                                {resource.tag === 'Video' ? 'Watch the video' : 'Open the guide'}
+                                                                                <ArrowRight size={16} aria-hidden="true" />
+                                                                                {isExternal && <span className="sr-only">(opens in a new tab)</span>}
+                                                                            </a>
+                                                                        )}
+                                                                        {libraryLinks.map(link => (
+                                                                            <a
+                                                                                key={link.key}
+                                                                                href={link.href}
+                                                                                target="_blank"
+                                                                                rel="noopener noreferrer"
+                                                                                className={cn(TEXT_LINK, 'inline-flex min-h-11 items-center gap-2 px-1')}
+                                                                            >
+                                                                                {link.label}
+                                                                                {link.key === 'members'
+                                                                                    ? <ArrowRight size={16} aria-hidden="true" />
+                                                                                    : <Download size={16} aria-hidden="true" />}
+                                                                                <span className="sr-only">(opens in a new tab)</span>
+                                                                            </a>
+                                                                        ))}
+                                                                    </div>
                                                                 ) : (
                                                                     <p className="inline-flex items-center gap-2 text-sm font-medium text-muted">
                                                                         <Clock size={16} aria-hidden="true" />
