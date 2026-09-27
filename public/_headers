@@ -134,3 +134,24 @@
 
 /robots.txt
   Cache-Control: public, max-age=3600
+
+# Favicons. Period-mark replaced the orange globe at the same filenames; keep
+# revalidation short so a bad disk cache cannot pin the globe. Query ?v= on the
+# <link> tags is the primary bust; these headers are belt-and-suspenders.
+/favicon.ico
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/favicon.svg
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/favicon.png
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/favicon-16.png
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/favicon-32.png
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400, must-revalidate

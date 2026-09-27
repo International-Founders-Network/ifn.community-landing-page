@@ -78,11 +78,13 @@
        rather than waste it. -->
   <link rel="preload" href="/fonts/archivo-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <!-- Period-mark favicon only. Cache-bust query so browsers drop the retired
+       orange-globe bytes that lived at these same paths. Do not add a second
+       competing set (no dual globe+period tags). /favicon.ico exists so the
+       implicit browser request no longer 404s and falls back to a stale cache. -->
+  <link rel="icon" href="/favicon.svg?v=period-mark" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico?v=period-mark" sizes="any" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=period-mark" />
 
   <title>International Founders Network | Founder Community in Austin, Texas</title>
   <meta name="description"
