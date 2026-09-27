@@ -577,16 +577,17 @@ right aligned to the action. It is 44rem wide (capped at the viewport less
 2px `--ink` bar under whichever trigger is open, sitting on the panel's top
 edge, so trigger and panel read as one piece.
 
-Panels keep photography selective (revision 6): the Events feature
-(`sep-group`), the Collaborate feature (`aug-networking`) and the Library card
-(`feb-slide`), all reused gallery frames, and nowhere else. Every other
-destination row leads with its own lucide icon in a square ink tile, a 1px
-`--rule` border on `--paper` with the icon in `--ink` at stroke 1.5, decorative
-because the link already names its destination. No two rows share an icon:
-Meetups `Users`, Accountability Pod `Target`, Workshops `Presentation`, Library
-`BookOpen` (mobile only), Blogs `PenLine`, Sponsors `Award`, Partners
-`Handshake`. The period-mark crops of revision 5 are gone; the mark stays in the
-wordmark, not in the menu.
+Panels keep photography selective (revision 7): the Events feature
+(`sep-group`) and the Collaborate feature (`aug-networking`), both reused
+gallery frames, and nowhere else. Every destination row, including Library and
+Blogs on the Resources panel, leads with its own lucide icon in a square ink
+tile, a 1px `--rule` border on `--paper` with the icon in `--ink` at stroke
+1.5, decorative because the link already names its destination. No two rows
+share an icon: Meetups `Users`, Accountability Pod `Target`, Workshops
+`Presentation`, Library `BookOpen`, Blogs `PenLine`, Sponsors `Award`, Partners
+`Handshake`. Library `BookOpen` is desktop and mobile (revision 6 was
+mobile-only). The period-mark crops of revision 5 are gone; the mark stays in
+the wordmark, not in the menu.
 
 The Events and Collaborate panels are the same layout: two columns, a 17rem
 feature and the rows, 16rem minimum height. On the left, a feature photo under
@@ -597,14 +598,15 @@ the scene and is not a link. On the right, the group's rows as a vertical list
 `ROUTE_SEO` description. Every row takes an equal share of the column's
 height, so Collaborate's two rows fill the column the way Events' three do
 rather than floating in the middle of it. Resources opens with the group label
-(uppercase `--muted`) and one `--ink` intro line, then its two rows as cards:
-Library with its photo on top, Blogs with its icon tile on top. The accessible
-name is the item name alone and the line is its description. On hover and
-focus a row fills with `--band`, its icon tile inverts to an `--ink` fill with
-a `--paper` icon (a card's photo scales to 1.05 inside a clipped box instead),
-and in a feature panel's list an arrow slides in. The current route adds a 2px
-`--ink` edge (left in the list, top on a card), the inverted tile and semibold
-weight so it does not rely on tone. The accent never appears in a panel.
+(uppercase `--muted`) and one `--ink` intro line, then its two rows as a
+vertical icon stack: Library with `BookOpen` and Blogs with `PenLine`, the same
+layout as the Events and Collaborate stack rows (flex-1, icon tile, name,
+description, left border-l-2 active edge, ArrowRight). The accessible name is
+the item name alone and the line is its description. On hover and focus a row
+fills with `--band`, its icon tile inverts to an `--ink` fill with a `--paper`
+icon, and an arrow slides in. The current route adds a 2px `--ink` left edge,
+the inverted tile and semibold weight so it does not rely on tone. The accent
+never appears in a panel.
 
 **Viewport and Indicator now earn their place.** The first grouped version
 skipped both, rendering each panel inline in its `<li>` and positioning it by
@@ -629,8 +631,9 @@ height so the switch stays a slide, not a resize. Every animation is
 
 On mobile the same table renders as flat sections under uppercase `--muted`
 labels (Events, Resources, Collaborate), each row led by a 32px version of
-its icon tile (Library too, so the flat list carries no photos), with Gallery and About as plain rows in their table positions and the
-pill last. Never a disclosure inside the menu disclosure.
+its icon tile (Library `BookOpen`, Blogs `PenLine`), with Gallery and About as
+plain rows in their table positions and the pill last. No photos in the mobile
+list. Never a disclosure inside the menu disclosure.
 
 ### The modal
 

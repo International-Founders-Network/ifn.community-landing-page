@@ -9,9 +9,10 @@ Revision 3 (Kyra and Venkat feedback on PR #38) locks the IA below: Events
 gains Accountability Pod, Sponsors and Partners move out of About into a
 Collaborate menu, and About becomes a plain link. Revision 4 keeps that IA and
 trims panel visuals to abstract brand marks (period-mark on soft tiles).
-Revision 5 varies each row's mark composition and allows three selective
-gallery photos: the Events and Collaborate feature columns and the Library
-card. The requirements are written against that final state.
+Revision 5 varies each row's mark composition and adds selective photos.
+Revision 6 replaces marks with lucide icon tiles. Revision 7 drops the Library
+photo card so Resources is a clean icon stack; photos remain on the Events and
+Collaborate features only. The requirements are written against that final state.
 
 ## ADDED Requirements
 
@@ -60,16 +61,14 @@ pod exists, any member count or any schedule. It SHALL be listed in
 ### Requirement: Desktop group menus
 On desktop, each group SHALL open a panel listing its links when the visitor
 hovers or clicks its trigger, or activates it with Enter or Space. Each panel
-link SHALL show a decorative leading visual, the item name and a one line
-description, and SHALL expose the item name as its accessible name. The leading
-visual SHALL be the IFN period-mark on a soft tile, in a composition (crop,
-scale, offset or rotation) that no other row in the nav shares, except that the
-Library card on desktop SHALL show a gallery photo instead. Panel links SHALL
-NOT lead with lucide icon tiles as the primary visual. The Events and
-Collaborate panels SHALL be two columns: a feature photo carrying the group
-intro on the left, and the group's links as a vertical list on the right. No
-other panel region SHALL use a gallery photo, and mobile rows SHALL use marks
-only. Escape SHALL
+link SHALL show a decorative lucide icon tile, the item name and a one line
+description, and SHALL expose the item name as its accessible name. No two rows
+SHALL share an icon. The Events and Collaborate panels SHALL be two columns: a
+feature photo carrying the group intro on the left, and the group's links as a
+vertical icon stack on the right. The Resources panel SHALL show its rows
+(Library and Blogs) as a vertical icon stack under an intro header, with no
+photo. Gallery photos SHALL appear only on the Events and Collaborate feature
+columns. Escape SHALL
 close an open panel and return focus to its trigger. Every group's panel SHALL
 render in one shared panel under the bar that lies wholly inside the viewport
 at 768px and wider, and an indicator SHALL mark the open trigger. Clicking outside SHALL
@@ -81,9 +80,9 @@ a trigger whose panel is already open SHALL NOT close it. Triggers SHALL expose
 - **WHEN** a keyboard user focuses the Events trigger, presses Enter, then presses Escape
 - **THEN** the panel opens showing Meetups, Accountability Pod and Workshops, then closes, and focus is on the Events trigger
 
-#### Scenario: Selective photos, varied marks
+#### Scenario: Selective photos, icon stack rows
 - **WHEN** a visitor opens Events, Resources and Collaborate in turn
-- **THEN** Events and Collaborate each show one feature photo on the left with mark tiles on their rows, Resources shows a photo on the Library card and a mark tile on Blogs, and no two mark tiles share a composition
+- **THEN** Events and Collaborate each show one feature photo on the left with icon tile rows on the right, Resources shows Library and Blogs as icon tile rows under an intro header with no photo, and no two rows share an icon
 
 #### Scenario: Shared panel and indicator
 - **WHEN** a visitor on a 768px viewport opens Events and then moves to Collaborate

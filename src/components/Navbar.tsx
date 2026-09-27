@@ -20,7 +20,7 @@ import { ButtonLink } from './ButtonLink';
 
 
 // Primary nav IA (openspec/changes/nav-ia-grouped-menu, revision 3; visuals
-// revision 6): an Events
+// revision 7): an Events
 // menu, a Resources menu, a Gallery link, a Collaborate menu holding Sponsors
 // and Partners, an About link, then one action. There is no separate
 // Membership link because "Become a member" already carries that intent.
@@ -39,20 +39,16 @@ function photoPath(photo: NavPhoto, width: number, ext: 'avif' | 'webp' | 'jpg')
 }
 
 // Every row has its own icon, so no two rows read as the same drawing
-// (revision 6). `photo` swaps the desktop card's icon tile for a gallery
-// frame. Mobile keeps the icon, so the flat list does not turn into a strip of
-// thumbnails.
+// (revision 7).
 type NavChildItem = NavLinkItem & {
     description: string;
     icon: LucideIcon;
-    photo?: NavPhoto;
 };
 // `intro` is the one line that heads the group's desktop panel. Like the row
 // descriptions it is paraphrased from ROUTE_SEO. `feature` puts a large photo
-// in a left column with the rows stacked beside it; groups without one lay
-// their rows out two across under the intro. Photos stay selective: the Events
-// and Collaborate features and the Library card, and every other row is an
-// icon tile.
+// in a left column with the rows stacked beside it; groups without one stack
+// their rows vertically under the intro. Photos are on the Events and
+// Collaborate features only; every row is an icon tile.
 type NavGroupItem = {
     name: string;
     intro: string;
@@ -102,7 +98,6 @@ const NAV_ITEMS: NavItem[] = [
                 href: '/resources',
                 description: 'Guides for founders building in the US',
                 icon: BookOpen,
-                photo: { slot: 'feb-slide', tile: 640 },
             },
             {
                 name: 'Blogs',
@@ -136,7 +131,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 /**
- * A gallery frame in the nav: a group feature or the Library card. It is decorative
+ * A gallery frame for a group feature (Events, Collaborate). Decorative
  * (alt="", hidden from the accessibility tree) because the panel's text carries
  * the meaning. Panels mount only when opened, so `lazy` keeps it off the first
  * load.
@@ -267,52 +262,34 @@ function mobileLinkClass(isActive: boolean): string {
 }
 
 // Every panel is one width and one minimum height, whether it has a feature
-// column (Events, Collaborate) or lays its rows two across (Resources), so the
-// shared Viewport changes panels with little or no change in size. That keeps
-// the switch a slide and not a resize (width and height are layout properties, and
-// MOTION_INTENSITY 4 animates transform and opacity only).
+// column (Events, Collaborate) or stacks its rows under an intro header
+// (Resources), so the shared Viewport changes panels with little or no change
+// in size. That keeps the switch a slide and not a resize.
 const PANEL_WIDTH = 'w-[min(44rem,calc(100vw-3rem))]';
 
-// The hover and focus lift on a card's photo. Icon tiles invert instead.
-const HOVER_SCALE =
-    'motion-safe:transition-transform motion-safe:duration-300 ' +
-    'group-hover/row:scale-105 group-focus-visible/row:scale-105';
-
 /**
- * The destination rows of one desktop panel. `stack` is the vertical list
- * beside a feature photo: an icon tile, the name and a one line description in
- * a row. Every row takes an equal share of the feature's height, so Collaborate's
- * two rows fill the column the way Events' three do rather than floating in
- * it. `grid` sets them two across under the intro as cards, the row's photo
- * (Library) or its icon tile on top.
+ * The destination rows of one desktop panel, always a vertical stack: an icon
+ * tile, the name and a one line description in a row. Every row takes an equal
+ * share of the column's height, so Collaborate's two rows fill it the way
+ * Events' three do rather than floating in it.
  */
 function PanelRows({
     group,
     pathname,
-    layout,
 }: {
     group: NavGroupItem;
     pathname: string;
-    layout: 'stack' | 'grid';
 }) {
     const reduceMotion = useReducedMotion();
     return (
-        <ul
-            className={
-                layout === 'stack'
-                    ? 'flex h-full flex-col gap-1'
-                    : 'grid flex-1 grid-cols-2 gap-1 pt-3'
-            }
-        >
+        <ul className="flex h-full flex-col gap-1">
             {group.children.map((child, index) => {
                 const isActive = isRouteActive(pathname, child.href);
                 const id = rowId(child.href);
                 return (
-                    // Rows follow the panel 40ms apart, 6px rise and fade,
-                    // transform and opacity only. At rest under reduced motion.
                     <motion.li
                         key={child.name}
-                        className={layout === 'stack' ? 'flex-1' : undefined}
+                        className="flex-1"
                         initial={reduceMotion ? false : { opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{
@@ -321,46 +298,18 @@ function PanelRows({
                             delay: 0.04 * (index + 1),
                         }}
                     >
-                        {/* Radix Slot merges className as a string, so NavLink
-                            gets a computed string here rather than its function
-                            form. NavLink still sets aria-current="page" on the
-                            active route. The accessible name is the item name
-                            alone; the one line description is wired as its
-                            description rather than folded into the name. The
-                            active row carries a 2px --ink edge (left in the
-                            stack, top on a card), an inverted icon tile and a
-                            semibold name as well as the --band fill, so it does
-                            not depend on tone alone. */}
                         <NavigationMenu.Link asChild active={isActive}>
                             <NavLink
                                 to={child.href}
                                 aria-labelledby={`${id}-name`}
                                 aria-describedby={`${id}-desc`}
-                                className={`group/row flex h-full rounded-none p-2 transition-colors ${FOCUS_RING} ${
-                                    layout === 'stack'
-                                        ? 'items-center gap-4 border-l-2'
-                                        : 'flex-col gap-3 border-t-2'
-                                } ${
+                                className={`group/row flex h-full items-center gap-4 rounded-none border-l-2 p-2 transition-colors ${FOCUS_RING} ${
                                     isActive
                                         ? 'border-ink bg-band'
                                         : 'border-transparent hover:bg-band'
                                 }`}
                             >
-                                {/* A card's photo scales up a touch on hover
-                                    and focus inside its own clipped tile,
-                                    transform only. Every other row leads with
-                                    its icon tile, which inverts instead. */}
-                                {layout === 'grid' && child.photo ? (
-                                    <span className="block h-32 w-full shrink-0 overflow-hidden bg-ink">
-                                        <NavPicture
-                                            photo={child.photo}
-                                            width={child.photo.tile}
-                                            className={`size-full object-cover ${HOVER_SCALE}`}
-                                        />
-                                    </span>
-                                ) : (
-                                    <NavIconTile icon={child.icon} size="panel" isActive={isActive} />
-                                )}
+                                <NavIconTile icon={child.icon} size="panel" isActive={isActive} />
                                 <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                                     <span
                                         id={`${id}-name`}
@@ -374,15 +323,11 @@ function PanelRows({
                                         {child.description}
                                     </span>
                                 </span>
-                                {/* The arrow belongs to the row form; a
-                                    card's hover cue is its photo or tile. */}
-                                {layout === 'stack' && (
-                                    <ArrowRight
-                                        aria-hidden="true"
-                                        strokeWidth={1.5}
-                                        className="size-4 shrink-0 -translate-x-1 text-ink opacity-0 motion-safe:transition-[opacity,transform] group-hover/row:translate-x-0 group-hover/row:opacity-100 group-focus-visible/row:translate-x-0 group-focus-visible/row:opacity-100"
-                                    />
-                                )}
+                                <ArrowRight
+                                    aria-hidden="true"
+                                    strokeWidth={1.5}
+                                    className="size-4 shrink-0 -translate-x-1 text-ink opacity-0 motion-safe:transition-[opacity,transform] group-hover/row:translate-x-0 group-hover/row:opacity-100 group-focus-visible/row:translate-x-0 group-focus-visible/row:opacity-100"
+                                />
                             </NavLink>
                         </NavigationMenu.Link>
                     </motion.li>
@@ -480,7 +425,7 @@ function DesktopGroup({
                                 <p className="text-sm font-medium text-paper">{group.intro}</p>
                             </div>
                         </div>
-                        <PanelRows group={group} pathname={pathname} layout="stack" />
+                        <PanelRows group={group} pathname={pathname} />
                     </div>
                 ) : (
                     <div className="flex min-h-64 flex-col">
@@ -490,7 +435,7 @@ function DesktopGroup({
                             </p>
                             <p className="text-sm text-ink">{group.intro}</p>
                         </div>
-                        <PanelRows group={group} pathname={pathname} layout="grid" />
+                        <PanelRows group={group} pathname={pathname} />
                     </div>
                 )}
             </NavigationMenu.Content>

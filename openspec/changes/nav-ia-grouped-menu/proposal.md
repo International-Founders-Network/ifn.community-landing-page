@@ -139,6 +139,22 @@ Collaborate list looked loose next to Events. Visuals only; IA unchanged.
 - Workshops page and the `/accountability-pods` stub stay untouched. Radix
   Viewport and Indicator stay.
 
+## Revision 7 (Venkat via Kyra, PR #38)
+
+Drop the Library photo card (`feb-slide`) from the Resources panel. Visuals
+only; IA unchanged.
+
+- Library and Blogs are both lucide icon stack rows (`BookOpen`, `PenLine`),
+  the same layout as the Events and Collaborate stack rows (flex-1, icon tile,
+  name, description, left border-l-2 active edge, ArrowRight).
+- Resources uses the stack layout, consistent with Events and Collaborate rows
+  rather than a two-across grid of cards.
+- Photos remain on two feature slots only: Events (`sep-group`) and Collaborate
+  (`aug-networking`). `feb-slide` is no longer used in the nav.
+- Library `BookOpen` is now desktop and mobile (revision 6 was mobile-only).
+- Dead code removed: `photo` field on `NavChildItem`, `layout: 'grid'` branch,
+  `HOVER_SCALE` constant, photo-card rendering path.
+
 ## Capabilities
 
 ### New Capabilities

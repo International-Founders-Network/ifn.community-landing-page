@@ -63,3 +63,12 @@
 - [x] 9.4 Update DESIGN.md Navigation section and this change's proposal, design and spec delta
 - [x] 9.5 Run `npx tsc -b`, lint, `npm test`, `npm run build`; confirm PR #38 stays draft
 
+## 10. Revision 7 (Resources icon stack; drop Library photo)
+
+- [x] 10.1 Drop `photo: { slot: 'feb-slide', tile: 640 }` from the Library child under Resources in `NAV_ITEMS`
+- [x] 10.2 Resources mega panel uses stack layout (vertical icon rows) instead of two-across grid cards; Library `BookOpen` and Blogs `PenLine` both as icon stack rows
+- [x] 10.3 Remove dead code: `photo` optional field on `NavChildItem`, `layout === 'grid' && child.photo` branch, `HOVER_SCALE` constant, grid layout path in `PanelRows`
+- [x] 10.4 Update comments: revision 6 → revision 7; NavPicture for group features only; photo slots = Events + Collaborate features only
+- [x] 10.5 Update DESIGN.md Navigation section, proposal.md (Revision 7), design.md, spec.md and tasks.md
+- [x] 10.6 Run `npx tsc -b` and verify pass
+

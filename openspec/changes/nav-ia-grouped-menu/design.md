@@ -168,6 +168,14 @@ layout as Events, and the Library card on the Resources grid shows
 `feb-slide` in place of its mark tile. Blogs stays a mark, and mobile keeps a
 mark for Library so the flat list carries no photos.
 
+**Resources as icon stack, not photo/icon cards (revision 7).** Revision 6
+kept the Library card as a photo (`feb-slide`) in a two-across grid. Revision 7
+drops that photo card and the grid layout entirely: Resources is now a vertical
+icon stack (Library `BookOpen`, Blogs `PenLine`), consistent with the
+Events and Collaborate stack rows. Photos remain on the two feature slots only
+(`sep-group`, `aug-networking`). The `photo` field on `NavChildItem`, the
+`layout: 'grid'` branch and `HOVER_SCALE` are removed as dead code.
+
 ## Risks / Trade-offs
 
 - [The shared panel is right aligned, so the Events panel does not start under
@@ -184,10 +192,10 @@ mark for Library so the flat list carries no photos.
   one] → Resolved in revision 3: About is a link again and Sponsors and
   Partners sit under Collaborate.
 - [Nav photo paths are strings, not imports from the generated photo module]
-  → If `npm run photos` renames `sep-group`, `aug-networking` or `feb-slide`,
-  or their tile widths, that photo 404s without failing the build. Accepted to
-  keep the photo module out of the entry chunk; the three slots used are listed
-  in the one `NAV_ITEMS` table in `Navbar.tsx`.
+  → If `npm run photos` renames `sep-group` or `aug-networking`, or their tile
+  widths, that photo 404s without failing the build. Accepted to keep the photo
+  module out of the entry chunk; the two slots used are listed in the one
+  `NAV_ITEMS` table in `Navbar.tsx`. (`feb-slide` was removed in revision 7.)
 - [Accountability Pod links to a placeholder] → Better than a dead link, and
   the page says plainly that pods are not open yet.
 - [Hover-open can feel twitchy] → Radix default 200ms open delay and 150ms
