@@ -176,6 +176,15 @@ Events and Collaborate stack rows. Photos remain on the two feature slots only
 (`sep-group`, `aug-networking`). The `photo` field on `NavChildItem`, the
 `layout: 'grid'` branch and `HOVER_SCALE` are removed as dead code.
 
+**Resources as horizontal icon grid (revision 8).** Revision 7's vertical stack
+is replaced with a horizontal 2-column grid: Library and Blogs side by side as
+equal columns, both keeping their lucide icon tiles (`BookOpen`, `PenLine`).
+Grid cards are vertical (icon tile on top, name and description stacked below,
+border-t-2 on hover/active/current) instead of the stack layout's horizontal
+rows (border-l-2, ArrowRight). `PanelRows` restores the `layout` prop:
+`'stack'` for Events/Collaborate features, `'grid'` for Resources. Photos
+remain Events and Collaborate features only. No Library photo.
+
 ## Risks / Trade-offs
 
 - [The shared panel is right aligned, so the Events panel does not start under

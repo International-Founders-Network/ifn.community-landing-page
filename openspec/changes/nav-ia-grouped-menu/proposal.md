@@ -155,6 +155,23 @@ only; IA unchanged.
 - Dead code removed: `photo` field on `NavChildItem`, `layout: 'grid'` branch,
   `HOVER_SCALE` constant, photo-card rendering path.
 
+## Revision 8 (Venkat via Kyra, PR #38)
+
+Resources submenu should be horizontal — Library and Blog side by side in a
+2-column grid, not a vertical stack. Visuals only; IA unchanged.
+
+- Resources panel renders Library and Blogs as a horizontal 2-column grid
+  instead of a vertical stack. Both keep their lucide icon tiles (`BookOpen`,
+  `PenLine`).
+- Grid cards are vertical: icon tile on top, name and description stacked
+  below, border-t-2 on hover/active/current (not border-l-2). No ArrowRight.
+- Events and Collaborate remain stack layout (feature photo on left, vertical
+  rows on right with icon tile, name, description, border-l-2, ArrowRight).
+- `PanelRows` component restored `layout` prop (`'stack' | 'grid'`). Events and
+  Collaborate pass `layout="stack"`, Resources passes `layout="grid"`.
+- Photos remain Events (`sep-group`) and Collaborate (`aug-networking`)
+  features only. No Library photo.
+
 ## Capabilities
 
 ### New Capabilities

@@ -20,7 +20,7 @@ import { ButtonLink } from './ButtonLink';
 
 
 // Primary nav IA (openspec/changes/nav-ia-grouped-menu, revision 3; visuals
-// revision 7): an Events
+// revision 8): an Events
 // menu, a Resources menu, a Gallery link, a Collaborate menu holding Sponsors
 // and Partners, an About link, then one action. There is no separate
 // Membership link because "Become a member" already carries that intent.
@@ -268,19 +268,73 @@ function mobileLinkClass(isActive: boolean): string {
 const PANEL_WIDTH = 'w-[min(44rem,calc(100vw-3rem))]';
 
 /**
- * The destination rows of one desktop panel, always a vertical stack: an icon
- * tile, the name and a one line description in a row. Every row takes an equal
- * share of the column's height, so Collaborate's two rows fill it the way
- * Events' three do rather than floating in it.
+ * The destination rows of one desktop panel. Stack layout: icon tile, name and
+ * description in a horizontal row with ArrowRight, filling the column's height.
+ * Grid layout (Resources): two equal columns with icon tiles on top, each a
+ * vertical card with border-t-2 on hover/active (revision 8).
  */
 function PanelRows({
     group,
     pathname,
+    layout = 'stack',
 }: {
     group: NavGroupItem;
     pathname: string;
+    layout?: 'stack' | 'grid';
 }) {
     const reduceMotion = useReducedMotion();
+
+    if (layout === 'grid') {
+        return (
+            <ul className="grid flex-1 grid-cols-2 gap-1 pt-3">
+                {group.children.map((child, index) => {
+                    const isActive = isRouteActive(pathname, child.href);
+                    const id = rowId(child.href);
+                    return (
+                        <motion.li
+                            key={child.name}
+                            initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{
+                                duration: 0.2,
+                                ease: 'easeOut',
+                                delay: 0.04 * (index + 1),
+                            }}
+                        >
+                            <NavigationMenu.Link asChild active={isActive}>
+                                <NavLink
+                                    to={child.href}
+                                    aria-labelledby={`${id}-name`}
+                                    aria-describedby={`${id}-desc`}
+                                    className={`group/row flex h-full flex-col gap-3 rounded-none border-t-2 p-3 transition-colors ${FOCUS_RING} ${
+                                        isActive
+                                            ? 'border-ink bg-band'
+                                            : 'border-transparent hover:bg-band'
+                                    }`}
+                                >
+                                    <NavIconTile icon={child.icon} size="panel" isActive={isActive} />
+                                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                                        <span
+                                            id={`${id}-name`}
+                                            className={`text-sm text-ink ${
+                                                isActive ? 'font-semibold' : 'font-medium'
+                                            }`}
+                                        >
+                                            {child.name}
+                                        </span>
+                                        <span id={`${id}-desc`} className="text-xs leading-5 text-muted">
+                                            {child.description}
+                                        </span>
+                                    </span>
+                                </NavLink>
+                            </NavigationMenu.Link>
+                        </motion.li>
+                    );
+                })}
+            </ul>
+        );
+    }
+
     return (
         <ul className="flex h-full flex-col gap-1">
             {group.children.map((child, index) => {
@@ -425,7 +479,7 @@ function DesktopGroup({
                                 <p className="text-sm font-medium text-paper">{group.intro}</p>
                             </div>
                         </div>
-                        <PanelRows group={group} pathname={pathname} />
+                        <PanelRows group={group} pathname={pathname} layout="stack" />
                     </div>
                 ) : (
                     <div className="flex min-h-64 flex-col">
@@ -435,7 +489,7 @@ function DesktopGroup({
                             </p>
                             <p className="text-sm text-ink">{group.intro}</p>
                         </div>
-                        <PanelRows group={group} pathname={pathname} />
+                        <PanelRows group={group} pathname={pathname} layout="grid" />
                     </div>
                 )}
             </NavigationMenu.Content>

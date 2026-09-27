@@ -598,10 +598,12 @@ the scene and is not a link. On the right, the group's rows as a vertical list
 `ROUTE_SEO` description. Every row takes an equal share of the column's
 height, so Collaborate's two rows fill the column the way Events' three do
 rather than floating in the middle of it. Resources opens with the group label
-(uppercase `--muted`) and one `--ink` intro line, then its two rows as a
-vertical icon stack: Library with `BookOpen` and Blogs with `PenLine`, the same
-layout as the Events and Collaborate stack rows (flex-1, icon tile, name,
-description, left border-l-2 active edge, ArrowRight). The accessible name is
+(uppercase `--muted`) and one `--ink` intro line, then its two items as a
+horizontal 2-column grid (revision 8): Library with `BookOpen` and Blogs with
+`PenLine` side by side, equal columns. Each is a vertical card with the icon
+tile on top, name and description stacked below, border-t-2 on hover/active/
+current. No ArrowRight in the grid cards, unlike the stack layout used for
+Events and Collaborate row panels. The accessible name is
 the item name alone and the line is its description. On hover and focus a row
 fills with `--band`, its icon tile inverts to an `--ink` fill with a `--paper`
 icon, and an arrow slides in. The current route adds a 2px `--ink` left edge,

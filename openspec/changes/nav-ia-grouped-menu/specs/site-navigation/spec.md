@@ -12,7 +12,9 @@ trims panel visuals to abstract brand marks (period-mark on soft tiles).
 Revision 5 varies each row's mark composition and adds selective photos.
 Revision 6 replaces marks with lucide icon tiles. Revision 7 drops the Library
 photo card so Resources is a clean icon stack; photos remain on the Events and
-Collaborate features only. The requirements are written against that final state.
+Collaborate features only. Revision 8 (Venkat via Kyra) makes Resources a
+horizontal 2-column grid (Library | Blogs side by side with icon tiles) instead
+of a vertical stack. The requirements are written against that final state.
 
 ## ADDED Requirements
 

@@ -72,3 +72,12 @@
 - [x] 10.5 Update DESIGN.md Navigation section, proposal.md (Revision 7), design.md, spec.md and tasks.md
 - [x] 10.6 Run `npx tsc -b` and verify pass
 
+## 11. Revision 8 (Resources horizontal Library|Blog icon columns)
+
+- [x] 11.1 Resources panel renders Library and Blogs as horizontal 2-column grid instead of vertical stack; both keep lucide icon tiles (`BookOpen`, `PenLine`)
+- [x] 11.2 Grid cards are vertical (icon tile on top, name/description below, border-t-2 on hover/active) instead of stack layout (border-l-2, ArrowRight)
+- [x] 11.3 `PanelRows` restores `layout` prop: Events/Collaborate pass `layout="stack"`, Resources passes `layout="grid"`
+- [x] 11.4 Update comments: revision 7 → revision 8
+- [x] 11.5 Update DESIGN.md Navigation section, proposal.md (Revision 8), design.md, spec.md and tasks.md
+- [x] 11.6 Run `npx tsc -b`, eslint on touched files, `npm test`, `npm run build`; commit and push to `feat/nav-ia-events-resources`; confirm PR #38 stays draft
+
