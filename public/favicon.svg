@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  IFN period-mark (Pack A abstract). Master vector.
+  Geometry from Typst ifn-page1-mark in ifn-gumroad/templates/ifn.typ
+  (locked 2026-09-26): band fill circle + ink ring + accent period.
+  Hairline omitted for favicon / image-logo use.
+  Tokens (light): band #F0F0EC, ink #131311, accent #A81B36.
+  Naming: period-mark — never logo.png.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" role="img" aria-label="IFN period mark">
+  <!--
+    Typst size S=100 units → content bbox ~ [0,0]..[64,50] (no hairline).
+    Centers (Typst place = top-left of circle bbox):
+      band:  (19, 31) r=19
+      ring:  (41, 15) r=15  stroke ≈ S/102 ≈ 0.98
+      accent:(58, 36) r=6
+    Padded into square 72×72 (6u left, 4u right, 11u top, 11u bottom).
+  -->
+  <g transform="translate(6, 11)">
+    <circle cx="19" cy="31" r="19" fill="#F0F0EC"/>
+    <circle cx="41" cy="15" r="15" fill="none" stroke="#131311" stroke-width="1.25"/>
+    <circle cx="58" cy="36" r="6" fill="#A81B36"/>
+  </g>
+</svg>
