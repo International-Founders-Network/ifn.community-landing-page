@@ -113,6 +113,43 @@ so screen readers hear a short name. Hover and focus fill the tile with
 tile keeps the inverted icon tile and adds a 2px `--ink` top edge. Mobile rows
 carry a smaller copy of the icon tile, still flat.
 
+## Revision 3 decisions
+
+These supersede "Sponsors and Partners under About" and "Richer panels" above
+where they disagree.
+
+**Collaborate menu, About as a link.** Sponsors and Partners move into a
+Collaborate menu, the same grouping the footer already uses, so bar and footer
+now agree. About goes back to one click. The bar holds five entries plus the
+action, which still fits one line at 768px with the stepped gaps.
+
+**Accountability Pod under Events.** It is an in person, recurring format, so it
+sits with Meetups and Workshops. The route is a ComingSoon placeholder wired
+exactly like `/mentorship`: lazy route, non-indexable `ROUTE_SEO` entry,
+`NOINDEX_PATHS`, a 200 rewrite ahead of the 404 catch-all, and
+`X-Robots-Tag: noindex, follow` on the bare path and `/*`.
+
+**Photos, not icon tiles.** Rows lead with a gallery frame instead of a lucide
+icon tile, so the panels show the actual room. Frames come from the existing
+tile derivatives in `public/photos/` (avif, webp, jpeg fallback). The paths are
+built in `Navbar.tsx` from slot and tile width rather than imported from
+`src/data/photos.generated.ts`, because the nav ships in the entry chunk and
+that module (with every alt text) does not. Images are decorative (`alt=""`,
+hidden) because the link's name already says where it goes, and `lazy`, which
+matters little since panels mount only when opened.
+
+**Events: feature plus vertical list.** The Events panel is a two column grid:
+a 17rem feature photo (the 1280 view tier, so it stays sharp on 2x) under an
+`--ink` bottom scrim carrying the group label and intro in `--paper`, and the
+three rows stacked on the right, each a small thumb, name and line, with the
+arrow sliding in on hover and focus. The feature is not a link. Resources and
+Collaborate keep the label and intro strip and set their two rows as cards,
+photo on top. Every panel is 44rem wide (capped at `100vw - 3rem`) and at least
+16rem tall, so the Viewport switch stays close to a pure slide. The active row
+carries a 2px `--ink` edge (left in the list, top on a card) plus semibold.
+Thumbs scale 1.05 on hover inside a clipped box, transform only and
+`motion-safe:`. Mobile rows swap the icon tile for a small thumb.
+
 ## Risks / Trade-offs
 
 - [The shared panel is right aligned, so the Events panel does not start under
@@ -126,8 +163,14 @@ carry a smaller copy of the icon tile, still flat.
 - [Radix adds a visually hidden focus proxy next to an open trigger] → It is
   part of Radix's Tab order handling and is not announced; accepted.
 - [About is now a menu, so `/about` takes two actions from the bar instead of
-  one] → Accepted to keep Sponsors and Partners in the bar; the footer still
-  links About Us directly.
+  one] → Resolved in revision 3: About is a link again and Sponsors and
+  Partners sit under Collaborate.
+- [Nav photo paths are strings, not imports from the generated photo module]
+  → If `npm run photos` renames a slot or tile width, a nav thumb 404s without
+  failing the build. Accepted to keep the photo module out of the entry chunk;
+  the slots used are listed in one table in `Navbar.tsx`.
+- [Accountability Pod links to a placeholder] → Better than a dead link, and
+  the page says plainly that pods are not open yet.
 - [Hover-open can feel twitchy] → Radix default 200ms open delay and 150ms
   close delay kept.
 - [Privacy policy copy is otherwise out of scope] → Only the two quoted button

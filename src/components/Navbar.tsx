@@ -1,34 +1,40 @@
 import { useState, useEffect, useRef, type MouseEvent } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
-import {
-    Menu,
-    X,
-    ChevronDown,
-    Users,
-    Presentation,
-    BookOpen,
-    PenLine,
-    Globe,
-    Award,
-    Handshake,
-    ArrowRight,
-    type LucideIcon,
-} from 'lucide-react';
+import { Menu, X, ChevronDown, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ButtonLink } from './ButtonLink';
 
 
-// Primary nav IA (openspec/changes/nav-ia-grouped-menu, revised): Events and
-// Resources menus, a Gallery link, an About menu that also holds Sponsors and
-// Partners, then one action. There is no separate Membership link because
-// "Become a member" already carries that intent. Desktop and mobile both
-// render from this one table so they cannot drift.
+// Primary nav IA (openspec/changes/nav-ia-grouped-menu, revision 3): an Events
+// menu, a Resources menu, a Gallery link, a Collaborate menu holding Sponsors
+// and Partners, an About link, then one action. There is no separate
+// Membership link because "Become a member" already carries that intent.
+// Desktop and mobile both render from this one table so they cannot drift.
 type NavLinkItem = { name: string; href: string };
-type NavChildItem = NavLinkItem & { description: string; icon: LucideIcon };
-// `intro` is the one line under the group label at the top of its desktop
-// panel. Like the row descriptions it is paraphrased from ROUTE_SEO.
-type NavGroupItem = { name: string; intro: string; children: NavChildItem[] };
+
+// A gallery frame already in public/photos, named by its slot and the width of
+// its tile tier (see galleryFrames in src/data/photos.generated.ts). The paths
+// are built here rather than read from that module because the nav ships in
+// the entry chunk and the module, with every alt text, does not. Every tier is
+// 16:9 and carries avif, webp and a jpeg fallback, so one pattern covers them.
+type NavPhoto = { slot: string; tile: number };
+
+function photoPath(photo: NavPhoto, width: number, ext: 'avif' | 'webp' | 'jpg'): string {
+    return `/photos/gallery-${photo.slot}-${width}w.${ext}`;
+}
+
+type NavChildItem = NavLinkItem & { description: string; photo: NavPhoto };
+// `intro` is the one line that heads the group's desktop panel. Like the row
+// descriptions it is paraphrased from ROUTE_SEO. `feature` puts a large photo
+// in a left column with the rows stacked beside it; groups without one lay
+// their rows out two across under the intro.
+type NavGroupItem = {
+    name: string;
+    intro: string;
+    feature?: NavPhoto;
+    children: NavChildItem[];
+};
 type NavItem = NavLinkItem | NavGroupItem;
 
 function isNavGroup(item: NavItem): item is NavGroupItem {
@@ -41,18 +47,25 @@ const NAV_ITEMS: NavItem[] = [
     {
         name: 'Events',
         intro: 'In person in Austin. Register on Luma.',
+        feature: { slot: 'sep-group', tile: 640 },
         children: [
             {
                 name: 'Meetups',
                 href: '/events',
                 description: 'Free monthly evenings in Austin',
-                icon: Users,
+                photo: { slot: 'aug-networking', tile: 640 },
+            },
+            {
+                name: 'Accountability Pod',
+                href: '/accountability-pods',
+                description: 'Small founder groups checking in on goals. Coming soon',
+                photo: { slot: 'apr-gesture', tile: 704 },
             },
             {
                 name: 'Workshops',
                 href: '/workshops',
                 description: 'Visas, banking, hiring, fundraising',
-                icon: Presentation,
+                photo: { slot: 'aug-room', tile: 640 },
             },
         ],
     },
@@ -64,42 +77,68 @@ const NAV_ITEMS: NavItem[] = [
                 name: 'Library',
                 href: '/resources',
                 description: 'Guides for founders building in the US',
-                icon: BookOpen,
+                photo: { slot: 'feb-slide', tile: 640 },
             },
             {
                 name: 'Blogs',
                 href: '/blog',
                 description: 'Peer notes from founders in Austin',
-                icon: PenLine,
+                photo: { slot: 'sep-talk', tile: 640 },
             },
         ],
     },
     { name: 'Gallery', href: '/gallery' },
     {
-        name: 'About',
-        intro: 'Built in Austin. Free meetups, optional membership.',
+        name: 'Collaborate',
+        intro: 'The people who help the Austin meetups happen.',
         children: [
-            {
-                name: 'About IFN',
-                href: '/about',
-                description: 'For founders from somewhere else',
-                icon: Globe,
-            },
             {
                 name: 'Sponsors',
                 href: '/sponsors',
                 description: 'Back the monthly meetups',
-                icon: Award,
+                photo: { slot: 'aug-group', tile: 640 },
             },
             {
                 name: 'Partners',
                 href: '/partners',
                 description: 'Collaborators who help run IFN',
-                icon: Handshake,
+                photo: { slot: 'jul-hall', tile: 640 },
             },
         ],
     },
+    { name: 'About', href: '/about' },
 ];
+
+/**
+ * A decorative gallery frame. The link around it already carries the name, so
+ * the image is alt="" and hidden from the accessibility tree. Panels mount only
+ * when opened, so `lazy` keeps every frame off the first load.
+ */
+function NavPicture({
+    photo,
+    width,
+    className,
+}: {
+    photo: NavPhoto;
+    width: number;
+    className: string;
+}) {
+    return (
+        <picture aria-hidden="true">
+            <source type="image/avif" srcSet={photoPath(photo, width, 'avif')} />
+            <source type="image/webp" srcSet={photoPath(photo, width, 'webp')} />
+            <img
+                src={photoPath(photo, photo.tile, 'jpg')}
+                alt=""
+                width={16}
+                height={9}
+                loading="lazy"
+                decoding="async"
+                className={className}
+            />
+        </picture>
+    );
+}
 
 const MOBILE_MENU_ID = 'primary-navigation-menu';
 
@@ -159,15 +198,123 @@ function mobileLinkClass(isActive: boolean): string {
     }`;
 }
 
-// Two rows sit two across and three sit three across, so every panel is one
-// row of tiles at one width and one height. The shared Viewport then changes
-// panels without changing size, which keeps the switch a slide and not a
-// resize (width and height are layout properties, and MOTION_INTENSITY 4
-// animates transform and opacity only).
-const TILE_COLUMNS: Record<number, string> = {
-    2: 'grid-cols-2',
-    3: 'grid-cols-3',
-};
+// Every panel is one width, and the two groups without a feature photo lay
+// their rows two across under a fixed minimum height, so the shared Viewport
+// changes panels with little or no change in size. That keeps the switch a
+// slide and not a resize (width and height are layout properties, and
+// MOTION_INTENSITY 4 animates transform and opacity only).
+const PANEL_WIDTH = 'w-[min(44rem,calc(100vw-3rem))]';
+
+/**
+ * The destination rows of one desktop panel. `stack` is the vertical list
+ * beside a feature photo: a small thumb, the name and a one line description
+ * in a row. `grid` sets them two across under the intro as cards, the photo
+ * wide on top, so a two item panel fills the same height as Events.
+ */
+function PanelRows({
+    group,
+    pathname,
+    layout,
+}: {
+    group: NavGroupItem;
+    pathname: string;
+    layout: 'stack' | 'grid';
+}) {
+    const reduceMotion = useReducedMotion();
+    return (
+        <ul
+            className={
+                layout === 'stack'
+                    ? 'flex flex-col justify-center gap-1'
+                    : 'grid flex-1 grid-cols-2 gap-1 pt-3'
+            }
+        >
+            {group.children.map((child, index) => {
+                const isActive = isRouteActive(pathname, child.href);
+                const id = rowId(child.href);
+                return (
+                    // Rows follow the panel 40ms apart, 6px rise and fade,
+                    // transform and opacity only. At rest under reduced motion.
+                    <motion.li
+                        key={child.name}
+                        initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                            duration: 0.2,
+                            ease: 'easeOut',
+                            delay: 0.04 * (index + 1),
+                        }}
+                    >
+                        {/* Radix Slot merges className as a string, so NavLink
+                            gets a computed string here rather than its function
+                            form. NavLink still sets aria-current="page" on the
+                            active route. The accessible name is the item name
+                            alone; the one line description is wired as its
+                            description rather than folded into the name. The
+                            active row carries a 2px --ink edge (left in the
+                            stack, top on a card) and a
+                            semibold name as well as the --band fill, so it does
+                            not depend on tone alone. */}
+                        <NavigationMenu.Link asChild active={isActive}>
+                            <NavLink
+                                to={child.href}
+                                aria-labelledby={`${id}-name`}
+                                aria-describedby={`${id}-desc`}
+                                className={`group/row flex h-full rounded-none p-2 transition-colors ${FOCUS_RING} ${
+                                    layout === 'stack'
+                                        ? 'items-center gap-4 border-l-2'
+                                        : 'flex-col gap-3 border-t-2'
+                                } ${
+                                    isActive
+                                        ? 'border-ink bg-band'
+                                        : 'border-transparent hover:bg-band'
+                                }`}
+                            >
+                                {/* The thumb scales up a touch on hover and
+                                    focus inside its own clipped box, transform
+                                    only. */}
+                                <span
+                                    aria-hidden="true"
+                                    className={`block shrink-0 overflow-hidden bg-band ${
+                                        layout === 'stack' ? 'h-14 w-20' : 'h-32 w-full'
+                                    }`}
+                                >
+                                    <NavPicture
+                                        photo={child.photo}
+                                        width={child.photo.tile}
+                                        className="size-full object-cover motion-safe:transition-transform motion-safe:duration-300 group-hover/row:scale-105 group-focus-visible/row:scale-105"
+                                    />
+                                </span>
+                                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                                    <span
+                                        id={`${id}-name`}
+                                        className={`text-sm text-ink ${
+                                            isActive ? 'font-semibold' : 'font-medium'
+                                        }`}
+                                    >
+                                        {child.name}
+                                    </span>
+                                    <span id={`${id}-desc`} className="text-xs leading-5 text-muted">
+                                        {child.description}
+                                    </span>
+                                </span>
+                                {/* The arrow belongs to the row form; a
+                                    card's hover cue is its photo. */}
+                                {layout === 'stack' && (
+                                    <ArrowRight
+                                        aria-hidden="true"
+                                        strokeWidth={1.5}
+                                        className="size-4 shrink-0 -translate-x-1 text-ink opacity-0 motion-safe:transition-[opacity,transform] group-hover/row:translate-x-0 group-hover/row:opacity-100 group-focus-visible/row:translate-x-0 group-focus-visible/row:opacity-100"
+                                    />
+                                )}
+                            </NavLink>
+                        </NavigationMenu.Link>
+                    </motion.li>
+                );
+            })}
+        </ul>
+    );
+}
 
 /**
  * One desktop group: a Radix Navigation Menu trigger plus its panel content.
@@ -186,7 +333,6 @@ function DesktopGroup({
     pathname: string;
     open: boolean;
 }) {
-    const reduceMotion = useReducedMotion();
     const pointerTypeRef = useRef<string>('');
     const childActive = group.children.some((child) => isRouteActive(pathname, child.href));
 
@@ -227,105 +373,50 @@ function DesktopGroup({
                 data-motion; the Viewport's own entrance covers it. */}
             <NavigationMenu.Content
                 className={
-                    'absolute top-0 left-0 w-[min(40rem,calc(100vw-3rem))] p-3 ' +
+                    `absolute top-0 left-0 ${PANEL_WIDTH} p-3 ` +
                     'motion-safe:data-[motion=from-start]:animate-nav-from-start ' +
                     'motion-safe:data-[motion=from-end]:animate-nav-from-end ' +
                     'motion-safe:data-[motion=to-start]:animate-nav-to-start ' +
                     'motion-safe:data-[motion=to-end]:animate-nav-to-end'
                 }
             >
-                <div className="flex items-baseline justify-between gap-6 border-b border-rule px-3 pt-1 pb-3">
-                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted">
-                        {group.name}
-                    </p>
-                    <p className="text-sm text-ink">{group.intro}</p>
-                </div>
-                <ul
-                    className={`grid gap-1 pt-3 ${
-                        TILE_COLUMNS[group.children.length] ?? 'grid-cols-2'
-                    }`}
-                >
-                    {group.children.map((child, index) => {
-                        const isActive = isRouteActive(pathname, child.href);
-                        const id = rowId(child.href);
-                        const Icon = child.icon;
-                        return (
-                            // Rows follow the panel 40ms apart, 6px rise and
-                            // fade, transform and opacity only. At rest under
-                            // reduced motion.
-                            <motion.li
-                                key={child.name}
-                                initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{
-                                    duration: 0.2,
-                                    ease: 'easeOut',
-                                    delay: 0.04 * (index + 1),
-                                }}
-                            >
-                                {/* Radix Slot merges className as a string, so
-                                    NavLink gets a computed string here rather
-                                    than its function form. NavLink still sets
-                                    aria-current="page" on the active route.
-                                    The accessible name is the item name alone;
-                                    the one line description is wired as its
-                                    description rather than folded into the
-                                    name. The active tile carries a 2px --ink
-                                    top edge and an inverted icon tile as well
-                                    as the --band fill, so it does not depend on
-                                    tone alone. */}
-                                <NavigationMenu.Link asChild active={isActive}>
-                                    <NavLink
-                                        to={child.href}
-                                        aria-labelledby={`${id}-name`}
-                                        aria-describedby={`${id}-desc`}
-                                        className={`group/row flex h-full min-h-36 flex-col gap-3 rounded-none border-t-2 p-3 transition-colors ${FOCUS_RING} ${
-                                            isActive
-                                                ? 'border-ink bg-band'
-                                                : 'border-transparent hover:bg-band'
-                                        }`}
-                                    >
-                                        <span aria-hidden="true" className="flex items-start justify-between">
-                                            {/* Ink tile: the icon never takes
-                                                the accent. It inverts to an
-                                                --ink fill on hover, focus and
-                                                the current route. */}
-                                            <span
-                                                className={`flex size-10 shrink-0 items-center justify-center border transition-colors ${
-                                                    isActive
-                                                        ? 'border-ink bg-ink text-paper'
-                                                        : 'border-rule bg-paper text-ink group-hover/row:border-ink group-hover/row:bg-ink group-hover/row:text-paper group-focus-visible/row:border-ink group-focus-visible/row:bg-ink group-focus-visible/row:text-paper'
-                                                }`}
-                                            >
-                                                <Icon strokeWidth={1.5} className="size-5" />
-                                            </span>
-                                            <ArrowRight
-                                                strokeWidth={1.5}
-                                                className="size-4 -translate-x-1 text-ink opacity-0 motion-safe:transition-[opacity,transform] group-hover/row:translate-x-0 group-hover/row:opacity-100 group-focus-visible/row:translate-x-0 group-focus-visible/row:opacity-100"
-                                            />
-                                        </span>
-                                        <span className="flex min-w-0 flex-col gap-0.5">
-                                            <span
-                                                id={`${id}-name`}
-                                                className={`text-sm text-ink ${
-                                                    isActive ? 'font-semibold' : 'font-medium'
-                                                }`}
-                                            >
-                                                {child.name}
-                                            </span>
-                                            <span
-                                                id={`${id}-desc`}
-                                                className="text-xs leading-5 text-muted"
-                                            >
-                                                {child.description}
-                                            </span>
-                                        </span>
-                                    </NavLink>
-                                </NavigationMenu.Link>
-                            </motion.li>
-                        );
-                    })}
-                </ul>
+                {group.feature ? (
+                    // Feature column on the left, rows stacked on the right.
+                    // The feature is not a link: it sets the scene and carries
+                    // the group intro, and every destination is a row.
+                    <div className="grid min-h-64 grid-cols-[minmax(0,17rem)_minmax(0,1fr)] gap-3">
+                        <div className="relative overflow-hidden bg-ink">
+                            <NavPicture
+                                photo={group.feature}
+                                width={1280}
+                                className="absolute inset-0 size-full object-cover"
+                            />
+                            {/* A bottom scrim so the --paper intro reads on any
+                                frame. The scrim is --ink, never the accent. */}
+                            <div
+                                aria-hidden="true"
+                                className="absolute inset-0 bg-linear-to-t from-ink/85 via-ink/35 to-transparent"
+                            />
+                            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4">
+                                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-paper/80">
+                                    {group.name}
+                                </p>
+                                <p className="text-sm font-medium text-paper">{group.intro}</p>
+                            </div>
+                        </div>
+                        <PanelRows group={group} pathname={pathname} layout="stack" />
+                    </div>
+                ) : (
+                    <div className="flex min-h-64 flex-col">
+                        <div className="flex items-baseline justify-between gap-6 border-b border-rule px-3 pt-1 pb-3">
+                            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted">
+                                {group.name}
+                            </p>
+                            <p className="text-sm text-ink">{group.intro}</p>
+                        </div>
+                        <PanelRows group={group} pathname={pathname} layout="grid" />
+                    </div>
+                )}
             </NavigationMenu.Content>
         </NavigationMenu.Item>
     );
@@ -487,7 +578,7 @@ export function Navbar() {
                                 Become a member
                             </ButtonLink>
                             {/* The one shared panel. It hangs from the bar's bottom
-                                edge, right aligned to the action, so a 40rem panel
+                                edge, right aligned to the action, so a 44rem panel
                                 spans the whole cluster and stays on screen at
                                 768px. Its size comes from Radix's measured
                                 viewport variables and is not transitioned; it
@@ -554,36 +645,35 @@ export function Navbar() {
                                                     {item.name}
                                                 </p>
                                                 <ul className="border-l border-rule pl-3">
-                                                    {item.children.map((child) => {
-                                                        const Icon = child.icon;
-                                                        return (
-                                                            <li key={child.name}>
-                                                                <NavLink
-                                                                    to={child.href}
-                                                                    className={({ isActive }) =>
-                                                                        mobileLinkClass(isActive)
-                                                                    }
-                                                                    onClick={() =>
-                                                                        setIsMobileMenuOpen(false)
-                                                                    }
+                                                    {item.children.map((child) => (
+                                                        <li key={child.name}>
+                                                            <NavLink
+                                                                to={child.href}
+                                                                className={({ isActive }) =>
+                                                                    mobileLinkClass(isActive)
+                                                                }
+                                                                onClick={() =>
+                                                                    setIsMobileMenuOpen(false)
+                                                                }
+                                                            >
+                                                                {/* The same gallery
+                                                                    thumb as the desktop
+                                                                    row, smaller, so the
+                                                                    two read as one menu. */}
+                                                                <span
+                                                                    aria-hidden="true"
+                                                                    className="block h-8 w-12 shrink-0 overflow-hidden bg-band"
                                                                 >
-                                                                    {/* The same ink tile as the
-                                                                        desktop panel, smaller, so
-                                                                        the two read as one menu. */}
-                                                                    <span
-                                                                        aria-hidden="true"
-                                                                        className="flex size-8 shrink-0 items-center justify-center border border-rule bg-paper text-ink"
-                                                                    >
-                                                                        <Icon
-                                                                            strokeWidth={1.5}
-                                                                            className="size-4"
-                                                                        />
-                                                                    </span>
-                                                                    {child.name}
-                                                                </NavLink>
-                                                            </li>
-                                                        );
-                                                    })}
+                                                                    <NavPicture
+                                                                        photo={child.photo}
+                                                                        width={child.photo.tile}
+                                                                        className="size-full object-cover"
+                                                                    />
+                                                                </span>
+                                                                {child.name}
+                                                            </NavLink>
+                                                        </li>
+                                                    ))}
                                                 </ul>
                                             </li>
                                         ) : (

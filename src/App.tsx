@@ -25,6 +25,7 @@ const Newsletter = lazy(() => import('./pages/Newsletter').then(module => ({ def
 const Membership = lazy(() => import('./pages/Membership').then(module => ({ default: module.Membership })));
 const Mentorship = lazy(() => import('./pages/Mentorship').then(module => ({ default: module.Mentorship })));
 const Chapters = lazy(() => import('./pages/Chapters').then(module => ({ default: module.Chapters })));
+const AccountabilityPods = lazy(() => import('./pages/AccountabilityPods').then(module => ({ default: module.AccountabilityPods })));
 const CodeOfConduct = lazy(() => import('./pages/CodeOfConduct').then(module => ({ default: module.CodeOfConduct })));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions').then(module => ({ default: module.TermsAndConditions })));
@@ -148,6 +149,7 @@ function App() {
                         <Route path="/membership" element={<Membership />} />
                         <Route path="/mentorship" element={<Mentorship />} />
                         <Route path="/chapters" element={<Chapters />} />
+                        <Route path="/accountability-pods" element={<AccountabilityPods />} />
                         <Route path="/code-of-conduct" element={<CodeOfConduct />} />
                         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />

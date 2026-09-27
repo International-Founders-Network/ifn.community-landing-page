@@ -5,36 +5,64 @@
 The fixed primary navigation bar: which routes it exposes, how they are grouped,
 and how visitors reach them by pointer, keyboard and touch on desktop and mobile.
 
+Revision 3 (Kyra and Venkat feedback on PR #38) locks the IA below: Events
+gains Accountability Pod, Sponsors and Partners move out of About into a
+Collaborate menu, About becomes a plain link, and panel rows lead with gallery
+photos rather than icon tiles. The requirements are written against that
+final state.
+
 ## ADDED Requirements
 
 ### Requirement: Grouped primary navigation
 The primary navigation SHALL show exactly these top-level entries, in this
 order: an "Events" group, a "Resources" group, a "Gallery" link to `/gallery`,
-an "About" group, and a "Become a member" action linking to `/membership`. The
-Events group SHALL contain Meetups `/events` and Workshops `/workshops`. The
-Resources group SHALL contain Library `/resources` and Blogs `/blog`. The About
-group SHALL contain About IFN `/about`, Sponsors `/sponsors` and Partners
-`/partners`, in that order. The navigation SHALL NOT contain a "Discover" or
-"Collaborate" entry or a separate "Membership" link, and SHALL NOT link to any
-route that `src/App.tsx` does not define.
+a "Collaborate" group, an "About" link to `/about`, and a "Become a member"
+action linking to `/membership`. The Events group SHALL contain Meetups
+`/events`, Accountability Pod `/accountability-pods` and Workshops
+`/workshops`, in that order. The Resources group SHALL contain Library
+`/resources` and Blogs `/blog`. The Collaborate group SHALL contain Sponsors
+`/sponsors` and Partners `/partners`, in that order, matching the footer's
+Collaborate group. About SHALL be a link, not a group. The navigation SHALL NOT
+contain a "Discover" entry or a separate "Membership" link, and SHALL NOT link
+to any route that `src/App.tsx` does not define.
 
 #### Scenario: Desktop bar entries
 - **WHEN** a visitor loads any page at a viewport of 768px or wider
-- **THEN** the bar shows Events, Resources, Gallery, About and the "Become a member" action on one line, and no other top-level entries
+- **THEN** the bar shows Events, Resources, Gallery, Collaborate, About and the "Become a member" action on one line, and no other top-level entries
 
 #### Scenario: Sponsors and Partners reachable from the bar
-- **WHEN** a visitor opens the About group
-- **THEN** it lists About IFN, Sponsors and Partners
+- **WHEN** a visitor opens the Collaborate group
+- **THEN** it lists Sponsors and Partners
+
+#### Scenario: About is a link
+- **WHEN** a visitor activates About in the bar
+- **THEN** `/about` renders and no panel opens
 
 #### Scenario: Every destination exists
 - **WHEN** each nav destination is requested from the built site
 - **THEN** each resolves to a real route and none renders the not-found page
 
+### Requirement: Accountability Pods placeholder
+`/accountability-pods` SHALL render a ComingSoon placeholder that describes
+accountability pods as small peer groups of founders who check in on goals
+regularly and states that they are not open for signup. It SHALL NOT claim any
+pod exists, any member count or any schedule. It SHALL be listed in
+`ROUTE_SEO` as non-indexable and in `NOINDEX_PATHS`, SHALL be served with a
+200 rewrite ahead of the 404 catch-all, and SHALL send
+`X-Robots-Tag: noindex, follow` on the bare path and on `/accountability-pods/*`.
+
+#### Scenario: Placeholder is reachable and not indexed
+- **WHEN** a crawler requests `/accountability-pods` on the deployed site
+- **THEN** it receives 200 with `X-Robots-Tag: noindex, follow`, and the path is absent from `sitemap.xml`
+
 ### Requirement: Desktop group menus
 On desktop, each group SHALL open a panel listing its links when the visitor
 hovers or clicks its trigger, or activates it with Enter or Space. Each panel
-link SHALL show an icon, the item name and a one line description, and SHALL
-expose the item name as its accessible name. Escape SHALL
+link SHALL show a decorative photo from the in-repo gallery frames (not an
+icon tile), the item name and a one line description, and SHALL expose the item
+name as its accessible name. The Events panel SHALL be two columns: a feature
+photo carrying the group intro on the left, and its three links as a vertical
+list on the right. Escape SHALL
 close an open panel and return focus to its trigger. Every group's panel SHALL
 render in one shared panel under the bar that lies wholly inside the viewport
 at 768px and wider, and an indicator SHALL mark the open trigger. Clicking outside SHALL
@@ -44,18 +72,18 @@ a trigger whose panel is already open SHALL NOT close it. Triggers SHALL expose
 
 #### Scenario: Keyboard open and Escape
 - **WHEN** a keyboard user focuses the Events trigger, presses Enter, then presses Escape
-- **THEN** the panel opens showing Meetups and Workshops, then closes, and focus is on the Events trigger
+- **THEN** the panel opens showing Meetups, Accountability Pod and Workshops, then closes, and focus is on the Events trigger
 
 #### Scenario: Shared panel and indicator
-- **WHEN** a visitor on a 768px viewport opens Events and then moves to About
-- **THEN** both open in the same panel, the panel stays inside the viewport, and the indicator moves from under Events to under About
+- **WHEN** a visitor on a 768px viewport opens Events and then moves to Collaborate
+- **THEN** both open in the same panel, the panel stays inside the viewport, and the indicator moves from under Events to under Collaborate
 
 #### Scenario: Hover then click
 - **WHEN** a mouse user hovers Events until its panel opens and then clicks the trigger
 - **THEN** the panel stays open
 
 #### Scenario: Route change closes the panel
-- **WHEN** a visitor opens About and chooses Partners
+- **WHEN** a visitor opens Collaborate and chooses Partners
 - **THEN** `/partners` renders and no panel is open
 
 ### Requirement: Active section indication
@@ -75,7 +103,8 @@ children.
 ### Requirement: Mobile navigation parity
 Below 768px, a menu button SHALL toggle a panel that lists the same entries as
 desktop, in the same order: each group as an uppercase muted label followed by
-its links, Gallery as a plain link, and the "Become a member" action last. The panel SHALL NOT nest a
+its links, Gallery and About as plain links, and the "Become a member" action
+last. The panel SHALL NOT nest a
 disclosure inside it. Escape SHALL close the panel and return focus to the menu
 button, and a route change SHALL close it. The panel SHALL animate open and
 closed, and SHALL NOT animate when the visitor prefers reduced motion. Desktop
@@ -83,7 +112,7 @@ panels and their rows SHALL likewise render at rest under reduced motion.
 
 #### Scenario: Mobile groups
 - **WHEN** a visitor on a 375px viewport opens the menu
-- **THEN** they see an "Events" label with Meetups and Workshops, a "Resources" label with Library and Blogs, a Gallery link, an "About" label with About IFN, Sponsors and Partners, and the "Become a member" action, all without further taps
+- **THEN** they see an "Events" label with Meetups, Accountability Pod and Workshops, a "Resources" label with Library and Blogs, a Gallery link, a "Collaborate" label with Sponsors and Partners, an About link, and the "Become a member" action, all without further taps
 
 #### Scenario: Mobile Escape
 - **WHEN** the mobile panel is open and the visitor presses Escape

@@ -60,6 +60,36 @@ the open trigger. Each panel gains a group label and intro line above one row
 of icon tiles. Mobile rows gain the same icon tile, and stay flat. No new
 dependency; a few CSS keyframes are added to `src/index.css`.
 
+## Revision 3 (locked IA, Kyra and Venkat)
+
+Feedback on PR #38 locked the IA again, and this revision supersedes the About
+menu above:
+
+| Top level | Kind | Contents |
+| --- | --- | --- |
+| Events | menu | Meetups `/events`, Accountability Pod `/accountability-pods`, Workshops `/workshops` |
+| Resources | menu | Library `/resources`, Blogs `/blog` |
+| Gallery | link | `/gallery` |
+| Collaborate | menu | Sponsors `/sponsors`, Partners `/partners` |
+| About | link | `/about` |
+| Become a member | pill action | `/membership` |
+
+- Sponsors and Partners move out of About into a Collaborate menu, which now
+  matches the footer's Collaborate group. About is a plain link again.
+- Events gains Accountability Pod. `/accountability-pods` is new: a ComingSoon
+  stub like `/mentorship` and `/chapters`, non-indexable, with a 200 rewrite
+  and `noindex, follow` headers, so the nav entry is never a dead link. The
+  copy says what a pod is and that it is not open for signup; it claims no pod,
+  count or schedule.
+- `/workshops` already exists and is only linked. `Workshops.tsx` is untouched.
+- Panels drop the lucide icon tiles for photos reused from the gallery frames
+  in `public/photos/`. The Events panel is two columns: a feature photo with
+  the group intro on the left, a vertical list of its three rows on the right.
+  Resources and Collaborate set their two rows as photo cards under the intro.
+- Radix `Viewport` and `Indicator` stay. The panel widens from 40rem to 44rem,
+  still capped at `100vw - 3rem`.
+- Still no Discover and no separate Membership link.
+
 ## Capabilities
 
 ### New Capabilities
@@ -74,7 +104,7 @@ None. No existing spec describes the nav or the banner.
 ## Impact
 
 - `src/components/Navbar.tsx` (rewritten around Radix Navigation Menu, then
-  its Viewport and Indicator).
+  its Viewport and Indicator, then the revision 3 IA and photo panels).
 - `src/index.css` (`nav-*` keyframes for the Viewport, panels and Indicator).
 - `src/components/Footer.tsx` (one code comment that named the old Collaborate
   nav group).
@@ -83,4 +113,10 @@ None. No existing spec describes the nav or the banner.
 - `DESIGN.md` Navigation section (records the grouped IA).
 - New dependency: `@radix-ui/react-navigation-menu`. No new animation library;
   framer-motion stays.
-- No route, sitemap, prerender or SEO change. `src/lib/analytics.ts` untouched.
+- Revision 3 adds one route: `src/pages/AccountabilityPods.tsx`, its lazy
+  `<Route>` in `src/App.tsx`, a non-indexable `ROUTE_SEO` entry and a
+  `NOINDEX_PATHS` entry in `src/data/seo.ts`, and a 200 rewrite plus
+  `noindex, follow` headers in `netlify.toml`. It is not prerendered and not
+  in the sitemap, like the other placeholders.
+- No new image assets; the panels reuse existing gallery derivatives.
+- `src/lib/analytics.ts` untouched.

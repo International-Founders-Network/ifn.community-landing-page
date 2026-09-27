@@ -38,3 +38,12 @@
 - [x] 6.4 Rebuild panel content as a group label, intro line and one row of equal height icon tiles (hover inverts the icon tile, arrow slides in, active tile has a top edge), remove `align`, and add icon tiles to mobile rows without nesting
 - [x] 6.5 Reverse "No Radix Viewport" in design.md and update the DESIGN.md Navigation section
 - [x] 6.6 Run `npm test`, `npx tsc -b`, eslint on touched files, `npm run build`, and a headless check of the bar entries, keyboard open, Escape focus return, hover then click, and route change close
+
+## 7. Revision 3 (Collaborate menu, Accountability Pods, photo panels)
+
+- [x] 7.1 Set `NAV_ITEMS` to Events (Meetups, Accountability Pod, Workshops), Resources (Library, Blogs), Gallery, Collaborate (Sponsors, Partners), About link, and verify every href is a `<Route>` in `src/App.tsx`
+- [x] 7.2 Add `src/pages/AccountabilityPods.tsx` on `ComingSoon`, its lazy route, a non-indexable `ROUTE_SEO` entry, `NOINDEX_PATHS`, a 200 rewrite and `noindex, follow` headers (bare and `/*`) in `netlify.toml`; leave `Workshops.tsx` untouched
+- [x] 7.3 Replace lucide icon tiles with gallery frame photos; Events panel as feature photo plus vertical list, Resources and Collaborate as photo cards; remove unused lucide imports; widen the panel to 44rem capped at `100vw - 3rem`
+- [x] 7.4 Mobile: same table, Collaborate label with Sponsors and Partners, About as a plain row, small photo thumbs
+- [x] 7.5 Update the DESIGN.md Navigation section and this change's proposal, design and spec delta
+- [x] 7.6 Run `npx tsc -b`, `npm run lint`, `npm test`, `npm run build`, and a headless check of the Events panel at 1280px and 768px and the mobile menu at 390px

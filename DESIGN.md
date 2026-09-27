@@ -550,44 +550,54 @@ rather than an entry being dropped. A new route joins a menu, or reaches
 readers through the footer and the one on-page link that belongs to it, rather
 than adding a top-level entry.
 
-**The bar is grouped** (`openspec/changes/nav-ia-grouped-menu`, revised after
-PR #36). Four entries plus the action, in this order:
+**The bar is grouped** (`openspec/changes/nav-ia-grouped-menu`, revision 3).
+Five entries plus the action, in this order:
 
 | Top level | Kind | Contents |
 | --- | --- | --- |
-| Events | menu | Meetups `/events`, Workshops `/workshops` |
+| Events | menu | Meetups `/events`, Accountability Pod `/accountability-pods`, Workshops `/workshops` |
 | Resources | menu | Library `/resources`, Blogs `/blog` |
 | Gallery | link | `/gallery` |
-| About | menu | About IFN `/about`, Sponsors `/sponsors`, Partners `/partners` |
+| Collaborate | menu | Sponsors `/sponsors`, Partners `/partners` |
+| About | link | `/about` |
 | Become a member | pill action | `/membership` |
 
-There is no Discover and no Collaborate group, and no separate Membership link,
-because the action already carries that intent. Sponsors and Partners live
-under About so they stay one click from the bar; the footer lists them too. A
-new public route joins one of these menus rather than the top level.
+There is no Discover group and no separate Membership link, because the action
+already carries that intent. Collaborate matches the footer's Collaborate
+group, so bar and footer agree. `/accountability-pods` is a ComingSoon
+placeholder, non-indexable, so the Events entry is never a dead link. A new
+public route joins one of these menus rather than the top level.
 
 On desktop the menus are one Radix Navigation Menu (links, not menu items;
 Escape returns focus to the trigger), and every panel renders inside Radix's
 shared `Viewport`, a single mega panel that hangs from the bar's bottom edge,
-right aligned to the action. It is 40rem wide (capped at the viewport less
+right aligned to the action. It is 44rem wide (capped at the viewport less
 3rem), so it spans the whole cluster and stays on screen at 768px, and its 1px
 `--rule` border lands on the bar's own hairline. Radix's `Indicator` slides a
 2px `--ink` bar under whichever trigger is open, sitting on the panel's top
 edge, so trigger and panel read as one piece.
 
-Each panel opens with the group label (uppercase `--muted`) and one `--ink`
-line, then one row of tiles: two across for Events and Resources, three across
-for About. A tile is a square icon tile holding a lucide icon in `--ink` at
-stroke 1.5, the item name, and one `--muted` line paraphrased from that route's
-`ROUTE_SEO` description. The accessible name is the item name alone and the
-line is its description. On hover and focus the tile fills with `--band`, the
-icon tile inverts to an `--ink` fill, and an arrow slides in. The current route
-keeps the inverted icon tile and adds a 2px `--ink` top edge and semibold weight
-so it does not rely on tone. Icons never take the accent.
+Panels show photos, not icons. Every row leads with a frame reused from the
+gallery derivatives in `public/photos/`, decorative (`alt=""`) because the
+link already names its destination. No new photography, and no lucide icon
+tiles as the primary visual.
+
+The Events panel is two columns. On the left, a feature photo under an `--ink`
+bottom scrim carries the group label and intro in `--paper`; it sets the scene
+and is not a link. On the right, a vertical list of Meetups, Accountability Pod
+and Workshops, each a small photo thumb, the name, and one `--muted` line
+paraphrased from that route's `ROUTE_SEO` description. Resources and
+Collaborate open with the group label (uppercase `--muted`) and one `--ink`
+intro line, then their two rows as cards, photo on top. The accessible name is
+the item name alone and the line is its description. On hover and focus a row
+fills with `--band`, its photo scales to 1.05 inside a clipped box, and in the
+Events list an arrow slides in. The current route adds a 2px `--ink` edge (left
+in the list, top on a card) and semibold weight so it does not rely on tone.
+The accent never appears in a panel.
 
 **Viewport and Indicator now earn their place.** The first grouped version
 skipped both, rendering each panel inline in its `<li>` and positioning it by
-hand. With icon tiles, an intro line and three menus that users move between,
+hand. With photo rows, an intro line and three menus that users move between,
 one shared panel does three things inline panels cannot: panels cross with a
 directional slide instead of blinking out and in, the indicator travels between
 triggers, and the panel sits at one fixed place and size, which is what makes it
@@ -600,15 +610,16 @@ corner (0.98 to 1) and fades over 200ms, and reverses over 140ms on close.
 Moving between menus, the outgoing panel slides 32px away and fades while the
 incoming one slides 32px in, in the direction of travel. The indicator's
 `transform` is transitioned over 200ms; its width is set by Radix and snaps.
-Tiles follow the panel 40ms apart with a 6px rise. The Viewport's size is read
+Rows follow the panel 40ms apart with a 6px rise. The Viewport's size is read
 from Radix's measured variables and is never transitioned, because width and
-height are layout properties; tiles share a minimum height so every panel is
-the same size and the switch stays a slide, not a resize. Every animation is
+height are layout properties; every panel shares one width and a 16rem minimum
+height so the switch stays a slide, not a resize. Every animation is
 `motion-safe:` and at rest under reduced motion.
 
 On mobile the same table renders as flat sections under uppercase `--muted`
-labels (Events, Resources, About), each row led by a smaller copy of the
-desktop icon tile, with Gallery as a plain row and the pill last. Never a
+labels (Events, Resources, Collaborate), each row led by a small photo thumb,
+with Gallery and About as plain rows in their table positions and the pill
+last. Never a
 disclosure inside the menu disclosure.
 
 ### The modal
