@@ -103,6 +103,20 @@ Menus felt heavy with gallery photos on every row. Visuals only; IA unchanged.
 - No lucide icon tiles as the primary visual. Workshops page and the
   `/accountability-pods` stub stay untouched. Radix Viewport and Indicator stay.
 
+## Revision 5 (Venkat via Kyra, PR #38)
+
+The mark tiles all looked the same, and the nav wanted a little more
+photography, but selectively. Visuals only; IA unchanged.
+
+- Each row gets its own composition of the period-mark (crop, scale, offset,
+  rotation, optional soft ink geometry) on top of its ground, so no two tiles
+  share a drawing.
+- Keep the Events feature photo. Add a Collaborate feature photo
+  (`aug-networking`), using the Events stack layout.
+- Give the Library card on the Resources grid a photo (`feb-slide`) in place
+  of its mark tile. Blogs and every other row stay marks; mobile keeps marks
+  throughout.
+
 ## Capabilities
 
 ### New Capabilities
@@ -117,7 +131,8 @@ None. No existing spec describes the nav or the banner.
 ## Impact
 
 - `src/components/Navbar.tsx` (rewritten around Radix Navigation Menu, then
-  its Viewport and Indicator, then the revision 3 IA, then revision 4 mark tiles).
+  its Viewport and Indicator, then the revision 3 IA, then revision 4 mark
+  tiles, then revision 5 varied mark compositions and selective photos).
 - `src/index.css` (`nav-*` keyframes for the Viewport, panels and Indicator).
 - `src/components/Footer.tsx` (one code comment that named the old Collaborate
   nav group).

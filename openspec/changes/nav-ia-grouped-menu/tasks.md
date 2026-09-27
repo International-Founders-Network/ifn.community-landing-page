@@ -55,3 +55,11 @@
 - [x] 8.3 Update DESIGN.md Navigation section and this change's proposal, design and spec delta
 - [x] 8.4 Run `npx tsc -b`, lint, `npm test`, `npm run build`; confirm PR #38 stays draft
 
+## 9. Revision 5 (varied mark compositions; Collaborate feature and Library photo)
+
+- [x] 9.1 Add `MarkCompose` and `MARK_COMPOSES` (crop, transform, soft geometry, card placement); give every row a distinct `compose`
+- [x] 9.2 Collaborate `feature` (`aug-networking`, tile 640) in the Events stack layout
+- [x] 9.3 Library card photo (`feb-slide`, tile 640) on the Resources grid; Blogs stays a mark; mobile keeps marks for every row
+- [x] 9.4 Update DESIGN.md Navigation section and this change's proposal, design and spec delta
+- [x] 9.5 Run `npx tsc -b`, lint, `npm test`, `npm run build`; confirm PR #38 stays draft
+

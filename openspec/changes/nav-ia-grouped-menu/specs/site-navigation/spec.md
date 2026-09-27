@@ -8,10 +8,10 @@ and how visitors reach them by pointer, keyboard and touch on desktop and mobile
 Revision 3 (Kyra and Venkat feedback on PR #38) locks the IA below: Events
 gains Accountability Pod, Sponsors and Partners move out of About into a
 Collaborate menu, and About becomes a plain link. Revision 4 keeps that IA and
-trims panel visuals: only the Events feature column may use a gallery photo;
-destination row leading visuals are abstract brand marks (period-mark on soft
-tiles), not gallery frames and not lucide icon tiles as primary. The
-requirements are written against that final state.
+trims panel visuals to abstract brand marks (period-mark on soft tiles).
+Revision 5 varies each row's mark composition and allows three selective
+gallery photos: the Events and Collaborate feature columns and the Library
+card. The requirements are written against that final state.
 
 ## ADDED Requirements
 
@@ -60,12 +60,16 @@ pod exists, any member count or any schedule. It SHALL be listed in
 ### Requirement: Desktop group menus
 On desktop, each group SHALL open a panel listing its links when the visitor
 hovers or clicks its trigger, or activates it with Enter or Space. Each panel
-link SHALL show a decorative abstract brand mark (the IFN period-mark on a soft
-tile), the item name and a one line description, and SHALL expose the item name
-as its accessible name. Panel links SHALL NOT lead with gallery photos or with
-lucide icon tiles as the primary visual. The Events panel SHALL be two columns:
-a feature photo carrying the group intro on the left (the only gallery photo in
-the nav), and its three links as a vertical list on the right. Escape SHALL
+link SHALL show a decorative leading visual, the item name and a one line
+description, and SHALL expose the item name as its accessible name. The leading
+visual SHALL be the IFN period-mark on a soft tile, in a composition (crop,
+scale, offset or rotation) that no other row in the nav shares, except that the
+Library card on desktop SHALL show a gallery photo instead. Panel links SHALL
+NOT lead with lucide icon tiles as the primary visual. The Events and
+Collaborate panels SHALL be two columns: a feature photo carrying the group
+intro on the left, and the group's links as a vertical list on the right. No
+other panel region SHALL use a gallery photo, and mobile rows SHALL use marks
+only. Escape SHALL
 close an open panel and return focus to its trigger. Every group's panel SHALL
 render in one shared panel under the bar that lies wholly inside the viewport
 at 768px and wider, and an indicator SHALL mark the open trigger. Clicking outside SHALL
@@ -77,9 +81,9 @@ a trigger whose panel is already open SHALL NOT close it. Triggers SHALL expose
 - **WHEN** a keyboard user focuses the Events trigger, presses Enter, then presses Escape
 - **THEN** the panel opens showing Meetups, Accountability Pod and Workshops, then closes, and focus is on the Events trigger
 
-#### Scenario: Only Events feature uses a gallery photo
+#### Scenario: Selective photos, varied marks
 - **WHEN** a visitor opens Events, Resources and Collaborate in turn
-- **THEN** Events shows one feature photo on the left with mark tiles on its rows, and Resources and Collaborate rows lead with mark tiles and no gallery photos
+- **THEN** Events and Collaborate each show one feature photo on the left with mark tiles on their rows, Resources shows a photo on the Library card and a mark tile on Blogs, and no two mark tiles share a composition
 
 #### Scenario: Shared panel and indicator
 - **WHEN** a visitor on a 768px viewport opens Events and then moves to Collaborate

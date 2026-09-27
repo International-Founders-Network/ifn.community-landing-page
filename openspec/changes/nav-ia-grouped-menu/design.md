@@ -151,6 +151,23 @@ pure slide. The active row carries a 2px `--ink` edge (left in the list, top on
 a card) plus semibold. Marks scale 1.05 on hover inside a clipped box,
 transform only and `motion-safe:`. Mobile rows use a small mark tile.
 
+**Varied marks and selective photos (revision 5).** Revision 4's tiles varied
+only their ground, so every tile read as the same drawing. Each row now also
+carries a `compose` value, one of seven compositions of the unchanged brand
+geometry in `MARK_COMPOSES` (`Navbar.tsx`): `whole` (Meetups), `orbit`
+(Accountability Pod, small inside two soft ink rings), `tilt` (Workshops,
+turned and enlarged), `disc` (Library on mobile, cropped onto the disc),
+`period` (Blogs, cropped onto the period), `drift` (Sponsors, enlarged, turned
+and pushed off the edge over a soft ink band) and `pair` (Partners, a second
+ring echoing the first). A composition is a `viewBox` crop, a transform, an
+optional soft `--ink` extra, and its own placement inside a tall card tile.
+The grounds (band, paper, ink wash, accent wash) stay; the accent still never
+fills a tile. Photos grow from one to three, all reused gallery frames:
+Collaborate gets a left feature (`aug-networking`) and uses the same stack
+layout as Events, and the Library card on the Resources grid shows
+`feb-slide` in place of its mark tile. Blogs stays a mark, and mobile keeps a
+mark for Library so the flat list carries no photos.
+
 ## Risks / Trade-offs
 
 - [The shared panel is right aligned, so the Events panel does not start under
@@ -166,11 +183,11 @@ transform only and `motion-safe:`. Mobile rows use a small mark tile.
 - [About is now a menu, so `/about` takes two actions from the bar instead of
   one] → Resolved in revision 3: About is a link again and Sponsors and
   Partners sit under Collaborate.
-- [Events feature photo path is a string, not an import from the generated photo module]
-  → If `npm run photos` renames that slot or tile width, the one nav feature
-  photo 404s without failing the build. Accepted to keep the photo module out
-  of the entry chunk; row visuals no longer depend on gallery frames.
-  the slots used are listed in one table in `Navbar.tsx`.
+- [Nav photo paths are strings, not imports from the generated photo module]
+  → If `npm run photos` renames `sep-group`, `aug-networking` or `feb-slide`,
+  or their tile widths, that photo 404s without failing the build. Accepted to
+  keep the photo module out of the entry chunk; the three slots used are listed
+  in the one `NAV_ITEMS` table in `Navbar.tsx`.
 - [Accountability Pod links to a placeholder] → Better than a dead link, and
   the page says plainly that pods are not open yet.
 - [Hover-open can feel twitchy] → Radix default 200ms open delay and 150ms
