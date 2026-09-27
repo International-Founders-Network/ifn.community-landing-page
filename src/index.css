@@ -10,6 +10,10 @@
    documents. Docs are prose, not markup: exclude them from the scan. */
 @source not "../**/*.md";
 
+/* @ifn/ui (shared Resources card) ships class strings, not CSS, and Tailwind
+   skips node_modules by default. Scan its build so those classes are emitted. */
+@source "../node_modules/@ifn/ui/dist";
+
 /* ============================================================================
    IFN TOKEN LAYER. Phases 1 and 2 of REDESIGN-PLAN.md ("The Sign").
    DARK MODE IS LIVE as of Phase 2. See the mode blocks below.
@@ -178,6 +182,14 @@
      modal surface; none of the three moves that number, and a lighter surface
      would collapse the --band field fills inside the dialog to 1.000. */
   --scrim: rgb(19 19 17 / 0.6);
+
+  /* @ifn/ui bridge. The shared package reads members' variable names; point
+     them at landing tokens. Declared on the same element the dark palette
+     targets, so each var() resolves to the active mode's value. */
+  --paper-deep: var(--band);
+  --ink-muted: var(--muted);
+  --crimson: var(--accent);
+  --ifn-surface: var(--paper);
 }
 
 

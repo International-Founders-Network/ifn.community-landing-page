@@ -6,6 +6,7 @@ import { Button } from './Button';
 import { ButtonLink } from './ButtonLink';
 import { cn } from '../lib/cn';
 import { Emphasis } from './Emphasis';
+import { ResourceCard, ResourceCtaLink, PILL_NEUTRAL, PILL_ON, STATUS_TEXT } from '@ifn/ui';
 import { RESOURCES_DATA } from '../data/resourcesData';
 import type { Resource } from '../data/resourcesData';
 import {
@@ -94,7 +95,7 @@ const TEXT_LINK =
     'rounded focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink ' +
     'focus-visible:ring-offset-2 focus-visible:ring-offset-paper';
 
-type LibraryLink = { key: string; href: string; label: string };
+type LibraryLink = { key: 'teaser' | 'full' | 'members'; href: string; label: string };
 
 /**
  * Download links for a card whose `id` matches a members catalog asset. Every
@@ -495,73 +496,60 @@ export function Resources() {
                                                     const ResourceIcon = resource.icon;
                                                     const isExternal = Boolean(resource.link && /^https?:/i.test(resource.link));
                                                     const libraryLinks = libraryLinksFor(libraryCatalog, resource.id);
-                                                    return (
-                                                        <li
-                                                            key={resource.id}
-                                                            className="group flex flex-col rounded-2xl border border-rule bg-paper p-6 transition-shadow duration-300 hover:shadow-lg"
+                                                    const ctaFor = (key: LibraryLink['key']) => {
+                                                        const link = libraryLinks.find(l => l.key === key);
+                                                        return link && (
+                                                            <ResourceCtaLink
+                                                                external
+                                                                href={link.href}
+                                                                icon={key === 'members'
+                                                                    ? <ArrowRight size={16} aria-hidden="true" />
+                                                                    : <Download size={16} aria-hidden="true" />}
+                                                            >
+                                                                {link.label}
+                                                            </ResourceCtaLink>
+                                                        );
+                                                    };
+                                                    // The card's own guide or video link has no dedicated slot; it
+                                                    // leads the CTA row as it did before, ahead of the teaser.
+                                                    const guideCta = resource.link && (
+                                                        <ResourceCtaLink
+                                                            external={isExternal}
+                                                            href={resource.link}
+                                                            icon={<ArrowRight size={16} aria-hidden="true" />}
                                                         >
-                                                            <div className="mb-6 flex items-start justify-between gap-4">
-                                                                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-rule bg-band text-ink">
-                                                                    <ResourceIcon size={24} aria-hidden="true" />
-                                                                </span>
-                                                                <div className="flex flex-col items-end gap-2">
-                                                                    <span className="rounded-full border border-rule bg-band px-3 py-1 text-xs font-bold uppercase tracking-wide text-ink">
-                                                                        {resource.tag}
-                                                                    </span>
+                                                            {resource.tag === 'Video' ? 'Watch the video' : 'Open the guide'}
+                                                        </ResourceCtaLink>
+                                                    );
+                                                    const teaserCta = ctaFor('teaser');
+                                                    return (
+                                                        <ResourceCard
+                                                            key={resource.id}
+                                                            titleAs="h3"
+                                                            title={resource.title}
+                                                            description={resource.description}
+                                                            icon={<ResourceIcon size={24} aria-hidden="true" />}
+                                                            pills={
+                                                                <>
+                                                                    <span className={PILL_NEUTRAL}>{resource.tag}</span>
                                                                     {resource.isMembersOnly && (
-                                                                        <span className="inline-flex items-center gap-1 rounded-full bg-ink px-3 py-1 text-xs font-bold uppercase tracking-wide text-paper">
+                                                                        <span className={PILL_ON}>
                                                                             <Lock size={12} aria-hidden="true" />
                                                                             Members
                                                                         </span>
                                                                     )}
-                                                                </div>
-                                                            </div>
-
-                                                            <h3 className="mb-2 text-lg font-bold text-ink">
-                                                                {resource.title}
-                                                            </h3>
-                                                            <p className="mb-6 flex-1 text-sm leading-relaxed text-muted">
-                                                                {resource.description}
-                                                            </p>
-
-                                                            <div className="border-t border-rule pt-4">
-                                                                {resource.link || libraryLinks.length > 0 ? (
-                                                                    <div className="flex flex-wrap gap-x-6">
-                                                                        {resource.link && (
-                                                                            <a
-                                                                                href={resource.link}
-                                                                                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                                                                                className={cn(TEXT_LINK, 'inline-flex min-h-11 items-center gap-2 px-1')}
-                                                                            >
-                                                                                {resource.tag === 'Video' ? 'Watch the video' : 'Open the guide'}
-                                                                                <ArrowRight size={16} aria-hidden="true" />
-                                                                                {isExternal && <span className="sr-only">(opens in a new tab)</span>}
-                                                                            </a>
-                                                                        )}
-                                                                        {libraryLinks.map(link => (
-                                                                            <a
-                                                                                key={link.key}
-                                                                                href={link.href}
-                                                                                target="_blank"
-                                                                                rel="noopener noreferrer"
-                                                                                className={cn(TEXT_LINK, 'inline-flex min-h-11 items-center gap-2 px-1')}
-                                                                            >
-                                                                                {link.label}
-                                                                                {link.key === 'members'
-                                                                                    ? <ArrowRight size={16} aria-hidden="true" />
-                                                                                    : <Download size={16} aria-hidden="true" />}
-                                                                                <span className="sr-only">(opens in a new tab)</span>
-                                                                            </a>
-                                                                        ))}
-                                                                    </div>
-                                                                ) : (
-                                                                    <p className="inline-flex items-center gap-2 text-sm font-medium text-muted">
-                                                                        <Clock size={16} aria-hidden="true" />
-                                                                        {resource.isComingSoon ? 'Being written' : 'Not published yet'}
-                                                                    </p>
-                                                                )}
-                                                            </div>
-                                                        </li>
+                                                                </>
+                                                            }
+                                                            teaserCta={(guideCta || teaserCta) && <>{guideCta}{teaserCta}</>}
+                                                            fullCta={ctaFor('full')}
+                                                            memberCta={ctaFor('members')}
+                                                            footer={!resource.link && libraryLinks.length === 0 && (
+                                                                <p className={STATUS_TEXT}>
+                                                                    <Clock size={16} aria-hidden="true" />
+                                                                    {resource.isComingSoon ? 'Being written' : 'Not published yet'}
+                                                                </p>
+                                                            )}
+                                                        />
                                                     );
                                                 })}
                                             </ul>

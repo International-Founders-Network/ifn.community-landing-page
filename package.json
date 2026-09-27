@@ -18,6 +18,7 @@
     "compile-blog": "node scripts/compile-blog.mjs"
   },
   "dependencies": {
+    "@ifn/ui": "github:International-Founders-Network/ifn-ui#47bd91708ac88c978c7e31e50dae68ae4a60da77",
     "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-navigation-menu": "^1.2.22",
     "clsx": "^2.1.1",
