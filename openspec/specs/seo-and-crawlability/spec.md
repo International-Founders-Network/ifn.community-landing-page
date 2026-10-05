@@ -78,6 +78,23 @@ follow a client-side navigation into a route that must be indexed.
 - **WHEN** a visitor navigates client-side from `/blog` to `/membership`
 - **THEN** the `noindex` robots meta is removed rather than overwritten, and `/membership` carries no robots meta
 
+### Requirement: Published blog posts carry their own share image
+A published blog post whose frontmatter sets `ogImage` SHALL emit that image,
+absolutised against `SITE_URL`, in `og:image` and `twitter:image` (with matching
+`*:image:alt`), set `og:type` to `article`, and include it as `image` on its
+BlogPosting node. Every other route SHALL emit `https://ifn.community/og-image.png`,
+the index.html alt text and `og:type` `website`. `Head` SHALL write these tags on
+every route, never only on routes with a custom image, so neither client-side
+navigation nor the prerender can carry one route's card onto another.
+
+#### Scenario: A published post with ogImage is prerendered
+- **WHEN** `/blog/forming-a-us-company-from-abroad` is published and prerendered
+- **THEN** its HTML carries `og:image` and `twitter:image` of `https://ifn.community/blog/forming-a-us-company-from-abroad-og.png`
+
+#### Scenario: Navigating from a post to a route without an image
+- **WHEN** a visitor navigates client-side from that post to `/membership`
+- **THEN** `og:image` and `twitter:image` revert to `https://ifn.community/og-image.png` and `og:type` to `website`
+
 ### Requirement: Every page carries a structured-data graph
 The system SHALL emit one JSON-LD `@graph` per page from
 `src/data/structuredData.ts`, replaced wholesale on navigation, containing

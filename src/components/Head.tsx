@@ -1,6 +1,15 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { NOINDEX_PATHS, SITE_URL, canonicalFor, normalisePath, seoFor } from '../data/seo';
+import {
+    DEFAULT_OG_IMAGE,
+    DEFAULT_OG_IMAGE_ALT,
+    NOINDEX_PATHS,
+    SITE_URL,
+    absoluteUrl,
+    canonicalFor,
+    normalisePath,
+    seoFor,
+} from '../data/seo';
 import { graphFor } from '../data/structuredData';
 import { trackPageview } from '../lib/analytics';
 
@@ -159,6 +168,23 @@ export function Head() {
         setMetaByProperty('og:url', canonical);
         setMetaByName('twitter:title', seo.title);
         setMetaByName('twitter:description', seo.description);
+
+        /**
+         * Image and og:type are set on EVERY route, falling back to the
+         * index.html defaults, never only on routes that have their own. A
+         * conditional write would leave a blog post's card in place after
+         * client-side navigation to a route without one, and the prerender
+         * would bake whichever image the previous route left behind.
+         */
+        const image = seo.image ? absoluteUrl(seo.image) : DEFAULT_OG_IMAGE;
+        const imageAlt = seo.image ? (seo.imageAlt ?? seo.title) : DEFAULT_OG_IMAGE_ALT;
+        setMetaByProperty('og:type', seo.ogType ?? 'website');
+        setMetaByProperty('og:image', image);
+        setMetaByProperty('og:image:width', '1200');
+        setMetaByProperty('og:image:height', '630');
+        setMetaByProperty('og:image:alt', imageAlt);
+        setMetaByName('twitter:image', image);
+        setMetaByName('twitter:image:alt', imageAlt);
 
         setRobots(isNoindex);
         setAlternateRss(normalised === '/blog' ? `${SITE_URL}/rss.xml` : null);

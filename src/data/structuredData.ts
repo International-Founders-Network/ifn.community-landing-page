@@ -31,7 +31,7 @@ import {
 } from './membershipData';
 import { SOCIAL_LINKS } from './socialLinks';
 import { getPostBySlug } from './blog.generated';
-import { SITE_NAME, SITE_URL, canonicalFor, normalisePath, seoFor } from './seo';
+import { SITE_NAME, SITE_URL, absoluteUrl, canonicalFor, normalisePath, seoFor } from './seo';
 
 const ORGANIZATION_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
@@ -271,6 +271,7 @@ export function blogPostingSchema(pathname: string) {
         inLanguage: 'en-US',
         isPartOf: { '@id': WEBSITE_ID },
         url: canonicalFor(pathname),
+        ...(post.ogImage ? { image: absoluteUrl(post.ogImage) } : {}),
     };
 }
 
