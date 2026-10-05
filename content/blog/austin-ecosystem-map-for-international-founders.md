@@ -48,7 +48,7 @@ IFN works with a small number of partners. You will come across them in and arou
 
 - **[Station Austin](https://stationaustin.org)** is the venue partner and the coworking home for many founders in the community.
 - **[Reuneo](https://reuneo.app)** runs speed networking at IFN meetups. The format puts you in short, structured conversations with several people in a row, which helps if walking up to strangers is not your strength.
-- **Yani Partners** also works with the community. (No public website to link here.)
+- **Yani Partners** is a technology partner for founders. (No public website to link here.)
 
 That is the verified list. If you hear someone claim a formal IFN partnership that is not on it, ask an organizer before assuming.
 
