@@ -37,6 +37,23 @@ export const SITE_NAME = 'International Founders Network';
 export const DEFAULT_DESCRIPTION =
     'A community of international and immigrant founders in Austin, Texas. Monthly in-person meetups, an optional membership, and practical sessions between gatherings.';
 
+/**
+ * The share image every route gets unless it names its own. Must match the
+ * static og:image / twitter:image defaults in index.html: Head.tsx resets to
+ * these on every route without a custom image, so a visitor who opens a blog
+ * post and then clicks through to /membership does not carry the post's card
+ * with them, and a prerender pass cannot bake one route's image into another.
+ */
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
+export const DEFAULT_OG_IMAGE_ALT =
+    'The IFN wordmark above the words: Founders who came from somewhere else. Monthly meetups in Austin, Texas.';
+
+/** Absolutise a site path (`/blog/x-og.png`) against SITE_URL; absolute URLs pass through. */
+export function absoluteUrl(pathOrUrl: string): string {
+    if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
+    return `${SITE_URL}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`;
+}
+
 export interface RouteSeo {
     /** The full <title>. Written out rather than templated so each can be tuned. */
     title: string;
@@ -56,6 +73,16 @@ export interface RouteSeo {
     priority?: number;
     /** Sitemap changefreq hint. Advisory only; crawlers largely infer this. */
     changefreq?: 'daily' | 'weekly' | 'monthly' | 'yearly';
+    /**
+     * Share image for og:image / twitter:image. A site path (`/blog/<slug>-og.png`)
+     * or an absolute URL; Head absolutises paths against SITE_URL. Omitted means
+     * DEFAULT_OG_IMAGE.
+     */
+    image?: string;
+    /** Alt text for `image`. Omitted means DEFAULT_OG_IMAGE_ALT. */
+    imageAlt?: string;
+    /** og:type. Omitted means `website`, the index.html default. */
+    ogType?: 'website' | 'article';
 }
 
 /**
@@ -271,6 +298,13 @@ function seoForBlogPost(post: BlogPost): RouteSeo {
         indexable: true,
         priority: 0.6,
         changefreq: 'monthly',
+        ogType: 'article',
+        ...(post.ogImage
+            ? {
+                  image: post.ogImage,
+                  imageAlt: `The IFN wordmark above a peer notes card for the post: ${post.title}`,
+              }
+            : {}),
     };
 }
 

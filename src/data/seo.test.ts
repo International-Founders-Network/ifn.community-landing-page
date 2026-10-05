@@ -1,0 +1,69 @@
+import { describe, expect, it, vi } from 'vitest';
+
+/**
+ * The real blog.generated.ts only holds posts that are public at compile time,
+ * and the Week 1 posts go live through the Neon overlay at Netlify build, so
+ * the fixture stands in for "a published post with ogImage set".
+ */
+vi.mock('./blog.generated', () => {
+    const posts = [
+        {
+            slug: 'forming-a-us-company-from-abroad',
+            title: 'Forming a US company from abroad: what peers actually sequence',
+            description: 'desc',
+            excerpt: 'desc',
+            date: '2026-09-29',
+            updated: null,
+            tags: [],
+            ogImage: '/blog/forming-a-us-company-from-abroad-og.png',
+            html: '',
+        },
+        {
+            slug: 'welcome-to-the-ifn-blog',
+            title: 'Welcome to the IFN blog',
+            description: 'desc',
+            excerpt: 'desc',
+            date: '2026-09-26',
+            updated: null,
+            tags: [],
+            ogImage: null,
+            html: '',
+        },
+    ];
+    return {
+        BLOG_POSTS: posts,
+        getPostBySlug: (slug: string) => posts.find((post) => post.slug === slug),
+    };
+});
+
+const { absoluteUrl, seoFor } = await import('./seo');
+const { blogPostingSchema } = await import('./structuredData');
+
+describe('per-post share images', () => {
+    it('carries a published post’s ogImage as an article route image', () => {
+        const seo = seoFor('/blog/forming-a-us-company-from-abroad');
+        expect(seo.image).toBe('/blog/forming-a-us-company-from-abroad-og.png');
+        expect(seo.imageAlt).toContain('Forming a US company from abroad');
+        expect(seo.ogType).toBe('article');
+        expect(absoluteUrl(seo.image!)).toBe(
+            'https://ifn.community/blog/forming-a-us-company-from-abroad-og.png',
+        );
+    });
+
+    it('leaves the image unset for a post without ogImage and for static routes', () => {
+        expect(seoFor('/blog/welcome-to-the-ifn-blog').image).toBeUndefined();
+        expect(seoFor('/membership').image).toBeUndefined();
+        expect(seoFor('/membership').ogType).toBeUndefined();
+    });
+
+    it('passes absolute URLs through untouched', () => {
+        expect(absoluteUrl('https://cdn.example.com/x.png')).toBe('https://cdn.example.com/x.png');
+    });
+
+    it('adds an absolute image to BlogPosting only when ogImage is set', () => {
+        expect(blogPostingSchema('/blog/forming-a-us-company-from-abroad')?.image).toBe(
+            'https://ifn.community/blog/forming-a-us-company-from-abroad-og.png',
+        );
+        expect(blogPostingSchema('/blog/welcome-to-the-ifn-blog')).not.toHaveProperty('image');
+    });
+});
