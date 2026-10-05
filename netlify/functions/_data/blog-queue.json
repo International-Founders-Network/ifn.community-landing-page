@@ -1,6 +1,27 @@
 {
   "posts": [
     {
+      "slug": "austin-ecosystem-map-for-international-founders",
+      "title": "Austin ecosystem map for international founders",
+      "date": "2026-10-07",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "austin",
+        "ecosystem",
+        "networking",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
       "slug": "us-business-banking-document-pack",
       "title": "US business banking for international founders: what peers gather first",
       "date": "2026-10-03",
