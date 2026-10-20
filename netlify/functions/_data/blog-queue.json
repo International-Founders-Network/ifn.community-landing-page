@@ -1,6 +1,27 @@
 {
   "posts": [
     {
+      "slug": "us-go-to-market-when-your-product-was-built-elsewhere",
+      "title": "US go-to-market when your first product was built elsewhere",
+      "date": "2026-10-28",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "gtm",
+        "sales",
+        "us-market-entry",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
       "slug": "us-business-banking-document-pack",
       "title": "US business banking for international founders: what peers gather first",
       "date": "2026-10-03",
