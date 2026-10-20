@@ -1,6 +1,27 @@
 {
   "posts": [
     {
+      "slug": "how-we-validate-a-us-market-before-landing",
+      "title": "How we validate a US market before landing",
+      "date": "2026-10-20",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "gtm",
+        "market-research",
+        "us-market-entry",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
       "slug": "us-business-banking-document-pack",
       "title": "US business banking for international founders: what peers gather first",
       "date": "2026-10-03",
