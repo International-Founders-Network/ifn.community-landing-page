@@ -34,7 +34,7 @@ Alongside the conversations, people read what is public. The [US Census Bureau](
 
 They also watch how US competitors sell. They look at pricing pages, how a free trial is framed, whether a sales call comes before anyone sees a price, and which job titles show up in case studies. None of that requires being in the country. It does require looking closely and noticing where US buyers seem to expect something different from buyers at home.
 
-The questions peers come back to in early calls are simple. How does the buyer handle the problem today? What does it cost them when it goes wrong? Who else would have to say yes? Fuller discovery guides belong with membership and Resources, not here.
+The questions peers come back to in early calls are simple. How does the buyer handle the problem today? What does it cost them when it goes wrong? Who else would have to say yes?
 
 ## The fake local presence trap
 
@@ -67,22 +67,22 @@ What the stronger signals share is cost. Each one asks the buyer to spend money,
 
 This comes up as a peer note, not advice. Under immigration rules, talking with potential customers during a US visit and actually doing work in the US can be different questions. Where one ends and the other begins depends on your status and on what you do during the trip. Founders in the room have been surprised by how fine that line can be, and a discovery meeting and delivering paid work on site may not be treated the same way.
 
-Start with the USCIS page on [B-1 business visitors](https://www.uscis.gov/working-in-the-united-states/temporary-visitors-for-business/b-1-temporary-business-visitor) and our post on [visa paths founders talk about at IFN](/blog/visa-paths-founders-talk-about-at-ifn), which covers what the room discusses and where we hand off. Then talk to immigration counsel before the trip, not after.
+Peers usually start with the USCIS page on [B-1 business visitors](https://www.uscis.gov/working-in-the-united-states/temporary-visitors-for-business/b-1-temporary-business-visitor) and our post on [visa paths founders talk about at IFN](/blog/visa-paths-founders-talk-about-at-ifn), which covers what the room discusses and where we hand off. Founders who travel for discovery say they talked to immigration counsel before the trip, not after.
 
 ## Where the Austin trip fits
 
 Once you have real signals, a trip starts to make sense. Peers describe it as a way to pressure-test what the calls already suggested.
 
-A useful week usually has meetings booked before you land. These can be in-person follow-ups with people who already took a video call, perhaps a visit to a pilot customer, and time with founders who sell to the same kind of buyer. Austin helps with that last part. Many international founders work out of [Station Austin](https://stationaustin.org) at 701 Brazos St, and the IFN monthly meetup for international and immigrant founders happens there. If you bring your signals to that room, along with what you are unsure about, problems tend to come up faster than they would with another week of desk research. Someone will usually ask the question you have been avoiding.
+A useful week usually has meetings booked before you land. These can be in-person follow-ups with people who already took a video call, perhaps a visit to a pilot customer, and time with founders who sell to the same kind of buyer. Austin helps with that last part. Many international founders work out of [Station Austin](https://stationaustin.org) at 701 Brazos St, and the IFN monthly meetup for international and immigrant founders happens there. If you bring your signals to that room, along with what you are unsure about, problems tend to come up faster than they would with another week of desk research.
 
-Peers try not to let the trip stand in for the work. A week in the city with an empty calendar mostly teaches you where the good coffee is.
+Peers try not to let the trip stand in for the work. An empty calendar in Austin teaches you very little.
 
 ## When we stop talking
 
 Peer notes stop and licensed help starts when:
 
 - You are planning a US trip and are not sure what your status allows you to do while you are there, including meetings, pilots, or anything that looks like work
-- A US customer sends you a contract, pilot agreement, or data terms to sign. Have counsel read it before you sign.
+- A US customer sends you a contract, pilot agreement, or data terms to sign. Peers have counsel read it first.
 - Revenue from US customers starts arriving and you need to understand the tax obligations for the entity and for you personally. That is a job for a CPA, ideally one with cross-border experience.
 
 Immigration counsel, a business attorney, and a CPA are different seats. It is rare for one person to cover all three well.
