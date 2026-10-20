@@ -44,9 +44,9 @@ When founders compare notes, the same requests come up across very different pro
 
 **Contracts that look familiar to US buyers.** If your agreement was drafted under home-country law with home-country conventions, the buyer's legal team may slow down or send back heavy redlines. Founders who had counsel review their customer terms for US buyers before they started selling say later deals moved faster. The room does not pass around contract language. That work belongs with a lawyer.
 
-**Support hours that overlap.** You do not need round-the-clock coverage. You do need to say clearly which hours you cover in US time zones and how fast you respond outside them. A buyer who knows you answer by mid-morning Central time is usually fine. A buyer who finds out by waiting is not.
+**Support hours that overlap.** Peers say round-the-clock coverage is rarely the ask. Buyers want to know which hours you cover in US time zones and what happens outside them. A buyer who knows you answer by mid-morning Central time is usually fine. A buyer who finds out by waiting is not.
 
-**References from US customers.** Your first US customer counts for more than its revenue. Some founders ask early whether that customer would take a reference call later, and they keep the relationship warm so the answer stays yes. Logos from your home market still help, but many US buyers do not know them, so give a sentence of context.
+**References from US customers.** Your first US customer counts for more than its revenue. Some founders ask early whether that customer would take a reference call later, and they keep the relationship warm so the answer stays yes. Logos from your home market still help, but many US buyers do not know them, so founders add a sentence of context.
 
 **A clear privacy and security posture.** Security questionnaires show up earlier than most founders expect, sometimes before pricing does. Peers suggest having a plain description of how you handle customer data, where it is stored, and who can access it. Getting that description right for your product is a job for counsel. The FTC's [business guidance](https://www.ftc.gov/business-guidance) is an official starting point for understanding how US regulators think about privacy and data security.
 
@@ -54,7 +54,7 @@ When founders compare notes, the same requests come up across very different pro
 
 Some founders admit they tried to look local at first: a US phone number, an Austin address on the website, and vague answers about where engineering sits. Most gave it up.
 
-It usually comes out on the first scheduling call, when time zones show. A buyer who feels misled about something small starts to wonder what else is off. What works better is plain language. Say where the team is based, which hours you cover, and who the buyer's US contact is. Plenty of US buyers work with distributed teams every day. Surprises are what bother them.
+It usually comes out on the first scheduling call, when time zones show. A buyer who feels misled about something small starts to wonder what else is off. What works better is plain language: where the team is based, which hours you cover, and who the buyer's US contact is. Plenty of US buyers work with distributed teams every day. Surprises are what bother them.
 
 ## Channels: what translated and what did not
 
