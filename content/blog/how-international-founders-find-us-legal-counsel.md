@@ -42,25 +42,19 @@ These seats do not substitute for each other. A good startup lawyer will often s
 
 ## How peers find them
 
-Most people in the room started with **founders a step or two ahead**. A useful referral is specific: what did that lawyer handle for you, what status were you on, and how did it go when something got complicated. "They're great" tells you less than "they caught a problem with my equity grant before my petition was filed."
+Most people in the room started with **founders a step or two ahead**. A useful referral is specific: what did that lawyer handle for you, what status were you on, and how did it go when something got complicated. "They're great" tells you less than a specific story, like a lawyer who spotted an equity problem before a petition went in.
 
 **The meetup room** helps before you even have names. Describe what you are trying to do, and people can usually tell you which seat you need. That narrows the search.
 
 Some founders first meet professionals through **programs at [Station Austin](https://stationaustin.org)**. A short conversation at an event is a low-pressure way to hear how someone explains things.
 
-Then comes the **official check**. Before a first paid meeting, peers confirm the person is licensed. The State Bar of Texas has a public lawyer search on its website where you can confirm a Texas license and see public discipline history. Immigration lawyers may be licensed in another state and still practice federal immigration law, so check the bar in the state where they say they are licensed. For CPAs, the [Texas State Board of Public Accountancy](https://www.tsbpa.texas.gov) is the licensing body.
+Then comes the **official check**. Before a first paid meeting, peers confirm the person is licensed. The State Bar of Texas has a public lawyer search on its website where you can confirm a Texas license and see public discipline history. Immigration lawyers may be licensed in another state and still practice federal immigration law, so peers check the bar in the state where the lawyer says they are licensed. For CPAs, the [Texas State Board of Public Accountancy](https://www.tsbpa.texas.gov) is the licensing body.
 
 ## What peers ask in a first call
 
-Founders who felt good about their choice usually asked a few plain questions early. Some that come up:
+Founders who felt good about their choice usually asked a few plain questions early. Who the advisor usually represents. Whether they have worked with founders on a similar status. How billing works and who does the work day to day.
 
-- Who do you usually represent?
-- Have you worked with founders on my status before?
-- How do you bill, and what would make the cost change?
-- Who does the work day to day?
-- How fast do you usually respond?
-
-Pay attention to whether the answers come back plain or slippery. Fuller first-call notes and ways to compare advisors live with membership and the Resources hub.
+Peers pay attention to whether the answers come back plain or slippery. Fuller first-call notes and ways to compare advisors live with membership and the Resources hub.
 
 ## Getting your advisors to talk to each other
 
@@ -68,15 +62,15 @@ People say they learned this part late. How much of the company you own, your ti
 
 Before a raise, an entity change, a new co-founder, or a shift in your own role, people in the room suggest putting immigration counsel and corporate counsel on the same thread. Copy your CPA when money or ownership moves. If you are still at the formation stage, [Forming a US company from abroad](/blog/forming-a-us-company-from-abroad) covers what peers sequence first.
 
-You may end up as the messenger. Keep a short running note of what each advisor told you and when, so you are not passing along decisions from memory.
+You may end up as the messenger. Peers in that seat keep a short running note of what each advisor said and when, so they are not passing along decisions from memory.
 
 ## Red flags peers mention
 
 **Guaranteed outcomes.** Nobody can promise a visa approval. Peers treat a guarantee as a reason to keep looking.
 
-**"Notario" style services.** In some countries a notary is a legal professional. In the US, a notary public cannot give legal advice. USCIS warns about people who are not attorneys or accredited representatives offering immigration help. Read the [USCIS page on avoiding scams](https://www.uscis.gov/avoid-scams) before handing anyone your documents.
+**"Notario" style services.** In some countries a notary is a legal professional. In the US, a notary public is not a lawyer. USCIS warns about people who are not attorneys or accredited representatives offering immigration help. Peers point newcomers to the [USCIS page on avoiding scams](https://www.uscis.gov/avoid-scams) before they hand anyone their documents.
 
-**Pressure to sign the same day.** A good advisor gives you time to read an engagement letter. If the urgency comes from the advisor and not from your own deadline, pause.
+**Pressure to sign the same day.** A good advisor gives you time to read an engagement letter. If the urgency comes from the advisor and not from your own deadline, peers treat that as a reason to pause.
 
 Vague answers about who will handle your file, or reluctance to put scope in writing, come up too.
 
