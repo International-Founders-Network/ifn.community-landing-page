@@ -1,6 +1,27 @@
 {
   "posts": [
     {
+      "slug": "how-international-founders-find-us-legal-counsel",
+      "title": "How international founders find US legal counsel (and what peers ask first)",
+      "date": "2026-10-21",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "counsel",
+        "advisors",
+        "us-market-entry",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
       "slug": "us-business-banking-document-pack",
       "title": "US business banking for international founders: what peers gather first",
       "date": "2026-10-03",
