@@ -1,6 +1,27 @@
 {
   "posts": [
     {
+      "slug": "building-your-first-50-connections-in-austin",
+      "title": "Building your first 50 connections in Austin from zero",
+      "date": "2026-10-27",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "austin",
+        "networking",
+        "community",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
       "slug": "us-business-banking-document-pack",
       "title": "US business banking for international founders: what peers gather first",
       "date": "2026-10-03",
