@@ -26,35 +26,27 @@ This is peer orientation from that room: the money questions founders wish they 
 
 ## The questions worth answering before you fly
 
-When peers look back, the money surprises tend to fall into a few areas:
-
-- How you will build US credit starting from nothing
-- How money will move from home to the US, and what that costs
-- How personal money and company money stay apart
-- What you still owe, file, or maintain back home
-- How much the move itself eats before the company sees any of it
-
-The fuller pre-arrival checklist lives with membership and Resources. What follows is how the room talks about each area.
+When peers look back, the money surprises tend to land in a few places: credit from zero, moving money across borders, keeping personal and company money apart, what still lives back home, and what the move itself costs. What follows is how the room talks about each. Fuller pre-arrival notes live with membership and Resources.
 
 ## Credit starts at zero
 
 The thing most newcomers find hardest to accept is that a strong credit record at home usually does not follow you. US lenders, landlords, and phone carriers check US credit reports, and when you first arrive you have no file there at all. To them you look the same as someone who has never borrowed anything.
 
-Founders describe building it slowly and on purpose. A pattern that comes up often is a secured card: you put down a deposit with the issuer, get a small limit, use it lightly for ordinary expenses, and pay it off on time every month. Over months, that history starts to show up. A few people mention services that claim to bring foreign credit history across. Results in the room have been mixed, so ask around before counting on one.
+Founders describe building it slowly and on purpose. A pattern that comes up often is a secured card, where a deposit backs a small limit and on-time payments slowly build a US history. A few people mention services that claim to bring foreign credit history across. Results in the room have been mixed, so peers ask around before counting on one.
 
 Many applications ask for an SSN or ITIN, which ties credit building back to the identity paperwork from your first weeks. Peers also suggest checking your own report once a file exists, partly to catch errors and partly to understand what lenders actually see. The Consumer Financial Protection Bureau at [consumerfinance.gov](https://www.consumerfinance.gov) has plain explanations of credit reports, scores, and how to dispute mistakes.
 
-The practical point from the room: plan for deposits and slower approvals in the first months. This happens to most new arrivals and says nothing about you.
+Peers plan for deposits and slower approvals in the first months. It happens to most new arrivals and says nothing about you.
 
 ## Moving money across borders
 
-Every founder in the room has moved money internationally, and most have a story about a transfer that cost more or took longer than expected.
+Most founders in the room have moved money internationally, and many have a story about a transfer that cost more or took longer than expected.
 
 **Exchange costs hide in the rate.** Beyond any visible fee, there is often a gap between the market exchange rate and the rate you actually receive. On a large transfer, that gap can matter more than the fee. Peers compare the amount that lands, not the advertised fee.
 
 **Timing is slower than you think.** International transfers can take days, and a first large transfer may trigger extra review on either end. Some home countries also have rules or limits on moving money out. Founders who needed funds for a lease deposit on a specific date learned to send early.
 
-**Keep records of every transfer.** Save the confirmation, the date, the amount, which account it left and which it reached, and a note on why. Later, a CPA, a bank compliance team, or sometimes an immigration filing may ask where money came from. Rebuilding that trail a year later is miserable.
+**Records matter later.** Peers save the confirmation for each transfer with a short note on why the money moved. Later, a CPA, a bank compliance team, or sometimes an immigration filing may ask where money came from. Rebuilding that trail a year later is miserable.
 
 ## Personal money and company money
 
@@ -68,13 +60,13 @@ How money goes from you into the company also matters. Founder loans, capital co
 
 Leaving a country does not automatically end your obligations there. Founders mention bank accounts that need to stay active, loans still being repaid, property, pensions, and family support they send regularly. Some home countries continue to treat you as a tax resident for a period after you leave, or based on ties you keep.
 
-A small practical note that comes up more than you would expect: many home-country banks send login codes to your home phone number. People who let that number lapse have been locked out of their own accounts from Austin. Decide before you leave how you will keep access.
+A small practical note that comes up more than you would expect: many home-country banks send login codes to your home phone number. People who let that number lapse have been locked out of their own accounts from Austin. Peers sort out how they will keep access before they leave.
 
 Peers who had a smooth first year usually had a CPA in each country, and sometimes got the two talking to each other early.
 
 ## US reporting for foreign accounts
 
-This one gets a plain flag. Some people who are considered US persons for tax purposes, and who hold financial accounts outside the US above certain thresholds, have to report those accounts each year. This is often called the FBAR. The IRS explains it on its [Report of Foreign Bank and Financial Accounts (FBAR) page](https://www.irs.gov/businesses/small-businesses-self-employed/report-of-foreign-bank-and-financial-accounts-fbar).
+This one gets a plain flag. The IRS describes a yearly reporting requirement for some US persons with financial accounts outside the US above certain thresholds, often called the FBAR. It explains the rules on its [Report of Foreign Bank and Financial Accounts (FBAR) page](https://www.irs.gov/businesses/small-businesses-self-employed/report-of-foreign-bank-and-financial-accounts-fbar).
 
 Whether it applies to you, and from when, depends on your tax status and your accounts. That is a question for a CPA, and founders in the room are careful not to guess for each other.
 
@@ -86,7 +78,7 @@ The pattern peers suggest is to keep a separate number for landing costs, so the
 
 ## When we stop talking
 
-Call licensed professionals when any of these show up:
+Bring in licensed help when any of these show up:
 
 - Tax residency in either country, foreign account reporting, how you fund the company, and how you pay yourself: a CPA with cross-border experience
 - Investments, pensions, or moving larger sums between countries: a financial advisor licensed in the relevant country
