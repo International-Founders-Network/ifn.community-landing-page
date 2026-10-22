@@ -36,6 +36,9 @@ interface EditorialPost {
     tags: string[];
     draft: boolean;
     publicInBuild: boolean;
+    /** Hero, thumbnail, OG image and imageAlt all present at the last build. */
+    imagesReady: boolean;
+    imagesMissing: string[];
     source: 'overlay' | 'frontmatter';
     updatedAt: string | null;
     updatedBy: string | null;
@@ -265,6 +268,8 @@ function ReviewDrawer({
                             {STATUS_LABEL[post.status]}
                             {' · '}
                             {post.publicInBuild ? 'On site in current build' : 'Not on site'}
+                            {' · '}
+                            {post.imagesReady ? 'Images ready' : `Images missing: ${post.imagesMissing.join(', ')}`}
                             {' · '}
                             {post.slug}
                         </p>
@@ -564,6 +569,12 @@ export function AdminBlogPanel({
                                         <div>{STATUS_LABEL[post.status]}</div>
                                         <div className="text-xs text-muted">
                                             {post.publicInBuild ? 'On site in current build' : 'Not on site'}
+                                        </div>
+                                        <div
+                                            className="text-xs text-muted"
+                                            title={post.imagesReady ? undefined : `Missing: ${post.imagesMissing.join(', ')}`}
+                                        >
+                                            {post.imagesReady ? 'Images ready' : 'Images missing. Going live fails the build'}
                                         </div>
                                     </td>
                                     <td className="whitespace-nowrap py-2 pr-4 text-muted">
