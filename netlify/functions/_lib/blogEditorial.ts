@@ -31,6 +31,10 @@ export interface QueueEntry {
     imagesReady: boolean;
     /** What the image gate found missing at the last build, e.g. public/blog/<slug>-og.png. */
     imagesMissing: string[];
+    /** Site paths of the image set (scripts/lib/blogImages.mjs imageSetPaths; og from frontmatter). */
+    images: { hero: string; hero800: string; thumb: string; og: string };
+    /** Frontmatter imageAlt; empty when missing (imagesMissing then says so). */
+    imageAlt: string;
 }
 
 export interface OverlayRow {

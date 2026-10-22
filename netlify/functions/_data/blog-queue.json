@@ -21,7 +21,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/money-questions-to-sort-before-you-land-in-the-us-hero.webp",
+        "hero800": "/blog/money-questions-to-sort-before-you-land-in-the-us-hero-800.webp",
+        "thumb": "/blog/money-questions-to-sort-before-you-land-in-the-us-thumb.webp",
+        "og": "/blog/money-questions-to-sort-before-you-land-in-the-us-og.png"
+      },
+      "imageAlt": "Diagram: home and US columns joined by three lines labeled credit, transfers and records."
     },
     {
       "slug": "us-go-to-market-when-your-product-was-built-elsewhere",
@@ -44,7 +51,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/us-go-to-market-when-your-product-was-built-elsewhere-hero.webp",
+        "hero800": "/blog/us-go-to-market-when-your-product-was-built-elsewhere-hero-800.webp",
+        "thumb": "/blog/us-go-to-market-when-your-product-was-built-elsewhere-thumb.webp",
+        "og": "/blog/us-go-to-market-when-your-product-was-built-elsewhere-og.png"
+      },
+      "imageAlt": "Diagram: a product box labeled built elsewhere with one path that branches to pricing, trust and channels."
     },
     {
       "slug": "building-your-first-50-connections-in-austin",
@@ -67,7 +81,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/building-your-first-50-connections-in-austin-hero.webp",
+        "hero800": "/blog/building-your-first-50-connections-in-austin-hero-800.webp",
+        "thumb": "/blog/building-your-first-50-connections-in-austin-thumb.webp",
+        "og": "/blog/building-your-first-50-connections-in-austin-og.png"
+      },
+      "imageAlt": "Diagram: a grid of mostly unconnected dots with one small connected cluster around a pin labeled Austin."
     },
     {
       "slug": "opening-an-ein-and-why-the-letter-matters-for-banking",
@@ -90,7 +111,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/opening-an-ein-and-why-the-letter-matters-for-banking-hero.webp",
+        "hero800": "/blog/opening-an-ein-and-why-the-letter-matters-for-banking-hero-800.webp",
+        "thumb": "/blog/opening-an-ein-and-why-the-letter-matters-for-banking-thumb.webp",
+        "og": "/blog/opening-an-ein-and-why-the-letter-matters-for-banking-og.png"
+      },
+      "imageAlt": "Diagram: formation papers and the EIN letter side by side, joined by a line that matches the company name on both."
     },
     {
       "slug": "how-international-founders-find-us-legal-counsel",
@@ -113,7 +141,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/how-international-founders-find-us-legal-counsel-hero.webp",
+        "hero800": "/blog/how-international-founders-find-us-legal-counsel-hero-800.webp",
+        "thumb": "/blog/how-international-founders-find-us-legal-counsel-thumb.webp",
+        "og": "/blog/how-international-founders-find-us-legal-counsel-og.png"
+      },
+      "imageAlt": "Diagram: seats for immigration, corporate, employment, CPA and home-country advisors around one table, with lines showing advisors talking to each other."
     },
     {
       "slug": "how-we-validate-a-us-market-before-landing",
@@ -136,7 +171,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/how-we-validate-a-us-market-before-landing-hero.webp",
+        "hero800": "/blog/how-we-validate-a-us-market-before-landing-hero-800.webp",
+        "thumb": "/blog/how-we-validate-a-us-market-before-landing-thumb.webp",
+        "og": "/blog/how-we-validate-a-us-market-before-landing-og.png"
+      },
+      "imageAlt": "Diagram: a column of calls from abroad passes three real signals before an arrow reaches the Austin trip."
     },
     {
       "slug": "fundraising-as-an-international-founder-what-changes-in-the-us-conversation",
@@ -159,7 +201,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/fundraising-as-an-international-founder-what-changes-in-the-us-conversation-hero.webp",
+        "hero800": "/blog/fundraising-as-an-international-founder-what-changes-in-the-us-conversation-hero-800.webp",
+        "thumb": "/blog/fundraising-as-an-international-founder-what-changes-in-the-us-conversation-thumb.webp",
+        "og": "/blog/fundraising-as-an-international-founder-what-changes-in-the-us-conversation-og.png"
+      },
+      "imageAlt": "Diagram: status, team location and market narrative converge on a US diligence file."
     },
     {
       "slug": "austin-ecosystem-map-for-international-founders",
@@ -182,7 +231,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/austin-ecosystem-map-for-international-founders-hero.webp",
+        "hero800": "/blog/austin-ecosystem-map-for-international-founders-hero-800.webp",
+        "thumb": "/blog/austin-ecosystem-map-for-international-founders-thumb.webp",
+        "og": "/blog/austin-ecosystem-map-for-international-founders-og.png"
+      },
+      "imageAlt": "Diagram: one downtown building holding coworking, meetups and speed networking, with lines out to a warm intro, following up once and offering one back."
     },
     {
       "slug": "first-90-days-in-austin-as-an-international-founder",
@@ -205,7 +261,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/first-90-days-in-austin-as-an-international-founder-hero.webp",
+        "hero800": "/blog/first-90-days-in-austin-as-an-international-founder-hero-800.webp",
+        "thumb": "/blog/first-90-days-in-austin-as-an-international-founder-thumb.webp",
+        "og": "/blog/first-90-days-in-austin-as-an-international-founder-og.png"
+      },
+      "imageAlt": "Diagram: a timeline from day 1 to day 90 with overlapping bars for housing, documents and local operations."
     },
     {
       "slug": "us-business-banking-document-pack",
@@ -228,7 +291,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/us-business-banking-document-pack-hero.webp",
+        "hero800": "/blog/us-business-banking-document-pack-hero-800.webp",
+        "thumb": "/blog/us-business-banking-document-pack-thumb.webp",
+        "og": "/blog/us-business-banking-document-pack-og.png"
+      },
+      "imageAlt": "Diagram: six document sheets for formation, EIN, ownership, ID, address and description, with the address sheet out of line, lead to bank review."
     },
     {
       "slug": "visa-paths-founders-talk-about-at-ifn",
@@ -251,7 +321,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/visa-paths-founders-talk-about-at-ifn-hero.webp",
+        "hero800": "/blog/visa-paths-founders-talk-about-at-ifn-hero-800.webp",
+        "thumb": "/blog/visa-paths-founders-talk-about-at-ifn-thumb.webp",
+        "og": "/blog/visa-paths-founders-talk-about-at-ifn-og.png"
+      },
+      "imageAlt": "Diagram: O-1, E-2, H-1B and L-1 sit on one line that ends at a stop line, past which the conversation goes to immigration counsel."
     },
     {
       "slug": "forming-a-us-company-from-abroad",
@@ -274,7 +351,14 @@
       },
       "publicInBuild": false,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/forming-a-us-company-from-abroad-hero.webp",
+        "hero800": "/blog/forming-a-us-company-from-abroad-hero-800.webp",
+        "thumb": "/blog/forming-a-us-company-from-abroad-thumb.webp",
+        "og": "/blog/forming-a-us-company-from-abroad-og.png"
+      },
+      "imageAlt": "Diagram: three separate tracks for company paper, personal status and money rails run side by side to a line where the room stops and founders call counsel."
     },
     {
       "slug": "welcome-to-the-ifn-blog",
@@ -296,7 +380,14 @@
       },
       "publicInBuild": true,
       "imagesReady": true,
-      "imagesMissing": []
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/welcome-to-the-ifn-blog-hero.webp",
+        "hero800": "/blog/welcome-to-the-ifn-blog-hero-800.webp",
+        "thumb": "/blog/welcome-to-the-ifn-blog-thumb.webp",
+        "og": "/blog/welcome-to-the-ifn-blog-og.png"
+      },
+      "imageAlt": "Diagram: five note sheets for entity, visas, banking, housing and funding lead to a ring for the monthly meetup."
     }
   ]
 }
