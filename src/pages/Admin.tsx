@@ -427,8 +427,8 @@ function useAdminLinks(onUnauthorized: () => void) {
             setRows((prev) => prev?.map((r) => (r.id === updated.id ? updated : r)) ?? prev);
             setNotice(
                 action === 'approve'
-                    ? `${updated.name}: approved. Posts link to ${host} from the next build.${buildNote(data.build)}`
-                    : `${updated.name}: held. Links to ${host} become plain text from the next build.${buildNote(data.build)}`
+                    ? `${updated.name}: approved. Posts link to ${host} once the site rebuilds.${buildNote(data.build)}`
+                    : `${updated.name}: held. Links to ${host} become plain text once the site rebuilds.${buildNote(data.build)}`
             );
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Update failed');
