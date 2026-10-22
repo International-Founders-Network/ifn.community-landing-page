@@ -42,6 +42,14 @@
  * compiled to HTML with remark/rehype so React can render without a runtime
  * Markdown parser.
  *
+ * IMAGE GATE (openspec/changes/blog-brand-images). Every post owns an image set
+ * under public/blog/ (hero, hero-800, thumb WebP and the OG PNG; names in
+ * scripts/lib/blogImages.mjs) plus `imageAlt` in frontmatter. A post that is
+ * public in this build with any of those missing FAILS the build, naming the
+ * slug, the missing file and the command that generates it. A non-public post
+ * only warns. Readiness is written to the queue as imagesReady/imagesMissing so
+ * Admin shows it before anyone flips a post live.
+ *
  * Runs before tsc/vite in `npm run build`. Safe to run alone: `node scripts/compile-blog.mjs`.
  */
 
@@ -52,10 +60,12 @@ import matter from 'gray-matter';
 import { neon } from '@neondatabase/serverless';
 import { runnerImport } from 'vite';
 import { buildOutboundGate, markdownToHtml } from './lib/outboundGate.mjs';
+import { checkImageSets, imageSetPaths } from './lib/blogImages.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const CONTENT_DIR = join(ROOT, 'content', 'blog');
+const PUBLIC_DIR = join(ROOT, 'public');
 const OUT_PATH = join(ROOT, 'src', 'data', 'blog.generated.ts');
 const QUEUE_PATH = join(ROOT, 'netlify', 'functions', '_data', 'blog-queue.json');
 const BODIES_PATH = join(ROOT, 'netlify', 'functions', '_data', 'blog-bodies.json');
@@ -242,10 +252,15 @@ async function compile() {
         const tags = Array.isArray(data.tags)
             ? data.tags.filter((t) => typeof t === 'string').map((t) => t.trim())
             : [];
+        const paths = imageSetPaths(slug);
         const ogImage =
             typeof data.ogImage === 'string' && data.ogImage.trim()
                 ? data.ogImage.trim()
-                : null;
+                : paths.og;
+        if (ogImage !== paths.og) {
+            console.warn(`${file}: ogImage ${ogImage} differs from the generated ${paths.og}; using the frontmatter value.`);
+        }
+        const imageAlt = typeof data.imageAlt === 'string' ? data.imageAlt.trim() : '';
 
         if (!title) throw new Error(`${file}: frontmatter title is required`);
         if (!description) throw new Error(`${file}: frontmatter description is required`);
@@ -272,10 +287,18 @@ async function compile() {
             syndication: parseSyndication(data.syndication),
             tags,
             ogImage,
+            imageAlt,
+            image: { hero: paths.hero, hero800: paths.hero800, thumb: paths.thumb, alt: imageAlt },
             html,
             heldLinks: held,
             isPublic: isPublic(status, publishAt, nowMs),
         });
+    }
+
+    const imageGate = checkImageSets(posts, PUBLIC_DIR);
+    for (const warning of imageGate.warnings) console.warn(warning);
+    if (imageGate.errors.length > 0) {
+        throw new Error(`Blog image gate failed:\n  ${imageGate.errors.join('\n  ')}`);
     }
 
     const published = posts
@@ -292,6 +315,17 @@ async function compile() {
  * already past. Drafts, in-review and approved posts never appear here.
  */
 
+export interface BlogImage {
+    /** 1600x900 WebP. */
+    hero: string;
+    /** 800x450 WebP. */
+    hero800: string;
+    /** 640x360 WebP, monochrome, for the /blog index. */
+    thumb: string;
+    /** From frontmatter imageAlt. */
+    alt: string;
+}
+
 export interface BlogPost {
     slug: string;
     title: string;
@@ -301,7 +335,10 @@ export interface BlogPost {
     date: string;
     updated: string | null;
     tags: string[];
-    ogImage: string | null;
+    /** Site path of the 1200x630 share image. Always set for a public post. */
+    ogImage: string;
+    /** Hero, srcset derivative and index thumbnail. The build gate guarantees the files exist. */
+    image: BlogImage;
     /** Sanitized HTML from Markdown body. */
     html: string;
 }
@@ -317,7 +354,8 @@ ${published
         date: ${escapeTsString(post.date)},
         updated: ${post.updated ? escapeTsString(post.updated) : 'null'},
         tags: ${JSON.stringify(post.tags)},
-        ogImage: ${post.ogImage ? escapeTsString(post.ogImage) : 'null'},
+        ogImage: ${escapeTsString(post.ogImage)},
+        image: ${JSON.stringify(post.image)},
         html: ${escapeTsString(post.html)},
     }`,
     )
@@ -344,6 +382,8 @@ export function getPostBySlug(slug: string): BlogPost | undefined {
             draft: post.draft,
             syndication: post.syndication,
             publicInBuild: post.isPublic,
+            imagesReady: imageGate.readiness.get(post.slug).ready,
+            imagesMissing: imageGate.readiness.get(post.slug).missing,
         }))
         .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.slug.localeCompare(b.slug)));
     mkdirSync(dirname(QUEUE_PATH), { recursive: true });

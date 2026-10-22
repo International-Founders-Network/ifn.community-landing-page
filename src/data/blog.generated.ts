@@ -8,6 +8,17 @@
  * already past. Drafts, in-review and approved posts never appear here.
  */
 
+export interface BlogImage {
+    /** 1600x900 WebP. */
+    hero: string;
+    /** 800x450 WebP. */
+    hero800: string;
+    /** 640x360 WebP, monochrome, for the /blog index. */
+    thumb: string;
+    /** From frontmatter imageAlt. */
+    alt: string;
+}
+
 export interface BlogPost {
     slug: string;
     title: string;
@@ -17,7 +28,10 @@ export interface BlogPost {
     date: string;
     updated: string | null;
     tags: string[];
-    ogImage: string | null;
+    /** Site path of the 1200x630 share image. Always set for a public post. */
+    ogImage: string;
+    /** Hero, srcset derivative and index thumbnail. The build gate guarantees the files exist. */
+    image: BlogImage;
     /** Sanitized HTML from Markdown body. */
     html: string;
 }
@@ -31,7 +45,8 @@ export const BLOG_POSTS: BlogPost[] = [
         date: "2026-09-26",
         updated: null,
         tags: ["austin","landing","community"],
-        ogImage: null,
+        ogImage: "/blog/welcome-to-the-ifn-blog-og.png",
+        image: {"hero":"/blog/welcome-to-the-ifn-blog-hero.webp","hero800":"/blog/welcome-to-the-ifn-blog-hero-800.webp","thumb":"/blog/welcome-to-the-ifn-blog-thumb.webp","alt":"Diagram: five note sheets for entity, visas, banking, housing and funding lead to a ring for the monthly meetup."},
         html: "<p>IFN runs a free monthly meetup in Austin for international and immigrant founders. The same questions show up every month: how people register a company in the United States, how they stay inside visa limits while they build, how they open a bank account, and how local funding conversations differ from the ones they had at home.</p>\n<p>This blog is where we write those conversations down. Not legal advice. Not a course. Peer experience from founders who are doing the work in Austin, so you can arrive at the next meetup with sharper questions.</p>\n<h2>What you will find here</h2>\n<ul>\n<li>Field notes from the room: what surprised people who just landed, and what they wish they had asked earlier.</li>\n<li>Orientation on visas, entity setup, banking, housing, hiring, and fundraising as an international founder, always as peer framing. When a topic needs counsel, we say so.</li>\n<li>Soft pointers to the next meetup, the optional membership (private member channel and members-only call), and the Resources hub when a catalog title is useful.</li>\n</ul>\n<h2>What this is not</h2>\n<p>This is not the paid Resources library. Guides that belong behind membership stay there. The blog stays free to read.</p>\n<p>It is also not a newsletter signup page. When we publish, the post lives at <code>/blog</code>. Come to a meetup if you want the live version of the same conversation.</p>\n<h2>Start here</h2>\n<p>If you are new to Austin as an international founder, come to the next meetup first. Register on Luma. Bring one concrete question. The blog will keep adding the written version of what the room keeps teaching.</p>",
     }
 ];

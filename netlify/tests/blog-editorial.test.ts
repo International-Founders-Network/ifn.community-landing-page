@@ -76,6 +76,8 @@ describe('mergeOverlay', () => {
         tags: [],
         draft: true,
         publicInBuild: false,
+        imagesReady: true,
+        imagesMissing: [],
     };
 
     it('overlay wins for status and publishAt only', () => {
