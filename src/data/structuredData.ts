@@ -271,7 +271,7 @@ export function blogPostingSchema(pathname: string) {
         inLanguage: 'en-US',
         isPartOf: { '@id': WEBSITE_ID },
         url: canonicalFor(pathname),
-        ...(post.ogImage ? { image: absoluteUrl(post.ogImage) } : {}),
+        image: absoluteUrl(post.ogImage),
     };
 }
 

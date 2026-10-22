@@ -63,32 +63,48 @@ export function Blog() {
                         No posts published yet. When we publish, they will appear here.
                     </p>
                 ) : (
-                    <ul className="mx-auto max-w-3xl divide-y divide-rule">
+                    <ul className="mx-auto max-w-4xl divide-y divide-rule">
                         {BLOG_POSTS.map((post) => (
                             <li key={post.slug} className="py-10 first:pt-0">
-                                <article>
-                                    <p className="text-sm text-muted">
-                                        <time dateTime={post.date}>{formatPostDate(post.date)}</time>
-                                    </p>
-                                    <h2 className="mt-2 text-2xl font-bold tracking-tight text-ink md:text-3xl">
-                                        <Link
-                                            to={`/blog/${post.slug}`}
-                                            className="underline-offset-4 hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
-                                        >
-                                            {post.title}
-                                        </Link>
-                                    </h2>
-                                    <p className="mt-3 text-lg leading-relaxed text-muted">
-                                        {post.excerpt}
-                                    </p>
-                                    <p className="mt-4">
-                                        <Link
-                                            to={`/blog/${post.slug}`}
-                                            className="text-sm font-semibold text-ink underline-offset-4 hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
-                                        >
-                                            Read post
-                                        </Link>
-                                    </p>
+                                <article className="grid gap-6 sm:grid-cols-[13rem_minmax(0,1fr)] sm:gap-8 md:grid-cols-[16rem_minmax(0,1fr)]">
+                                    {/*
+                                      Monochrome by design: the header's marked
+                                      word and the nav period already spend the
+                                      two accent marks this view allows.
+                                    */}
+                                    <img
+                                        src={post.image.thumb}
+                                        alt={post.image.alt}
+                                        width={640}
+                                        height={360}
+                                        loading="lazy"
+                                        decoding="async"
+                                        className="aspect-video h-auto w-full border border-rule bg-band"
+                                    />
+                                    <div>
+                                        <p className="text-sm text-muted">
+                                            <time dateTime={post.date}>{formatPostDate(post.date)}</time>
+                                        </p>
+                                        <h2 className="mt-2 text-2xl font-bold tracking-tight text-ink md:text-3xl">
+                                            <Link
+                                                to={`/blog/${post.slug}`}
+                                                className="underline-offset-4 hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                                            >
+                                                {post.title}
+                                            </Link>
+                                        </h2>
+                                        <p className="mt-3 text-lg leading-relaxed text-muted">
+                                            {post.excerpt}
+                                        </p>
+                                        <p className="mt-4">
+                                            <Link
+                                                to={`/blog/${post.slug}`}
+                                                className="text-sm font-semibold text-ink underline-offset-4 hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                                            >
+                                                Read post
+                                            </Link>
+                                        </p>
+                                    </div>
                                 </article>
                             </li>
                         ))}

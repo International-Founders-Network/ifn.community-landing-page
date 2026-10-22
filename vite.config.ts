@@ -1,4 +1,4 @@
-import { writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -20,6 +20,33 @@ import { INDEXABLE_PATHS, PRERENDER_PATHS, SITE_NAME, SITE_URL, seoFor } from '.
  * app appears in the sitemap automatically and a route marked `indexable:
  * false` cannot be advertised by accident.
  */
+/**
+ * Ship only public posts' images. public/blog/ holds the image set for EVERY
+ * post (scripts/build-blog-og-images.mjs), drafts included, because the build
+ * gate needs the files present before a post can go live. Vite copies public/
+ * verbatim, so without this a draft's images would sit at guessable URLs named
+ * after its slug. Anything in dist/blog/ that is not referenced by a post in
+ * BLOG_POSTS is deleted after the bundle is written.
+ */
+function blogImagePrune(): Plugin {
+    return {
+        name: 'ifn-blog-image-prune',
+        apply: 'build',
+        closeBundle() {
+            const dir = resolve(__dirname, 'dist/blog')
+            if (!existsSync(dir)) return
+            const keep = new Set(
+                BLOG_POSTS.flatMap((post) => [post.ogImage, post.image.hero, post.image.hero800, post.image.thumb]).map(
+                    (sitePath) => sitePath.replace(/^\/blog\//, ''),
+                ),
+            )
+            for (const name of readdirSync(dir)) {
+                if (!keep.has(name)) rmSync(resolve(dir, name), { force: true })
+            }
+        },
+    }
+}
+
 function seoAssets(): Plugin {
     return {
         name: 'ifn-seo-assets',
@@ -168,7 +195,7 @@ function seoAssets(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [react(), seoAssets()],
+    plugins: [react(), seoAssets(), blogImagePrune()],
     build: {
         rollupOptions: {
             output: {

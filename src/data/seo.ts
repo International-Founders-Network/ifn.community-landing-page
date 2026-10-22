@@ -299,12 +299,8 @@ function seoForBlogPost(post: BlogPost): RouteSeo {
         priority: 0.6,
         changefreq: 'monthly',
         ogType: 'article',
-        ...(post.ogImage
-            ? {
-                  image: post.ogImage,
-                  imageAlt: `The IFN wordmark above a peer notes card for the post: ${post.title}`,
-              }
-            : {}),
+        image: post.ogImage,
+        imageAlt: `Share card for the IFN post ${post.title}: the IFN wordmark beside a diagram. ${post.image.alt}`,
     };
 }
 

@@ -46,6 +46,25 @@ export function BlogPost() {
                         {post.title}
                     </h1>
                     <p className="mt-6 text-xl leading-relaxed text-muted">{post.description}</p>
+                    {/*
+                      The hero is the post's one accent mark (the nav period is
+                      the other). It runs wider than the text column, centred on
+                      it, and is the LCP candidate, so it loads eagerly.
+                    */}
+                    <figure className="relative left-1/2 mt-12 w-[min(64rem,calc(100vw-2rem))] -translate-x-1/2">
+                        <img
+                            src={post.image.hero}
+                            srcSet={`${post.image.hero800} 800w, ${post.image.hero} 1600w`}
+                            sizes="(min-width: 68rem) 64rem, calc(100vw - 2rem)"
+                            alt={post.image.alt}
+                            width={1600}
+                            height={900}
+                            loading="eager"
+                            fetchPriority="high"
+                            decoding="async"
+                            className="aspect-video h-auto w-full border border-rule bg-band"
+                        />
+                    </figure>
                     <div
                         className="blog-prose mt-12"
                         dangerouslySetInnerHTML={{ __html: post.html }}
