@@ -57,7 +57,7 @@ describe('blogActionNotice', () => {
     it('never uses an em dash', () => {
         for (const action of ['approve', 'schedule', 'mark_live', 'hold'] as const) {
             for (const build of ['triggered', 'not-configured', 'failed', 'skipped']) {
-                expect(blogActionNotice(post, action, build).text).not.toContain('—');
+                expect(blogActionNotice(post, action, build).text).not.toContain('\u2014');
             }
         }
     });
