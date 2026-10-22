@@ -1,29 +1,15 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Loader2, RefreshCw } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { RefreshCw } from 'lucide-react';
 import { Container } from '../components/Container';
 import { Button } from '../components/Button';
-import { ButtonLink } from '../components/ButtonLink';
+import { AdminGate } from '../components/admin/AdminShell';
 import { ROADMAP_TIERS } from '../data/roadmapData';
 import { COMPETITORS, type Competitor } from '../data/competitorsData';
 import { AdminBlogPanel } from '../components/admin/AdminBlogPanel';
 import { buildNote } from '../components/admin/buildNote';
 import { getOutboundLinkRows, type OutboundLinkRow } from '../data/linkAllowlistData';
 
-declare global {
-    interface Window {
-        google?: {
-            accounts: {
-                id: {
-                    initialize: (config: {
-                        client_id: string;
-                        callback: (response: { credential: string }) => void;
-                    }) => void;
-                    renderButton: (parent: HTMLElement, options: Record<string, unknown>) => void;
-                };
-            };
-        };
-    }
-}
 
 interface JoinApplication {
     id: number;
@@ -103,102 +89,6 @@ function EmptyRow({ colSpan, searching }: { colSpan: number; searching: boolean 
     );
 }
 
-function GoogleSignInButton({ onCredential }: { onCredential: (credential: string) => void }) {
-    const buttonRef = useRef<HTMLDivElement>(null);
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined;
-
-    useEffect(() => {
-        if (!clientId) return;
-
-        const scriptId = 'google-identity-services';
-        const init = () => {
-            if (!window.google || !buttonRef.current) return;
-            window.google.accounts.id.initialize({
-                client_id: clientId,
-                callback: (response) => onCredential(response.credential),
-            });
-            window.google.accounts.id.renderButton(buttonRef.current, {
-                theme: 'outline',
-                size: 'large',
-                text: 'signin_with',
-            });
-        };
-
-        if (document.getElementById(scriptId)) {
-            init();
-            return;
-        }
-
-        const script = document.createElement('script');
-        script.id = scriptId;
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.async = true;
-        script.defer = true;
-        script.onload = init;
-        document.head.appendChild(script);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clientId]);
-
-    if (!clientId) {
-        return (
-            <p className="max-w-sm text-center text-sm text-ink">
-                Google Sign-In is not configured. Set <code>VITE_GOOGLE_CLIENT_ID</code> in the environment.
-            </p>
-        );
-    }
-
-    return <div ref={buttonRef} />;
-}
-
-function LoginScreen({ onAuthenticated }: { onAuthenticated: (email: string) => void }) {
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-
-    const handleCredential = async (credential: string) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const res = await fetch('/api/auth-google', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'same-origin',
-                body: JSON.stringify({ credential }),
-            });
-            const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.error || 'Sign-in failed');
-            }
-            onAuthenticated(data.email);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Sign-in failed');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="flex min-h-[60vh] items-center justify-center px-4 py-16">
-            <div className="flex w-full max-w-sm flex-col items-center gap-6 rounded-2xl border border-rule bg-paper p-10">
-                <h2 className="text-2xl font-bold text-ink">Sign in</h2>
-                <p className="text-center text-sm text-muted">
-                    Sign in with an authorized Google account to view form submissions.
-                </p>
-                <GoogleSignInButton onCredential={handleCredential} />
-                {loading && (
-                    <p role="status" className="flex items-center gap-2 text-sm text-muted">
-                        <Loader2 className="h-4 w-4 animate-spin motion-status" aria-hidden="true" />
-                        Signing in&hellip;
-                    </p>
-                )}
-                {error && (
-                    <p role="alert" className="text-center text-sm text-ink">
-                        {error}
-                    </p>
-                )}
-            </div>
-        </div>
-    );
-}
 
 interface FilteredRows {
     contact: ContactMessage[];
@@ -537,8 +427,8 @@ function useAdminLinks(onUnauthorized: () => void) {
             setRows((prev) => prev?.map((r) => (r.id === updated.id ? updated : r)) ?? prev);
             setNotice(
                 action === 'approve'
-                    ? `${updated.name}: approved. Posts link to ${host} from the next build.${buildNote(data.build)}`
-                    : `${updated.name}: held. Links to ${host} become plain text from the next build.${buildNote(data.build)}`
+                    ? `${updated.name}: approved. Posts link to ${host} once the site rebuilds.${buildNote(data.build)}`
+                    : `${updated.name}: held. Links to ${host} become plain text once the site rebuilds.${buildNote(data.build)}`
             );
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Update failed');
@@ -693,7 +583,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     const [data, setData] = useState<Submissions | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [refreshing, setRefreshing] = useState(false);
-    const [tab, setTab] = useState<Tab>('contact');
+    // The open tab lives in ?tab= so the blog review page can link back to
+    // the queue (/admin?tab=blog) and a reload keeps the same tab.
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabParam = searchParams.get('tab');
+    const tab: Tab = tabParam && tabParam in TAB_META ? (tabParam as Tab) : 'contact';
+    const setTab = (next: Tab) => setSearchParams(next === 'contact' ? {} : { tab: next }, { replace: true });
     const [search, setSearch] = useState('');
     // Blog panel fetches its own data; bumping this reloads it from Refresh.
     const [blogRefresh, setBlogRefresh] = useState(0);
@@ -917,111 +812,10 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </Container>
     );
 }
-
 /**
- * The chrome shared by all three states (checking, signed out, signed in), so
- * the surface carries exactly one <h1> in the DOM at every moment.
- *
- * It also supplies the <main> landmark. Page components normally must not, but
- * `/admin` is routed outside `<Layout>` (App.tsx), so nothing else provides one
- * on this route and there is no second landmark to collide with.
+ * Title and `noindex` are set by <Head> from the ROUTE_SEO '/admin' entry. The
+ * netlify.toml header for /admin still sends `noindex, nofollow`.
  */
-function AdminShell({ children, actions }: { children: React.ReactNode; actions?: React.ReactNode }) {
-    return (
-        <div className="flex min-h-screen flex-col bg-band">
-            <header className="border-b border-rule bg-paper">
-                <Container className="flex flex-wrap items-center justify-between gap-4 py-4">
-                    <h1 className="text-xl font-bold text-ink">IFN Admin</h1>
-                    <div className="flex flex-wrap items-center gap-2">
-                        <ButtonLink to="/" variant="ghost" size="sm">
-                            Back to the site
-                        </ButtonLink>
-                        {actions}
-                    </div>
-                </Container>
-            </header>
-            <main className="flex-grow">{children}</main>
-        </div>
-    );
-}
-
-/** Who is signed in, and the way out. Lives in the shell header, beside the <h1>. */
-function SignedInActions({ email, onLoggedOut }: { email: string; onLoggedOut: () => void }) {
-    const handleLogout = async () => {
-        await fetch('/api/auth-logout', { method: 'POST', credentials: 'same-origin' });
-        onLoggedOut();
-    };
-
-    return (
-        <>
-            <span className="text-sm text-muted">{email}</span>
-            <Button variant="ghost" size="sm" onClick={handleLogout}>
-                Log out
-            </Button>
-        </>
-    );
-}
-
 export function Admin() {
-    const [email, setEmail] = useState<string | null>(null);
-    const [checking, setChecking] = useState(true);
-
-    /**
-     * `/admin` is an internal surface. Netlify already sends
-     * `X-Robots-Tag: noindex, nofollow` for this path and robots.txt disallows
-     * it; this covers crawlers that execute JavaScript. Both the tag and the
-     * previous <title> are restored on unmount.
-     *
-     * None of this is access control. That is the signed, httpOnly session
-     * cookie checked server-side on every /api/admin-* request.
-     */
-    /**
-     * Title and `noindex` are set by <Head> from the ROUTE_SEO '/admin' entry.
-     * The real access control for this page is server-side (Google sign-in plus
-     * an allowlist, verified in every /api/admin-* function) and is unaffected
-     * by anything in the document head.
-     *
-     * One deliberate difference from what this effect used to send: Head emits
-     * `noindex, follow` where this sent `noindex, nofollow`. The netlify.toml
-     * header for /admin still sends `noindex, nofollow`, and the HTTP header is
-     * the directive a crawler actually acts on, so the stricter form is not
-     * lost.
-     */
-
-    useEffect(() => {
-        fetch('/api/auth-me', { credentials: 'same-origin' })
-            .then((res) => (res.ok ? res.json() : null))
-            .then((data) => setEmail(data?.email ?? null))
-            .finally(() => setChecking(false));
-    }, []);
-
-    if (checking) {
-        return (
-            <AdminShell>
-                <Container className="py-24">
-                    <p
-                        role="status"
-                        className="flex items-center justify-center gap-3 text-sm text-muted"
-                    >
-                        <Loader2 className="h-5 w-5 animate-spin motion-status" aria-hidden="true" />
-                        Checking your sign-in&hellip;
-                    </p>
-                </Container>
-            </AdminShell>
-        );
-    }
-
-    if (!email) {
-        return (
-            <AdminShell>
-                <LoginScreen onAuthenticated={setEmail} />
-            </AdminShell>
-        );
-    }
-
-    return (
-        <AdminShell actions={<SignedInActions email={email} onLoggedOut={() => setEmail(null)} />}>
-            <Dashboard onLogout={() => setEmail(null)} />
-        </AdminShell>
-    );
+    return <AdminGate>{(_email, signOut) => <Dashboard onLogout={signOut} />}</AdminGate>;
 }

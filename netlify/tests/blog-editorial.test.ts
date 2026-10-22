@@ -78,6 +78,8 @@ describe('mergeOverlay', () => {
         publicInBuild: false,
         imagesReady: true,
         imagesMissing: [],
+        images: { hero: '/blog/a-hero.webp', hero800: '/blog/a-hero-800.webp', thumb: '/blog/a-thumb.webp', og: '/blog/a-og.png' },
+        imageAlt: 'Alt',
     };
 
     it('overlay wins for status and publishAt only', () => {
@@ -126,6 +128,20 @@ describe('admin-blog.ts request handling', () => {
         expect(body.overlayAvailable).toBe(false);
         expect(body.posts.some((p: { slug: string }) => p.slug === 'welcome-to-the-ifn-blog')).toBe(true);
         expect(res!.body).not.toContain('"html"');
+    });
+
+    it('GET lists each post\'s image set paths and alt text', async () => {
+        const res = await handler(await authedEvent('GET'), {} as never);
+        const body = JSON.parse(res!.body!);
+        const post = body.posts.find((p: { slug: string }) => p.slug === 'welcome-to-the-ifn-blog');
+        expect(post.images).toEqual({
+            hero: '/blog/welcome-to-the-ifn-blog-hero.webp',
+            hero800: '/blog/welcome-to-the-ifn-blog-hero-800.webp',
+            thumb: '/blog/welcome-to-the-ifn-blog-thumb.webp',
+            og: '/blog/welcome-to-the-ifn-blog-og.png',
+        });
+        expect(typeof post.imageAlt).toBe('string');
+        expect(post.imageAlt.length).toBeGreaterThan(0);
     });
 
     it('PATCH without a database answers 503', async () => {

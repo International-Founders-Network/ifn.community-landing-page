@@ -82,3 +82,14 @@ describe('per-post share images', () => {
         );
     });
 });
+
+describe('admin subroutes', () => {
+    it('use the /admin entry: noindex, and never prerendered', async () => {
+        const { seoFor, PRERENDER_PATHS, INDEXABLE_PATHS } = await import('./seo');
+        const seo = seoFor('/admin/blog/forming-a-us-company-from-abroad');
+        expect(seo.indexable).toBe(false);
+        expect(seo.title).toBe(seoFor('/admin').title);
+        expect(PRERENDER_PATHS.some((p: string) => p.startsWith('/admin'))).toBe(false);
+        expect(INDEXABLE_PATHS.some((p: string) => p.startsWith('/admin'))).toBe(false);
+    });
+});

@@ -384,6 +384,11 @@ export function getPostBySlug(slug: string): BlogPost | undefined {
             publicInBuild: post.isPublic,
             imagesReady: imageGate.readiness.get(post.slug).ready,
             imagesMissing: imageGate.readiness.get(post.slug).missing,
+            // Site paths of the image set. Admin shows them; for a post that is
+            // not public the files are pruned from dist/, so Admin fetches them
+            // through the authed admin-blog-image function instead.
+            images: { ...imageSetPaths(post.slug), og: post.ogImage },
+            imageAlt: post.imageAlt,
         }))
         .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.slug.localeCompare(b.slug)));
     mkdirSync(dirname(QUEUE_PATH), { recursive: true });
