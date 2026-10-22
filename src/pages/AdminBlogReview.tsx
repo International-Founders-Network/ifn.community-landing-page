@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { Container } from '../components/Container';
 import { ButtonLink } from '../components/ButtonLink';
 import { AdminGate } from '../components/admin/AdminShell';
@@ -61,36 +62,45 @@ function ReviewBar({
     return (
         <div className="sticky top-0 z-40 border-b border-ink bg-paper">
             <Container className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-3">
-                <dl className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
-                    <Fact label="Status">{STATUS_LABEL[post.status]}</Fact>
-                    <Fact label="Site">{siteState(post).label}</Fact>
-                    <Fact label="Images">
-                        {post.imagesReady ? (
-                            'Ready'
-                        ) : (
-                            <span title={post.imagesMissing.join(', ')}>
-                                {post.imagesMissing.length} missing, going live fails the build
-                            </span>
-                        )}
-                    </Fact>
-                    <Fact label="Links">
-                        {held === 0 ? (
-                            'None held'
-                        ) : (
-                            <a
-                                href="#held-links"
-                                className="underline decoration-rule underline-offset-4 hover:decoration-ink"
-                            >
-                                {held === 1 ? '1 held as plain text' : `${held} held as plain text`}
-                            </a>
-                        )}
-                    </Fact>
-                    {post.publishAt && (
-                        <Fact label="Publish at">
-                            <time dateTime={post.publishAt}>{formatChicago(post.publishAt)}</time>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                    <Link
+                        to={QUEUE_PATH}
+                        className="inline-flex items-center gap-1 text-sm font-semibold text-ink underline decoration-rule underline-offset-4 hover:decoration-ink focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                    >
+                        <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                        Blog queue
+                    </Link>
+                    <dl className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
+                        <Fact label="Status">{STATUS_LABEL[post.status]}</Fact>
+                        <Fact label="Site">{siteState(post).label}</Fact>
+                        <Fact label="Images">
+                            {post.imagesReady ? (
+                                'Ready'
+                            ) : (
+                                <span title={post.imagesMissing.join(', ')}>
+                                    {post.imagesMissing.length} missing, going live fails the build
+                                </span>
+                            )}
                         </Fact>
-                    )}
-                </dl>
+                        <Fact label="Links">
+                            {held === 0 ? (
+                                'None held'
+                            ) : (
+                                <a
+                                    href="#held-links"
+                                    className="underline decoration-rule underline-offset-4 hover:decoration-ink"
+                                >
+                                    {held === 1 ? '1 held as plain text' : `${held} held as plain text`}
+                                </a>
+                            )}
+                        </Fact>
+                        {post.publishAt && (
+                            <Fact label="Publish at">
+                                <time dateTime={post.publishAt}>{formatChicago(post.publishAt)}</time>
+                            </Fact>
+                        )}
+                    </dl>
+                </div>
                 <div className="flex flex-wrap items-center gap-2">
                     <PostActions
                         post={post}
@@ -104,15 +114,17 @@ function ReviewBar({
                 </div>
             </Container>
             {(actions.notice || actions.error || actions.buildPhase || !overlayAvailable) && (
-                <Container className="space-y-2 border-t border-rule py-2">
-                    {!overlayAvailable && (
-                        <p className="text-sm text-ink">
-                            Editorial store unavailable (NETLIFY_DATABASE_URL is not configured). Actions are
-                            disabled.
-                        </p>
-                    )}
-                    <ActionFeedback notice={actions.notice} error={actions.error} buildPhase={actions.buildPhase} />
-                </Container>
+                <div className="border-t border-rule">
+                    <Container className="space-y-2 py-2">
+                        {!overlayAvailable && (
+                            <p className="text-sm text-ink">
+                                Editorial store unavailable (NETLIFY_DATABASE_URL is not configured). Actions are
+                                disabled.
+                            </p>
+                        )}
+                        <ActionFeedback notice={actions.notice} error={actions.error} buildPhase={actions.buildPhase} />
+                    </Container>
+                </div>
             )}
         </div>
     );

@@ -52,7 +52,7 @@ export function PostActions({
                 </Button>
             )}
             {actions.includes('schedule') && (
-                <span className="inline-flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-2 whitespace-nowrap">
                     <label htmlFor={inputId} className="sr-only">
                         Publish time for {post.title}, America/Chicago
                     </label>

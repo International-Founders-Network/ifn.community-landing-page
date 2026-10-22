@@ -24,7 +24,7 @@ describe('buildNote', () => {
 describe('blogActionNotice', () => {
     it('mark live with a triggered hook reads as publishing, not as a manual step', () => {
         const notice = blogActionNotice(post, 'mark_live', 'triggered');
-        expect(notice).toEqual({ tone: 'info', text: 'Post: publishing. Site rebuild started, live in a few minutes.' });
+        expect(notice).toEqual({ tone: 'info', text: 'Publishing "Post": site rebuild started, live in a few minutes.' });
         expect(notice.text).not.toMatch(/next build|Rebuild requested|Not on site/);
     });
 

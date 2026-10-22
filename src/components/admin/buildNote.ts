@@ -52,7 +52,7 @@ export function blogActionNotice(
             return { tone: 'info', text: `${name} approved. Nothing changes on the site until it is scheduled or marked live.` };
         case 'mark_live':
             if (build === 'triggered') {
-                return { tone, text: `${name} publishing. Site rebuild started, live in a few minutes.` };
+                return { tone, text: `Publishing "${post.title}": site rebuild started, live in a few minutes.` };
             }
             return { tone, text: `${name} marked live.${buildNote(build)}` };
         case 'schedule': {

@@ -166,14 +166,13 @@ export function AdminBlogPanel({
                             <th scope="col" className={TH}>Title</th>
                             <th scope="col" className={TH}>Status</th>
                             <th scope="col" className={TH}>Publish at (America/Chicago)</th>
-                            <th scope="col" className={TH}>Date</th>
                             <th scope="col" className={TH}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {posts && posts.length === 0 && (
                             <tr>
-                                <td colSpan={6} className="py-8 text-center text-muted">
+                                <td colSpan={5} className="py-8 text-center text-muted">
                                     No posts in content/blog yet.
                                 </td>
                             </tr>
@@ -196,7 +195,7 @@ export function AdminBlogPanel({
                                             <PostThumb post={post} className="w-32" />
                                         </Link>
                                     </td>
-                                    <td className="py-3 pr-4">
+                                    <td className="min-w-[16rem] py-3 pr-4">
                                         <Link
                                             to={reviewPath}
                                             className="font-medium text-ink underline decoration-rule underline-offset-4 hover:decoration-ink focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
@@ -204,6 +203,9 @@ export function AdminBlogPanel({
                                             {post.title}
                                         </Link>
                                         <div className="mt-1 text-xs text-muted">{post.slug}</div>
+                                        <div className="text-xs text-muted">
+                                            Post date <time dateTime={post.date}>{post.date}</time>
+                                        </div>
                                     </td>
                                     <td className="whitespace-nowrap py-3 pr-4">
                                         <div className="font-semibold text-ink">{STATUS_LABEL[post.status]}</div>
@@ -224,10 +226,7 @@ export function AdminBlogPanel({
                                             '-'
                                         )}
                                     </td>
-                                    <td className="whitespace-nowrap py-3 pr-4 text-muted">
-                                        <time dateTime={post.date}>{post.date}</time>
-                                    </td>
-                                    <td className="py-3 pr-4">
+                                    <td className="min-w-[27rem] py-3 pr-4">
                                         <div className="flex flex-wrap items-center gap-2">
                                             <ButtonLink to={reviewPath} size="sm" variant="outline">
                                                 Review<span className="sr-only"> {post.title}</span>
