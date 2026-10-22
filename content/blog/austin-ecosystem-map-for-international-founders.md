@@ -14,6 +14,7 @@ syndication:
   newsletter: false
 tags: [austin, ecosystem, networking, peer-notes]
 ogImage: /blog/austin-ecosystem-map-for-international-founders-og.png
+imageAlt: "Diagram: one downtown building holding coworking, meetups and speed networking, with lines out to a warm intro, following up once and offering one back."
 ---
 
 A founder who moved to Austin three weeks earlier walks into the building at 701 Brazos St on a Tuesday evening and asks the front desk which room the founder meetup is in. The answer is "which one?" There are several events that night. They find the IFN room, sit down, and the first thing they ask the person next to them is how anyone figures out who is who in this city.

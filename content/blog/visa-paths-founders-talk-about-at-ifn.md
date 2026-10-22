@@ -8,6 +8,7 @@ status: in_review
 publishAt: null
 tags: [visas, immigration, peer-notes, orientation]
 ogImage: /blog/visa-paths-founders-talk-about-at-ifn-og.png
+imageAlt: "Diagram: O-1, E-2, H-1B and L-1 sit on one line that ends at a stop line, past which the conversation goes to immigration counsel."
 
 # Phase 2 stubs only (defaults false; syndication is not wired yet)
 syndication:

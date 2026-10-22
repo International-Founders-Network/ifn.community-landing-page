@@ -14,6 +14,7 @@ syndication:
   newsletter: false
 tags: [fundraising, diligence, peer-notes, us-market-entry]
 ogImage: /blog/fundraising-as-an-international-founder-what-changes-in-the-us-conversation-og.png
+imageAlt: "Diagram: status, team location and market narrative converge on a US diligence file."
 ---
 
 Two founders are comparing notes at a corner table during an IFN meetup. One has just finished a round of calls with US angels. The other raised a seed round back home two years ago and is preparing for a US round now. The first one says the investor conversations went fine until about minute twenty, when the questions moved away from the product. "Where do you live? Who is on payroll? What happens if you cannot get back into the country?" The second founder nods and starts writing things down.

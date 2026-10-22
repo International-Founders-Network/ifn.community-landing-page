@@ -14,6 +14,7 @@ syndication:
   newsletter: false
 tags: [gtm, sales, us-market-entry, peer-notes]
 ogImage: /blog/us-go-to-market-when-your-product-was-built-elsewhere-og.png
+imageAlt: "Diagram: a product box labeled built elsewhere with one path that branches to pricing, trust and channels."
 ---
 
 A founder sits at the IFN meetup table with an email thread open on their laptop. At home, the product sells through referrals and a short demo, and most deals close inside a few calls. Here, a US prospect liked the demo and then sent back a list of questions. Is there a security review document? Do you have a US entity? Can we talk to two US customers? What support hours do you keep in Central time? None of these came up at home. The founder wants to know which one to answer first, and whether the deal is even real.

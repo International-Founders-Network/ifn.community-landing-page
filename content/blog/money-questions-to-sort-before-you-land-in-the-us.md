@@ -14,6 +14,7 @@ syndication:
   newsletter: false
 tags: [pre-arrival, credit, banking, peer-notes]
 ogImage: /blog/money-questions-to-sort-before-you-land-in-the-us-og.png
+imageAlt: "Diagram: home and US columns joined by three lines labeled credit, transfers and records."
 ---
 
 Someone at the IFN Austin meetup usually has a version of this story. They went into a phone store expecting a simple monthly plan and came out with a request for a deposit. A week later, the apartment they wanted asked for a deposit too, and suggested a guarantor they did not have. Back home they had years of clean credit, loans paid on time, and a bank that knew them by name. None of it counted here. The founder next to them nods, because the same thing happened to them in their first month.

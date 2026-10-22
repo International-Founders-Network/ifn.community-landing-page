@@ -8,6 +8,7 @@ status: in_review
 publishAt: null
 tags: [banking, finance, operations, peer-notes]
 ogImage: /blog/us-business-banking-document-pack-og.png
+imageAlt: "Diagram: six document sheets for formation, EIN, ownership, ID, address and description, with the address sheet out of line, lead to bank review."
 
 # Phase 2 stubs only (defaults false; syndication is not wired yet)
 syndication:

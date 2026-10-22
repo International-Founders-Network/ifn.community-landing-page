@@ -14,6 +14,7 @@ syndication:
   newsletter: false
 tags: [entity, ein, banking, peer-notes]
 ogImage: /blog/opening-an-ein-and-why-the-letter-matters-for-banking-og.png
+imageAlt: "Diagram: formation papers and the EIN letter side by side, joined by a line that matches the company name on both."
 ---
 
 A familiar moment at the IFN Austin meetup: a founder scrolls back through their inbox to show the table an email with a nine-digit number in it. That's their EIN. Their business bank application has been in review for two weeks, and the bank's latest message asked for "the IRS letter." They have the number but not the letter, and they aren't sure which letter the bank means. Two people across the table nod, because the same thing held up their accounts.
