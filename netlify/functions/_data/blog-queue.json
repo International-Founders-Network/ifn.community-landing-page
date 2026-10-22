@@ -1,6 +1,195 @@
 {
   "posts": [
     {
+      "slug": "money-questions-to-sort-before-you-land-in-the-us",
+      "title": "Money questions international founders sort before they land in the US",
+      "date": "2026-10-29",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "pre-arrival",
+        "credit",
+        "banking",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "us-go-to-market-when-your-product-was-built-elsewhere",
+      "title": "US go-to-market when your first product was built elsewhere",
+      "date": "2026-10-28",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "gtm",
+        "sales",
+        "us-market-entry",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "building-your-first-50-connections-in-austin",
+      "title": "Building your first 50 connections in Austin from zero",
+      "date": "2026-10-27",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "austin",
+        "networking",
+        "community",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "opening-an-ein-and-why-the-letter-matters-for-banking",
+      "title": "Opening an EIN and why the letter matters for banking",
+      "date": "2026-10-22",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "entity",
+        "ein",
+        "banking",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "how-international-founders-find-us-legal-counsel",
+      "title": "How international founders find US legal counsel (and what peers ask first)",
+      "date": "2026-10-21",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "counsel",
+        "advisors",
+        "us-market-entry",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "how-we-validate-a-us-market-before-landing",
+      "title": "How we validate a US market before landing",
+      "date": "2026-10-20",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "gtm",
+        "market-research",
+        "us-market-entry",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "fundraising-as-an-international-founder-what-changes-in-the-us-conversation",
+      "title": "Fundraising as an international founder: what changes in the US conversation",
+      "date": "2026-10-08",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "fundraising",
+        "diligence",
+        "peer-notes",
+        "us-market-entry"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "austin-ecosystem-map-for-international-founders",
+      "title": "Austin ecosystem map for international founders",
+      "date": "2026-10-07",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "austin",
+        "ecosystem",
+        "networking",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
+      "slug": "first-90-days-in-austin-as-an-international-founder",
+      "title": "First 90 days in Austin as an international founder",
+      "date": "2026-10-06",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "austin",
+        "housing",
+        "landing",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false
+    },
+    {
       "slug": "us-business-banking-document-pack",
       "title": "US business banking for international founders: what peers gather first",
       "date": "2026-10-03",
