@@ -45,6 +45,12 @@
 [functions]
   directory = "netlify/functions"
 
+# Admin reads unpublished posts' images through this function, because
+# vite.config.ts prunes them from dist/ (they must 404 publicly). Ship the WebP
+# set with this function only; the files are small (about 0.5 MB in total).
+[functions.admin-blog-image]
+  included_files = ["public/blog/*.webp"]
+
 # ---------------------------------------------------------------------------
 # REDIRECTS. Order is significant: Netlify applies the first matching rule.
 #
@@ -100,6 +106,14 @@
 
 [[redirects]]
   from = "/admin"
+  to = "/index.html"
+  status = 200
+
+# Admin subroutes such as the full-page blog review, /admin/blog/<slug>. Same
+# shell, same server-side auth on every /api/admin-* call, never prerendered.
+# Must sit before the 404 catch-all.
+[[redirects]]
+  from = "/admin/*"
   to = "/index.html"
   status = 200
 
