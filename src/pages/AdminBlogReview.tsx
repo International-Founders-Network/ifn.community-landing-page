@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container } from '../components/Container';
 import { ButtonLink } from '../components/ButtonLink';
@@ -185,7 +185,7 @@ function Review({ slug, onUnauthorized }: { slug: string; onUnauthorized: () => 
     const [loadError, setLoadError] = useState<{ notFound: boolean; message: string } | null>(null);
     const [wallTime, setWallTime] = useState<string | null>(null);
 
-    const load = useCallback(async () => {
+    const load = async () => {
         try {
             const result = await fetchPost(slug);
             setLoadError(null);
@@ -202,7 +202,7 @@ function Review({ slug, onUnauthorized }: { slug: string; onUnauthorized: () => 
                 message: err instanceof Error ? err.message : 'Failed to load the post',
             });
         }
-    }, [slug, onUnauthorized]);
+    };
 
     const actions = useBlogActions({
         onUnauthorized,
@@ -213,7 +213,9 @@ function Review({ slug, onUnauthorized }: { slug: string; onUnauthorized: () => 
 
     useEffect(() => {
         load();
-    }, [load]);
+        // Keyed by slug (AdminBlogReview), so this runs once per post.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     if (loadError) {
         return (
