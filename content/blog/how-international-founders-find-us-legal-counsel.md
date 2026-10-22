@@ -14,6 +14,7 @@ syndication:
   newsletter: false
 tags: [counsel, advisors, us-market-entry, peer-notes]
 ogImage: /blog/how-international-founders-find-us-legal-counsel-og.png
+imageAlt: "Diagram: seats for immigration, corporate, employment, CPA and home-country advisors around one table, with lines showing advisors talking to each other."
 ---
 
 Austin's in-person meetups sometimes have a founder scrolling through three notes on their phone that all say roughly the same thing. One came from a bank call: have your attorney review the operating agreement. One came from a co-founder conversation about splitting equity. The third came from someone at the last meetup who heard about their visa plans and said, kindly, that they should talk to counsel first. The founder wants to know if that means one lawyer or three. A few people at the table answer at once. It is closer to three, plus a CPA.

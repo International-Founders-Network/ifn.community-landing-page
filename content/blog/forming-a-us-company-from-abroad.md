@@ -8,6 +8,7 @@ status: in_review
 publishAt: null
 tags: [entity, formation, us-market-entry, peer-notes]
 ogImage: /blog/forming-a-us-company-from-abroad-og.png
+imageAlt: "Diagram: three separate tracks for company paper, personal status and money rails run side by side to a line where the room stops and founders call counsel."
 
 # Phase 2 stubs only (defaults false; syndication is not wired yet)
 syndication:

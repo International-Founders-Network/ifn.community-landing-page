@@ -19,7 +19,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "us-go-to-market-when-your-product-was-built-elsewhere",
@@ -40,7 +42,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "building-your-first-50-connections-in-austin",
@@ -61,7 +65,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "opening-an-ein-and-why-the-letter-matters-for-banking",
@@ -82,7 +88,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "how-international-founders-find-us-legal-counsel",
@@ -103,7 +111,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "how-we-validate-a-us-market-before-landing",
@@ -124,7 +134,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "fundraising-as-an-international-founder-what-changes-in-the-us-conversation",
@@ -145,7 +157,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "austin-ecosystem-map-for-international-founders",
@@ -166,7 +180,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "first-90-days-in-austin-as-an-international-founder",
@@ -187,7 +203,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "us-business-banking-document-pack",
@@ -208,7 +226,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "visa-paths-founders-talk-about-at-ifn",
@@ -229,7 +249,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "forming-a-us-company-from-abroad",
@@ -250,7 +272,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": false
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": []
     },
     {
       "slug": "welcome-to-the-ifn-blog",
@@ -270,7 +294,9 @@
         "x": false,
         "instagram": false
       },
-      "publicInBuild": true
+      "publicInBuild": true,
+      "imagesReady": true,
+      "imagesMissing": []
     }
   ]
 }

@@ -7,7 +7,8 @@ draft: false
 status: live
 publishAt: null
 tags: [austin, landing, community]
-ogImage: null
+ogImage: /blog/welcome-to-the-ifn-blog-og.png
+imageAlt: "Diagram: five note sheets for entity, visas, banking, housing and funding lead to a ring for the monthly meetup."
 
 # Phase 2 stubs only (defaults false; syndication is not wired yet)
 syndication:

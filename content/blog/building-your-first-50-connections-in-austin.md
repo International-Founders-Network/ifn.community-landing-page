@@ -14,6 +14,7 @@ syndication:
   newsletter: false
 tags: [austin, networking, community, peer-notes]
 ogImage: /blog/building-your-first-50-connections-in-austin-og.png
+imageAlt: "Diagram: a grid of mostly unconnected dots with one small connected cluster around a pin labeled Austin."
 ---
 
 A common first night at the IFN meetup goes something like this. A founder walks into Station Austin knowing nobody, picks up a name tag, and spends ten minutes near the wall pretending to read their phone. Someone asks what they are building. They explain it badly, then better the second time. By the end of the evening they have talked to six or seven people and forgotten most of the names. They have written down two that matter: a founder who opened a US bank account last year with the same company structure, and someone who sells to the same kind of customer back home. That is two follow-ups, and it counts as a good first night.

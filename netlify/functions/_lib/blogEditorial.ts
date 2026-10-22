@@ -27,6 +27,10 @@ export interface QueueEntry {
     tags: string[];
     draft: boolean;
     publicInBuild: boolean;
+    /** Every file of the post's image set exists and imageAlt is set (scripts/lib/blogImages.mjs). */
+    imagesReady: boolean;
+    /** What the image gate found missing at the last build, e.g. public/blog/<slug>-og.png. */
+    imagesMissing: string[];
 }
 
 export interface OverlayRow {

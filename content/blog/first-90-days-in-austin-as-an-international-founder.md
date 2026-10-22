@@ -14,6 +14,7 @@ syndication:
   newsletter: false
 tags: [austin, housing, landing, peer-notes]
 ogImage: /blog/first-90-days-in-austin-as-an-international-founder-og.png
+imageAlt: "Diagram: a timeline from day 1 to day 90 with overlapping bars for housing, documents and local operations."
 ---
 
 Austin's in-person meetups often have one founder holding a phone with a map open, asking the room which part of town they should actually live in. They landed two weeks ago. The company is formed, the bank account is half open, and they have spent their first ten days in a short-term rental. They are trying to work out whether to sign a twelve-month lease before they know where they will spend most of their time. Someone across the table laughs, because they asked the same question a year earlier.

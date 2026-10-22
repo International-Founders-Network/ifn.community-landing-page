@@ -14,6 +14,7 @@ syndication:
   newsletter: false
 tags: [gtm, market-research, us-market-entry, peer-notes]
 ogImage: /blog/how-we-validate-a-us-market-before-landing-og.png
+imageAlt: "Diagram: a column of calls from abroad passes three real signals before an arrow reaches the Austin trip."
 ---
 
 Every so often a founder at the Austin meetup explains that they flew in for a week of "validation." They have a hotel near downtown, a deck on their laptop, and a plan to talk to customers. Someone asks how many calls they have booked, and the answer is none yet. They were hoping the city would take care of that part. A few people around the table nod, because they tried the same thing and spent most of that week in coffee shops refreshing their inbox.
