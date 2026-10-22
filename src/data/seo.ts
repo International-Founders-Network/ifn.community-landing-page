@@ -368,6 +368,10 @@ export function seoFor(pathname: string): RouteSeo {
     if (normalised in ROUTE_SEO) {
         return ROUTE_SEO[normalised];
     }
+    // Admin subroutes (/admin/blog/<slug>) share the dashboard's noindex entry.
+    if (normalised.startsWith('/admin/')) {
+        return ROUTE_SEO['/admin'];
+    }
     const postMatch = normalised.match(/^\/blog\/([a-z0-9]+(?:-[a-z0-9]+)*)$/);
     if (postMatch) {
         const post = getPostBySlug(postMatch[1]);

@@ -32,6 +32,7 @@ const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions').then(
 const ResourcesHub = lazy(() => import('./pages/ResourcesHub').then(module => ({ default: module.ResourcesHub })));
 const NotFound = lazy(() => import('./pages/NotFound').then(module => ({ default: module.NotFound })));
 const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: module.Admin })));
+const AdminBlogReview = lazy(() => import('./pages/AdminBlogReview').then(module => ({ default: module.AdminBlogReview })));
 
 const JoinModal = lazy(() => import('./components/JoinModal').then(module => ({ default: module.JoinModal })));
 
@@ -122,6 +123,16 @@ function App() {
                         element={
                             <Suspense fallback={<PageFallback />}>
                                 <Admin />
+                            </Suspense>
+                        }
+                    />
+                    {/* Full-page blog review. Outside Layout like /admin, and not in
+                        ROUTE_SEO, so it is never prerendered or in the sitemap. */}
+                    <Route
+                        path="/admin/blog/:slug"
+                        element={
+                            <Suspense fallback={<PageFallback />}>
+                                <AdminBlogReview />
                             </Suspense>
                         }
                     />

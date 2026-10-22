@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Container } from '../Container';
 import { Button } from '../Button';
@@ -182,6 +182,8 @@ export function AdminGate({
 }) {
     const [email, setEmail] = useState<string | null>(null);
     const [checking, setChecking] = useState(true);
+    // Stable, because pages put it in effect dependencies.
+    const signOut = useCallback(() => setEmail(null), []);
 
     useEffect(() => {
         fetch('/api/auth-me', { credentials: 'same-origin' })
@@ -212,7 +214,6 @@ export function AdminGate({
         );
     }
 
-    const signOut = () => setEmail(null);
     return (
         <AdminShell actions={<SignedInActions email={email} onLoggedOut={signOut} />}>
             {children(email, signOut)}
