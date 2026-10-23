@@ -61,7 +61,7 @@ function normaliseVenue(value) {
 async function scrapeEvents() {
     console.log(`Starting scraper for ${TARGET_URL}...`);
     const browser = await puppeteer.launch({
-        headless: "new",
+        headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
