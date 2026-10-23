@@ -184,7 +184,7 @@ export function resolveSubjectScale(
 }
 
 /**
- * Editorial subject-scale map for Vol. 08 + Vol. 09 overflow.
+ * Editorial subject-scale map for Vol. 08, Vol. 09 and Vol. 10 overflow.
  * Mirrors `gallery.subjectScale` in scripts/photos.manifest.json.
  */
 export const OVERFLOW_SUBJECT_SCALE: Record<string, SubjectScale> = {
@@ -214,4 +214,22 @@ export const OVERFLOW_SUBJECT_SCALE: Record<string, SubjectScale> = {
   'gallery-sep-chat': 'sm',
   'gallery-sep-pose': 'sm',
   'gallery-sep-talk': 'sm',
+  'gallery-oct-group': 'lg',
+  'gallery-oct-arrivals': 'lg',
+  'gallery-oct-tables': 'md',
+  'gallery-oct-host': 'lg',
+  'gallery-oct-laptop': 'sm',
+  'gallery-oct-agenda': 'lg',
+  'gallery-oct-round': 'md',
+  'gallery-oct-wifi': 'md',
+  'gallery-oct-pair': 'sm',
+  'gallery-oct-headphones': 'sm',
+  'gallery-oct-intro': 'md',
+  'gallery-oct-room': 'lg',
+  'gallery-oct-texas': 'md',
+  'gallery-oct-speaker': 'lg',
+  'gallery-oct-smile': 'sm',
+  'gallery-oct-conversation': 'md',
+  'gallery-oct-one-on-one': 'sm',
+  'gallery-oct-stage': 'lg',
 };
