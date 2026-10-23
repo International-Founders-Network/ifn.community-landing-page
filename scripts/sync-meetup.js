@@ -13,7 +13,7 @@ const OUTPUT_FILE = path.join(__dirname, '../src/data/events-meetup.json');
 async function scrapeMeetup() {
     console.log(`Starting Meetup scraper for ${TARGET_URL}...`);
     const browser = await puppeteer.launch({
-        headless: "new",
+        headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
