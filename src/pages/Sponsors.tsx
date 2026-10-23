@@ -106,7 +106,7 @@ export function Sponsors() {
                         <div className="rounded-2xl border border-rule bg-paper p-8">
                             <h2 className="text-xl font-bold text-ink">Audience</h2>
                             <p className="mt-4 leading-relaxed text-muted">
-                                <span className="font-semibold text-ink">350+</span> people in
+                                <span className="font-semibold text-ink">390+</span> people in
                                 the IFN community. Attendees: international/immigrant
                                 founders and operators, plus attorneys, investors, and operators who
                                 work with them. Meetups free; membership optional.
