@@ -4,15 +4,28 @@ export interface CreateLinkResponse {
     shortUrl: string;
 }
 
-export async function createDynamicLink(targetUrl: string, label?: string): Promise<CreateLinkResponse> {
-    const response = await fetch('/api/qr-create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetUrl, label }),
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Failed to create link');
-    return data as CreateLinkResponse;
+/** Thrown on 401 so callers can drop back to the sign-in prompt. */
+export class AuthRequiredError extends Error {}
+
+async function request<T>(path: string, init: RequestInit = {}, fallbackError = 'Request failed'): Promise<T> {
+    const response = await fetch(path, { credentials: 'same-origin', ...init });
+    let data: { error?: string } = {};
+    try {
+        data = await response.json();
+    } catch {
+        data = {};
+    }
+    if (response.status === 401) throw new AuthRequiredError(data.error || 'Sign in first');
+    if (!response.ok) throw new Error(data.error || fallbackError);
+    return data as T;
+}
+
+function jsonInit(method: string, body: unknown): RequestInit {
+    return { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+}
+
+export function createDynamicLink(targetUrl: string, label?: string): Promise<CreateLinkResponse> {
+    return request('/api/qr-create', jsonInit('POST', { targetUrl, label }), 'Failed to create link');
 }
 
 export interface ScanEntry {
@@ -31,20 +44,30 @@ export interface LinkDetails {
     recentScans: ScanEntry[];
 }
 
-export async function getLinkByToken(token: string): Promise<LinkDetails> {
-    const response = await fetch(`/api/qr-manage?token=${encodeURIComponent(token)}`);
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Link not found');
-    return data as LinkDetails;
+export function getLinkByToken(token: string): Promise<LinkDetails> {
+    return request(`/api/qr-manage?token=${encodeURIComponent(token)}`, {}, 'Link not found');
 }
 
-export async function updateLinkTarget(token: string, targetUrl: string): Promise<LinkDetails> {
-    const response = await fetch(`/api/qr-manage?token=${encodeURIComponent(token)}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetUrl }),
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Failed to update link');
-    return data as LinkDetails;
+export function updateLinkTarget(token: string, targetUrl: string): Promise<LinkDetails> {
+    return request(`/api/qr-manage?token=${encodeURIComponent(token)}`, jsonInit('PUT', { targetUrl }), 'Failed to update link');
+}
+
+/** The signed-in admin's email; null when signed out. Throws when sign-in is not configured. */
+export async function getSessionEmail(): Promise<string | null> {
+    try {
+        const data = await request<{ email: string }>('/api/auth-me', {}, 'Admin sign-in is not available');
+        return data.email;
+    } catch (err) {
+        if (err instanceof AuthRequiredError) return null;
+        throw err;
+    }
+}
+
+export async function signInWithGoogle(credential: string): Promise<string> {
+    const data = await request<{ email: string }>('/api/auth-google', jsonInit('POST', { credential }), 'Sign-in failed');
+    return data.email;
+}
+
+export async function signOut(): Promise<void> {
+    await request('/api/auth-logout', jsonInit('POST', {}), 'Sign-out failed');
 }

@@ -12,7 +12,16 @@ This app has its own OpenSpec instance at `apps/qr/openspec/`, separate from the
 
 ## Deployment
 
-Deployed at **qr.ifn.community** via Netlify's own git integration, independent of the root app's deploy. Run `npx netlify dev` (not plain `vite`) to exercise `/api/*` locally — `qr-create`, `qr-manage`, `qr-redirect` all depend on it.
+Deployed at **qr.ifn.community** as its own Netlify site (`ifn-qr`), independent of the root app's deploy. That site has **no linked git repo**: it is deployed manually with the Netlify CLI, so merging to `main` does not deploy it and PRs get no QR deploy preview. Run `npx netlify dev` (not plain `vite`) to exercise `/api/*` locally; `qr-create`, `qr-manage`, `qr-redirect` and the `auth-*` functions all depend on it.
+
+Only files directly in `netlify/functions/` become functions. Shared helpers go in `netlify/functions/_lib/` (a `_db.ts` in the root used to deploy as a public function).
+
+## Short links are admin only, and destinations are allowlisted
+
+- Creating, viewing and editing trackable links requires an admin session: Google Sign-In on this host, `ADMIN_ALLOWED_EMAILS`, and an `ADMIN_SESSION_SECRET`-signed httpOnly SameSite=Strict cookie (`netlify/functions/_lib/auth.ts`). Every new short-link endpoint must call `requireAdmin()` before touching the body or the database. Missing env vars make it answer 503; keep it failing closed.
+- The edit token in `/manage/<token>` identifies a link; it is not authorization.
+- `src/lib/redirectAllowlist.ts` is the only list of allowed destinations, imported by both the UI and the functions, and enforced at create, edit and redirect time. Add hosts there, never as a pattern, and only domains the organisation actually operates. `GET /r/<code>` stays public.
+- `public/_headers` carries an enforcing CSP. Anything that adds a third-party script, style, font, frame or fetch must update it, and re-verify in a browser with the console open.
 
 ## Company context
 

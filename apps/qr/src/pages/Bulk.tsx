@@ -5,7 +5,10 @@ import { Loader2, Download, Wand2, AlertCircle } from 'lucide-react';
 import { StylePanel } from '../components/StylePanel';
 import { QRCodePreview } from '../components/QRCodePreview';
 import { buildQrOptions, defaultStyle, type QRStyle } from '../lib/qrStyle';
-import { createDynamicLink } from '../lib/api';
+import { AuthRequiredError, createDynamicLink } from '../lib/api';
+import { checkRedirectTarget } from '../lib/redirectAllowlist';
+import { useAuth } from '../lib/authContext';
+import { SignInPanel } from '../components/SignInPanel';
 
 interface BulkResult {
     input: string;
@@ -31,6 +34,8 @@ export function Bulk() {
     const [zipping, setZipping] = useState(false);
 
     const instancesRef = useRef<Map<number, QRCodeStyling>>(new Map());
+    const auth = useAuth();
+    const needsSignIn = dynamicMode && auth.status !== 'signed-in';
 
     const lines = raw
         .split('\n')
@@ -56,11 +61,15 @@ export function Bulk() {
 
         const settled = await Promise.allSettled(
             urls.map(async (url) => {
-                if (!isValidHttpUrl(url)) throw new Error('Not a valid URL');
+                const target = checkRedirectTarget(url);
+                if (!target.ok) throw new Error(target.error);
                 const link = await createDynamicLink(url);
                 return link.shortUrl;
             })
         );
+        if (settled.some((res) => res.status === 'rejected' && res.reason instanceof AuthRequiredError)) {
+            auth.markSignedOut();
+        }
 
         setResults(
             settled.map((res, i) => ({
@@ -131,7 +140,7 @@ export function Bulk() {
                             </label>
                             <button
                                 type="button"
-                                disabled={generating || lines.length === 0}
+                                disabled={generating || lines.length === 0 || needsSignIn}
                                 onClick={handleGenerate}
                                 className="flex items-center gap-2 bg-primary hover:bg-primary-light disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-bold px-4 py-2.5 rounded-xl transition-colors"
                             >
@@ -139,6 +148,15 @@ export function Bulk() {
                                 {generating ? 'Generating...' : `Generate ${lines.length || ''} QR code${lines.length === 1 ? '' : 's'}`}
                             </button>
                         </div>
+                        {needsSignIn && (
+                            <SignInPanel reason="Trackable links are for IFN admins. Sign in to create them, or untick the box for static QR codes." />
+                        )}
+                        {dynamicMode && !needsSignIn && (
+                            <p className="text-xs text-slate-500">
+                                Trackable destinations must be https:// on ifn.community, lu.ma, luma.com, meetup.com or eventbrite. Other
+                                lines are listed with an error and skipped.
+                            </p>
+                        )}
                     </div>
 
                     {results.length > 0 && (

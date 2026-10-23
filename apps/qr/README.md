@@ -26,11 +26,13 @@ If you're working in this directory, always run its scripts *from here* (`cd app
 ```bash
 apps/qr/
 ├── netlify/
-│   └── functions/     # qr-create, qr-manage, qr-redirect, _db (shared Neon helpers)
+│   ├── functions/     # qr-create, qr-manage, qr-redirect, auth-google/-me/-logout
+│   │   └── _lib/      # auth, db, http helpers (not deployed as functions)
+│   └── tests/         # Vitest; run from the repo root with `npm test`
 ├── openspec/           # This app's own spec-driven development artifacts
 ├── src/
 │   ├── components/     # ContentTypeTabs, ContentFields, StylePanel, DownloadBar, QRCodePreview
-│   ├── lib/            # qrContent, qrStyle, api client
+│   ├── lib/            # qrContent, qrStyle, api client, redirectAllowlist (shared with functions)
 │   └── pages/          # Generator (/), Bulk (/bulk), Manage (/manage/:token)
 ├── eslint.config.js
 ├── netlify.toml         # Includes the /r/* → qr-redirect rewrite for short links
@@ -51,7 +53,14 @@ apps/qr/
 
    ```bash
    NETLIFY_DATABASE_URL="your-neon-dev-connection-string"
+   # Admin sign-in for trackable links. Without all three, every short-link
+   # endpoint answers 503 (fail closed). Static QR codes still work.
+   ADMIN_ALLOWED_EMAILS="you@ifn.community"
+   ADMIN_SESSION_SECRET="any-long-random-string-for-local-dev"
+   VITE_GOOGLE_CLIENT_ID="the-oauth-client-id.apps.googleusercontent.com"
    ```
+
+   Google Sign-In only works on origins listed as Authorized JavaScript origins on that OAuth client (`http://localhost:8888` for `netlify dev`).
 
 3. **Run Development Server**:
    To test both frontend and backend (Netlify Functions), run:
@@ -68,6 +77,8 @@ apps/qr/
    npm run lint    # ESLint (own config, independent of root)
    npm run build   # tsc -b && vite build (typecheck + production build)
    ```
+
+   Tests live in `netlify/tests/` and run from the repo root (`cd ../.. && npm test`), which includes them via the root `vitest.config.ts`.
 
 ## 📐 Spec-Driven Development
 

@@ -3,6 +3,27 @@ import { QrCode, Layers } from 'lucide-react';
 import { Generator } from './pages/Generator';
 import { Bulk } from './pages/Bulk';
 import { Manage } from './pages/Manage';
+import { AuthProvider } from './components/AuthProvider';
+import { useAuth } from './lib/authContext';
+
+function SessionBadge() {
+    const { status, email, signOut } = useAuth();
+    if (status !== 'signed-in' || !email) return null;
+    return (
+        <span className="ml-2 hidden md:flex items-center gap-2 text-xs text-slate-500">
+            <span className="truncate max-w-[12rem]" title={email}>
+                {email}
+            </span>
+            <button
+                type="button"
+                onClick={() => void signOut()}
+                className="px-2 py-1 rounded-md font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+            >
+                Sign out
+            </button>
+        </span>
+    );
+}
 
 function Shell() {
     return (
@@ -42,6 +63,7 @@ function Shell() {
                         >
                             ifn.community &rarr;
                         </a>
+                        <SessionBadge />
                     </nav>
                 </div>
             </header>
@@ -62,7 +84,9 @@ function Shell() {
 function App() {
     return (
         <BrowserRouter>
-            <Shell />
+            <AuthProvider>
+                <Shell />
+            </AuthProvider>
         </BrowserRouter>
     );
 }

@@ -1,5 +1,8 @@
 import type { Handler, HandlerEvent } from '@netlify/functions';
-import { ensureQrTables, getSql, isValidHttpUrl } from './_db';
+import { ensureQrTables, getSql } from './_lib/db';
+import { requireAdmin } from './_lib/auth';
+import { json } from './_lib/http';
+import { checkRedirectTarget } from '../../src/lib/redirectAllowlist';
 
 interface QrLinkRow {
     code: string;
@@ -43,44 +46,51 @@ async function loadDetails(sql: ReturnType<typeof getSql>, token: string) {
     };
 }
 
+// View (GET) and edit (PUT) one short link. The edit token in ?token= still
+// identifies the link, but it is no longer enough on its own: every method
+// requires an admin session, including GET, because the response carries scan
+// history (user agents, referrers). There is no delete path.
 export const handler: Handler = async (event: HandlerEvent) => {
-    const sql = getSql();
-    const token = event.queryStringParameters?.token;
+    const method = event.httpMethod;
+    if (method !== 'GET' && method !== 'PUT') return json(405, { error: 'Method Not Allowed' });
 
-    if (!token) {
-        return { statusCode: 400, body: JSON.stringify({ error: 'Missing token' }) };
-    }
+    const admin = await requireAdmin(event, { write: method !== 'GET' });
+    if (!admin.ok) return admin.response;
+
+    const token = event.queryStringParameters?.token;
+    if (!token) return json(400, { error: 'Missing token' });
 
     try {
+        const sql = getSql();
         await ensureQrTables(sql);
 
-        if (event.httpMethod === 'GET') {
+        if (method === 'GET') {
             const details = await loadDetails(sql, token);
-            if (!details) return { statusCode: 404, body: JSON.stringify({ error: 'Link not found' }) };
-            return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(details) };
+            if (!details) return json(404, { error: 'Link not found' });
+            return json(200, details);
         }
 
-        if (event.httpMethod === 'PUT') {
-            const data = JSON.parse(event.body || '{}');
-            const { targetUrl } = data as { targetUrl?: string };
-            if (!targetUrl || !isValidHttpUrl(targetUrl)) {
-                return { statusCode: 400, body: JSON.stringify({ error: 'A valid targetUrl (http/https) is required' }) };
-            }
-
-            const updated = await sql`
-                UPDATE qr_links SET target_url = ${targetUrl}, updated_at = CURRENT_TIMESTAMP
-                WHERE edit_token = ${token}
-                RETURNING id
-            `;
-            if (updated.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'Link not found' }) };
-
-            const details = await loadDetails(sql, token);
-            return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(details) };
+        let data: { targetUrl?: unknown };
+        try {
+            data = JSON.parse(event.body || '{}');
+        } catch {
+            return json(400, { error: 'Invalid JSON body' });
         }
+        const target = checkRedirectTarget(data.targetUrl);
+        if (!target.ok) return json(400, { error: target.error });
 
-        return { statusCode: 405, body: 'Method Not Allowed' };
+        const updated = await sql`
+            UPDATE qr_links SET target_url = ${target.url}, updated_at = CURRENT_TIMESTAMP
+            WHERE edit_token = ${token}
+            RETURNING id
+        `;
+        if (updated.length === 0) return json(404, { error: 'Link not found' });
+
+        console.log(`qr-manage: ${admin.email} updated link ${(updated[0] as { id: number }).id}`);
+        const details = await loadDetails(sql, token);
+        return json(200, details);
     } catch (error) {
         console.error('qr-manage error:', error);
-        return { statusCode: 500, body: JSON.stringify({ error: 'Internal server error. Please try again later.' }) };
+        return json(500, { error: 'Internal server error. Please try again later.' });
     }
 };
