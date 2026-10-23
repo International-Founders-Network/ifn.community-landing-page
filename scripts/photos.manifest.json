@@ -1,5 +1,12 @@
 {
   "$about": [
+    "ADDED 2026-10-23: IFN Vol. 10 (Oct 22 2026, Station Austin / Capital Factory,",
+    "Captain America Room, 8th floor) founder-approved album of 18 frames. Near-duplicates",
+    "004 and 018 excluded and never copied into photos-source. Sources land in meetups/",
+    "under camera timestamps (20261022_*). Eighteen gallery-oct-* slots ship, each with",
+    "gallery.subjectScale. gallery-oct-group (020, the group shot) leads the Vol. 10 run.",
+    "Gallery.tsx overflow mosaic places the Vol. 10 frames; the authored hang is untouched.",
+    "",
     "DROPPED 2026-09-24: gallery-apr-floor (meetups/20260423_184620.jpg) \u2014 founder confirm via Kyra; laptop-foreground circle removed from /gallery and home preview. Public derivatives may remain on disk; slot status is dropped (not ship). gallery-apr-circle kept.",
     "",
     "UPDATED 2026-09-24: overflow gallery slots carry gallery.subjectScale (lg|md|sm) so",
@@ -91,7 +98,7 @@
     "$note": "REDESIGN-PLAN.md section 7. Measured at build, never estimated.",
     "heroAt1440AvifBytes": 112640,
     "totalAt1440ViewportBytes": 512000,
-    "galleryTilesAvifBytes": 720000,
+    "galleryTilesAvifBytes": 900000,
     "$landingNote": [
       "Every avif tier a 1440px viewport at 1x actually selects on the landing route, named as data.",
       "The runner used to hardcode this list in JavaScript while carrying a comment claiming it did not,",
@@ -160,6 +167,12 @@
       }
     ],
     "$galleryNote": [
+      "RAISED 2026-10-23 for the Vol. 10 album (18 frames): 720,000 to 900,000 bytes.",
+      "Full-scroll tile sum measured 858.5 KB across 58 avif tiles after adding the eighteen",
+      "gallery-oct-* 640w tiles (Vol. 10 adds about 234 KB). Same reasoning as the Vol. 08 raise:",
+      "the founder approved the set for publication and every frame below the first row is lazy.",
+      "Arrival cost at 1440x900 is unchanged at 34.5 KB. Recorded as a raise, not a pass.",
+      "",
       "RESTATED 2026-09-15 for the Vol. 08 curated album (trimmed 21 \u2192 18).",
       "",
       "It was 286,720 bytes against fifteen frames measuring 272,765. Adding the eighteen",
@@ -259,6 +272,17 @@
       "blackPoint": 0.04,
       "whitePoint": 0.92,
       "note": "Evening interior under mixed LED and window light at Station Austin, 2026-09-23. Same room family as august-2026; warmth left alone."
+    },
+    "october-2026": {
+      "whiteBalance": [
+        1,
+        1,
+        1
+      ],
+      "saturation": 0.55,
+      "blackPoint": 0.04,
+      "whitePoint": 0.92,
+      "note": "Evening interior under mixed LED light at Station Austin / Capital Factory, Captain America Room (8th floor), 2026-10-22. Same room family as september-2026; warmth left alone."
     }
   },
   "slots": [
@@ -1980,6 +2004,672 @@
       "fallbackWidth": 640,
       "sizes": "(max-width: 639px) 100vw, 67vw",
       "alt": "A diverse group of meetup attendees standing together facing the camera in front of a thank-you slide on a large screen.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-oct-group",
+      "status": "ship",
+      "source": "meetups/20261022_200932.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Lead frame of the Vol. 10 album, so it opens the Vol. 10 overflow run. Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "About a dozen attendees standing together for a group photo on a red carpet in front of the Capital Factory logo, with flags behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-oct-arrivals",
+      "status": "ship",
+      "source": "meetups/20261022_185459.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Early arrivals seated at high and low tables in a bright meetup room, with a slide about selling into government on the wall screen.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-oct-tables",
+      "status": "ship",
+      "source": "meetups/20261022_185503.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Attendees seated at several tables, turned toward the front of the room and listening.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-oct-host",
+      "status": "ship",
+      "source": "meetups/20261022_185520.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "The host in a suit holds a microphone to open the evening beside an agenda slide, with the Capital Factory logo and a red carpet behind him.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-oct-laptop",
+      "status": "ship",
+      "source": "meetups/20261022_185538.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A side view of attendees listening, with a laptop on the table showing the words Where Founders Connect, Grow and Succeed.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-oct-agenda",
+      "status": "ship",
+      "source": "meetups/20261022_185555.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "The host speaks in front of the agenda slide with Texas and US flags beside him, as attendees listen in the foreground.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-oct-round",
+      "status": "ship",
+      "source": "meetups/20261022_185610.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Attendees around a round table listening, with the rest of the room stretching out behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-oct-wifi",
+      "status": "ship",
+      "source": "meetups/20261022_185619.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees seated at a table and one standing nearby, with a Connect to Wi-Fi poster on the wall behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-oct-pair",
+      "status": "ship",
+      "source": "meetups/20261022_185622.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees at a table looking toward the speaker.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-oct-headphones",
+      "status": "ship",
+      "source": "meetups/20261022_185637.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee with headphones around his neck rests his arms on the table and listens.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-oct-intro",
+      "status": "ship",
+      "source": "meetups/20261022_185639.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee in a maroon sweater speaks into a microphone during introductions.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-oct-room",
+      "status": "ship",
+      "source": "meetups/20261022_185646.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A wider view of the room with attendees at several tables and a Baker Botts sign on a screen.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-oct-texas",
+      "status": "ship",
+      "source": "meetups/20261022_185801.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee in a Texas T-shirt holds a microphone and gestures as he speaks, with another attendee seated behind him.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-oct-speaker",
+      "status": "ship",
+      "source": "meetups/20261022_190322.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A speaker in a blue polo holds a microphone and a phone in front of the agenda slide, the flags and the Capital Factory logo.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-oct-smile",
+      "status": "ship",
+      "source": "meetups/20261022_190405.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee in a cap smiles as he speaks into a microphone.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-oct-conversation",
+      "status": "ship",
+      "source": "meetups/20261022_191910.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Four attendees in conversation around a table.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-oct-one-on-one",
+      "status": "ship",
+      "source": "meetups/20261022_191914.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees talking one on one, one of them wearing headphones around his neck.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-oct-stage",
+      "status": "ship",
+      "source": "meetups/20261022_200928.jpg",
+      "grade": "october-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-10-23. Vol. 10 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A wider view of the group photo, with an International Founders Network screen on the left and the Capital Factory logo behind the group.",
       "loading": "lazy",
       "fetchPriority": "auto",
       "gallery": {

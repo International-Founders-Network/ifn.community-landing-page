@@ -265,7 +265,7 @@ import {
  * `useReducedMotion` guard drops the `initial` state as well so nothing ever
  * starts displaced.
  *
- * OVERFLOW AFTER THE HANG, 2026-09-24. Vol. 08 and Vol. 09 frames that the hang
+ * OVERFLOW AFTER THE HANG, 2026-09-24. Vol. 08, 09 and 10 frames that the hang
  * does not claim pack as a subject-scale mosaic (lg|md|sm), not as stacked
  * full-measure span-8 solos. Spans stay ≤6 so 640w tiles keep ≥1× coverage.
  * Phone classes follow subject scale through BLEED / MEASURE / INSET. No dates,

@@ -138,8 +138,8 @@ export function About() {
                             for the part that happens between meetups.
                         </p>
                         <p className="text-lg text-muted leading-relaxed">
-                            Around 100 to 300 people are on our meetup and newsletter list: a real number, and a
-                            modest one. We would rather print it than round it up.
+                            390+ people are part of the IFN community. It is a real count, and we would rather
+                            print it than round it up.
                         </p>
                     </div>
 
