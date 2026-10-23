@@ -25,7 +25,7 @@
 // enlarged view for every cell. That is the exact failure the split shape exists
 // to prevent.
 
-export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night" | "gallery-sep-rows" | "gallery-sep-listening" | "gallery-sep-midroom" | "gallery-sep-gesture" | "gallery-sep-chat" | "gallery-sep-pose" | "gallery-sep-talk" | "gallery-sep-group"
+export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night" | "gallery-sep-rows" | "gallery-sep-listening" | "gallery-sep-midroom" | "gallery-sep-gesture" | "gallery-sep-chat" | "gallery-sep-pose" | "gallery-sep-talk" | "gallery-sep-group" | "gallery-oct-group" | "gallery-oct-arrivals" | "gallery-oct-tables" | "gallery-oct-host" | "gallery-oct-laptop" | "gallery-oct-agenda" | "gallery-oct-round" | "gallery-oct-wifi" | "gallery-oct-pair" | "gallery-oct-headphones" | "gallery-oct-intro" | "gallery-oct-room" | "gallery-oct-texas" | "gallery-oct-speaker" | "gallery-oct-smile" | "gallery-oct-conversation" | "gallery-oct-one-on-one" | "gallery-oct-stage"
 
 export type PhotoDerivative = {
   width: number
@@ -835,6 +835,330 @@ export const photos: Record<PhotoSlot, Photo> = {
     ],
     bytesTotal: 198878,
   },
+  "gallery-oct-group": {
+    slot: "gallery-oct-group",
+    alt: "About a dozen attendees standing together for a group photo on a red carpet in front of the Capital Factory logo, with flags behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-group-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-group-640w.avif 640w, /photos/gallery-oct-group-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-group-640w.webp 640w, /photos/gallery-oct-group-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-group-640w.avif", webp: "/photos/gallery-oct-group-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-group-1280w.avif", webp: "/photos/gallery-oct-group-1280w.webp" },
+    ],
+    bytesTotal: 207870,
+  },
+  "gallery-oct-arrivals": {
+    slot: "gallery-oct-arrivals",
+    alt: "Early arrivals seated at high and low tables in a bright meetup room, with a slide about selling into government on the wall screen.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-arrivals-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-arrivals-640w.avif 640w, /photos/gallery-oct-arrivals-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-arrivals-640w.webp 640w, /photos/gallery-oct-arrivals-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-arrivals-640w.avif", webp: "/photos/gallery-oct-arrivals-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-arrivals-1280w.avif", webp: "/photos/gallery-oct-arrivals-1280w.webp" },
+    ],
+    bytesTotal: 182697,
+  },
+  "gallery-oct-tables": {
+    slot: "gallery-oct-tables",
+    alt: "Attendees seated at several tables, turned toward the front of the room and listening.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-tables-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-tables-640w.avif 640w, /photos/gallery-oct-tables-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-tables-640w.webp 640w, /photos/gallery-oct-tables-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-tables-640w.avif", webp: "/photos/gallery-oct-tables-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-tables-1280w.avif", webp: "/photos/gallery-oct-tables-1280w.webp" },
+    ],
+    bytesTotal: 161174,
+  },
+  "gallery-oct-host": {
+    slot: "gallery-oct-host",
+    alt: "The host in a suit holds a microphone to open the evening beside an agenda slide, with the Capital Factory logo and a red carpet behind him.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-host-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-host-640w.avif 640w, /photos/gallery-oct-host-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-host-640w.webp 640w, /photos/gallery-oct-host-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-host-640w.avif", webp: "/photos/gallery-oct-host-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-host-1280w.avif", webp: "/photos/gallery-oct-host-1280w.webp" },
+    ],
+    bytesTotal: 190983,
+  },
+  "gallery-oct-laptop": {
+    slot: "gallery-oct-laptop",
+    alt: "A side view of attendees listening, with a laptop on the table showing the words Where Founders Connect, Grow and Succeed.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-laptop-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-laptop-640w.avif 640w, /photos/gallery-oct-laptop-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-laptop-640w.webp 640w, /photos/gallery-oct-laptop-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-laptop-640w.avif", webp: "/photos/gallery-oct-laptop-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-laptop-1280w.avif", webp: "/photos/gallery-oct-laptop-1280w.webp" },
+    ],
+    bytesTotal: 145468,
+  },
+  "gallery-oct-agenda": {
+    slot: "gallery-oct-agenda",
+    alt: "The host speaks in front of the agenda slide with Texas and US flags beside him, as attendees listen in the foreground.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-agenda-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-agenda-640w.avif 640w, /photos/gallery-oct-agenda-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-agenda-640w.webp 640w, /photos/gallery-oct-agenda-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-agenda-640w.avif", webp: "/photos/gallery-oct-agenda-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-agenda-1280w.avif", webp: "/photos/gallery-oct-agenda-1280w.webp" },
+    ],
+    bytesTotal: 169168,
+  },
+  "gallery-oct-round": {
+    slot: "gallery-oct-round",
+    alt: "Attendees around a round table listening, with the rest of the room stretching out behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-round-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-round-640w.avif 640w, /photos/gallery-oct-round-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-round-640w.webp 640w, /photos/gallery-oct-round-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-round-640w.avif", webp: "/photos/gallery-oct-round-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-round-1280w.avif", webp: "/photos/gallery-oct-round-1280w.webp" },
+    ],
+    bytesTotal: 186191,
+  },
+  "gallery-oct-wifi": {
+    slot: "gallery-oct-wifi",
+    alt: "Two attendees seated at a table and one standing nearby, with a Connect to Wi-Fi poster on the wall behind them.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-wifi-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-wifi-640w.avif 640w, /photos/gallery-oct-wifi-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-wifi-640w.webp 640w, /photos/gallery-oct-wifi-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-wifi-640w.avif", webp: "/photos/gallery-oct-wifi-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-wifi-1280w.avif", webp: "/photos/gallery-oct-wifi-1280w.webp" },
+    ],
+    bytesTotal: 155610,
+  },
+  "gallery-oct-pair": {
+    slot: "gallery-oct-pair",
+    alt: "Two attendees at a table looking toward the speaker.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-pair-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-pair-640w.avif 640w, /photos/gallery-oct-pair-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-pair-640w.webp 640w, /photos/gallery-oct-pair-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-pair-640w.avif", webp: "/photos/gallery-oct-pair-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-pair-1280w.avif", webp: "/photos/gallery-oct-pair-1280w.webp" },
+    ],
+    bytesTotal: 127334,
+  },
+  "gallery-oct-headphones": {
+    slot: "gallery-oct-headphones",
+    alt: "An attendee with headphones around his neck rests his arms on the table and listens.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-headphones-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-headphones-640w.avif 640w, /photos/gallery-oct-headphones-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-headphones-640w.webp 640w, /photos/gallery-oct-headphones-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-headphones-640w.avif", webp: "/photos/gallery-oct-headphones-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-headphones-1280w.avif", webp: "/photos/gallery-oct-headphones-1280w.webp" },
+    ],
+    bytesTotal: 162989,
+  },
+  "gallery-oct-intro": {
+    slot: "gallery-oct-intro",
+    alt: "An attendee in a maroon sweater speaks into a microphone during introductions.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-intro-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-intro-640w.avif 640w, /photos/gallery-oct-intro-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-intro-640w.webp 640w, /photos/gallery-oct-intro-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-intro-640w.avif", webp: "/photos/gallery-oct-intro-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-intro-1280w.avif", webp: "/photos/gallery-oct-intro-1280w.webp" },
+    ],
+    bytesTotal: 132816,
+  },
+  "gallery-oct-room": {
+    slot: "gallery-oct-room",
+    alt: "A wider view of the room with attendees at several tables and a Baker Botts sign on a screen.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-room-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-room-640w.avif 640w, /photos/gallery-oct-room-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-room-640w.webp 640w, /photos/gallery-oct-room-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-room-640w.avif", webp: "/photos/gallery-oct-room-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-room-1280w.avif", webp: "/photos/gallery-oct-room-1280w.webp" },
+    ],
+    bytesTotal: 157092,
+  },
+  "gallery-oct-texas": {
+    slot: "gallery-oct-texas",
+    alt: "An attendee in a Texas T-shirt holds a microphone and gestures as he speaks, with another attendee seated behind him.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-texas-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-texas-640w.avif 640w, /photos/gallery-oct-texas-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-texas-640w.webp 640w, /photos/gallery-oct-texas-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-texas-640w.avif", webp: "/photos/gallery-oct-texas-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-texas-1280w.avif", webp: "/photos/gallery-oct-texas-1280w.webp" },
+    ],
+    bytesTotal: 104471,
+  },
+  "gallery-oct-speaker": {
+    slot: "gallery-oct-speaker",
+    alt: "A speaker in a blue polo holds a microphone and a phone in front of the agenda slide, the flags and the Capital Factory logo.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-speaker-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-speaker-640w.avif 640w, /photos/gallery-oct-speaker-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-speaker-640w.webp 640w, /photos/gallery-oct-speaker-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-speaker-640w.avif", webp: "/photos/gallery-oct-speaker-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-speaker-1280w.avif", webp: "/photos/gallery-oct-speaker-1280w.webp" },
+    ],
+    bytesTotal: 181110,
+  },
+  "gallery-oct-smile": {
+    slot: "gallery-oct-smile",
+    alt: "An attendee in a cap smiles as he speaks into a microphone.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-smile-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-smile-640w.avif 640w, /photos/gallery-oct-smile-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-smile-640w.webp 640w, /photos/gallery-oct-smile-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-smile-640w.avif", webp: "/photos/gallery-oct-smile-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-smile-1280w.avif", webp: "/photos/gallery-oct-smile-1280w.webp" },
+    ],
+    bytesTotal: 112653,
+  },
+  "gallery-oct-conversation": {
+    slot: "gallery-oct-conversation",
+    alt: "Four attendees in conversation around a table.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-conversation-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-conversation-640w.avif 640w, /photos/gallery-oct-conversation-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-conversation-640w.webp 640w, /photos/gallery-oct-conversation-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-conversation-640w.avif", webp: "/photos/gallery-oct-conversation-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-conversation-1280w.avif", webp: "/photos/gallery-oct-conversation-1280w.webp" },
+    ],
+    bytesTotal: 155702,
+  },
+  "gallery-oct-one-on-one": {
+    slot: "gallery-oct-one-on-one",
+    alt: "Two attendees talking one on one, one of them wearing headphones around his neck.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-one-on-one-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-one-on-one-640w.avif 640w, /photos/gallery-oct-one-on-one-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-one-on-one-640w.webp 640w, /photos/gallery-oct-one-on-one-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-one-on-one-640w.avif", webp: "/photos/gallery-oct-one-on-one-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-one-on-one-1280w.avif", webp: "/photos/gallery-oct-one-on-one-1280w.webp" },
+    ],
+    bytesTotal: 153370,
+  },
+  "gallery-oct-stage": {
+    slot: "gallery-oct-stage",
+    alt: "A wider view of the group photo, with an International Founders Network screen on the left and the Capital Factory logo behind the group.",
+    sizes: "(max-width: 639px) 100vw, 67vw",
+    loading: "lazy",
+    fetchPriority: "auto",
+    src: "/photos/gallery-oct-stage-640w.jpg",
+    width: 640,
+    height: 360,
+    aspectRatio: "16:9",
+    avif: "/photos/gallery-oct-stage-640w.avif 640w, /photos/gallery-oct-stage-1280w.avif 1280w",
+    webp: "/photos/gallery-oct-stage-640w.webp 640w, /photos/gallery-oct-stage-1280w.webp 1280w",
+    derivatives: [
+      { width: 640, height: 360, avif: "/photos/gallery-oct-stage-640w.avif", webp: "/photos/gallery-oct-stage-640w.webp" },
+      { width: 1280, height: 720, avif: "/photos/gallery-oct-stage-1280w.avif", webp: "/photos/gallery-oct-stage-1280w.webp" },
+    ],
+    bytesTotal: 235821,
+  },
 }
 
 /**
@@ -910,46 +1234,64 @@ export const photos: Record<PhotoSlot, Photo> = {
  * COMMENT on purpose: the filenames carry timestamps, and nothing date derived is
  * emitted as data a component could render.
  *
- *    1. gallery-apr-room        meetups/20260423_184515.jpg  (tile 960w)
- *    2. gallery-jul-hall        venue/20260723_175654.jpg  (tile 640w)
- *    3. gallery-apr-gesture     meetups/20260423_184540.jpg  (tile 704w)
- *    4. gallery-apr-listening   meetups/20260423_184527.jpg  (tile 640w)
- *    5. gallery-feb-sign        venue/20260226_184628.jpg  (tile 640w)
- *    6. gallery-jul-screen      venue/20260723_190952.jpg  (tile 640w)
- *    7. gallery-feb-hall        meetups/20260226_184622.jpg  (tile 640w)
- *    8. gallery-jul-standing    meetups/20260723_190939.jpg  (tile 704w)
- *    9. gallery-apr-seated      meetups/20260423_184523.jpg  (tile 832w)
- *   10. gallery-feb-slide       venue/20260226_184639.jpg  (tile 640w)
- *   11. gallery-apr-profile     meetups/20260423_184536.jpg  (tile 640w)
- *   13. gallery-apr-circle      meetups/20260423_184509.jpg  (tile 640w)
- *   14. gallery-feb-room        venue/20260226_184645.jpg  (tile 640w)
- *   15. gallery-apr-group       meetups/20260423_201820.jpg  (tile 832w)
- *   16. gallery-aug-group       meetups/20260827_202740.jpg  (tile 640w)
- *   17. gallery-aug-audience    meetups/20260827_190404.jpg  (tile 640w)
- *   18. gallery-aug-room        meetups/20260827_190429.jpg  (tile 640w)
- *   19. gallery-aug-rows        meetups/20260827_190459.jpg  (tile 640w)
- *   20. gallery-aug-listening   meetups/20260827_190613.jpg  (tile 640w)
- *   21. gallery-aug-standing    meetups/20260827_190620.jpg  (tile 640w)
- *   22. gallery-aug-address     meetups/20260827_190703.jpg  (tile 640w)
- *   23. gallery-aug-networking  meetups/20260827_191238.jpg  (tile 640w)
- *   24. gallery-aug-lounge      meetups/20260827_191242.jpg  (tile 640w)
- *   25. gallery-aug-posters     meetups/20260827_191301.jpg  (tile 640w)
- *   26. gallery-aug-wall        meetups/20260827_191304.jpg  (tile 640w)
- *   27. gallery-aug-gesture     meetups/20260827_201545.jpg  (tile 640w)
- *   28. gallery-aug-midroom     meetups/20260827_201643.jpg  (tile 640w)
- *   29. gallery-aug-pose        meetups/20260827_201654.jpg  (tile 640w)
- *   30. gallery-aug-skyline     meetups/20260827_201705.jpg  (tile 640w)
- *   31. gallery-aug-counter     meetups/20260827_201717.jpg  (tile 640w)
- *   32. gallery-aug-dusk        meetups/20260827_201725.jpg  (tile 640w)
- *   33. gallery-aug-night       meetups/20260827_201728.jpg  (tile 640w)
- *   34. gallery-sep-rows        meetups/20260923_190822.jpg  (tile 640w)
- *   35. gallery-sep-listening   meetups/20260923_190834.jpg  (tile 640w)
- *   36. gallery-sep-midroom     meetups/20260923_202106.jpg  (tile 640w)
- *   37. gallery-sep-gesture     meetups/20260923_202109.jpg  (tile 640w)
- *   38. gallery-sep-chat        meetups/20260923_202123.jpg  (tile 640w)
- *   39. gallery-sep-pose        meetups/20260923_202152.jpg  (tile 640w)
- *   40. gallery-sep-talk        meetups/20260923_202200.jpg  (tile 640w)
- *   41. gallery-sep-group       meetups/20260923_202756.jpg  (tile 640w)
+ *    1. gallery-apr-room          meetups/20260423_184515.jpg  (tile 960w)
+ *    2. gallery-jul-hall          venue/20260723_175654.jpg  (tile 640w)
+ *    3. gallery-apr-gesture       meetups/20260423_184540.jpg  (tile 704w)
+ *    4. gallery-apr-listening     meetups/20260423_184527.jpg  (tile 640w)
+ *    5. gallery-feb-sign          venue/20260226_184628.jpg  (tile 640w)
+ *    6. gallery-jul-screen        venue/20260723_190952.jpg  (tile 640w)
+ *    7. gallery-feb-hall          meetups/20260226_184622.jpg  (tile 640w)
+ *    8. gallery-jul-standing      meetups/20260723_190939.jpg  (tile 704w)
+ *    9. gallery-apr-seated        meetups/20260423_184523.jpg  (tile 832w)
+ *   10. gallery-feb-slide         venue/20260226_184639.jpg  (tile 640w)
+ *   11. gallery-apr-profile       meetups/20260423_184536.jpg  (tile 640w)
+ *   12. gallery-apr-circle        meetups/20260423_184509.jpg  (tile 640w)
+ *   13. gallery-feb-room          venue/20260226_184645.jpg  (tile 640w)
+ *   14. gallery-apr-group         meetups/20260423_201820.jpg  (tile 832w)
+ *   15. gallery-aug-group         meetups/20260827_202740.jpg  (tile 640w)
+ *   16. gallery-aug-audience      meetups/20260827_190404.jpg  (tile 640w)
+ *   17. gallery-aug-room          meetups/20260827_190429.jpg  (tile 640w)
+ *   18. gallery-aug-rows          meetups/20260827_190459.jpg  (tile 640w)
+ *   19. gallery-aug-listening     meetups/20260827_190613.jpg  (tile 640w)
+ *   20. gallery-aug-standing      meetups/20260827_190620.jpg  (tile 640w)
+ *   21. gallery-aug-address       meetups/20260827_190703.jpg  (tile 640w)
+ *   22. gallery-aug-networking    meetups/20260827_191238.jpg  (tile 640w)
+ *   23. gallery-aug-lounge        meetups/20260827_191242.jpg  (tile 640w)
+ *   24. gallery-aug-posters       meetups/20260827_191301.jpg  (tile 640w)
+ *   25. gallery-aug-wall          meetups/20260827_191304.jpg  (tile 640w)
+ *   26. gallery-aug-gesture       meetups/20260827_201545.jpg  (tile 640w)
+ *   27. gallery-aug-midroom       meetups/20260827_201643.jpg  (tile 640w)
+ *   28. gallery-aug-pose          meetups/20260827_201654.jpg  (tile 640w)
+ *   29. gallery-aug-skyline       meetups/20260827_201705.jpg  (tile 640w)
+ *   30. gallery-aug-counter       meetups/20260827_201717.jpg  (tile 640w)
+ *   31. gallery-aug-dusk          meetups/20260827_201725.jpg  (tile 640w)
+ *   32. gallery-aug-night         meetups/20260827_201728.jpg  (tile 640w)
+ *   33. gallery-sep-rows          meetups/20260923_190822.jpg  (tile 640w)
+ *   34. gallery-sep-listening     meetups/20260923_190834.jpg  (tile 640w)
+ *   35. gallery-sep-midroom       meetups/20260923_202106.jpg  (tile 640w)
+ *   36. gallery-sep-gesture       meetups/20260923_202109.jpg  (tile 640w)
+ *   37. gallery-sep-chat          meetups/20260923_202123.jpg  (tile 640w)
+ *   38. gallery-sep-pose          meetups/20260923_202152.jpg  (tile 640w)
+ *   39. gallery-sep-talk          meetups/20260923_202200.jpg  (tile 640w)
+ *   40. gallery-sep-group         meetups/20260923_202756.jpg  (tile 640w)
+ *   41. gallery-oct-group         meetups/20261022_200932.jpg  (tile 640w)
+ *   42. gallery-oct-arrivals      meetups/20261022_185459.jpg  (tile 640w)
+ *   43. gallery-oct-tables        meetups/20261022_185503.jpg  (tile 640w)
+ *   44. gallery-oct-host          meetups/20261022_185520.jpg  (tile 640w)
+ *   45. gallery-oct-laptop        meetups/20261022_185538.jpg  (tile 640w)
+ *   46. gallery-oct-agenda        meetups/20261022_185555.jpg  (tile 640w)
+ *   47. gallery-oct-round         meetups/20261022_185610.jpg  (tile 640w)
+ *   48. gallery-oct-wifi          meetups/20261022_185619.jpg  (tile 640w)
+ *   49. gallery-oct-pair          meetups/20261022_185622.jpg  (tile 640w)
+ *   50. gallery-oct-headphones    meetups/20261022_185637.jpg  (tile 640w)
+ *   51. gallery-oct-intro         meetups/20261022_185639.jpg  (tile 640w)
+ *   52. gallery-oct-room          meetups/20261022_185646.jpg  (tile 640w)
+ *   53. gallery-oct-texas         meetups/20261022_185801.jpg  (tile 640w)
+ *   54. gallery-oct-speaker       meetups/20261022_190322.jpg  (tile 640w)
+ *   55. gallery-oct-smile         meetups/20261022_190405.jpg  (tile 640w)
+ *   56. gallery-oct-conversation  meetups/20261022_191910.jpg  (tile 640w)
+ *   57. gallery-oct-one-on-one    meetups/20261022_191914.jpg  (tile 640w)
+ *   58. gallery-oct-stage         meetups/20261022_200928.jpg  (tile 640w)
  */
 
 export type GalleryImage = {
@@ -1135,8 +1477,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-group",
-    subjectScale: "lg",
     alt: "A large group of people standing together facing the camera in an open event hall, with a thank-you slide on a screen behind them and a wall emblem on a dark curtain.",
+    subjectScale: "lg",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-group-640w.jpg",
       avif: "/photos/gallery-aug-group-640w.avif",
@@ -1147,8 +1489,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-audience",
-    subjectScale: "lg",
     alt: "People seated in rows listening, some with laptops open on their laps, others standing along the back wall of a daylit room with framed posters.",
+    subjectScale: "lg",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-audience-640w.jpg",
       avif: "/photos/gallery-aug-audience-640w.avif",
@@ -1159,8 +1501,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-room",
-    subjectScale: "lg",
     alt: "A speaker with a microphone facing a seated audience across an open floor, photographed from the back of the room, with a meetup slide on a screen and a wall emblem behind.",
+    subjectScale: "lg",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-room-640w.jpg",
       avif: "/photos/gallery-aug-room-640w.avif",
@@ -1171,8 +1513,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-rows",
-    subjectScale: "lg",
     alt: "Rows of people seated and listening in an industrial room under hanging pendant lamps, with a few people standing along the back wall of framed posters.",
+    subjectScale: "lg",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-rows-640w.jpg",
       avif: "/photos/gallery-aug-rows-640w.avif",
@@ -1183,8 +1525,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-listening",
-    subjectScale: "md",
     alt: "A seated audience turned toward a speaker out of frame, one person smiling in the foreground, with others standing along the back wall beside a tall plant.",
+    subjectScale: "md",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-listening-640w.jpg",
       avif: "/photos/gallery-aug-listening-640w.avif",
@@ -1195,8 +1537,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-standing",
-    subjectScale: "md",
     alt: "Several people standing and seated near glass doors listening, one holding a water bottle, with framed posters on the wall beside them.",
+    subjectScale: "md",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-standing-640w.jpg",
       avif: "/photos/gallery-aug-standing-640w.avif",
@@ -1207,8 +1549,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-address",
-    subjectScale: "lg",
     alt: "A speaker seen from behind addressing a mixed seated and standing crowd across a wide open floor under industrial pendant lights.",
+    subjectScale: "lg",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-address-640w.jpg",
       avif: "/photos/gallery-aug-address-640w.avif",
@@ -1219,8 +1561,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-networking",
-    subjectScale: "md",
     alt: "Small groups of people talking across an open floor, with a QR code lit on a pillar screen and the city through the windows behind them.",
+    subjectScale: "md",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-networking-640w.jpg",
       avif: "/photos/gallery-aug-networking-640w.avif",
@@ -1231,8 +1573,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-lounge",
-    subjectScale: "md",
     alt: "People standing in conversation near leather chairs and tall windows, with grey stackable chairs scattered across the polished floor.",
+    subjectScale: "md",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-lounge-640w.jpg",
       avif: "/photos/gallery-aug-lounge-640w.avif",
@@ -1243,8 +1585,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-posters",
-    subjectScale: "sm",
     alt: "Two people standing and talking in front of a wall of framed posters, one of them holding a drink.",
+    subjectScale: "sm",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-posters-640w.jpg",
       avif: "/photos/gallery-aug-posters-640w.avif",
@@ -1255,8 +1597,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-wall",
-    subjectScale: "sm",
     alt: "Two people standing with arms crossed in conversation in front of framed posters on a grey wall.",
+    subjectScale: "sm",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-wall-640w.jpg",
       avif: "/photos/gallery-aug-wall-640w.avif",
@@ -1267,8 +1609,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-gesture",
-    subjectScale: "sm",
     alt: "Two people mid conversation in a room of hanging pendant lights, one gesturing with both hands, with other groups talking behind them.",
+    subjectScale: "sm",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-gesture-640w.jpg",
       avif: "/photos/gallery-aug-gesture-640w.avif",
@@ -1279,8 +1621,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-midroom",
-    subjectScale: "md",
     alt: "People standing and talking under industrial pendant lights, with a tall plant and glass partitions behind them.",
+    subjectScale: "md",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-midroom-640w.jpg",
       avif: "/photos/gallery-aug-midroom-640w.avif",
@@ -1291,8 +1633,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-pose",
-    subjectScale: "sm",
     alt: "Two people facing the camera mid celebration in a meetup room, one seated with a laptop, others talking further back near framed posters.",
+    subjectScale: "sm",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-pose-640w.jpg",
       avif: "/photos/gallery-aug-pose-640w.avif",
@@ -1303,8 +1645,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-skyline",
-    subjectScale: "md",
     alt: "Small groups of people networking beside tall windows looking out onto a city skyline at dusk under hanging pendant lights.",
+    subjectScale: "md",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-skyline-640w.jpg",
       avif: "/photos/gallery-aug-skyline-640w.avif",
@@ -1315,8 +1657,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-counter",
-    subjectScale: "sm",
     alt: "Two people talking across a counter in front of framed posters, with a leafy plant beside them.",
+    subjectScale: "sm",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-counter-640w.jpg",
       avif: "/photos/gallery-aug-counter-640w.avif",
@@ -1327,8 +1669,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-dusk",
-    subjectScale: "md",
     alt: "A small group talking and smiling beside tall windows with a city skyline at dusk behind them.",
+    subjectScale: "md",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-dusk-640w.jpg",
       avif: "/photos/gallery-aug-dusk-640w.avif",
@@ -1339,8 +1681,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-aug-night",
-    subjectScale: "md",
     alt: "A few people standing in conversation in a nightlit room, one wearing a name tag, with city lights visible through the windows behind them.",
+    subjectScale: "md",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-aug-night-640w.jpg",
       avif: "/photos/gallery-aug-night-640w.avif",
@@ -1351,8 +1693,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-rows",
-    subjectScale: "lg",
     alt: "Rows of attendees seated in gray chairs listening in a bright industrial meetup room with exposed ducts and framed posters on the wall.",
+    subjectScale: "lg",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-rows-640w.jpg",
       avif: "/photos/gallery-sep-rows-640w.avif",
@@ -1363,8 +1705,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-listening",
-    subjectScale: "lg",
     alt: "Attendees seated facing a presentation, with floor-to-ceiling windows showing a city skyline at dusk behind them.",
+    subjectScale: "lg",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-listening-640w.jpg",
       avif: "/photos/gallery-sep-listening-640w.avif",
@@ -1375,8 +1717,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-midroom",
-    subjectScale: "lg",
     alt: "People networking across a nightlit room: some seated mid-conversation, others standing by tall windows overlooking city lights.",
+    subjectScale: "lg",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-midroom-640w.jpg",
       avif: "/photos/gallery-sep-midroom-640w.avif",
@@ -1387,8 +1729,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-gesture",
-    subjectScale: "sm",
     alt: "A man in a light blue shirt gesturing while talking with a young attendee wearing a backpack, posters and a plant behind them.",
+    subjectScale: "sm",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-gesture-640w.jpg",
       avif: "/photos/gallery-sep-gesture-640w.avif",
@@ -1399,8 +1741,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-chat",
-    subjectScale: "sm",
     alt: "A man in a black polo and a woman with long blonde hair talking beside a glass window reflecting the room at night.",
+    subjectScale: "sm",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-chat-640w.jpg",
       avif: "/photos/gallery-sep-chat-640w.avif",
@@ -1411,8 +1753,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-pose",
-    subjectScale: "sm",
     alt: "A man in a gray polo holding a phone and a woman in a patterned top smiling for the camera near stacked chairs and night windows.",
+    subjectScale: "sm",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-pose-640w.jpg",
       avif: "/photos/gallery-sep-pose-640w.avif",
@@ -1423,8 +1765,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-talk",
-    subjectScale: "sm",
     alt: "A woman with purple headphones gesturing as she talks with a man holding a drink, other attendees mingling behind them.",
+    subjectScale: "sm",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-talk-640w.jpg",
       avif: "/photos/gallery-sep-talk-640w.avif",
@@ -1435,8 +1777,8 @@ export const galleryFrames: GalleryFrame[] = [
   },
   {
     slot: "gallery-sep-group",
-    subjectScale: "lg",
     alt: "A diverse group of meetup attendees standing together facing the camera in front of a thank-you slide on a large screen.",
+    subjectScale: "lg",
     tile: { width: 640, height: 360,
       src: "/photos/gallery-sep-group-640w.jpg",
       avif: "/photos/gallery-sep-group-640w.avif",
@@ -1445,7 +1787,223 @@ export const galleryFrames: GalleryFrame[] = [
       avif: "/photos/gallery-sep-group-1280w.avif",
       webp: "/photos/gallery-sep-group-1280w.webp" },
   },
+  {
+    slot: "gallery-oct-group",
+    alt: "About a dozen attendees standing together for a group photo on a red carpet in front of the Capital Factory logo, with flags behind them.",
+    subjectScale: "lg",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-group-640w.jpg",
+      avif: "/photos/gallery-oct-group-640w.avif",
+      webp: "/photos/gallery-oct-group-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-group-1280w.avif",
+      webp: "/photos/gallery-oct-group-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-arrivals",
+    alt: "Early arrivals seated at high and low tables in a bright meetup room, with a slide about selling into government on the wall screen.",
+    subjectScale: "lg",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-arrivals-640w.jpg",
+      avif: "/photos/gallery-oct-arrivals-640w.avif",
+      webp: "/photos/gallery-oct-arrivals-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-arrivals-1280w.avif",
+      webp: "/photos/gallery-oct-arrivals-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-tables",
+    alt: "Attendees seated at several tables, turned toward the front of the room and listening.",
+    subjectScale: "md",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-tables-640w.jpg",
+      avif: "/photos/gallery-oct-tables-640w.avif",
+      webp: "/photos/gallery-oct-tables-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-tables-1280w.avif",
+      webp: "/photos/gallery-oct-tables-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-host",
+    alt: "The host in a suit holds a microphone to open the evening beside an agenda slide, with the Capital Factory logo and a red carpet behind him.",
+    subjectScale: "lg",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-host-640w.jpg",
+      avif: "/photos/gallery-oct-host-640w.avif",
+      webp: "/photos/gallery-oct-host-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-host-1280w.avif",
+      webp: "/photos/gallery-oct-host-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-laptop",
+    alt: "A side view of attendees listening, with a laptop on the table showing the words Where Founders Connect, Grow and Succeed.",
+    subjectScale: "sm",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-laptop-640w.jpg",
+      avif: "/photos/gallery-oct-laptop-640w.avif",
+      webp: "/photos/gallery-oct-laptop-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-laptop-1280w.avif",
+      webp: "/photos/gallery-oct-laptop-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-agenda",
+    alt: "The host speaks in front of the agenda slide with Texas and US flags beside him, as attendees listen in the foreground.",
+    subjectScale: "lg",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-agenda-640w.jpg",
+      avif: "/photos/gallery-oct-agenda-640w.avif",
+      webp: "/photos/gallery-oct-agenda-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-agenda-1280w.avif",
+      webp: "/photos/gallery-oct-agenda-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-round",
+    alt: "Attendees around a round table listening, with the rest of the room stretching out behind them.",
+    subjectScale: "md",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-round-640w.jpg",
+      avif: "/photos/gallery-oct-round-640w.avif",
+      webp: "/photos/gallery-oct-round-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-round-1280w.avif",
+      webp: "/photos/gallery-oct-round-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-wifi",
+    alt: "Two attendees seated at a table and one standing nearby, with a Connect to Wi-Fi poster on the wall behind them.",
+    subjectScale: "md",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-wifi-640w.jpg",
+      avif: "/photos/gallery-oct-wifi-640w.avif",
+      webp: "/photos/gallery-oct-wifi-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-wifi-1280w.avif",
+      webp: "/photos/gallery-oct-wifi-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-pair",
+    alt: "Two attendees at a table looking toward the speaker.",
+    subjectScale: "sm",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-pair-640w.jpg",
+      avif: "/photos/gallery-oct-pair-640w.avif",
+      webp: "/photos/gallery-oct-pair-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-pair-1280w.avif",
+      webp: "/photos/gallery-oct-pair-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-headphones",
+    alt: "An attendee with headphones around his neck rests his arms on the table and listens.",
+    subjectScale: "sm",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-headphones-640w.jpg",
+      avif: "/photos/gallery-oct-headphones-640w.avif",
+      webp: "/photos/gallery-oct-headphones-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-headphones-1280w.avif",
+      webp: "/photos/gallery-oct-headphones-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-intro",
+    alt: "An attendee in a maroon sweater speaks into a microphone during introductions.",
+    subjectScale: "md",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-intro-640w.jpg",
+      avif: "/photos/gallery-oct-intro-640w.avif",
+      webp: "/photos/gallery-oct-intro-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-intro-1280w.avif",
+      webp: "/photos/gallery-oct-intro-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-room",
+    alt: "A wider view of the room with attendees at several tables and a Baker Botts sign on a screen.",
+    subjectScale: "lg",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-room-640w.jpg",
+      avif: "/photos/gallery-oct-room-640w.avif",
+      webp: "/photos/gallery-oct-room-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-room-1280w.avif",
+      webp: "/photos/gallery-oct-room-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-texas",
+    alt: "An attendee in a Texas T-shirt holds a microphone and gestures as he speaks, with another attendee seated behind him.",
+    subjectScale: "md",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-texas-640w.jpg",
+      avif: "/photos/gallery-oct-texas-640w.avif",
+      webp: "/photos/gallery-oct-texas-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-texas-1280w.avif",
+      webp: "/photos/gallery-oct-texas-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-speaker",
+    alt: "A speaker in a blue polo holds a microphone and a phone in front of the agenda slide, the flags and the Capital Factory logo.",
+    subjectScale: "lg",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-speaker-640w.jpg",
+      avif: "/photos/gallery-oct-speaker-640w.avif",
+      webp: "/photos/gallery-oct-speaker-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-speaker-1280w.avif",
+      webp: "/photos/gallery-oct-speaker-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-smile",
+    alt: "An attendee in a cap smiles as he speaks into a microphone.",
+    subjectScale: "sm",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-smile-640w.jpg",
+      avif: "/photos/gallery-oct-smile-640w.avif",
+      webp: "/photos/gallery-oct-smile-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-smile-1280w.avif",
+      webp: "/photos/gallery-oct-smile-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-conversation",
+    alt: "Four attendees in conversation around a table.",
+    subjectScale: "md",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-conversation-640w.jpg",
+      avif: "/photos/gallery-oct-conversation-640w.avif",
+      webp: "/photos/gallery-oct-conversation-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-conversation-1280w.avif",
+      webp: "/photos/gallery-oct-conversation-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-one-on-one",
+    alt: "Two attendees talking one on one, one of them wearing headphones around his neck.",
+    subjectScale: "sm",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-one-on-one-640w.jpg",
+      avif: "/photos/gallery-oct-one-on-one-640w.avif",
+      webp: "/photos/gallery-oct-one-on-one-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-one-on-one-1280w.avif",
+      webp: "/photos/gallery-oct-one-on-one-1280w.webp" },
+  },
+  {
+    slot: "gallery-oct-stage",
+    alt: "A wider view of the group photo, with an International Founders Network screen on the left and the Capital Factory logo behind the group.",
+    subjectScale: "lg",
+    tile: { width: 640, height: 360,
+      src: "/photos/gallery-oct-stage-640w.jpg",
+      avif: "/photos/gallery-oct-stage-640w.avif",
+      webp: "/photos/gallery-oct-stage-640w.webp" },
+    view: { width: 1280, height: 720,
+      avif: "/photos/gallery-oct-stage-1280w.avif",
+      webp: "/photos/gallery-oct-stage-1280w.webp" },
+  },
 ]
 
 /** Every avif tile summed, measured at build. A full scroll costs this much. */
-export const galleryTileBytesAvif = 656592
+export const galleryTileBytesAvif = 879122
