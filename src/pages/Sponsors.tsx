@@ -106,7 +106,7 @@ export function Sponsors() {
                         <div className="rounded-2xl border border-rule bg-paper p-8">
                             <h2 className="text-xl font-bold text-ink">Audience</h2>
                             <p className="mt-4 leading-relaxed text-muted">
-                                About <span className="font-semibold text-ink">100–300</span> people on
+                                <span className="font-semibold text-ink">350+</span> people on
                                 the meetup and newsletter list. Attendees: international/immigrant
                                 founders and operators, plus attorneys, investors, and operators who
                                 work with them. Meetups free; membership optional.
