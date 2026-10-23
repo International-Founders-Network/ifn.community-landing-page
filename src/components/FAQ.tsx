@@ -4,7 +4,6 @@ import { Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from './Container';
 import { cn } from '../lib/cn';
-import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
 
 /**
  * Shared inline-link styling.
@@ -155,7 +154,7 @@ interface FaqCluster {
  * What is claimed: a monthly in-person Austin meetup with six-plus months of
  * history, a venue partner and a format partner (neither named on this
  * surface, see below), listings on Luma and Meetup, free attendance, and a paid
- * membership at the one published price. Nothing else. See PRODUCT.md,
+ * membership whose price is stated on `/membership`. Nothing else. See PRODUCT.md,
  * "Evidence on Hand".
  *
  * **THE TWO PARTNER NAMES ARE DELIBERATELY ABSENT, DO NOT PUT THEM BACK.** The
@@ -178,15 +177,16 @@ interface FaqCluster {
  *
  * **THE SECOND MEMBERSHIP PRICE IS DELIBERATELY ABSENT TOO, AND THAT IS THE
  * EASIER ONE TO "FIX" BACK IN.** Only `MEMBERSHIP_PRICE_STANDARD` is published,
- * here and on every other public surface. A second, lower annual price exists;
- * the founder sends it by email to roughly forty selected people and it is not
+ * and it is shown only on `/membership`. This section prints no price at all:
+ * the `fee` answer and the deck say membership is optional and paid, and point
+ * to `/membership` for the figure. A second, lower annual price exists; the
+ * founder sends it by email to roughly forty selected people and it is not
  * public. It is not an export, not a tier and not rendered anywhere, so there
- * is no constant in this file to reach for. The `fee` answer below used to
- * print both figures side by side and now prints one. If a future reader finds
- * `/membership` and this section disagreeing, the resolution is never to add
- * the lower figure here: it is that the lower figure does not belong on a page.
- * The answer must also not hint that a cheaper price exists, so no "starting
- * at", no "from", no "ask us about a discount".
+ * is no constant in this file to reach for. The `fee` answer once printed both
+ * figures side by side, then one, and now none. If a future reader wants a
+ * price back here, the resolution is never to add the lower figure: it does not
+ * belong on a page. The answer must also not hint that a cheaper price exists,
+ * so no "starting at", no "from", no "ask us about a discount".
  *
  * **What else changed, and what did not.** Grouping and order were set in an
  * earlier phase: the eight entries are three clusters, and two phrases already
@@ -286,14 +286,12 @@ const CLUSTERS: FaqCluster[] = [
                 question: 'Is there a fee?',
                 answer: (
                     <>
-                        Meetups are free. Optional membership is{' '}
-                        <strong className="font-semibold tabular-nums">{MEMBERSHIP_PRICE_STANDARD}/year</strong>:
-                        private member channel, monthly members-only call, first access to guides as they
-                        publish.{' '}
+                        Meetups are free. Membership is optional and paid: private member channel, monthly
+                        members-only call, first access to guides as they publish. The{' '}
                         <Link to="/membership" className={linkStyles}>
-                            See what membership includes
-                        </Link>
-                        .
+                            membership page
+                        </Link>{' '}
+                        has the full details and the price.
                     </>
                 ),
             },
@@ -422,9 +420,8 @@ export function FAQ() {
                         Questions founders ask us
                     </h2>
                     <p className="mt-5 text-[1.0625rem] leading-[1.6] text-muted">
-                        Direct answers about what IFN is, what it costs (nothing for the meetups,{' '}
-                        {MEMBERSHIP_PRICE_STANDARD} a year for optional membership), and what it does
-                        not do.
+                        Direct answers about what IFN is, what it costs (the meetups are free, and
+                        membership is optional), and what it does not do.
                     </p>
                 </motion.div>
 

@@ -3,7 +3,6 @@ import { ArrowRight } from 'lucide-react';
 import { ButtonLink } from './ButtonLink';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
 import { Container } from './Container';
-import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
 
 /**
  * SECTION 9. The page's one colour block (REDESIGN-PLAN.md section 5, row 9).
@@ -120,7 +119,7 @@ const PROOF = [
     },
     {
         title: 'Free to attend',
-        detail: `Register on Luma or Meetup. Membership is a separate, optional layer at ${MEMBERSHIP_PRICE_STANDARD} a year.`,
+        detail: 'Register on Luma or Meetup. Membership is a separate, optional layer.',
     },
 ];
 
@@ -321,11 +320,12 @@ export function FinalCTA(_props?: FinalCTAProps) {
                     </motion.ul>
 
                     {/* ONE PRICE IS PUBLIC, AND IT IS NOT PRINTED HERE.
-                        `MEMBERSHIP_PRICE_STANDARD` appears once on this field,
-                        in the fourth commitment above, verbatim; printing it
-                        twice on one screen reads as a page that cannot keep its
-                        own figures straight, so this note carries no figure at
-                        all.
+                        `MEMBERSHIP_PRICE_STANDARD` is shown only on
+                        `/membership`. The home page, this section included,
+                        carries no figure at all: the fourth commitment above and
+                        this note both describe membership without a price, and
+                        the "Become a member" button sends the reader to the page
+                        that states it.
 
                         `MEMBERSHIP_PRICE_ATTENDEE` USED TO CLOSE THIS SENTENCE
                         AND MUST NOT COME BACK. On 2026-08-10 the founder ruled
