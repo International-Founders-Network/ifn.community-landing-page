@@ -163,7 +163,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/sponsors': {
         title: 'Sponsor IFN meetups in Austin | IFN',
         description:
-            'Sponsor Austin’s monthly international founder meetups. Event from $1,000. Category exclusive from $3,500. Title from $12,000/year. Audience 350+.',
+            'Sponsor Austin’s monthly international founder meetups. Event from $1,000. Category exclusive from $3,500. Title from $12,000/year. 350+ people in the IFN community.',
         indexable: true,
         priority: 0.7,
         changefreq: 'monthly',
