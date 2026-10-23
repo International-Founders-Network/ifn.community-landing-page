@@ -25,7 +25,8 @@
   # build ran on whatever Netlify's build image defaulted to that week — and a
   # default bump is a build that breaks on a day nobody touched the repo. 24 is
   # the version the prerender step was developed and verified against.
-  # .nvmrc carries the same value so local and CI agree.
+  # .nvmrc and the GitHub workflows (.github/workflows/*.yml) carry the same
+  # value, so local, CI and Netlify agree.
   NODE_VERSION = "24"
 
   # Netlify scans build output for the values of environment variables and fails
