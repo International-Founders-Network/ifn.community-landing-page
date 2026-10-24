@@ -31,10 +31,11 @@
 
        It must stay inline. An external file would be a network round trip that
        either blocks the parser or arrives too late, which is the same flash by
-       a slower route. There is no Content-Security-Policy on this site
-       (netlify.toml sets only X-Robots-Tag headers and public/_headers is
-       empty), so no nonce or hash is required; if a CSP is ever added, this
-       script needs a hash entry rather than deletion.
+       a slower route. public/_headers carries a REPORT-ONLY
+       Content-Security-Policy that allows this script by its sha256 hash.
+       Editing anything between the <script> tags changes the hash: recompute
+       it from dist/index.html with the command in public/_headers, or the
+       policy will report (and, once enforcing, block) this script.
 
        Always writes an explicit data-theme. src/index.css resolves dark tokens
        only via `:root[data-theme="dark"]` — no media-query auto-switch. -->

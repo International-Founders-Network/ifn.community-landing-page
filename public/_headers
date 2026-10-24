@@ -41,7 +41,8 @@
   Referrer-Policy: strict-origin-when-cross-origin
 
   # No one has any reason to frame this site. Blocks clickjacking outright.
-  # (frame-ancestors 'none' is the modern equivalent and arrives with the CSP below.)
+  # (frame-ancestors 'none' in the CSP below is the modern equivalent, but it
+  # is report-only for now, so this header is what actually enforces it.)
   X-Frame-Options: DENY
 
   # Drop capabilities the site never uses, so a future dependency cannot quietly
@@ -62,40 +63,57 @@
   # and future subdomain will always be HTTPS.
   Strict-Transport-Security: max-age=63072000; includeSubDomains
 
-# A CONTENT SECURITY POLICY IS THE ONE STILL MISSING, AND IT IS LEFT OFF ON
-# PURPOSE RATHER THAN OVERLOOKED.
+  # REPORT-ONLY: logs, never blocks. See the CSP section below before changing
+  # it or making it enforcing.
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'sha256-AvNGzIFbGkacOD9U/po6QeZc4xaoX5nAYS3NUkFWf9Q=' https://*.googletagmanager.com https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data: https://images.lumacdn.com https://*.google-analytics.com https://*.googletagmanager.com; font-src 'self'; connect-src 'self' https://members.ifn.community https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+# CONTENT SECURITY POLICY: REPORT-ONLY. NOTHING IS BLOCKED.
 #
-# A wrong CSP breaks the site silently for real visitors while looking fine in
-# every check you would think to run, so it should be added deliberately, tested
-# against a deploy preview with the browser console open, and not before.
-# Everything needed to do that is here.
+# The Content-Security-Policy-Report-Only header in the /* block above makes
+# the browser log every request the policy WOULD block to the console, and
+# block nothing. A wrong enforcing CSP breaks the site silently for real
+# visitors while looking fine in every check you would think to run, so the
+# policy ships report-only first. Switching to an enforcing
+# Content-Security-Policy is a later, deliberate decision: watch the console on
+# a deploy preview and in production (every route, including /admin, /gallery,
+# /events and a blog post, with analytics consent both accepted and declined),
+# and only then rename the header. There is no report-uri, so reports appear in
+# the browser console only.
 #
-# index.html carries one inline classic script — the theme bootstrap that
-# prevents a flash of the wrong palette — and it cannot become an external file
-# without reintroducing that flash. So the policy needs its hash, computed from
-# the BUILT output (dist/index.html), not the source:
+# What each source is for:
+#   script-src  'self' is the Vite bundle. The sha256 is the theme bootstrap,
+#               the one inline classic script, identical in index.html and every
+#               prerendered page. *.googletagmanager.com is gtag.js (GA4,
+#               src/lib/analytics.ts). accounts.google.com/gsi/client is the
+#               /admin Google Sign-In.
+#               JSON-LD blocks are data, not script, and need no entry.
+#   style-src   'unsafe-inline': framer-motion writes inline styles on every
+#               animated element, and Google Sign-In injects a <style>.
+#               Removing it stops every animation on the site.
+#               accounts.google.com/gsi/style is the sign-in button's sheet.
+#   img-src     images.lumacdn.com: event cover images come from Luma (via
+#               src/data/events.json). The Google hosts are GA4's pixels. data:
+#               covers inline SVG/data images.
+#   font-src    'self' only: fonts are self-hosted under /fonts/.
+#   connect-src members.ifn.community is the library catalog
+#               (src/lib/membersLibraryCatalog.ts). The Google hosts are GA4
+#               collection and Google Sign-In's status check.
+#   frame-src   the Google Sign-In button renders in an iframe on /admin.
+#   form-action Stripe Checkout is a full navigation (window.location) to the
+#               URL /api/checkout returns, not a form post and not Stripe.js,
+#               so no Stripe host is needed anywhere in this policy.
 #
-#   'sha256-esW/1UYzIMAdg6XSltigJroAJf2yve8LXzbhmFGrnsI='
-#
-# Recompute it whenever that script changes, or the site loads unstyled:
+# The theme bootstrap hash must be recomputed whenever that script changes,
+# from the BUILT output (dist/index.html), not the source, or the site would
+# load unstyled once this policy enforces:
 #
 #   python3 -c "import re,hashlib,base64;h=open('dist/index.html').read();\
 #   s=re.findall(r'<script(?![^>]*src=)(?![^>]*ld\+json)[^>]*>(.*?)</script>',h,re.S)[0];\
 #   print('sha256-'+base64.b64encode(hashlib.sha256(s.encode()).digest()).decode())"
 #
-# A starting policy, once GA4 is live. Test it on a deploy preview first:
-#
-#   Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-esW/1UYzIMAdg6XSltigJroAJf2yve8LXzbhmFGrnsI=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.lumacdn.com https://*.google-analytics.com; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://accounts.google.com; frame-src https://accounts.google.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
-#
-# Three things that policy has to account for, all of which are easy to miss:
-#   - `style-src 'unsafe-inline'`: framer-motion writes inline styles on every
-#     animated element. Removing it stops every animation on the site.
-#   - `images.lumacdn.com`: event cover images come from Luma, not from here.
-#   - `accounts.google.com`: the /admin sign-in. Omit it and admin login breaks,
-#     which no visitor will ever report to you.
-#
-# Deploy it first as Content-Security-Policy-Report-Only, watch the console on
-# every route including /admin and /gallery, then switch to enforcing.
+# Verified on a local build (static server applying this file, headless
+# Chrome): zero report-only violations on /, /membership, /blog, a blog post,
+# /gallery, /events and /admin, with GA4 loaded and consent accepted.
 
 # Content-hashed build output. The hash IS the cache key: a changed file gets a
 # changed name, so this can be cached for a year and never revalidated.

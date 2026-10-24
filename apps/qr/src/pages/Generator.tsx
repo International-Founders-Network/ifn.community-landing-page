@@ -8,16 +8,10 @@ import { DownloadBar } from '../components/DownloadBar';
 import { QRCodePreview } from '../components/QRCodePreview';
 import { buildQrData, emptyFields, isFieldsEmpty, type QRContentType, type QRFieldsByType } from '../lib/qrContent';
 import { buildQrOptions, defaultStyle, type QRStyle } from '../lib/qrStyle';
-import { createDynamicLink, updateLinkTarget, type CreateLinkResponse } from '../lib/api';
-
-function isValidHttpUrl(value: string): boolean {
-    try {
-        const url = new URL(value);
-        return url.protocol === 'http:' || url.protocol === 'https:';
-    } catch {
-        return false;
-    }
-}
+import { AuthRequiredError, createDynamicLink, updateLinkTarget, type CreateLinkResponse } from '../lib/api';
+import { checkRedirectTarget } from '../lib/redirectAllowlist';
+import { useAuth } from '../lib/authContext';
+import { SignInPanel } from '../components/SignInPanel';
 
 export function Generator() {
     const [contentType, setContentType] = useState<QRContentType>('url');
@@ -29,6 +23,9 @@ export function Generator() {
     const [creating, setCreating] = useState(false);
     const [createError, setCreateError] = useState<string | null>(null);
     const [syncStatus, setSyncStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+    const [syncError, setSyncError] = useState<string | null>(null);
+    const auth = useAuth();
+    const { markSignedOut } = auth;
     const [copied, setCopied] = useState<'short' | 'manage' | null>(null);
 
     const qrRef = useRef<QRCodeStyling | null>(null);
@@ -61,28 +58,36 @@ export function Generator() {
     useEffect(() => {
         if (!dynamicResult) return;
         const url = fields.url.url.trim();
-        if (!url || !isValidHttpUrl(url) || url === syncedUrlRef.current) return;
+        if (!url || url === syncedUrlRef.current) return;
 
         if (debounceRef.current) clearTimeout(debounceRef.current);
+        // Not allowlisted: nothing is sent, and syncBlocked below says so. The
+        // short link keeps pointing at the last allowed destination.
+        if (!checkRedirectTarget(url).ok) return;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- shows "saving" for the debounced write this effect schedules
         setSyncStatus('saving');
         debounceRef.current = setTimeout(async () => {
             try {
                 await updateLinkTarget(dynamicResult.editToken, url);
                 syncedUrlRef.current = url;
+                setSyncError(null);
                 setSyncStatus('saved');
-            } catch {
+            } catch (err) {
+                if (err instanceof AuthRequiredError) markSignedOut();
                 setSyncStatus('error');
+                setSyncError(err instanceof Error ? err.message : null);
             }
         }, 700);
         return () => {
             if (debounceRef.current) clearTimeout(debounceRef.current);
         };
-    }, [fields.url.url, dynamicResult]);
+    }, [fields.url.url, dynamicResult, markSignedOut]);
 
     async function handleCreateDynamicLink() {
         const url = fields.url.url.trim();
-        if (!isValidHttpUrl(url)) {
-            setCreateError('Enter a valid URL starting with http:// or https:// first');
+        const target = checkRedirectTarget(url);
+        if (!target.ok) {
+            setCreateError(target.error);
             return;
         }
         setCreating(true);
@@ -93,6 +98,7 @@ export function Generator() {
             syncedUrlRef.current = url;
             setSyncStatus('saved');
         } catch (err) {
+            if (err instanceof AuthRequiredError) markSignedOut();
             setCreateError(err instanceof Error ? err.message : 'Failed to create trackable link');
         } finally {
             setCreating(false);
@@ -108,6 +114,10 @@ export function Generator() {
     async function handleDownload(extension: 'png' | 'svg' | 'jpeg') {
         await qrRef.current?.download({ name: `ifn-qr-${contentType}`, extension });
     }
+
+    const syncTarget = fields.url.url.trim();
+    const syncCheck = dynamicResult && syncTarget ? checkRedirectTarget(syncTarget) : null;
+    const syncBlocked = syncCheck && !syncCheck.ok ? syncCheck.error : null;
 
     const manageUrl = dynamicResult ? `${window.location.origin}/manage/${dynamicResult.editToken}` : null;
 
@@ -151,8 +161,15 @@ export function Generator() {
                                 </span>
                             </label>
 
-                            {dynamicMode && !dynamicResult && (
+                            {dynamicMode && !dynamicResult && auth.status !== 'signed-in' && (
+                                <SignInPanel reason="Trackable links are for IFN admins. Sign in to create one, or untick the box for a static QR code." />
+                            )}
+
+                            {dynamicMode && !dynamicResult && auth.status === 'signed-in' && (
                                 <div>
+                                    <p className="text-xs text-slate-500 mb-2">
+                                        Destinations must be https:// on ifn.community, lu.ma, luma.com, meetup.com or eventbrite.
+                                    </p>
                                     <button
                                         type="button"
                                         disabled={creating || empty}
@@ -191,9 +208,18 @@ export function Generator() {
                                         </button>
                                     </div>
                                     <div className="text-xs text-slate-500">
-                                        {syncStatus === 'saving' && 'Saving destination...'}
-                                        {syncStatus === 'saved' && 'Destination in sync.'}
-                                        {syncStatus === 'error' && 'Could not save latest destination &mdash; try again.'}
+                                        {syncBlocked ? (
+                                            <span className="text-red-600 flex items-start gap-1">
+                                                <AlertCircle size={12} className="mt-0.5 flex-shrink-0" /> Not saved: {syncBlocked}
+                                            </span>
+                                        ) : (
+                                            <>
+                                                {syncStatus === 'saving' && 'Saving destination...'}
+                                                {syncStatus === 'saved' && 'Destination in sync.'}
+                                                {syncStatus === 'error' &&
+                                                    `Could not save the latest destination. ${syncError ?? 'Try again.'}`}
+                                            </>
+                                        )}
                                     </div>
                                     <div className="pt-1 border-t border-slate-200 flex items-center justify-between gap-2">
                                         <span className="text-xs text-slate-500">Save this link to edit or view scans later:</span>

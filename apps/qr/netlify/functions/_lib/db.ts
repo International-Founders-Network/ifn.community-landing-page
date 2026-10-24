@@ -1,5 +1,9 @@
 import { neon } from '@neondatabase/serverless';
 
+// Lives in _lib/ rather than the functions root: Netlify deploys every file in
+// the functions root as its own function, which is how _db.ts used to ship as
+// a public endpoint.
+
 export function getSql() {
     return neon(process.env.NETLIFY_DATABASE_URL!);
 }
@@ -25,15 +29,6 @@ export async function ensureQrTables(sql: ReturnType<typeof getSql>) {
             referrer TEXT
         )
     `;
-}
-
-export function isValidHttpUrl(value: string): boolean {
-    try {
-        const url = new URL(value);
-        return url.protocol === 'http:' || url.protocol === 'https:';
-    } catch {
-        return false;
-    }
 }
 
 export function getBaseUrl(headers: Record<string, string | undefined>): string {
