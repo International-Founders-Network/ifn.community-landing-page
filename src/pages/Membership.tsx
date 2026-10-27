@@ -194,9 +194,7 @@ export function Membership() {
                                 <p className={EYEBROW_ROW}>Popular</p>
                                 <h2 className={TITLE_ROW}>Member</h2>
                                 <p className={PRICE_ROW}>{MEMBERSHIP_PRICE_STANDARD}/year</p>
-                                <p className={PRICE_DETAIL_ROW} aria-hidden="true">
-                                    &nbsp;
-                                </p>
+                                <p className={PRICE_DETAIL_ROW}>Plus applicable sales tax</p>
                                 <hr className={CARD_RULE} />
                                 <p className={BLURB_ROW}>
                                     Year-round IFN. Channel, call, and member resources.
@@ -259,7 +257,7 @@ export function Membership() {
                         )}
 
                         <p className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-muted">
-                            Billed yearly through Stripe. Cancel anytime.
+                            Billed yearly through Stripe. Applicable sales tax is added at checkout. Cancel anytime.
                         </p>
                     </Container>
 
