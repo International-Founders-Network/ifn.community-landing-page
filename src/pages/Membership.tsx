@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { Container } from '../components/Container';
@@ -65,10 +65,91 @@ function InclusionList({ items }: { items: readonly string[] }) {
     );
 }
 
+type MembershipCheck =
+    | { kind: 'checking' }
+    | { kind: 'invite'; url: string }
+    | { kind: 'invite-pending' }
+    | { kind: 'unverified' };
+
+const HELLO_EMAIL = 'hello@ifn.community';
+
+function HelloLink() {
+    return (
+        <a href={`mailto:${HELLO_EMAIL}`} className="underline underline-offset-2">
+            {HELLO_EMAIL}
+        </a>
+    );
+}
+
+/** The line under the receipt copy, driven by the server's checkout check. */
+function MembershipNextStep({ check }: { check: MembershipCheck }) {
+    switch (check.kind) {
+        case 'checking':
+            return <p className="mt-4 leading-relaxed text-muted">Checking your membership...</p>;
+        case 'invite':
+            return (
+                <div className="mt-6">
+                    <ButtonLink href={check.url} variant="primary" size="lg" className="shadow-lg">
+                        Join the Members Slack
+                    </ButtonLink>
+                </div>
+            );
+        case 'invite-pending':
+            return (
+                <p className="mt-4 leading-relaxed text-muted">
+                    Your Slack invite is on its way. Email <HelloLink /> and we&apos;ll invite you
+                    within 1 business day.
+                </p>
+            );
+        case 'unverified':
+            return (
+                <p className="mt-4 leading-relaxed text-muted">
+                    If you completed payment, email <HelloLink /> and we&apos;ll confirm your
+                    membership.
+                </p>
+            );
+    }
+}
+
 export function Membership() {
     const [searchParams] = useSearchParams();
     const checkoutResult = searchParams.get('checkout');
+    const sessionId = searchParams.get('session_id');
     const [checkoutState, setCheckoutState] = useState<'idle' | 'starting' | 'error'>('idle');
+    const [membershipCheck, setMembershipCheck] = useState<MembershipCheck>({ kind: 'checking' });
+
+    /**
+     * After Stripe sends the reader back, ask the server whether the session is
+     * a paid membership. `?checkout=success` alone proves nothing: anyone can
+     * type it. The Slack invite link only ever arrives in this response; it is
+     * not in the bundle.
+     */
+    useEffect(() => {
+        if (checkoutResult !== 'success' || !sessionId) return;
+        const controller = new AbortController();
+
+        fetch(`/api/checkout-status?session_id=${encodeURIComponent(sessionId)}`, {
+            signal: controller.signal,
+        })
+            .then((response) => (response.ok ? response.json() : null))
+            .then((data: { paid?: unknown; slackInviteUrl?: unknown } | null) => {
+                if (data?.paid !== true) {
+                    setMembershipCheck({ kind: 'unverified' });
+                } else if (typeof data.slackInviteUrl === 'string' && data.slackInviteUrl) {
+                    setMembershipCheck({ kind: 'invite', url: data.slackInviteUrl });
+                } else {
+                    setMembershipCheck({ kind: 'invite-pending' });
+                }
+            })
+            .catch(() => {
+                if (!controller.signal.aborted) setMembershipCheck({ kind: 'unverified' });
+            });
+
+        return () => controller.abort();
+    }, [checkoutResult, sessionId]);
+
+    // With no session id there is nothing to ask the server about.
+    const membership: MembershipCheck = sessionId ? membershipCheck : { kind: 'unverified' };
 
     /**
      * Starts Stripe Checkout. The browser sends a plan SLUG and nothing else:
@@ -128,11 +209,11 @@ export function Membership() {
                     >
                         <h2 className="mb-2 text-lg font-bold text-ink">Payment received</h2>
                         <p className="leading-relaxed text-muted">
-                            Thank you for joining IFN. Stripe has emailed you a receipt. Private member
-                            channel access comes after checkout. Details for the next members-only call
-                            land in the channel when scheduled. Cancel anytime via the Stripe customer
-                            portal or email hello@ifn.community.
+                            Thank you for joining IFN. Stripe has emailed you a receipt. Details for the
+                            next members-only call land in the channel when scheduled. Cancel anytime via
+                            the Stripe customer portal or email hello@ifn.community.
                         </p>
+                        <MembershipNextStep check={membership} />
                     </div>
                 </Container>
             )}
