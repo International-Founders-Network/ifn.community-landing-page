@@ -197,6 +197,13 @@ export function membershipOfferSchema() {
             'Annual membership of the International Founders Network: a private member channel, monthly members-only call, and the founder resource library.',
         price: MEMBERSHIP_PRICE_STANDARD.replace('$', ''),
         priceCurrency: 'USD',
+        // Checkout adds sales tax on top of the listed price.
+        priceSpecification: {
+            '@type': 'PriceSpecification',
+            price: MEMBERSHIP_PRICE_STANDARD.replace('$', ''),
+            priceCurrency: 'USD',
+            valueAddedTaxIncluded: false,
+        },
         url: `${SITE_URL}/membership`,
         availability: 'https://schema.org/InStock',
         offeredBy: { '@id': ORGANIZATION_ID },
