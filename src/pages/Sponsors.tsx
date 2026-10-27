@@ -51,7 +51,7 @@ const PACKAGES = [
         name: 'Category Exclusive',
         price: 'Starting from $3,500',
         summary:
-            'Be the only sponsor in your category for a set window. Housing, immigration, and banking start from $4,500.',
+            'Be the only sponsor in your category at our Austin meetups for a set window. Housing and immigration start from $4,500.',
     },
     {
         name: 'Title / annual',
