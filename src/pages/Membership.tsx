@@ -302,9 +302,7 @@ export function Membership() {
                                 <p className={EYEBROW_ROW}>Limited seats · Apply</p>
                                 <h2 className={TITLE_ROW}>Founder in Residence</h2>
                                 <p className={PRICE_ROW}>Starting from $1,800/year</p>
-                                <p className={PRICE_DETAIL_ROW} aria-hidden="true">
-                                    &nbsp;
-                                </p>
+                                <p className={PRICE_DETAIL_ROW}>Plus applicable sales tax</p>
                                 <hr className={CARD_RULE} />
                                 <p className={BLURB_ROW}>
                                     Priority workshop seats, capped warm intros, one co-host
