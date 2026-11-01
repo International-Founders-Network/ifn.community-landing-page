@@ -28,17 +28,13 @@
     ]
   },
   {
-    "id": "evt-BFi4Ul1bYqLEBiz",
-    "title": "Austin International Founders Meetup (Vol. 10)",
-    "start_at": "2026-10-22T23:00:00.000Z",
-    "location_name": "Station Austin, 701 Brazos St, Austin, TX 78701, USA",
-    "cover_url": "https://images.lumacdn.com/uploads/ab/de221c8a-f284-418b-9302-4c308ce09ba7.png",
-    "raw_date": "2026-10-22T23:00:00.000Z",
+    "id": "316249601",
+    "title": "Austin International Founders Meetup (Vol. 10) ",
+    "start_at": "2026-10-22T18:00:00-05:00",
+    "location_name": "Austin, TX",
+    "cover_url": "",
+    "raw_date": "2026-10-22T18:00:00-05:00",
     "registrations": [
-      {
-        "platform": "luma",
-        "url": "https://lu.ma/4429vmwc"
-      },
       {
         "platform": "meetup",
         "url": "https://www.meetup.com/international-founders-network-austin/events/316249601/"
