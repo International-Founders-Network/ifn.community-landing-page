@@ -216,4 +216,4 @@ the functions directory as a function, and a name containing a dot
 (`contact.test`) fails its "alphanumeric characters, hyphen & underscores" rule.
 That blocks the entire deploy with `Incorrect function names`, while `CI / verify`
 passes because Vitest does not care where the files sit. Keep tests in
-`netlify/tests/`. Validation logic and the admin auth (session sign/verify, allowlist revocation) are covered; page components are not (see `openspec/specs/*` non-goals for why each was or wasn't tested). `apps/qr` doesn't have its own test setup yet.
+`netlify/tests/`. Validation logic and the admin auth (session sign/verify, allowlist revocation) are covered; page components are not (see `openspec/specs/*` non-goals for why each was or wasn't tested). `apps/qr` has no test runner of its own: its tests live in `apps/qr/netlify/tests/` (so they travel with the app) and the root `vitest.config.ts` includes them, so `npm test` here runs them. They may import only `apps/qr` code and packages the root also installs.

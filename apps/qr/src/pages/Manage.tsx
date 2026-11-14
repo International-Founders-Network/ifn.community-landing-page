@@ -1,10 +1,29 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { BarChart3, Check, Loader2, Save, ExternalLink, AlertCircle } from 'lucide-react';
-import { getLinkByToken, updateLinkTarget, type LinkDetails } from '../lib/api';
+import { AuthRequiredError, getLinkByToken, updateLinkTarget, type LinkDetails } from '../lib/api';
+import { checkRedirectTarget } from '../lib/redirectAllowlist';
+import { useAuth } from '../lib/authContext';
+import { SignInPanel } from '../components/SignInPanel';
 
+// Viewing or editing a link needs an admin session: the API refuses the edit
+// token on its own, so this signs in first rather than showing a load error.
 export function Manage() {
+    const auth = useAuth();
+    if (auth.status === 'signed-in') return <ManageLink />;
+    return (
+        <div className="max-w-md mx-auto px-4 py-24">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-2">
+                <h1 className="text-xl font-bold text-slate-800">Manage trackable link</h1>
+                <SignInPanel reason="Sign in with an authorized IFN Google account to view or edit this link." />
+            </div>
+        </div>
+    );
+}
+
+function ManageLink() {
     const { token } = useParams<{ token: string }>();
+    const { markSignedOut } = useAuth();
     const [details, setDetails] = useState<LinkDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -19,12 +38,20 @@ export function Manage() {
                 setDetails(d);
                 setDraftUrl(d.targetUrl);
             })
-            .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load link'))
+            .catch((err) => {
+                if (err instanceof AuthRequiredError) markSignedOut();
+                setError(err instanceof Error ? err.message : 'Failed to load link');
+            })
             .finally(() => setLoading(false));
-    }, [token]);
+    }, [token, markSignedOut]);
 
     async function handleSave() {
         if (!token) return;
+        const target = checkRedirectTarget(draftUrl);
+        if (!target.ok) {
+            setError(target.error);
+            return;
+        }
         setSaving(true);
         setError(null);
         try {
@@ -33,6 +60,7 @@ export function Manage() {
             setSaved(true);
             setTimeout(() => setSaved(false), 1500);
         } catch (err) {
+            if (err instanceof AuthRequiredError) markSignedOut();
             setError(err instanceof Error ? err.message : 'Failed to save');
         } finally {
             setSaving(false);
