@@ -55,6 +55,12 @@
 # ---------------------------------------------------------------------------
 # REDIRECTS. Order is significant: Netlify applies the first matching rule.
 #
+# Host-scoped www/http canonicalization lives in public/_redirects (copied
+# into dist/). Netlify processes _redirects before the rules in this file,
+# which is required so those rules are not shadowed by the catch-all below.
+# They are IFN-107: one 301 from www (and http, when the platform allows it)
+# to the canonical apex URL, stripping a trailing slash on the same hop.
+#
 # Netlify matches an EXISTING STATIC FILE before it applies any non-forced
 # rewrite, which is what makes prerendering work. scripts/prerender.mjs writes
 # dist/<route>/index.html for each of the eleven indexable routes, so a request
