@@ -1,0 +1,46 @@
+# IFN-107: send www (and http) to the canonical apex URL in a single 301.
+#
+# Canonical URLs:
+#   https://ifn.community/          homepage (trailing slash)
+#   https://ifn.community/{path}    every other path (no trailing slash)
+#
+# Why this file exists:
+# Netlify's automatic www -> primary-domain redirect preserves the request
+# path, including a trailing slash. Pretty-URL / slash normalization then
+# runs on the apex host. The result on every non-home path is a 2-hop chain:
+#
+#   https://www.ifn.community/about/  ->  https://ifn.community/about/  ->  /about
+#
+# Host-scoped forced rules are tried first so the www hop can land on the
+# final apex URL. A splat alone would keep the trailing slash, so the
+# slash-stripping rules have to come first. Placeholders match one path
+# segment; the two-segment rule covers /blog/{slug}. The splat is the
+# fallback for slash-less www URLs and any deeper path.
+#
+# http rules try to collapse scheme + host + slash into the same one hop.
+# They only help if they run before Netlify's automatic HTTP -> HTTPS
+# upgrade; see the IFN-107 PR if a production check still shows 2+ hops.
+#
+# Netlify processes this file (copied from public/ to dist/) before
+# netlify.toml. These rules must stay in _redirects so they are not
+# shadowed by the catch-all in netlify.toml.
+#
+# Do not add same-host trailing-slash rules here. Netlify normalizes slashes
+# before matching, and a same-host slash-strip rule can loop.
+
+# www HTTPS, trailing slash (one and two segments: all current sitemap paths)
+https://www.ifn.community/:path/        https://ifn.community/:path        301!
+https://www.ifn.community/:path/:sub/   https://ifn.community/:path/:sub   301!
+
+# www HTTPS, everything else (no trailing slash, deeper paths)
+https://www.ifn.community/*             https://ifn.community/:splat       301!
+
+# www HTTP: upgrade, drop www, and strip a trailing slash in one hop
+http://www.ifn.community/:path/         https://ifn.community/:path        301!
+http://www.ifn.community/:path/:sub/    https://ifn.community/:path/:sub   301!
+http://www.ifn.community/*              https://ifn.community/:splat       301!
+
+# apex HTTP: upgrade and strip a trailing slash in one hop
+http://ifn.community/:path/             https://ifn.community/:path        301!
+http://ifn.community/:path/:sub/        https://ifn.community/:path/:sub   301!
+http://ifn.community/*                  https://ifn.community/:splat       301!
