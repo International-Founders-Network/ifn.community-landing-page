@@ -20,13 +20,8 @@
         "instagram": false
       },
       "publicInBuild": false,
-      "imagesReady": false,
-      "imagesMissing": [
-        "public/blog/bringing-an-established-small-business-to-austin-hero.webp",
-        "public/blog/bringing-an-established-small-business-to-austin-hero-800.webp",
-        "public/blog/bringing-an-established-small-business-to-austin-thumb.webp",
-        "public/blog/bringing-an-established-small-business-to-austin-og.png"
-      ],
+      "imagesReady": true,
+      "imagesMissing": [],
       "images": {
         "hero": "/blog/bringing-an-established-small-business-to-austin-hero.webp",
         "hero800": "/blog/bringing-an-established-small-business-to-austin-hero-800.webp",
@@ -55,13 +50,8 @@
         "instagram": false
       },
       "publicInBuild": false,
-      "imagesReady": false,
-      "imagesMissing": [
-        "public/blog/running-a-team-split-between-home-and-austin-hero.webp",
-        "public/blog/running-a-team-split-between-home-and-austin-hero-800.webp",
-        "public/blog/running-a-team-split-between-home-and-austin-thumb.webp",
-        "public/blog/running-a-team-split-between-home-and-austin-og.png"
-      ],
+      "imagesReady": true,
+      "imagesMissing": [],
       "images": {
         "hero": "/blog/running-a-team-split-between-home-and-austin-hero.webp",
         "hero800": "/blog/running-a-team-split-between-home-and-austin-hero-800.webp",
@@ -90,13 +80,8 @@
         "instagram": false
       },
       "publicInBuild": false,
-      "imagesReady": false,
-      "imagesMissing": [
-        "public/blog/hiring-your-first-person-in-the-us-hero.webp",
-        "public/blog/hiring-your-first-person-in-the-us-hero-800.webp",
-        "public/blog/hiring-your-first-person-in-the-us-thumb.webp",
-        "public/blog/hiring-your-first-person-in-the-us-og.png"
-      ],
+      "imagesReady": true,
+      "imagesMissing": [],
       "images": {
         "hero": "/blog/hiring-your-first-person-in-the-us-hero.webp",
         "hero800": "/blog/hiring-your-first-person-in-the-us-hero-800.webp",

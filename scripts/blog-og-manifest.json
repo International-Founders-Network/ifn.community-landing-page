@@ -11,5 +11,8 @@
   { "slug": "opening-an-ein-and-why-the-letter-matters-for-banking", "scene": "letters", "titleFragment": "The EIN letter" },
   { "slug": "building-your-first-50-connections-in-austin", "scene": "cluster", "titleFragment": "First 50 connections" },
   { "slug": "money-questions-to-sort-before-you-land-in-the-us", "scene": "crossing", "titleFragment": "Before you land" },
-  { "slug": "us-go-to-market-when-your-product-was-built-elsewhere", "scene": "branch", "titleFragment": "US go-to-market" }
+  { "slug": "us-go-to-market-when-your-product-was-built-elsewhere", "scene": "branch", "titleFragment": "US go-to-market" },
+  { "slug": "hiring-your-first-person-in-the-us", "scene": "first-hire", "titleFragment": "Your first US hire" },
+  { "slug": "running-a-team-split-between-home-and-austin", "scene": "split-team", "titleFragment": "Split team, one rhythm" },
+  { "slug": "bringing-an-established-small-business-to-austin", "scene": "storefront", "titleFragment": "Bringing your business" }
 ]
