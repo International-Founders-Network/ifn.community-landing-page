@@ -11,5 +11,14 @@
   { "slug": "opening-an-ein-and-why-the-letter-matters-for-banking", "scene": "letters", "titleFragment": "The EIN letter" },
   { "slug": "building-your-first-50-connections-in-austin", "scene": "cluster", "titleFragment": "First 50 connections" },
   { "slug": "money-questions-to-sort-before-you-land-in-the-us", "scene": "crossing", "titleFragment": "Before you land" },
-  { "slug": "us-go-to-market-when-your-product-was-built-elsewhere", "scene": "branch", "titleFragment": "US go-to-market" }
+  { "slug": "us-go-to-market-when-your-product-was-built-elsewhere", "scene": "branch", "titleFragment": "US go-to-market" },
+  { "slug": "founder-loneliness-the-room-is-full-and-you-are-still-alone", "scene": "full-room", "titleFragment": "Full room, still alone" },
+  { "slug": "when-your-accent-or-foreign-degree-gets-you-treated-as-a-risk", "scene": "trust-bridge", "titleFragment": "Treated as a risk" },
+  { "slug": "founder-burnout-that-ends-a-business-you-still-love", "scene": "step-back", "titleFragment": "Close or step back" },
+  { "slug": "when-ai-takes-the-clients-who-used-to-pay-your-rent", "scene": "ai-clients", "titleFragment": "When AI takes the work" },
+  { "slug": "the-founder-spouse-who-carries-the-company-with-no-title", "scene": "no-title", "titleFragment": "The spouse with no title" },
+  { "slug": "raising-prices-after-years-of-underpricing", "scene": "price-step", "titleFragment": "Raising your prices" },
+  { "slug": "getting-paid-by-your-first-us-customers", "scene": "getting-paid", "titleFragment": "Getting paid in the US" },
+  { "slug": "moving-to-austin-with-family-while-you-build", "scene": "family-year", "titleFragment": "First year in Austin with family" },
+  { "slug": "working-the-austin-day-and-the-home-country-night", "scene": "day-night", "titleFragment": "Austin day, home night" }
 ]

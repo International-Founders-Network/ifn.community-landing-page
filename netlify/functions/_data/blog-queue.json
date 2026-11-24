@@ -1,6 +1,276 @@
 {
   "posts": [
     {
+      "slug": "working-the-austin-day-and-the-home-country-night",
+      "title": "Working the Austin day and the home-country night",
+      "date": "2026-11-19",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "founder-life",
+        "family",
+        "time-zones",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/working-the-austin-day-and-the-home-country-night-hero.webp",
+        "hero800": "/blog/working-the-austin-day-and-the-home-country-night-hero-800.webp",
+        "thumb": "/blog/working-the-austin-day-and-the-home-country-night-thumb.webp",
+        "og": "/blog/working-the-austin-day-and-the-home-country-night-og.png"
+      },
+      "imageAlt": "Diagram: a sun arc over Austin and a moon arc over home, with one short shared window between them marked family call."
+    },
+    {
+      "slug": "moving-to-austin-with-family-while-you-build",
+      "title": "Moving with family while you build: the first year in Austin",
+      "date": "2026-11-18",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "austin",
+        "family",
+        "landing",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/moving-to-austin-with-family-while-you-build-hero.webp",
+        "hero800": "/blog/moving-to-austin-with-family-while-you-build-hero-800.webp",
+        "thumb": "/blog/moving-to-austin-with-family-while-you-build-thumb.webp",
+        "og": "/blog/moving-to-austin-with-family-while-you-build-og.png"
+      },
+      "imageAlt": "Diagram: two timelines running side by side, one marked company and one marked family, meeting at a small house shape in Austin."
+    },
+    {
+      "slug": "getting-paid-by-your-first-us-customers",
+      "title": "Getting paid by your first US customers: invoices, payment terms and late payers",
+      "date": "2026-11-17",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "operations",
+        "invoicing",
+        "us-customers",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/getting-paid-by-your-first-us-customers-hero.webp",
+        "hero800": "/blog/getting-paid-by-your-first-us-customers-hero-800.webp",
+        "thumb": "/blog/getting-paid-by-your-first-us-customers-thumb.webp",
+        "og": "/blog/getting-paid-by-your-first-us-customers-og.png"
+      },
+      "imageAlt": "Diagram: a signed deal card on the left, a payment mark on the right, and three steps between them marked vendor setup, PO and invoice."
+    },
+    {
+      "slug": "raising-prices-after-years-of-underpricing",
+      "title": "I underpriced for years. Then I raised prices and some clients left",
+      "date": "2026-11-12",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "small-business",
+        "pricing",
+        "clients",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/raising-prices-after-years-of-underpricing-hero.webp",
+        "hero800": "/blog/raising-prices-after-years-of-underpricing-hero-800.webp",
+        "thumb": "/blog/raising-prices-after-years-of-underpricing-thumb.webp",
+        "og": "/blog/raising-prices-after-years-of-underpricing-og.png"
+      },
+      "imageAlt": "Diagram: a row of client dots, most staying in line after a step up, two drifting away and one returning."
+    },
+    {
+      "slug": "the-founder-spouse-who-carries-the-company-with-no-title",
+      "title": "The spouse who carries the company with no title",
+      "date": "2026-11-11",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "founder-life",
+        "family",
+        "partners",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/the-founder-spouse-who-carries-the-company-with-no-title-hero.webp",
+        "hero800": "/blog/the-founder-spouse-who-carries-the-company-with-no-title-hero-800.webp",
+        "thumb": "/blog/the-founder-spouse-who-carries-the-company-with-no-title-thumb.webp",
+        "og": "/blog/the-founder-spouse-who-carries-the-company-with-no-title-og.png"
+      },
+      "imageAlt": "Diagram: a company cap table card with one name, and a second outline beside it carrying the same weight with no label."
+    },
+    {
+      "slug": "when-ai-takes-the-clients-who-used-to-pay-your-rent",
+      "title": "When AI takes the clients who used to pay your rent",
+      "date": "2026-11-10",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "small-business",
+        "ai",
+        "services",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/when-ai-takes-the-clients-who-used-to-pay-your-rent-hero.webp",
+        "hero800": "/blog/when-ai-takes-the-clients-who-used-to-pay-your-rent-hero-800.webp",
+        "thumb": "/blog/when-ai-takes-the-clients-who-used-to-pay-your-rent-thumb.webp",
+        "og": "/blog/when-ai-takes-the-clients-who-used-to-pay-your-rent-og.png"
+      },
+      "imageAlt": "Diagram: a stack of routine work cards sliding away toward a chat window, while one card marked judgment stays with a person."
+    },
+    {
+      "slug": "founder-burnout-that-ends-a-business-you-still-love",
+      "title": "Founder burnout that ends a business you still love",
+      "date": "2026-11-05",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "founder-life",
+        "burnout",
+        "small-business",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/founder-burnout-that-ends-a-business-you-still-love-hero.webp",
+        "hero800": "/blog/founder-burnout-that-ends-a-business-you-still-love-hero-800.webp",
+        "thumb": "/blog/founder-burnout-that-ends-a-business-you-still-love-thumb.webp",
+        "og": "/blog/founder-burnout-that-ends-a-business-you-still-love-og.png"
+      },
+      "imageAlt": "Diagram: a shopfront outline with its light dimmed, and a path splitting into two, one marked close and one marked step back."
+    },
+    {
+      "slug": "when-your-accent-or-foreign-degree-gets-you-treated-as-a-risk",
+      "title": "When your accent or foreign degree gets you treated as a risk",
+      "date": "2026-11-04",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "founder-life",
+        "trust",
+        "credentials",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/when-your-accent-or-foreign-degree-gets-you-treated-as-a-risk-hero.webp",
+        "hero800": "/blog/when-your-accent-or-foreign-degree-gets-you-treated-as-a-risk-hero-800.webp",
+        "thumb": "/blog/when-your-accent-or-foreign-degree-gets-you-treated-as-a-risk-thumb.webp",
+        "og": "/blog/when-your-accent-or-foreign-degree-gets-you-treated-as-a-risk-og.png"
+      },
+      "imageAlt": "Diagram: two document cards side by side, one with an unfamiliar seal, joined by a bridge of three proof marks."
+    },
+    {
+      "slug": "founder-loneliness-the-room-is-full-and-you-are-still-alone",
+      "title": "The room is full and you are still alone: founder loneliness after landing",
+      "date": "2026-11-03",
+      "status": "in_review",
+      "publishAt": null,
+      "tags": [
+        "founder-life",
+        "loneliness",
+        "austin",
+        "peer-notes"
+      ],
+      "draft": true,
+      "syndication": {
+        "medium": false,
+        "linkedin": false,
+        "x": false,
+        "instagram": false
+      },
+      "publicInBuild": false,
+      "imagesReady": true,
+      "imagesMissing": [],
+      "images": {
+        "hero": "/blog/founder-loneliness-the-room-is-full-and-you-are-still-alone-hero.webp",
+        "hero800": "/blog/founder-loneliness-the-room-is-full-and-you-are-still-alone-hero-800.webp",
+        "thumb": "/blog/founder-loneliness-the-room-is-full-and-you-are-still-alone-thumb.webp",
+        "og": "/blog/founder-loneliness-the-room-is-full-and-you-are-still-alone-og.png"
+      },
+      "imageAlt": "Diagram: a field of scattered dots beside a ring of dots, with one dot set just outside the ring."
+    },
+    {
       "slug": "money-questions-to-sort-before-you-land-in-the-us",
       "title": "Money questions international founders sort before they land in the US",
       "date": "2026-10-29",
