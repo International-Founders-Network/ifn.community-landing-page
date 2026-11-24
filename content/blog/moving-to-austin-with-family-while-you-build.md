@@ -14,7 +14,7 @@ syndication:
   newsletter: false
 tags: [austin, family, landing, peer-notes]
 ogImage: /blog/moving-to-austin-with-family-while-you-build-og.png
-imageAlt: "Diagram: a field of scattered dots with one small connected cluster around a point marked Austin."
+imageAlt: "Diagram: two timelines running side by side, one marked company and one marked family, meeting at a small house shape in Austin."
 ---
 
 A founder sits near the end of the IFN meetup table, half in the conversation and half on their phone. They keep checking the time. School pickup is in an hour, and their partner has a job interview across town, so the handoff has to work. The company is doing fine: a few US customers, a small team at home, a pipeline that makes sense. The family is the part still being put together. Nobody in the house has worked out yet what a normal Tuesday looks like.

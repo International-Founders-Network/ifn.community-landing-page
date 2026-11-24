@@ -14,7 +14,7 @@ syndication:
   newsletter: false
 tags: [founder-life, burnout, small-business, peer-notes]
 ogImage: /blog/founder-burnout-that-ends-a-business-you-still-love-og.png
-imageAlt: "Diagram: a field of scattered dots with one small connected cluster around a point marked Austin."
+imageAlt: "Diagram: a shopfront outline with its light dimmed, and a path splitting into two, one marked close and one marked step back."
 ---
 
 An owner sits near the end of the IFN meetup table and says, quietly, that they are thinking of closing. The business is fine. Customers like it, some of them come back every week, and the numbers are not the problem. The owner says they feel empty. Someone across the table asks how long they have felt this way. The answer comes after a pause, and it is longer than they wanted to say out loud.

@@ -14,7 +14,7 @@ syndication:
   newsletter: false
 tags: [operations, invoicing, us-customers, peer-notes]
 ogImage: /blog/getting-paid-by-your-first-us-customers-og.png
-imageAlt: "Diagram: a field of scattered dots with one small connected cluster around a point marked Austin."
+imageAlt: "Diagram: a signed deal card on the left, a payment mark on the right, and three steps between them marked vendor setup, PO and invoice."
 ---
 
 A founder comes to the IFN meetup with good news: their first US enterprise customer has signed. The table congratulates them, someone asks how the demo went, and the talk moves on. Six weeks later the same founder is back with a different question. The invoice went out the day after signing, and nobody has paid it. Nobody has refused to pay it either. It has just gone quiet. Someone across the table asks whether the customer set them up as a vendor, and whether the invoice had a purchase order number on it. The founder had not heard of either, so the answer to both was no.

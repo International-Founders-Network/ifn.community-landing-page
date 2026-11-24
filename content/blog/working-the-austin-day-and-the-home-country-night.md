@@ -14,7 +14,7 @@ syndication:
   newsletter: false
 tags: [founder-life, family, time-zones, peer-notes]
 ogImage: /blog/working-the-austin-day-and-the-home-country-night-og.png
-imageAlt: "Diagram: a field of scattered dots with one small connected cluster around a point marked Austin."
+imageAlt: "Diagram: a sun arc over Austin and a moon arc over home, with one short shared window between them marked family call."
 ---
 
 A founder at the IFN meetup table says they took their mother's call at five in the morning. It was the only window before her evening ended. At nine they ran a customer meeting, and the customer had no idea the founder had already been up for hours. Around midnight they were answering the family group chat, because that was when everyone at home was having breakfast and sending photos. Nobody planned the day that way. It became the day, and then it became most days.

@@ -14,7 +14,7 @@ syndication:
   newsletter: false
 tags: [founder-life, trust, credentials, peer-notes]
 ogImage: /blog/when-your-accent-or-foreign-degree-gets-you-treated-as-a-risk-og.png
-imageAlt: "Diagram: a field of scattered dots with one small connected cluster around a point marked Austin."
+imageAlt: "Diagram: two document cards side by side, one with an unfamiliar seal, joined by a bridge of three proof marks."
 ---
 
 A founder at the IFN meetup table has spent more than a decade building products at home. They have led teams, shipped launches and sold a company. Tonight they describe a sales call from last week. The buyer had been warm over email. A few minutes into the call, once the founder started walking through the demo, the questions got shorter, and no follow-up came. A few weeks before that, a potential partner asked twice where their degree was from, as if the first answer had not counted. Someone across the table nods. The first time it happened to them, they assumed the problem was their pitch and rewrote it more than once before they saw it differently.

@@ -14,7 +14,7 @@ syndication:
   newsletter: false
 tags: [small-business, pricing, clients, peer-notes]
 ogImage: /blog/raising-prices-after-years-of-underpricing-og.png
-imageAlt: "Diagram: a field of scattered dots with one small connected cluster around a point marked Austin."
+imageAlt: "Diagram: a row of client dots, most staying in line after a step up, two drifting away and one returning."
 ---
 
 An owner sits down at the IFN meetup table and says they finally did it. They raised their prices. They had put it off for a long time, rewritten the email more times than they want to admit, and then sent it on a quiet afternoon. Most clients wrote back some version of "thanks for the heads up, that's fine." Two did not. Those two were among the first clients the owner ever had in Austin, the ones who stayed when the business was small and unsure of itself. Both said they would look elsewhere. The owner feels relieved and a little sick, both at once, and wants to know whether they got it wrong.

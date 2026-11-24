@@ -14,7 +14,7 @@ syndication:
   newsletter: false
 tags: [small-business, ai, services, peer-notes]
 ogImage: /blog/when-ai-takes-the-clients-who-used-to-pay-your-rent-og.png
-imageAlt: "Diagram: a field of scattered dots with one small connected cluster around a point marked Austin."
+imageAlt: "Diagram: a stack of routine work cards sliding away toward a chat window, while one card marked judgment stays with a person."
 ---
 
 A founder who runs a small design and development studio sits down at the IFN meetup table and reads an email aloud from their phone. It comes from their best client, the one who has sent steady work for years. The tone is warm. The client thanks them for everything and says they will handle this kind of work in-house from now on. Someone asks who they hired. Nobody. In-house means a chat tool and a staff member who types requests into it. The table goes quiet for a moment. Then a few other people say something similar happened to them this year.

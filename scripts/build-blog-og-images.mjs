@@ -59,14 +59,14 @@ function kit(ctx) {
     const hair = 2 * ctx.k
     return {
         disc: (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${PAPER}"/>`,
-        ring: (cx, cy, r, fill = 'none') =>
-            `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="${INK}" stroke-width="${sw}"/>`,
+        ring: (cx, cy, r, fill = 'none', { accent = false } = {}) =>
+            `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="${accent ? ctx.accent : INK}" stroke-width="${sw}"/>`,
         dot: (cx, cy, r, accent = false) =>
             `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${accent ? ctx.accent : INK}"/>`,
         line: (x1, y1, x2, y2, { accent = false, hairline = false, width } = {}) =>
             `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${accent ? ctx.accent : hairline ? RULE : INK}" stroke-width="${width ?? (hairline ? hair : sw)}" stroke-linecap="square"/>`,
-        path: (d, { accent = false } = {}) =>
-            `<path d="${d}" fill="none" stroke="${accent ? ctx.accent : INK}" stroke-width="${accent ? sw * 2 : sw}" stroke-linejoin="miter" stroke-linecap="square"/>`,
+        path: (d, { accent = false, fill = 'none' } = {}) =>
+            `<path d="${d}" fill="${fill}" stroke="${accent ? ctx.accent : INK}" stroke-width="${accent ? sw * 2 : sw}" stroke-linejoin="miter" stroke-linecap="square"/>`,
         rect: (x, y, w, h, { fill = PAPER, stroke = INK, accent = false } = {}) =>
             `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${accent ? ctx.accent : stroke}" stroke-width="${accent ? sw * 2 : sw}"/>`,
         /** Ruled lines inside a sheet: the "notes" texture, hairline grey. */
@@ -79,6 +79,8 @@ function kit(ctx) {
                 ? `<text x="${x}" y="${y}" font-family="Archivo" font-size="${size}" font-weight="${weight}" fill="${fill}" text-anchor="${anchor}" letter-spacing="${size >= 30 ? '-0.01em' : '0'}">${esc(s)}</text>`
                 : '',
         accentRule: (x, y, w) => `<rect x="${x}" y="${y}" width="${w}" height="${6 * Math.max(1, ctx.k * 0.75)}" fill="${ctx.accent}"/>`,
+        /** Solid accent rectangle; used for a narrow band, not a stroke. */
+        bar: (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${ctx.accent}"/>`,
     }
 }
 
@@ -337,7 +339,267 @@ ${d.text(350, 660, 'Built elsewhere', { anchor: 'middle' })}
 ${d.line(500, 450, 820, 450)}
 ${outs.map(([t, y], i) => `${d.path(`M820 450 L1000 ${y}`, { accent: i === 1 })}${d.ring(1040, y, 40, PAPER)}${d.text(1110, y + 12, t)}`).join('')}`
     },
+
+    /** A crowded field of dots, one set just outside a dense ring. */
+    'full-room'(d) {
+        const pts = []
+        for (let r = 0; r < 7; r++) for (let c = 0; c < 12; c++) pts.push([140 + c * 120, 150 + r * 100])
+        const cx = 1120
+        const cy = 480
+        const ringR = 160
+        const ringDots = []
+        for (let i = 0; i < 16; i++) {
+            const a = (i * Math.PI * 2) / 16
+            ringDots.push([cx + ringR * Math.cos(a), cy + ringR * Math.sin(a)])
+        }
+        for (let i = 0; i < 10; i++) {
+            const a = (i * Math.PI * 2) / 10 + 0.2
+            ringDots.push([cx + (ringR - 55) * Math.cos(a), cy + (ringR - 55) * Math.sin(a)])
+        }
+        const gap = 0.18
+        const isoR = ringR + 52
+        const iso = [cx + isoR * Math.cos(gap), cy + isoR * Math.sin(gap)]
+        const grid = pts.filter(([x, y]) => Math.hypot(x - cx, y - cy) > ringR + 80)
+        const inner = [cx + (ringR + 12) * Math.cos(gap), cy + (ringR + 12) * Math.sin(gap)]
+        const outer = [cx + (isoR - 20) * Math.cos(gap), cy + (isoR - 20) * Math.sin(gap)]
+        return `
+${d.disc(cx, cy, 280)}
+${grid.map(([x, y]) => d.dot(x, y, 7)).join('')}
+${ringDots.map(([x, y]) => d.dot(x, y, 10)).join('')}
+${d.line(inner[0], inner[1], outer[0], outer[1], { accent: true, width: 6 })}
+${d.dot(iso[0], iso[1], 12)}`
+    },
+
+    /** Two documents, a short bridge of proof: Work, Results, Reference. */
+    'trust-bridge'(d) {
+        const lx = 160
+        const rx = 1100
+        const cardW = 340
+        const cardY = 200
+        const cardH = 540
+        const midY = 450
+        const sx = lx + cardW / 2
+        const sy = 390
+        const steps = [
+            ['Work', 560],
+            ['Results', 730],
+            ['Reference', 900],
+        ]
+        const check = (x, accent) => d.path(`M${x - 16} ${midY} L${x - 4} ${midY + 14} L${x + 18} ${midY - 16}`, { accent })
+        return `
+${d.disc(800, 470, 280)}
+${d.rect(lx, cardY, cardW, cardH)}
+${d.ring(sx, sy, 58, PAPER)}
+${d.path(`M${sx} ${sy - 38} L${sx + 34} ${sy} L${sx} ${sy + 38} L${sx - 34} ${sy} Z`)}
+${d.lines(lx + 36, 520, 268, 5, 40)}
+${d.rect(rx, cardY, cardW, cardH)}
+${d.lines(rx + 36, 300, 268, 7, 40)}
+${d.text(rx + cardW / 2, cardY + cardH + 64, 'US buyer', { anchor: 'middle' })}
+${d.line(lx + cardW, midY, 524, midY, { hairline: true })}
+${d.line(936, midY, rx, midY, { hairline: true })}
+${steps.map(([t, x], i) => `${d.ring(x, midY, 36, PAPER)}${check(x, i === 1)}${d.text(x, midY + 86, t, { size: 32, fill: MUTED, anchor: 'middle' })}`).join('')}`
+    },
+
+    /** A dimmed shopfront, and a path that splits into Close and Step back. */
+    'step-back'(d) {
+        const fx = 560
+        const fy = 130
+        const fw = 480
+        const fh = 400
+        const doorW = 110
+        const doorH = 170
+        const doorX = fx + fw / 2 - doorW / 2
+        const doorY = fy + fh - doorH
+        const winW = 300
+        const winH = 150
+        const winX = fx + (fw - winW) / 2
+        const winY = fy + 50
+        const splitX = fx + fw / 2
+        const splitY = 680
+        return `
+${d.disc(800, 400, 340)}
+${d.rect(fx, fy, fw, fh)}
+${d.rect(winX, winY, winW, winH, { fill: MUTED })}
+${d.rect(doorX, doorY, doorW, doorH)}
+${d.line(splitX, fy + fh, splitX, splitY)}
+${d.path(`M${splitX} ${splitY} L${splitX - 200} ${splitY + 110}`)}
+${d.path(`M${splitX} ${splitY} L${splitX + 200} ${splitY + 110}`, { accent: true })}
+${d.text(splitX - 200, splitY + 164, 'Close', { anchor: 'middle' })}
+${d.text(splitX + 200, splitY + 164, 'Step back', { anchor: 'middle' })}`
+    },
+
+    /** Routine work slides into a chat window; one Judgment card stays. */
+    'ai-clients'(d) {
+        const personX = 230
+        const personY = 450
+        const cardW = 200
+        const cardH = 140
+        const jx = 360
+        const jy = 380
+        const trail = [
+            [640, 360],
+            [820, 320],
+            [1000, 280],
+            [1160, 250],
+        ]
+        const cx = 1200
+        const cy = 180
+        const cw = 320
+        const ch = 500
+        return `
+${d.disc(1080, 450, 320)}
+${d.ring(personX, personY, 70, PAPER)}
+${d.rect(jx, jy, cardW, cardH, { accent: true })}
+${d.lines(jx + 24, jy + 44, 152, 3, 28)}
+${d.text(jx + cardW / 2, jy + cardH + 56, 'Judgment', { anchor: 'middle' })}
+${trail.map(([x, y]) => `${d.rect(x, y, cardW, cardH)}${d.lines(x + 24, y + 44, 152, 3, 28)}`).join('')}
+${d.rect(cx, cy, cw, ch)}
+${d.rect(cx, cy, cw, 64, { fill: BAND })}
+${d.line(cx, cy + 64, cx + cw, cy + 64)}
+${d.lines(cx + 28, cy + 130, 264, 6, 48)}`
+    },
+
+    /** A cap table with one name, and an unlabeled card carrying the same weight. */
+    'no-title'(d) {
+        const w = 420
+        const h = 520
+        const y = 180
+        const left = 280
+        const right = 900
+        const nameY = 340
+        const weightY = 540
+        return `
+${d.disc(800, 450, 340)}
+${d.rect(left, y, w, h)}
+${d.rect(left + 40, nameY, 260, 48, { fill: BAND })}
+${d.lines(left + 40, nameY + 100, 340, 4, 42)}
+${d.line(left + 40, weightY, left + w - 40, weightY, { width: 6 })}
+${d.line(left + w, 450, right, 450, { hairline: true })}
+${d.rect(right, y, w, h, { accent: true })}
+${d.line(right + 40, weightY, right + w - 40, weightY, { width: 6 })}`
+    },
+
+    /** A client line that steps up once; most stay, two drift, one returns. */
+    'price-step'(d) {
+        const y1 = 560
+        const y2 = 340
+        const xStart = 180
+        const xStep = 700
+        const xEnd = 1440
+        const lower = [220, 340, 460, 580]
+        const upper = [840, 1000, 1160, 1420]
+        const drift = [
+            [860, 460],
+            [1020, 680],
+        ]
+        const ret = [1280, 480]
+        return `
+${d.disc(800, 450, 340)}
+${d.line(xStart, y1, xStep, y1)}
+${d.line(xStep, y1, xStep, y2, { accent: true, width: 6 })}
+${d.line(xStep, y2, xEnd, y2)}
+${lower.map((x) => d.dot(x, y1, 14)).join('')}
+${upper.map((x) => d.dot(x, y2, 14)).join('')}
+${d.path(`M760 ${y2} L${drift[0][0]} ${drift[0][1]} L${drift[1][0]} ${drift[1][1]}`)}
+${drift.map(([x, y]) => d.dot(x, y, 14)).join('')}
+${d.path(`M${ret[0] - 80} 640 L${ret[0]} ${ret[1]} L1420 ${y2}`)}
+${d.dot(ret[0], ret[1], 14)}`
+    },
+
+    /** A signed deal, then Vendor setup, PO and Invoice, then a payment mark. */
+    'getting-paid'(d) {
+        const cardX = 120
+        const cardY = 200
+        const cardW = 340
+        const cardH = 500
+        const midY = 450
+        const r = 40
+        const steps = [
+            ['Vendor setup', 620],
+            ['PO', 880],
+            ['Invoice', 1120],
+        ]
+        const payX = 1400
+        const payR = 70
+        const sigX = cardX + 48
+        const sigY = cardY + 400
+        const xs = steps.map(([, x]) => x)
+        const connectors = [
+            [cardX + cardW, xs[0] - r],
+            [xs[0] + r, xs[1] - r],
+            [xs[1] + r, xs[2] - r],
+            [xs[2] + r, payX - payR],
+        ]
+        return `
+${d.disc(900, 450, 300)}
+${d.rect(cardX, cardY, cardW, cardH)}
+${d.lines(cardX + 36, cardY + 80, 268, 6, 40)}
+${d.path(`M${sigX} ${sigY} C${sigX + 40} ${sigY - 40}, ${sigX + 70} ${sigY + 36}, ${sigX + 120} ${sigY - 8} S${sigX + 180} ${sigY + 24}, ${sigX + 220} ${sigY}`)}
+${connectors.map(([x1, x2]) => d.line(x1, midY, x2, midY)).join('')}
+${steps
+    .map(([t, x], i) => `${d.ring(x, midY, r, PAPER)}${i === 1 ? d.dot(x, midY, 14, true) : ''}${d.text(x, midY + 90, t, { size: 32, fill: MUTED, anchor: 'middle' })}`)
+    .join('')}
+${d.ring(payX, midY, payR, PAPER)}
+${d.path(`M${payX - 22} ${midY} L${payX - 6} ${midY + 20} L${payX + 26} ${midY - 22}`)}`
+    },
+
+    /** Company and Family timelines meet at a house in Austin. */
+    'family-year'(d) {
+        const yC = 400
+        const yF = 580
+        const x0 = 180
+        const x1 = 1100
+        const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => x0 + t * (x1 - x0))
+        const hx = 1220
+        const hy = 280
+        const hw = 200
+        const hh = 300
+        const roof = 70
+        const family = [
+            [x0, yF + 16],
+            [x0 + 170, yF - 48],
+            [x0 + 360, yF + 56],
+            [x0 + 560, yF - 28],
+            [x0 + 760, yF + 44],
+            [x1, yF],
+            [hx, hy + hh],
+        ]
+        const familyPath = family.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x} ${y}`).join(' ')
+        return `
+${d.disc(1200, 450, 300)}
+${d.text(x0, yC - 50, 'Company')}
+${d.line(x0, yC, hx, yC)}
+${ticks.map((x) => d.line(x, yC - 16, x, yC + 16)).join('')}
+${d.text(x0, yF - 70, 'Family')}
+${d.path(familyPath)}
+${d.rect(hx, hy, hw, hh, { fill: PAPER, accent: true })}
+${d.path(`M${hx} ${hy} L${hx + hw / 2} ${hy - roof} L${hx + hw} ${hy} Z`, { fill: PAPER, accent: true })}
+${d.rect(hx + hw / 2 - 28, hy + hh - 80, 56, 80, { fill: PAPER, accent: true })}
+${d.text(hx + hw / 2, hy + hh + 70, 'Austin', { anchor: 'middle' })}`
+    },
+
+    /** A sun arc over Austin and a moon arc over Home, briefly sharing Family call. */
+    'day-night'(d) {
+        const sun = { x0: 200, y0: 640, cx: 500, cy: 270, x1: 720, y1: 400 }
+        const moon = { x0: 880, y0: 400, cx: 1160, cy: 270, x1: 1440, y1: 640 }
+        const sunCtrl = [2 * sun.cx - 0.5 * sun.x0 - 0.5 * sun.x1, 2 * sun.cy - 0.5 * sun.y0 - 0.5 * sun.y1]
+        const moonCtrl = [2 * moon.cx - 0.5 * moon.x0 - 0.5 * moon.x1, 2 * moon.cy - 0.5 * moon.y0 - 0.5 * moon.y1]
+        const bandX = sun.x1
+        const bandW = moon.x0 - sun.x1
+        const bandY = 386
+        return `
+${d.disc(800, 450, 340)}
+${d.path(`M${sun.x0} ${sun.y0} Q${sunCtrl[0]} ${sunCtrl[1]} ${sun.x1} ${sun.y1}`)}
+${d.dot(sun.cx, sun.cy, 28)}
+${d.text(sun.cx, sun.cy - 64, 'Austin', { anchor: 'middle' })}
+${d.path(`M${moon.x0} ${moon.y0} Q${moonCtrl[0]} ${moonCtrl[1]} ${moon.x1} ${moon.y1}`)}
+${d.ring(moon.cx, moon.cy, 28, PAPER)}
+${d.text(moon.cx, moon.cy - 64, 'Home', { anchor: 'middle' })}
+${d.bar(bandX, bandY, bandW, 28)}
+${d.text(bandX + bandW / 2, bandY + 80, 'Family call', { size: 32, fill: MUTED, anchor: 'middle' })}`
+    },
 }
+
 
 /* ------------------------------------------------------------- rendering */
 

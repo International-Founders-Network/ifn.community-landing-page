@@ -14,7 +14,7 @@ syndication:
   newsletter: false
 tags: [founder-life, family, partners, peer-notes]
 ogImage: /blog/the-founder-spouse-who-carries-the-company-with-no-title-og.png
-imageAlt: "Diagram: a field of scattered dots with one small connected cluster around a point marked Austin."
+imageAlt: "Diagram: a company cap table card with one name, and a second outline beside it carrying the same weight with no label."
 ---
 
 A founder at the IFN meetup table is explaining a hiring decision and mentions, almost in passing, that their partner is back home with the kids while they build here. The conversation moves on. Later, as people are packing up, someone asks a simple question: how is your partner doing? The founder starts to answer and then stops. They realize nobody has asked them that in months. They are not sure they have asked it themselves.
