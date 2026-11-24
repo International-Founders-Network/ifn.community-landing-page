@@ -14,7 +14,7 @@ syndication:
   newsletter: false
 tags: [founder-life, loneliness, austin, peer-notes]
 ogImage: /blog/founder-loneliness-the-room-is-full-and-you-are-still-alone-og.png
-imageAlt: "Diagram: a field of scattered dots with one small connected cluster near a point marked Austin, one dot set apart from the rest."
+imageAlt: "Diagram: a field of scattered dots beside a ring of dots, with one dot set just outside the ring."
 ---
 
 A founder at the IFN meetup table is halfway through describing their week when they stop and laugh a little at themselves. They have a partner and kids at home. They have a coworking desk in Austin and people around them from morning until evening. They still feel alone with the company, and they are not sure that makes sense. Several people at the table nod before anyone says a word. Then someone puts it plainly: the hard part is that nobody around you can see what you are carrying.
