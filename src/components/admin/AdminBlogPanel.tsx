@@ -216,7 +216,7 @@ export function AdminBlogPanel({
                                             className="text-xs text-muted"
                                             title={post.imagesReady ? undefined : `Missing: ${post.imagesMissing.join(', ')}`}
                                         >
-                                            {post.imagesReady ? 'Images ready' : 'Images missing. Going live fails the build'}
+                                            {post.imagesReady ? 'Images ready' : 'Images missing. Mark live and schedule are blocked until the set is complete'}
                                         </div>
                                     </td>
                                     <td className="whitespace-nowrap py-3 pr-4 text-muted">

@@ -45,10 +45,11 @@
  * IMAGE GATE (openspec/changes/blog-brand-images). Every post owns an image set
  * under public/blog/ (hero, hero-800, thumb WebP and the OG PNG; names in
  * scripts/lib/blogImages.mjs) plus `imageAlt` in frontmatter. A post that is
- * public in this build with any of those missing FAILS the build, naming the
- * slug, the missing file and the command that generates it. A non-public post
- * only warns. Readiness is written to the queue as imagesReady/imagesMissing so
- * Admin shows it before anyone flips a post live.
+ * live or scheduled (even if publishAt is still in the future) with any of
+ * those missing FAILS the build, naming the slug, the missing file and the
+ * command that generates it. Draft and in-review posts only warn. Readiness is
+ * written to the queue as imagesReady/imagesMissing so Admin can refuse Mark
+ * live and Schedule until the set is complete.
  *
  * Runs before tsc/vite in `npm run build`. Safe to run alone: `node scripts/compile-blog.mjs`.
  */
@@ -60,7 +61,7 @@ import matter from 'gray-matter';
 import { neon } from '@neondatabase/serverless';
 import { runnerImport } from 'vite';
 import { buildOutboundGate, markdownToHtml } from './lib/outboundGate.mjs';
-import { checkImageSets, imageSetPaths } from './lib/blogImages.mjs';
+import { checkImageSets, imageSetPaths, requiresImageSet } from './lib/blogImages.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -292,6 +293,7 @@ async function compile() {
             html,
             heldLinks: held,
             isPublic: isPublic(status, publishAt, nowMs),
+            requiresImageSet: requiresImageSet(status),
         });
     }
 

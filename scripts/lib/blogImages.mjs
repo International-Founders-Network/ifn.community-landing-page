@@ -8,8 +8,9 @@
  *   <slug>-thumb.webp      640x360  /blog index thumbnail (monochrome, no labels)
  *   <slug>-og.png         1200x630  og:image, twitter:image, BlogPosting image
  *
- * A post that is public in the build must have all four, or the build fails.
- * A post that is not public only warns, so drafts can land before their art.
+ * A post that is live or scheduled must have all four, or the build fails,
+ * even if its publishAt is still in the future. Drafts and in-review posts
+ * only warn, so copy-only PRs can land before their art.
  */
 
 import { existsSync } from 'node:fs';
@@ -45,11 +46,35 @@ export function missingImageFiles(slug, publicDir, exists = existsSync) {
 }
 
 /**
- * The gate. posts: [{ slug, isPublic, imageAlt }]. A missing or empty
- * imageAlt counts as missing too: the hero and thumbnail render their alt from
- * it. Returns { errors, warnings, readiness }
- * where readiness maps slug -> { ready, missing }. compile-blog throws when
- * errors is non-empty.
+ * Whether a committed Markdown file must have its image set in CI.
+ * Live and scheduled posts (or any post with publishAt set) are enforced.
+ * in_review and draft posts are skipped so copy-only draft PRs can go green.
+ * parseStatus-compatible: with no status, draft: true => draft, else live.
+ */
+export function committedImageSetRequired(data) {
+    const raw = data && data.status;
+    const status =
+        typeof raw === 'string' && raw.trim()
+            ? raw.trim().toLowerCase()
+            : data && data.draft
+              ? 'draft'
+              : 'live';
+    if (status === 'in_review' || status === 'draft') return false;
+    return status === 'live' || status === 'scheduled' || Boolean(data && data.publishAt);
+}
+
+/** Live or scheduled (after the editorial overlay) must have a complete set. */
+export function requiresImageSet(status) {
+    return status === 'live' || status === 'scheduled';
+}
+
+/**
+ * The gate. posts: [{ slug, isPublic, imageAlt, requiresImageSet? }]. A missing
+ * or empty imageAlt counts as missing too: the hero and thumbnail render their
+ * alt from it. requiresImageSet, when set, decides error vs warning; otherwise
+ * isPublic is the fallback (live posts, and scheduled posts that are already
+ * due). Returns { errors, warnings, readiness } where readiness maps slug ->
+ * { ready, missing }. compile-blog throws when errors is non-empty.
  */
 export function checkImageSets(posts, publicDir, exists = existsSync) {
     const errors = [];
@@ -66,13 +91,14 @@ export function checkImageSets(posts, publicDir, exists = existsSync) {
         }
         if (!post.imageAlt) fixes.push(`Add imageAlt to the post's frontmatter in content/blog/.`);
         const fix = fixes.join(' ');
-        if (post.isPublic) {
+        const mustHave = typeof post.requiresImageSet === 'boolean' ? post.requiresImageSet : Boolean(post.isPublic);
+        if (mustHave) {
             errors.push(
-                `Blog post "${post.slug}" is public in this build but its image set is incomplete. Missing: ${missing.join(', ')}. ${fix}`,
+                `Blog post "${post.slug}" is live or scheduled but its image set is incomplete. Missing: ${missing.join(', ')}. ${fix}`,
             );
         } else {
             warnings.push(
-                `Blog post "${post.slug}" (not public) has no complete image set yet. Missing: ${missing.join(', ')}. ${fix} It must exist before the post goes live.`,
+                `Blog post "${post.slug}" (not live or scheduled) has no complete image set yet. Missing: ${missing.join(', ')}. ${fix} It must exist before the post goes live.`,
             );
         }
     }

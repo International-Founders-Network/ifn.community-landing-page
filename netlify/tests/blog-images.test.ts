@@ -4,8 +4,10 @@ import { join, resolve } from 'node:path';
 import matter from 'gray-matter';
 import {
     checkImageSets,
+    committedImageSetRequired,
     imageSetPaths,
     missingImageFiles,
+    requiresImageSet,
 } from '../../scripts/lib/blogImages.mjs';
 
 const ROOT = resolve(__dirname, '../..');
@@ -72,23 +74,84 @@ describe('blog image gate (openspec/changes/blog-brand-images)', () => {
         expect(readiness.get('a')?.ready).toBe(false);
         expect(readiness.get('a')?.missing).toHaveLength(4);
     });
+
+    it('fails a scheduled post missing images even when it is not yet public', () => {
+        const { errors, warnings } = checkImageSets(
+            [{ slug: 'a', isPublic: false, requiresImageSet: true, imageAlt: ALT }],
+            '/pub',
+            fsWith(),
+        );
+        expect(warnings).toEqual([]);
+        expect(errors).toHaveLength(1);
+        expect(errors[0]).toContain('"a"');
+        expect(errors[0]).toContain('public/blog/a-hero.webp');
+        expect(errors[0]).toContain('node scripts/build-blog-og-images.mjs a');
+    });
+
+    it('only warns for an in_review post when requiresImageSet is false', () => {
+        const { errors, warnings } = checkImageSets(
+            [{ slug: 'a', isPublic: false, requiresImageSet: false, imageAlt: ALT }],
+            '/pub',
+            fsWith(),
+        );
+        expect(errors).toEqual([]);
+        expect(warnings).toHaveLength(1);
+    });
+});
+
+describe('committedImageSetRequired', () => {
+    it('enforces live posts and scheduled posts, including when only publishAt is set', () => {
+        expect(requiresImageSet('live')).toBe(true);
+        expect(requiresImageSet('scheduled')).toBe(true);
+        expect(requiresImageSet('in_review')).toBe(false);
+        expect(committedImageSetRequired({ status: 'live' })).toBe(true);
+        expect(committedImageSetRequired({ status: 'scheduled', publishAt: '2026-12-01T09:00:00-06:00' })).toBe(true);
+        expect(committedImageSetRequired({ status: 'approved', publishAt: '2026-12-01T09:00:00-06:00' })).toBe(true);
+        expect(committedImageSetRequired({ draft: false })).toBe(true);
+    });
+
+    it('skips in_review and draft:true slugs, even if publishAt is present', () => {
+        expect(committedImageSetRequired({ status: 'in_review', draft: true })).toBe(false);
+        expect(committedImageSetRequired({ status: 'in_review', draft: true, publishAt: '2026-12-01T09:00:00-06:00' })).toBe(
+            false,
+        );
+        expect(committedImageSetRequired({ status: 'draft' })).toBe(false);
+        expect(committedImageSetRequired({ draft: true })).toBe(false);
+        expect(committedImageSetRequired({ status: 'approved' })).toBe(false);
+    });
 });
 
 describe('committed blog image sets', () => {
-    const slugs = readdirSync(join(ROOT, 'content/blog'))
-        .filter((f) => f.endsWith('.md'))
-        .map((f) => f.replace(/\.md$/, ''));
+    const files = readdirSync(join(ROOT, 'content/blog')).filter((f) => f.endsWith('.md'));
+    const posts = files.map((file) => {
+        const slug = file.replace(/\.md$/, '');
+        const { data } = matter(readFileSync(join(ROOT, 'content/blog', file), 'utf8'));
+        return { slug, data, required: committedImageSetRequired(data) };
+    });
+    const required = posts.filter((post) => post.required);
+    const skipped = posts.filter((post) => !post.required);
     const manifest = JSON.parse(readFileSync(join(ROOT, 'scripts/blog-og-manifest.json'), 'utf8')) as {
         slug: string;
     }[];
 
-    it.each(slugs)('%s has a manifest entry, a complete image set and imageAlt', (slug) => {
-        expect(manifest.some((entry) => entry.slug === slug)).toBe(true);
-        expect(missingImageFiles(slug, PUBLIC_DIR)).toEqual([]);
-        const { data } = matter(readFileSync(join(ROOT, 'content/blog', `${slug}.md`), 'utf8'));
-        expect(typeof data.imageAlt).toBe('string');
-        expect(data.imageAlt.trim()).not.toBe('');
-        expect(data.imageAlt).not.toMatch(/[–—]/);
-        expect(data.ogImage).toBe(imageSetPaths(slug).og);
+    it('splits the repo into live-or-scheduled posts and skipped drafts', () => {
+        expect(required.length + skipped.length).toBe(posts.length);
+        expect(required.length).toBeGreaterThan(0);
+        expect(skipped.length).toBeGreaterThan(0);
+    });
+
+    it.each(required)('$slug (live or scheduled) has a manifest entry, a complete image set and imageAlt', (post) => {
+        expect(manifest.some((entry) => entry.slug === post.slug)).toBe(true);
+        expect(missingImageFiles(post.slug, PUBLIC_DIR)).toEqual([]);
+        expect(typeof post.data.imageAlt).toBe('string');
+        expect(String(post.data.imageAlt).trim()).not.toBe('');
+        expect(String(post.data.imageAlt)).not.toMatch(/[–—]/);
+        expect(post.data.ogImage).toBe(imageSetPaths(post.slug).og);
+    });
+
+    it.each(skipped)('$slug (in_review or draft) is not required to have an image set yet', (post) => {
+        expect(post.required).toBe(false);
+        const status = typeof post.data.status === 'string' ? post.data.status : '';
+        expect(status === 'in_review' || status === 'draft' || post.data.draft === true).toBe(true);
     });
 });
