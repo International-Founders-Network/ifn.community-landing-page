@@ -35,7 +35,7 @@ There is the explaining, too. Parents and in-laws ask when the company will make
 
 Underneath it is the waiting. The founder gets feedback every day: a call went well, a customer left, an investor went quiet. The partner gets the summary, usually late, and has to decide how worried to be with less information than anyone.
 
-The Balderton Founder Wellbeing Report 2024, a survey of 128 VC-backed founders, found 57% of married or partnered founders and CEOs reported a negative impact on their relationship. When it comes up in the room, people mostly recognize it.
+The Balderton Founder Wellbeing Report 2024, a survey of 128 VC-backed founders and CEOs almost all at European-based companies, found that 57% of those who were married or in a relationship reported a negative impact on their relationship with their spouse or partner. When it comes up in the room, people mostly recognize it.
 
 ## Two versions of the same strain
 

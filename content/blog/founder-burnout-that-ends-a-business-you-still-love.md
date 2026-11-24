@@ -31,7 +31,7 @@ When an owner says they want to close, the room's first instinct is to ask about
 
 That is harder to say than "sales dropped." People understand the story of a failing business. When a healthy business has an owner who cannot keep running it, the owner tends to see it as a personal failure. So they wait, and they keep opening on time. By the time they say it at a meetup, they have usually been carrying it for a long while.
 
-The owner at the table is not unusual. The 2023 Startup Snapshot survey found 36% of founders reported burnout. A 2025 study of 308 entrepreneurs by researchers at Lehigh University, the Nasdaq Entrepreneurial Center and TU Dortmund found 74% said business demands left little room for self-care. Those numbers cover founders in general. The room adds another layer on top.
+The owner at the table is not unusual. The 2023 Startup Snapshot survey found 36% of founders reported burnout. A 2025 study of 308 entrepreneurs globally, described by the authors as a preliminary sample, by researchers at Lehigh University, the Nasdaq Entrepreneurial Center and TU Dortmund found 74% indicated that the demands of business left them little room for self-care. Those numbers cover founders in general. The room adds another layer on top.
 
 ## How it builds after landing
 
@@ -71,7 +71,7 @@ The second is looking at their own health before the business numbers. Owners de
 
 The room is a good place to be honest and compare notes. Peer talk ends here:
 
-- Your health and how you are actually doing: a doctor or a licensed mental-health professional. In the US, the [988 Suicide and Crisis Lifeline](https://988lifeline.org) is there any time if things feel like a crisis; you can call or text 988.
+- Your health and how you are actually doing: a doctor or a licensed mental-health professional. In the US, the [988 Suicide and Crisis Lifeline](https://988lifeline.org) is there any time if things feel like a crisis; you can call or text 988. 988 serves the United States and its territories, not other countries. See also [SAMHSA's 988 page](https://www.samhsa.gov/find-help/988).
 - Closing, pausing, or selling the business: counsel and a CPA, before you announce anything
 - Contracts, leases, loans, and obligations to staff: counsel who works with small businesses, and a CPA for the tax side
 
@@ -82,6 +82,7 @@ Come to the next IFN meetup with one concrete question about stepping back: a pa
 ## Sources
 
 - 988 Suicide and Crisis Lifeline, [988lifeline.org](https://988lifeline.org)
+- SAMHSA, [988 Suicide and Crisis Lifeline](https://www.samhsa.gov/find-help/988)
 - 2023 Startup Snapshot survey
-- 2025 study of 308 entrepreneurs by researchers at Lehigh University, the Nasdaq Entrepreneurial Center and TU Dortmund
+- 2025 study of 308 entrepreneurs globally (preliminary sample) by researchers at Lehigh University, the Nasdaq Entrepreneurial Center and TU Dortmund
 - Station Austin, [stationaustin.org](https://stationaustin.org)

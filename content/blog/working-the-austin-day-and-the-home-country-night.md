@@ -57,7 +57,7 @@ Nobody in the room has a system, and the ones who tried to build one usually dro
 
 **One longer visit a year, planned early.** Short trips home squeezed between fundraising and launches tend to leave everyone feeling shortchanged. Founders who block one longer visit well ahead say family has something to look forward to, and the business can plan around it. If travel touches your status, take that question to immigration counsel before you book.
 
-One practical thing catches people out. Daylight saving time does not change on the same dates everywhere, and some countries do not change their clocks at all. For a stretch each spring and fall, the family slot can drift by an hour, and someone ends up waiting on a call that comes at the wrong time. Founders who have been caught by it now check the dates for both places and send a reminder home ahead of time.
+One practical thing catches people out. Daylight saving time does not change on the same dates everywhere, and some countries do not change their clocks at all. The US dates are set out by [NIST](https://www.nist.gov/pml/time-and-frequency-division/popular-links/daylight-saving-time-dst), and the EU sets its own in [Directive 2000/84/EC](https://eur-lex.europa.eu/eli/dir/2000/84/oj/eng). For a stretch each spring and fall, the family slot can drift by an hour, and someone ends up waiting on a call that comes at the wrong time. Founders who have been caught by it now check the dates for both places and send a reminder home ahead of time.
 
 ## The guilt runs both ways
 
@@ -86,4 +86,6 @@ Come to the next IFN meetup with one concrete family-time question: a call slot 
 
 ## Sources
 
+- National Institute of Standards and Technology, [Daylight saving time](https://www.nist.gov/pml/time-and-frequency-division/popular-links/daylight-saving-time-dst)
+- European Union, [Directive 2000/84/EC on summer time](https://eur-lex.europa.eu/eli/dir/2000/84/oj/eng)
 - Station Austin, [stationaustin.org](https://stationaustin.org)

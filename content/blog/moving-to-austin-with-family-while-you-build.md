@@ -35,7 +35,7 @@ The company also has a team. The family has two adults, one of whom is usually b
 
 Parents in the room say the same thing about schools: start earlier than you think you need to, and go to the source.
 
-Public school enrollment goes through the school district. For families living within its boundaries, Austin ISD has an [enrollment page](https://www.austinisd.org/enroll) that is the place to begin. The greater Austin area includes more than one district, so peers suggest confirming which district your address belongs to before you assume anything. At the state level, the [Texas Education Agency](https://tea.texas.gov) is the agency that oversees public education in Texas.
+Public school enrollment goes through the school district. For families living within its boundaries, Austin ISD has an [enrollment page](https://www.austinisd.org/enroll) that is the place to begin. The greater Austin area includes more than one district, so peers suggest confirming which district your address belongs to before you assume anything. TEA has a [school district locator](https://tea.texas.gov/families-and-students/school-district-locator/school-district-locator) and a page on [enrolling and finding schools](https://tea.texas.gov/families-students/enrolling-and-finding-schools). At the state level, the [Texas Education Agency](https://tea.texas.gov) is the agency that oversees public education in Texas.
 
 Parents' groups online are full of confident answers about enrollment. Peers say many of those answers were right for someone else's situation, or for a different year. The room does not tell anyone which documents they need, who is eligible, or when the cutoffs fall. Those questions go to the district directly, ideally in writing, so you have the answer on record.
 
@@ -101,5 +101,7 @@ Come to the next IFN meetup with one concrete family-year question: a school or 
 
 - Austin Independent School District, [Enrollment](https://www.austinisd.org/enroll)
 - Texas Education Agency, [tea.texas.gov](https://tea.texas.gov)
+- Texas Education Agency, [School district locator](https://tea.texas.gov/families-and-students/school-district-locator/school-district-locator)
+- Texas Education Agency, [Enrolling and finding schools](https://tea.texas.gov/families-students/enrolling-and-finding-schools)
 - Texas Workforce Commission, [Child care](https://www.twc.texas.gov/programs/child-care)
 - Station Austin, [stationaustin.org](https://stationaustin.org)

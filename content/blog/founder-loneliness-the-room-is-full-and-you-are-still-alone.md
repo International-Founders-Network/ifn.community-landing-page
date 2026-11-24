@@ -35,7 +35,7 @@ Most founders also edit what they share at home. They do it out of care: the peo
 
 Good news has the same problem, which surprises people. A first US contract that changes everything for the company gets a warm "that's great" at dinner, and then the conversation moves on. Nobody is wrong to react that way. They just cannot see why it mattered so much. The wins and the losses both have nowhere to land.
 
-The room is not surprised by this. The 2023 Startup Snapshot survey of founders found 81% do not openly share their stress. When that figure comes up at the table, people mostly recognize themselves in it.
+The room is not surprised by this. The 2023 Startup Snapshot survey, a global survey of founders, found 81% are not really open about their stress, fears, and challenges. When that figure comes up at the table, people mostly recognize themselves in it.
 
 ## The landing version
 
@@ -71,7 +71,7 @@ It is not therapy. Nobody at the table is trained to treat anyone, and the room 
 Peers listen. They do not treat. Bring in a licensed professional when any of these come up:
 
 - A low mood that does not lift, or changes in your sleep or health: a doctor, therapist or counselor
-- Any thoughts of harming yourself: in the US, the [988 Suicide and Crisis Lifeline](https://988lifeline.org) is there any time, and you can call or text 988
+- Any thoughts of harming yourself: in the US, the [988 Suicide and Crisis Lifeline](https://988lifeline.org) is there any time, and you can call or text 988. 988 serves the United States and its territories, not other countries. See also [SAMHSA's 988 page](https://www.samhsa.gov/find-help/988).
 - Practical pressures underneath the stress, such as your immigration status or company finances: immigration counsel or a CPA, because peer talk ends where your specific facts begin
 
 ## Soft next steps
@@ -83,4 +83,5 @@ Come to the next IFN meetup with one concrete thing you have been carrying alone
 - 2023 Startup Snapshot survey of founders
 - Leapers 2025 report on UK freelancers
 - 988 Suicide and Crisis Lifeline, [988lifeline.org](https://988lifeline.org)
+- SAMHSA, [988 Suicide and Crisis Lifeline](https://www.samhsa.gov/find-help/988)
 - Station Austin, [stationaustin.org](https://stationaustin.org)

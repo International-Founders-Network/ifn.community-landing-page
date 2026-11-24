@@ -55,7 +55,7 @@ One more thing the room raises often: if you are invoicing from a foreign entity
 
 ## When a payer is late
 
-Late payment is common, and founders from many markets recognize it. The Leapers 2025 report on UK freelancers found 67.5% had experienced late payments. US enterprise buyers are not a special case. What feels different to newcomers is how to follow up without damaging a relationship they worked hard to win.
+The Leapers 2025 report on UK freelancers found 67.5% had dealt with late payments. That figure is from the UK, not from US buyers. Late payment is a common worry for small businesses here too. What feels different to newcomers is how to follow up without damaging a relationship they worked hard to win.
 
 Peers describe a rough order:
 

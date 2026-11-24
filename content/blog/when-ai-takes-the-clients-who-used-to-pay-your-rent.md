@@ -33,7 +33,7 @@ When owners look back at the work they lost, they often see the same pattern. Th
 
 Nobody at the table claims to know which jobs will disappear, and people who say they know are usually guessing. What owners can see is their own invoices. Many of them can point to the line items that have thinned out.
 
-The Leapers 2025 report on UK freelancers found 33.2% said AI had already hurt their career. That survey covers the UK, and Austin is a different market. Still, the figure fits the mood in the room. People are not talking about some future risk. They are describing something that already happened to them.
+The Leapers 2025 report on UK freelancers found 33.2% feel their career has already been negatively impacted by AI. That survey covers the UK, and Austin is a different market. Still, the figure fits the mood in the room. People are not talking about some future risk. They are describing something that already happened to them.
 
 ## What clients still pay for
 
