@@ -43,7 +43,7 @@ That changes the cash plan more than people expect. If you are used to paying su
 
 Owners in the room spend less time on what to charge than on how to show it. A few differences come up again and again:
 
-- **Tax added on top.** In many countries the price on the shelf or the menu includes tax. In the US the shown price usually does not, and sales tax is added at the register or on the invoice. Texas has a state sales tax, and a business selling taxable goods or services generally needs a sales tax permit from the [Texas Comptroller](https://comptroller.texas.gov/taxes/permit/). Whether that applies to you, and how, is a CPA question.
+- **Tax added on top.** In many countries the price on the shelf or the menu includes tax. In the US the shown price usually does not, and sales tax is added at the register or on the invoice. Texas has a state sales tax, and a business selling taxable goods or services generally needs a sales tax permit from the [Texas Comptroller](https://comptroller.texas.gov/taxes/permit/). The permit itself has no fee, though the Comptroller [may require a security bond](https://comptroller.texas.gov/taxes/sales/faq/permit.php). Whether that applies to you, and how, is a CPA question.
 - **Tipping.** In service businesses such as food and personal services, tipping norms can be very different from home. Owners talk about how it shapes menu prices, what customers assume, and what staff expect.
 - **Estimates and quotes.** In trades and services, local customers may expect a written estimate first, or a fixed price, in ways that differ from home. Owners say it is worth asking a few local customers what they expect before writing the first quote.
 - **Units and formats.** Imperial units, US date formats, and dollar pricing everywhere. Small details, but they tell a customer whether you set up for them.
@@ -87,6 +87,7 @@ Come to the next IFN meetup with one concrete question about moving your busines
 ## Sources
 
 - Texas Comptroller of Public Accounts, [Sales tax permit](https://comptroller.texas.gov/taxes/permit/)
+- Texas Comptroller of Public Accounts, [Sales and use tax FAQ: obtaining a permit](https://comptroller.texas.gov/taxes/sales/faq/permit.php)
 - City of Austin, [Development Services](https://www.austintexas.gov/development-services)
 - City of Austin, [Small Business Division](https://www.austintexas.gov/economic-development/divisions/small-business-division)
 - Texas Department of Licensing and Regulation, [tdlr.texas.gov](https://www.tdlr.texas.gov/)
