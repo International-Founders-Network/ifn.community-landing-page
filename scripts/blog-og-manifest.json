@@ -20,5 +20,8 @@
   { "slug": "raising-prices-after-years-of-underpricing", "scene": "price-step", "titleFragment": "Raising your prices" },
   { "slug": "getting-paid-by-your-first-us-customers", "scene": "getting-paid", "titleFragment": "Getting paid in the US" },
   { "slug": "moving-to-austin-with-family-while-you-build", "scene": "family-year", "titleFragment": "First year in Austin with family" },
-  { "slug": "working-the-austin-day-and-the-home-country-night", "scene": "day-night", "titleFragment": "Austin day, home night" }
+  { "slug": "working-the-austin-day-and-the-home-country-night", "scene": "day-night", "titleFragment": "Austin day, home night" },
+  { "slug": "hiring-your-first-person-in-the-us", "scene": "first-hire", "titleFragment": "Your first US hire" },
+  { "slug": "running-a-team-split-between-home-and-austin", "scene": "split-team", "titleFragment": "Split team, one rhythm" },
+  { "slug": "bringing-an-established-small-business-to-austin", "scene": "storefront", "titleFragment": "Bringing your business" }
 ]
