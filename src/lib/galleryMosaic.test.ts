@@ -10,7 +10,7 @@ import {
   type SubjectScale,
 } from './galleryMosaic';
 
-/** Vol. 08, Vol. 09, Vol. 10 and Vol. 11 overflow in manifest order (62 frames). */
+/** Vol. 08, Vol. 09, Vol. 10 and Vol. 11 overflow in manifest order (60 frames). */
 const OVERFLOW_SLOTS = [
   'gallery-aug-group',
   'gallery-aug-audience',
@@ -57,8 +57,6 @@ const OVERFLOW_SLOTS = [
   'gallery-oct-one-on-one',
   'gallery-oct-stage',
   'gallery-nov-group',
-  'gallery-nov-arrivals',
-  'gallery-nov-gravity',
   'gallery-nov-agenda',
   'gallery-nov-intro',
   'gallery-nov-remarks',
@@ -78,21 +76,21 @@ const OVERFLOW_SLOTS = [
 
 describe('galleryMosaic', () => {
   it('maps every Vol. 08/09/10/11 overflow slot to an audited subject scale', () => {
-    expect(OVERFLOW_SLOTS).toHaveLength(62);
+    expect(OVERFLOW_SLOTS).toHaveLength(60);
     for (const slot of OVERFLOW_SLOTS) {
       expect(OVERFLOW_SUBJECT_SCALE[slot]).toMatch(/^lg|md|sm$/);
     }
   });
 
-  it('packs the 62-frame overflow without full-measure solo defaults', () => {
+  it('packs the 60-frame overflow without full-measure solo defaults', () => {
     const scales = OVERFLOW_SLOTS.map(
       (slot) => OVERFLOW_SUBJECT_SCALE[slot] as SubjectScale,
     );
     const rows = packSubjectScales(scales);
     const cellCount = rows.reduce((n, row) => n + row.cells.length, 0);
-    expect(cellCount).toBe(62);
+    expect(cellCount).toBe(60);
     expect(rows.length).toBeGreaterThan(0);
-    expect(rows.length).toBeLessThan(62); // denser than one-per-row
+    expect(rows.length).toBeLessThan(60); // denser than one-per-row
 
     for (const row of rows) {
       expect(row.cells.length).toBeGreaterThanOrEqual(1);

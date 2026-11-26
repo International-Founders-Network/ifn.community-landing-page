@@ -233,8 +233,6 @@ export const OVERFLOW_SUBJECT_SCALE: Record<string, SubjectScale> = {
   'gallery-oct-one-on-one': 'sm',
   'gallery-oct-stage': 'lg',
   'gallery-nov-group': 'lg',
-  'gallery-nov-arrivals': 'lg',
-  'gallery-nov-gravity': 'md',
   'gallery-nov-agenda': 'lg',
   'gallery-nov-intro': 'lg',
   'gallery-nov-remarks': 'md',

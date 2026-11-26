@@ -25,7 +25,7 @@
 // enlarged view for every cell. That is the exact failure the split shape exists
 // to prevent.
 
-export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night" | "gallery-sep-rows" | "gallery-sep-listening" | "gallery-sep-midroom" | "gallery-sep-gesture" | "gallery-sep-chat" | "gallery-sep-pose" | "gallery-sep-talk" | "gallery-sep-group" | "gallery-oct-group" | "gallery-oct-arrivals" | "gallery-oct-tables" | "gallery-oct-host" | "gallery-oct-laptop" | "gallery-oct-agenda" | "gallery-oct-round" | "gallery-oct-wifi" | "gallery-oct-pair" | "gallery-oct-headphones" | "gallery-oct-intro" | "gallery-oct-room" | "gallery-oct-texas" | "gallery-oct-speaker" | "gallery-oct-smile" | "gallery-oct-conversation" | "gallery-oct-one-on-one" | "gallery-oct-stage" | "gallery-nov-group" | "gallery-nov-arrivals" | "gallery-nov-gravity" | "gallery-nov-agenda" | "gallery-nov-intro" | "gallery-nov-remarks" | "gallery-nov-listening" | "gallery-nov-texas" | "gallery-nov-pab" | "gallery-nov-round" | "gallery-nov-conversation" | "gallery-nov-laptop" | "gallery-nov-chat" | "gallery-nov-talk" | "gallery-nov-one-on-one" | "gallery-nov-pair" | "gallery-nov-standing" | "gallery-nov-tables"
+export type PhotoSlot = "hero-band" | "how-it-works-middle" | "founder-story" | "gallery-apr-room" | "gallery-jul-hall" | "gallery-apr-gesture" | "gallery-apr-listening" | "gallery-feb-sign" | "gallery-jul-screen" | "gallery-feb-hall" | "gallery-jul-standing" | "gallery-apr-seated" | "gallery-feb-slide" | "gallery-apr-profile" | "gallery-apr-circle" | "gallery-feb-room" | "gallery-apr-group" | "gallery-aug-group" | "gallery-aug-audience" | "gallery-aug-room" | "gallery-aug-rows" | "gallery-aug-listening" | "gallery-aug-standing" | "gallery-aug-address" | "gallery-aug-networking" | "gallery-aug-lounge" | "gallery-aug-posters" | "gallery-aug-wall" | "gallery-aug-gesture" | "gallery-aug-midroom" | "gallery-aug-pose" | "gallery-aug-skyline" | "gallery-aug-counter" | "gallery-aug-dusk" | "gallery-aug-night" | "gallery-sep-rows" | "gallery-sep-listening" | "gallery-sep-midroom" | "gallery-sep-gesture" | "gallery-sep-chat" | "gallery-sep-pose" | "gallery-sep-talk" | "gallery-sep-group" | "gallery-oct-group" | "gallery-oct-arrivals" | "gallery-oct-tables" | "gallery-oct-host" | "gallery-oct-laptop" | "gallery-oct-agenda" | "gallery-oct-round" | "gallery-oct-wifi" | "gallery-oct-pair" | "gallery-oct-headphones" | "gallery-oct-intro" | "gallery-oct-room" | "gallery-oct-texas" | "gallery-oct-speaker" | "gallery-oct-smile" | "gallery-oct-conversation" | "gallery-oct-one-on-one" | "gallery-oct-stage" | "gallery-nov-group" | "gallery-nov-agenda" | "gallery-nov-intro" | "gallery-nov-remarks" | "gallery-nov-listening" | "gallery-nov-texas" | "gallery-nov-pab" | "gallery-nov-round" | "gallery-nov-conversation" | "gallery-nov-laptop" | "gallery-nov-chat" | "gallery-nov-talk" | "gallery-nov-one-on-one" | "gallery-nov-pair" | "gallery-nov-standing" | "gallery-nov-tables"
 
 export type PhotoDerivative = {
   width: number
@@ -1177,42 +1177,6 @@ export const photos: Record<PhotoSlot, Photo> = {
     ],
     bytesTotal: 240898,
   },
-  "gallery-nov-arrivals": {
-    slot: "gallery-nov-arrivals",
-    alt: "Attendees standing and seated at high tables in a meetup room, with an agenda for today slide on the wall screen.",
-    sizes: "(max-width: 639px) 100vw, 67vw",
-    loading: "lazy",
-    fetchPriority: "auto",
-    src: "/photos/gallery-nov-arrivals-640w.jpg",
-    width: 640,
-    height: 360,
-    aspectRatio: "16:9",
-    avif: "/photos/gallery-nov-arrivals-640w.avif 640w, /photos/gallery-nov-arrivals-1280w.avif 1280w",
-    webp: "/photos/gallery-nov-arrivals-640w.webp 640w, /photos/gallery-nov-arrivals-1280w.webp 1280w",
-    derivatives: [
-      { width: 640, height: 360, avif: "/photos/gallery-nov-arrivals-640w.avif", webp: "/photos/gallery-nov-arrivals-640w.webp" },
-      { width: 1280, height: 720, avif: "/photos/gallery-nov-arrivals-1280w.avif", webp: "/photos/gallery-nov-arrivals-1280w.webp" },
-    ],
-    bytesTotal: 140329,
-  },
-  "gallery-nov-gravity": {
-    slot: "gallery-nov-gravity",
-    alt: "An attendee stands holding a phone near a high table where another attendee sits with a laptop, under a Center of Gravity screen.",
-    sizes: "(max-width: 639px) 100vw, 67vw",
-    loading: "lazy",
-    fetchPriority: "auto",
-    src: "/photos/gallery-nov-gravity-640w.jpg",
-    width: 640,
-    height: 360,
-    aspectRatio: "16:9",
-    avif: "/photos/gallery-nov-gravity-640w.avif 640w, /photos/gallery-nov-gravity-1280w.avif 1280w",
-    webp: "/photos/gallery-nov-gravity-640w.webp 640w, /photos/gallery-nov-gravity-1280w.webp 1280w",
-    derivatives: [
-      { width: 640, height: 360, avif: "/photos/gallery-nov-gravity-640w.avif", webp: "/photos/gallery-nov-gravity-640w.webp" },
-      { width: 1280, height: 720, avif: "/photos/gallery-nov-gravity-1280w.avif", webp: "/photos/gallery-nov-gravity-1280w.webp" },
-    ],
-    bytesTotal: 128506,
-  },
   "gallery-nov-agenda": {
     slot: "gallery-nov-agenda",
     alt: "An attendee in a cap speaks into a microphone in front of the agenda for today slide, with others seated and standing nearby.",
@@ -1617,23 +1581,21 @@ export const photos: Record<PhotoSlot, Photo> = {
  *   57. gallery-oct-one-on-one    meetups/20261022_191914.jpg  (tile 640w)
  *   58. gallery-oct-stage         meetups/20261022_200928.jpg  (tile 640w)
  *   59. gallery-nov-group         meetups/20261123_202744.jpg  (tile 640w)
- *   60. gallery-nov-arrivals      meetups/20261123_190128.jpg  (tile 640w)
- *   61. gallery-nov-gravity       meetups/20261123_190132.jpg  (tile 640w)
- *   62. gallery-nov-agenda        meetups/20261123_190504.jpg  (tile 640w)
- *   63. gallery-nov-intro         meetups/20261123_190908.jpg  (tile 640w)
- *   64. gallery-nov-remarks       meetups/20261123_190924.jpg  (tile 640w)
- *   65. gallery-nov-listening     meetups/20261123_190932.jpg  (tile 640w)
- *   66. gallery-nov-texas         meetups/20261123_191248.jpg  (tile 640w)
- *   67. gallery-nov-pab           meetups/20261123_192049.jpg  (tile 640w)
- *   68. gallery-nov-round         meetups/20261123_192542.jpg  (tile 640w)
- *   69. gallery-nov-conversation  meetups/20261123_195834.jpg  (tile 640w)
- *   70. gallery-nov-laptop        meetups/20261123_195837.jpg  (tile 640w)
- *   71. gallery-nov-chat          meetups/20261123_195843.jpg  (tile 640w)
- *   72. gallery-nov-talk          meetups/20261123_195846.jpg  (tile 640w)
- *   73. gallery-nov-one-on-one    meetups/20261123_195851.jpg  (tile 640w)
- *   74. gallery-nov-pair          meetups/20261123_195911.jpg  (tile 640w)
- *   75. gallery-nov-standing      meetups/20261123_195918.jpg  (tile 640w)
- *   76. gallery-nov-tables        meetups/20261123_195932.jpg  (tile 640w)
+ *   60. gallery-nov-agenda        meetups/20261123_190504.jpg  (tile 640w)
+ *   61. gallery-nov-intro         meetups/20261123_190908.jpg  (tile 640w)
+ *   62. gallery-nov-remarks       meetups/20261123_190924.jpg  (tile 640w)
+ *   63. gallery-nov-listening     meetups/20261123_190932.jpg  (tile 640w)
+ *   64. gallery-nov-texas         meetups/20261123_191248.jpg  (tile 640w)
+ *   65. gallery-nov-pab           meetups/20261123_192049.jpg  (tile 640w)
+ *   66. gallery-nov-round         meetups/20261123_192542.jpg  (tile 640w)
+ *   67. gallery-nov-conversation  meetups/20261123_195834.jpg  (tile 640w)
+ *   68. gallery-nov-laptop        meetups/20261123_195837.jpg  (tile 640w)
+ *   69. gallery-nov-chat          meetups/20261123_195843.jpg  (tile 640w)
+ *   70. gallery-nov-talk          meetups/20261123_195846.jpg  (tile 640w)
+ *   71. gallery-nov-one-on-one    meetups/20261123_195851.jpg  (tile 640w)
+ *   72. gallery-nov-pair          meetups/20261123_195911.jpg  (tile 640w)
+ *   73. gallery-nov-standing      meetups/20261123_195918.jpg  (tile 640w)
+ *   74. gallery-nov-tables        meetups/20261123_195932.jpg  (tile 640w)
  */
 
 export type GalleryImage = {
@@ -2358,30 +2320,6 @@ export const galleryFrames: GalleryFrame[] = [
       webp: "/photos/gallery-nov-group-1280w.webp" },
   },
   {
-    slot: "gallery-nov-arrivals",
-    alt: "Attendees standing and seated at high tables in a meetup room, with an agenda for today slide on the wall screen.",
-    subjectScale: "lg",
-    tile: { width: 640, height: 360,
-      src: "/photos/gallery-nov-arrivals-640w.jpg",
-      avif: "/photos/gallery-nov-arrivals-640w.avif",
-      webp: "/photos/gallery-nov-arrivals-640w.webp" },
-    view: { width: 1280, height: 720,
-      avif: "/photos/gallery-nov-arrivals-1280w.avif",
-      webp: "/photos/gallery-nov-arrivals-1280w.webp" },
-  },
-  {
-    slot: "gallery-nov-gravity",
-    alt: "An attendee stands holding a phone near a high table where another attendee sits with a laptop, under a Center of Gravity screen.",
-    subjectScale: "md",
-    tile: { width: 640, height: 360,
-      src: "/photos/gallery-nov-gravity-640w.jpg",
-      avif: "/photos/gallery-nov-gravity-640w.avif",
-      webp: "/photos/gallery-nov-gravity-640w.webp" },
-    view: { width: 1280, height: 720,
-      avif: "/photos/gallery-nov-gravity-1280w.avif",
-      webp: "/photos/gallery-nov-gravity-1280w.webp" },
-  },
-  {
     slot: "gallery-nov-agenda",
     alt: "An attendee in a cap speaks into a microphone in front of the agenda for today slide, with others seated and standing nearby.",
     subjectScale: "lg",
@@ -2564,4 +2502,4 @@ export const galleryFrames: GalleryFrame[] = [
 ]
 
 /** Every avif tile summed, measured at build. A full scroll costs this much. */
-export const galleryTileBytesAvif = 1084050
+export const galleryTileBytesAvif = 1060581

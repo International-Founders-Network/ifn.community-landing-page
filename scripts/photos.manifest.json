@@ -1,5 +1,10 @@
 {
   "$about": [
+    "UPDATED 2026-11-25: gallery-nov-arrivals (meetups/20261123_190128.jpg, album frame 001)",
+    "and gallery-nov-gravity (meetups/20261123_190132.jpg, album frame 002) dropped at founder",
+    "request after both were deleted from the curated album. Sixteen gallery-nov-* slots remain",
+    "(vol11-003 through vol11-019, excluding the video 010). The authored hang is untouched.",
+    "",
     "ADDED 2026-11-25: IFN Vol. 11 (Nov 23 2026, Station Austin / Capital Factory,",
     "Captain America Room, 8th floor) founder-approved album of 18 frames. The whole",
     "curated album is used; there is no shortlist. The one video in the album",
@@ -177,6 +182,10 @@
       }
     ],
     "$galleryNote": [
+      "UPDATED 2026-11-25: gallery-nov-arrivals and gallery-nov-gravity dropped at founder request.",
+      "Full-scroll tile sum measured 1035.7 KB across 74 avif tiles (16 Vol. 11 frames).",
+      "The 1,200,000 byte cap is unchanged. Arrival cost at 1440x900 is unchanged at 34.5 KB.",
+      "",
       "RAISED 2026-11-25 for the Vol. 11 album (18 frames): 900,000 to 1,200,000 bytes.",
       "Full-scroll tile sum measured 1058.6 KB across 76 avif tiles after adding the eighteen",
       "gallery-nov-* 640w tiles (Vol. 11 adds about 200.1 KB). Same reasoning as the Vol. 10 raise:",
@@ -2740,80 +2749,6 @@
         "tileWidth": 640,
         "viewWidth": 1280,
         "subjectScale": "lg"
-      }
-    },
-    {
-      "name": "gallery-nov-arrivals",
-      "status": "ship",
-      "source": "meetups/20261123_190128.jpg",
-      "grade": "november-2026",
-      "aspectRatio": "16:9",
-      "crop": {
-        "left": 0,
-        "top": 1,
-        "width": 4000,
-        "height": 2250
-      },
-      "cropNote": [
-        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
-        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
-      ],
-      "outputs": [
-        {
-          "width": 640,
-          "height": 360
-        },
-        {
-          "width": 1280,
-          "height": 720
-        }
-      ],
-      "fallbackWidth": 640,
-      "sizes": "(max-width: 639px) 100vw, 67vw",
-      "alt": "Attendees standing and seated at high tables in a meetup room, with an agenda for today slide on the wall screen.",
-      "loading": "lazy",
-      "fetchPriority": "auto",
-      "gallery": {
-        "tileWidth": 640,
-        "viewWidth": 1280,
-        "subjectScale": "lg"
-      }
-    },
-    {
-      "name": "gallery-nov-gravity",
-      "status": "ship",
-      "source": "meetups/20261123_190132.jpg",
-      "grade": "november-2026",
-      "aspectRatio": "16:9",
-      "crop": {
-        "left": 0,
-        "top": 1,
-        "width": 4000,
-        "height": 2250
-      },
-      "cropNote": [
-        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
-        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
-      ],
-      "outputs": [
-        {
-          "width": 640,
-          "height": 360
-        },
-        {
-          "width": 1280,
-          "height": 720
-        }
-      ],
-      "fallbackWidth": 640,
-      "sizes": "(max-width: 639px) 100vw, 67vw",
-      "alt": "An attendee stands holding a phone near a high table where another attendee sits with a laptop, under a Center of Gravity screen.",
-      "loading": "lazy",
-      "fetchPriority": "auto",
-      "gallery": {
-        "tileWidth": 640,
-        "viewWidth": 1280,
-        "subjectScale": "md"
       }
     },
     {
