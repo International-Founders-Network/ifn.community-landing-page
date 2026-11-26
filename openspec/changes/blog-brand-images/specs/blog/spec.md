@@ -11,12 +11,16 @@ Each post SHALL have `public/blog/<slug>-hero.webp`, `<slug>-hero-800.webp`, `<s
 - **WHEN** `/blog` renders
 - **THEN** each card shows that post's thumbnail, lazy loaded, with width and height set
 
-### Requirement: Public posts cannot build without their image set
-`scripts/compile-blog.mjs` SHALL fail the build when a post public in the build lacks any file of its image set or `imageAlt`, and the message SHALL name the slug, each missing file and the command that generates it. For a non-public post it SHALL only warn.
+### Requirement: Live or scheduled posts cannot build without their image set
+`scripts/compile-blog.mjs` SHALL fail the build when a `live` or `scheduled` post lacks any file of its image set or `imageAlt`, even if `publishAt` is still in the future, and the message SHALL name the slug, each missing file and the command that generates it. For a draft or in-review post it SHALL only warn. The committed-file CI check SHALL enforce the same image set only for live or scheduled posts (or posts with `publishAt` set) and SHALL skip `in_review` and `draft: true` slugs.
 
 #### Scenario: Live post missing its OG image
 - **WHEN** a post is `live` and `public/blog/<slug>-og.png` does not exist
 - **THEN** the build fails with a message containing the slug, `public/blog/<slug>-og.png` and `node scripts/build-blog-og-images.mjs <slug>`
+
+#### Scenario: Scheduled post missing its hero, publishAt still in the future
+- **WHEN** a post is `scheduled` with a future `publishAt` and its hero is missing
+- **THEN** the build fails with a message containing the slug, the missing file and `node scripts/build-blog-og-images.mjs <slug>`
 
 #### Scenario: In-review post missing its hero
 - **WHEN** a post is `in_review` and its hero is missing

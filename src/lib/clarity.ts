@@ -18,11 +18,19 @@
  *   - Consent granted now, via the banner: injected immediately.
  *   - Consent denied or not yet given: nothing.
  *   - /admin and everything under it: never injected. See syncClarityRoute.
+ *   - /membership while ?checkout= is present (the Stripe return page): never
+ *     injected.
+ *   - Any URL in this document's lifetime carrying a sensitive query parameter
+ *     (src/lib/sensitiveUrl.ts, chiefly Stripe's session_id): never injected,
+ *     and stopped if already running, until the next full page load. See
+ *     `sensitiveLatched` below.
  *
  * This module holds no consent storage of its own. analytics.ts reads the
  * stored choice and calls in; keeping the dependency one way avoids a circular
  * import between the two.
  */
+
+import { hasSensitiveParams } from './sensitiveUrl';
 
 type ClarityFn = ((...args: unknown[]) => void) & { q?: unknown[] };
 
@@ -54,6 +62,19 @@ export function isClarityExcludedPath(pathname: string): boolean {
     return /^\/admin(\/|$)/i.test(pathname);
 }
 
+/**
+ * Routes excluded for this URL. Adds, to the admin paths, the Stripe return
+ * page: /membership with any `checkout` parameter, success or cancelled. Its
+ * success state renders the members Slack invite link.
+ */
+export function isClarityExcludedLocation(pathname: string, search: string): boolean {
+    if (isClarityExcludedPath(pathname)) return true;
+    return (
+        /^\/membership\/?$/i.test(pathname) &&
+        new URLSearchParams(search.replace(/^\?/, '')).has('checkout')
+    );
+}
+
 /** The visitor has said yes, in this page's lifetime or a stored earlier one. */
 let granted = false;
 /** The script tag is in the document (or about to be, for a deferred load). */
@@ -61,6 +82,44 @@ let scheduled = false;
 let injected = false;
 /** clarity('stop') has been sent; recording stays off until the next full page load. */
 let stopped = false;
+
+/**
+ * THE SENSITIVE URL LATCH. Once any URL seen in this document carries a
+ * sensitive query parameter, Clarity does not load, and if running is
+ * stopped, for the rest of the document's lifetime. Consent granted later on
+ * the same page does not lift it, and neither does src/pages/Membership.tsx
+ * stripping session_id from the address bar: the stripped URL looks clean,
+ * but Clarity reports the page URL and referrer it saw, and the DOM was
+ * rendered from the original. Only a full page load resets it.
+ *
+ * Checked at module evaluation, which is before the app renders (src/main.tsx
+ * imports this through analytics.ts), so the INITIAL URL is captured before
+ * anything can rewrite it.
+ */
+let sensitiveLatched = false;
+
+function latchIfSensitive(search: string, hash: string): boolean {
+    if (hasSensitiveParams(search, hash)) sensitiveLatched = true;
+    return sensitiveLatched;
+}
+
+if (typeof window !== 'undefined' && window.location) {
+    latchIfSensitive(window.location.search ?? '', window.location.hash ?? '');
+}
+
+/** The current document URL is latched or excluded. */
+function blockedHere(): boolean {
+    const { pathname, search = '', hash = '' } = window.location;
+    if (latchIfSensitive(search, hash)) return true;
+    return isClarityExcludedLocation(pathname, search);
+}
+
+function stopIfRunning() {
+    if (injected && !stopped) {
+        stopped = true;
+        clarity('stop');
+    }
+}
 
 function canRun(): boolean {
     if (!PROJECT_ID) return false;
@@ -101,11 +160,12 @@ function injectTag() {
     }
     /**
      * Checked again at injection time, not only at scheduling time: a deferred
-     * load can be overtaken by a client side navigation into /admin. If it
-     * was, the load is dropped and syncClarityRoute picks it up again on the
-     * way back out.
+     * load can be overtaken by a client side navigation into /admin or onto a
+     * sensitive URL. If it was, the load is dropped; syncClarityRoute picks it
+     * up again on the way back out of an excluded route, but never after the
+     * sensitive latch has closed.
      */
-    if (isClarityExcludedPath(window.location.pathname)) {
+    if (blockedHere()) {
         scheduled = false;
         return;
     }
@@ -120,7 +180,7 @@ function injectTag() {
 
 function load(defer: boolean) {
     if (scheduled || stopped || !granted) return;
-    if (isClarityExcludedPath(window.location.pathname)) return;
+    if (blockedHere()) return;
     scheduled = true;
 
     if (!defer) {
@@ -173,7 +233,8 @@ export function revokeClarity() {
 }
 
 /**
- * Called on every route change from src/components/Head.tsx.
+ * Called on every route change, through trackPageview() in analytics.ts, from
+ * src/components/Head.tsx. `path` is the unredacted pathname plus search.
  *
  * Entering /admin after Clarity has loaded sends `stop`, which halts every
  * recording module. It is not restarted on the way back out: the only people
@@ -184,13 +245,17 @@ export function revokeClarity() {
  * Leaving /admin when Clarity never loaded (the visitor landed on /admin with
  * consent stored) loads it now, so the public pages are measured as normal.
  */
-export function syncClarityRoute(pathname: string) {
+export function syncClarityRoute(path: string) {
     if (!canRun()) return;
-    if (isClarityExcludedPath(pathname)) {
-        if (injected && !stopped) {
-            stopped = true;
-            clarity('stop');
-        }
+    const url = new URL(path, 'https://ifn.invalid');
+    /**
+     * A sensitive URL (latching) is handled exactly like entry to /admin:
+     * stop if running, never load. Both the router's path and the address bar
+     * are checked, because either can carry the parameter.
+     */
+    const latched = latchIfSensitive(url.search, url.hash) || blockedHere();
+    if (latched || isClarityExcludedLocation(url.pathname, url.search)) {
+        stopIfRunning();
         return;
     }
     load(false);

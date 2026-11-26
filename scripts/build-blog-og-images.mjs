@@ -598,6 +598,92 @@ ${d.text(moon.cx, moon.cy - 64, 'Home', { anchor: 'middle' })}
 ${d.bar(bandX, bandY, bandW, 28)}
 ${d.text(bandX + bandW / 2, bandY + 80, 'Family call', { size: 32, fill: MUTED, anchor: 'middle' })}`
     },
+
+    /** Empty Austin seat linked to the home team, four things to sort first. */
+    'first-hire'(d) {
+        const labels = ['Classify', 'Pay', 'Overlap', 'Manager']
+        const cx = 1280
+        const cy = 450
+        const chair = `${d.rect(cx - 44, cy - 128, 88, 96, { fill: 'none' })}${d.rect(cx - 80, cy - 36, 160, 28, { fill: 'none' })}${d.line(cx - 68, cy - 8, cx - 68, cy + 90)}${d.line(cx + 68, cy - 8, cx + 68, cy + 90)}${d.line(cx - 32, cy - 8, cx - 32, cy + 90)}${d.line(cx + 32, cy - 8, cx + 32, cy + 90)}`
+        const dots = [
+            [250, 410],
+            [316, 400],
+            [292, 472],
+        ]
+        return `
+${d.disc(1280, 450, 280)}
+${dots.map(([x, y]) => d.dot(x, y, 16)).join('')}
+${d.text(286, 560, 'Home team', { anchor: 'middle' })}
+${d.line(336, cy, 1112, cy)}
+${labels.map((t, i) => d.text(470 + i * 155, 400, t, { size: 32, fill: MUTED, anchor: 'middle' })).join('')}
+${d.ring(cx, cy, 168, 'none', { accent: true })}
+${chair}
+${d.text(cx, 690, 'Austin', { anchor: 'middle' })}`
+    },
+
+    /** Two clocks, a shared overlap window, and a handoff note. */
+    'split-team'(d) {
+        const clocks = [
+            ['Home', 400],
+            ['Austin', 1200],
+        ]
+        const cy = 430
+        const r = 170
+        const ticks = (cx) =>
+            Array.from({ length: 12 }, (_, i) => {
+                const a = (i * Math.PI) / 6 - Math.PI / 2
+                const inner = r - 22
+                const outer = r - 6
+                return d.line(cx + inner * Math.cos(a), cy + inner * Math.sin(a), cx + outer * Math.cos(a), cy + outer * Math.sin(a), {
+                    hairline: true,
+                })
+            }).join('')
+        const noteX = 745
+        const noteY = 408
+        const noteW = 110
+        const noteH = 140
+        const fold = 28
+        return `
+${d.disc(800, 450, 320)}
+${clocks.map(([t, x]) => `${d.ring(x, cy, r, PAPER)}${ticks(x)}${d.text(x, cy + r + 70, t, { anchor: 'middle' })}`).join('')}
+${d.bar(590, 414, 420, 32)}
+${d.text(800, 368, 'Overlap', { size: 32, fill: MUTED, anchor: 'middle' })}
+${d.path(`M${noteX} ${noteY} L${noteX + noteW - fold} ${noteY} L${noteX + noteW} ${noteY + fold} L${noteX + noteW} ${noteY + noteH} L${noteX} ${noteY + noteH} Z`, { fill: PAPER })}
+${d.line(noteX + noteW - fold, noteY, noteX + noteW - fold, noteY + fold)}
+${d.line(noteX + noteW - fold, noteY + fold, noteX + noteW, noteY + fold)}
+${d.text(noteX + noteW / 2, noteY + noteH + 50, 'Handoff', { anchor: 'middle' })}`
+    },
+
+    /** An established storefront, and four things to rework on the way. */
+    storefront(d) {
+        const items = ['Reviews', 'Suppliers', 'Pricing', 'Permits']
+        const fx = 240
+        const fy = 300
+        const fw = 440
+        const fh = 400
+        const awningDrop = 96
+        const ribs = [0.25, 0.5, 0.75].map((t) => {
+            const x1 = fx + fw * t
+            const x2 = fx - 36 + (fw + 72) * t
+            return d.line(x1, fy + 8, x2, fy + awningDrop, { hairline: true })
+        }).join('')
+        return `
+${d.disc(1240, 460, 300)}
+${d.rect(fx, fy, fw, fh)}
+${d.path(`M${fx} ${fy + 8} L${fx - 36} ${fy + awningDrop} L${fx + fw + 36} ${fy + awningDrop} L${fx + fw} ${fy + 8} Z`, { fill: PAPER })}
+${ribs}
+${d.rect(fx + 160, fy + awningDrop + 50, 120, fh - awningDrop - 50)}
+${d.text(fx + fw / 2, fy + fh + 70, 'Established at home', { anchor: 'middle' })}
+${d.line(fx + fw, fy + 200, 1020, fy + 200)}
+${d.line(1020, 260, 1020, 700, { hairline: true })}
+${items
+    .map((t, i) => {
+        const y = 300 + i * 120
+        const rule = t === 'Permits' ? d.accentRule(1060, y + 16, 140) : ''
+        return `${d.text(1060, y, t)}${rule}`
+    })
+    .join('')}`
+    },
 }
 
 

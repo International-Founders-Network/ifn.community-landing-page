@@ -35,9 +35,15 @@ export const handler = schedule('5 14 * * *', async () => {
     const sql = neon(dbUrl);
     await ensureTable(sql);
     const now = Date.now();
-    const due = mergeOverlay(loadQueue(), await loadOverlay(sql)).filter(
+    const candidates = mergeOverlay(loadQueue(), await loadOverlay(sql)).filter(
         (post) => post.status === 'scheduled' && isPubliclyVisible(post.status, post.publishAt, now)
     );
+    const due = candidates.filter((post) => post.imagesReady);
+    for (const post of candidates.filter((post) => !post.imagesReady)) {
+        console.warn(
+            `blog-publish-due: skipped ${post.slug}; image set incomplete (${post.imagesMissing.join(', ') || 'unknown'}). Mark live and schedule stay blocked until the set is complete.`
+        );
+    }
 
     for (const post of due) {
         await upsertOverlay(sql, post.slug, 'live', post.publishAt, 'blog-publish-due');

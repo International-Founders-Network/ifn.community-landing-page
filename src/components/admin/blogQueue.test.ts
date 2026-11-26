@@ -119,4 +119,31 @@ describe('prepareAction', () => {
         expect(prepareAction(post, 'schedule', '', () => true).kind).toBe('error');
         expect(prepareAction(post, 'schedule', '2026-10-01T09:00', () => false, DUE + 1000)).toEqual({ kind: 'cancelled' });
     });
+
+    it('refuses mark live and schedule when the image set is missing, without asking', () => {
+        const confirm = vi.fn();
+        const incomplete = {
+            title: 'T',
+            slug: 'a',
+            imagesReady: false as const,
+            imagesMissing: ['public/blog/a-og.png'],
+        };
+        const live = prepareAction(incomplete, 'mark_live', '', confirm);
+        expect(live).toEqual({
+            kind: 'error',
+            message: expect.stringContaining('Cannot mark live "T" because its image set is incomplete.'),
+        });
+        expect((live as { message: string }).message).toContain('public/blog/a-og.png');
+        expect((live as { message: string }).message).toContain('node scripts/build-blog-og-images.mjs a');
+        const scheduled = prepareAction(incomplete, 'schedule', '2026-10-01T09:00', confirm, DUE - 1000);
+        expect(scheduled.kind).toBe('error');
+        expect((scheduled as { message: string }).message).toContain('Cannot schedule "T"');
+        expect(confirm).not.toHaveBeenCalled();
+    });
+
+    it('still sends mark live when images are ready', () => {
+        expect(prepareAction({ title: 'T', imagesReady: true, slug: 'a' }, 'mark_live', '', () => true)).toEqual({
+            kind: 'send',
+        });
+    });
 });
