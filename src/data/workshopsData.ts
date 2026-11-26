@@ -1,3 +1,7 @@
+import type { Event } from '../components/EventCard';
+import workshopsData from './workshops.json';
+import { WORKSHOP_IMAGE_OVERRIDES } from './workshop-image-overrides';
+
 /**
  * Workshops page copy — Venkat-approved pack 2026-09-24-workshops-v2.
  * Pillar headings and workshop TYPES are locked. Dates/prices live on Luma.
@@ -58,7 +62,7 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
         types: [
             { label: 'First US hire vs contractor (when each breaks)' },
             { label: 'Offer letters, equity basics, and payroll setup for small teams' },
-            { label: 'Ops cadence for a 2–10 person company' },
+            { label: 'Ops cadence for a 2 to 10 person company' },
             { label: 'Vendors and tools that matter in year one (and which to skip)' },
         ],
     },
@@ -98,3 +102,48 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
         ],
     },
 ];
+
+/**
+ * IFN's Claude workshops, synced from lu.ma/claudeworkshops by
+ * scripts/update-events.js into src/data/workshops.json (only events hosted by
+ * IFN Community or titled for International Founders Network; the calendar is
+ * global). Never merged into events.json, which is the meetup feed.
+ *
+ * A workshop is upcoming until its `end_at` passes (`start_at` when Luma gives
+ * no end), judged at render time: at prerender for the static HTML, and again
+ * in the browser.
+ */
+export interface Workshop extends Event {
+    /** Luma URL slug, e.g. `awlxti59` for lu.ma/awlxti59. */
+    slug: string;
+    /** ISO 8601 instant. */
+    end_at?: string;
+    host?: string;
+}
+
+export const SYNCED_WORKSHOPS: readonly Workshop[] = workshopsData as Workshop[];
+
+function endOf(workshop: Workshop): number {
+    return Date.parse(workshop.end_at ?? workshop.start_at);
+}
+
+/** The cover with any poster override from workshop-image-overrides.ts applied. */
+export function withImageOverride(
+    workshop: Workshop,
+    overrides: Record<string, string> = WORKSHOP_IMAGE_OVERRIDES,
+): Workshop {
+    const poster = overrides[workshop.id] ?? overrides[workshop.slug];
+    return poster ? { ...workshop, cover_url: poster } : workshop;
+}
+
+/** Workshops whose end has not passed at `now`, soonest first, overrides applied. */
+export function upcomingWorkshops(
+    now: Date = new Date(),
+    workshops: readonly Workshop[] = SYNCED_WORKSHOPS,
+    overrides: Record<string, string> = WORKSHOP_IMAGE_OVERRIDES,
+): Workshop[] {
+    return workshops
+        .filter((workshop) => endOf(workshop) > now.getTime())
+        .sort((a, b) => Date.parse(a.start_at) - Date.parse(b.start_at))
+        .map((workshop) => withImageOverride(workshop, overrides));
+}

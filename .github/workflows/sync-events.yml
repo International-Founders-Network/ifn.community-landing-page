@@ -30,6 +30,11 @@ jobs:
       - name: Install Chrome for puppeteer
         run: npx puppeteer browsers install chrome
 
+      # update-events.js syncs both Luma calendars: IFN_ATX meetups into
+      # src/data/events.json and IFN's Claude workshops into
+      # src/data/workshops.json. A calendar that fails leaves its own file
+      # untouched and the script still exits 0, so the other file can be
+      # committed below. sync-all.js re-runs the meetup calendar only.
       - name: Run Scraper
         run: |
           node scripts/update-events.js
@@ -39,9 +44,9 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          if [[ -n $(git status --porcelain src/data/events.json) ]]; then
+          if [[ -n $(git status --porcelain src/data/events.json src/data/workshops.json) ]]; then
             echo "changes=true" >> $GITHUB_OUTPUT
-            echo "Changes detected in events.json"
+            echo "Changes detected in events.json or workshops.json"
           else
             echo "changes=false" >> $GITHUB_OUTPUT
             echo "No changes detected"
@@ -52,6 +57,6 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add src/data/events.json
+          git add src/data/events.json src/data/workshops.json
           git commit -m "chore: update events data [skip ci]"
           git push origin HEAD:main

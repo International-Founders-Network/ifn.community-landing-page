@@ -1,14 +1,34 @@
-
 import puppeteer from 'puppeteer';
-import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { scrapeLumaCalendar } from './lib/luma-calendar.js';
+import { runCalendarJobs, toMeetupRecords, toWorkshopRecords } from './lib/luma-records.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const TARGET_URL = 'https://lu.ma/IFN_ATX';
-const OUTPUT_FILE = path.join(__dirname, '../src/data/events.json');
+/**
+ * TWO LUMA CALENDARS, TWO FILES, ONE SCRAPER.
+ *
+ *  - meetups: lu.ma/IFN_ATX into src/data/events.json, the record shape it
+ *    has always had (scripts/sync-all.js then merges Meetup.com into it).
+ *  - workshops: lu.ma/claudeworkshops into src/data/workshops.json, filtered
+ *    to IFN's own events (see isIfnWorkshop in scripts/lib/luma-records.js).
+ *    Never merged into events.json, which feeds /events and the Event JSON-LD.
+ *
+ * Both go through scrapeLumaCalendar (scripts/lib/luma-calendar.js). Each
+ * calendar fails on its own: a failed scrape leaves its file untouched and the
+ * other calendar still writes. The script exits 0 either way, as it always
+ * has, so the workflow can commit whichever file did change; failures are
+ * logged, and annotated on the run in GitHub Actions.
+ *
+ * `--only=meetups` or `--only=workshops` runs one calendar. scripts/sync-all.js
+ * uses `--only=meetups`, so its re-run can never touch workshops.json.
+ */
+const MEETUPS_URL = 'https://lu.ma/IFN_ATX';
+const WORKSHOPS_URL = 'https://luma.com/claudeworkshops';
+const EVENTS_FILE = path.join(__dirname, '../src/data/events.json');
+const WORKSHOPS_FILE = path.join(__dirname, '../src/data/workshops.json');
 
 /**
  * VENUE CORRECTION, APPLIED ON THE WAY IN FROM LUMA.
@@ -57,85 +77,62 @@ function normaliseVenue(value) {
     return value;
 }
 
+function selectedJobs(jobs, argv) {
+    const only = argv.find((arg) => arg.startsWith('--only='))?.slice('--only='.length);
+    if (!only) return jobs;
+    const names = only.split(',').map((name) => name.trim());
+    const unknown = names.filter((name) => !jobs.some((job) => job.name === name));
+    if (unknown.length) throw new Error(`Unknown --only calendar: ${unknown.join(', ')}`);
+    return jobs.filter((job) => names.includes(job.name));
+}
 
-async function scrapeEvents() {
-    console.log(`Starting scraper for ${TARGET_URL}...`);
+async function syncLumaCalendars() {
     const browser = await puppeteer.launch({
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
-    const page = await browser.newPage();
 
-    // Set a reasonable viewport and user agent
-    await page.setViewport({ width: 1280, height: 800 });
-    await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36');
+    const jobs = [
+        {
+            name: 'meetups',
+            url: MEETUPS_URL,
+            outputFile: EVENTS_FILE,
+            // Zero meetups means the scrape broke, not that IFN stopped meeting.
+            allowEmpty: false,
+            scrape: () => scrapeLumaCalendar(browser, MEETUPS_URL),
+            toRecords: (items) =>
+                toMeetupRecords(items).map((event) => ({
+                    ...event,
+                    location_name: normaliseVenue(event.location_name),
+                })),
+        },
+        {
+            name: 'workshops',
+            url: WORKSHOPS_URL,
+            outputFile: WORKSHOPS_FILE,
+            // The calendar answered and listed no IFN workshop: that is true
+            // once December is over, and the page shows its empty state.
+            allowEmpty: true,
+            scrape: async () => {
+                const items = await scrapeLumaCalendar(browser, WORKSHOPS_URL);
+                // An empty global calendar means the scrape broke.
+                if (items.length === 0) throw new Error(`No entries at all on ${WORKSHOPS_URL}`);
+                return items;
+            },
+            toRecords: toWorkshopRecords,
+        },
+    ];
 
     try {
-        await page.goto(TARGET_URL, { waitUntil: 'networkidle2' });
-
-        // Extract data from __NEXT_DATA__ script tag
-        const rawEvents = await page.evaluate(() => {
-            const script = document.getElementById('__NEXT_DATA__');
-            if (!script) return null;
-            try {
-                const json = JSON.parse(script.innerText);
-                // Luma's structure usually has events in props.pageProps.calendar or similar
-                // We'll search for things that look like events
-                const props = json.props?.pageProps;
-
-                // Luma's structure: featured_items often contains the upcoming events in a list view
-                const initialData = props?.initialData?.data || {};
-                const calendarEvents = initialData.featured_items || props?.calendar_items || props?.initialData?.items || [];
-
-                return calendarEvents.map(item => {
-                    const event = item.event || item;
-                    // Skip if not an event object
-                    if (!event.name && !event.title) return null;
-
-                    return {
-                        id: event.api_id || event.id || '',
-                        title: event.name || event.title || '',
-                        start_at: event.start_at || '',
-                        location_name: event.geo_address_info?.full_address || event.geo_address_info?.city || event.location_name || '',
-                        url: (event.url || event.url_handle) ? `https://lu.ma/${event.url || event.url_handle}` : `https://lu.ma/${event.api_id}`,
-                        cover_url: event.cover_url || '',
-                        platform: 'luma',
-                        raw_date: event.start_at
-                    };
-                }).filter(e => e && e.title && e.start_at);
-            } catch (e) {
-                console.error("Failed to parse __NEXT_DATA__", e);
-                return null;
-            }
-        });
-
-        if (!rawEvents || rawEvents.length === 0) {
-            console.warn("Could not extract events from __NEXT_DATA__, falling back to DOM scraping...");
-            // ... (keep minimal fallback or just error out if we want consistency)
-            // For now, let's just log and fail so we know it needs a real fix
-            throw new Error("No data found in __NEXT_DATA__");
+        const results = await runCalendarJobs(selectedJobs(jobs, process.argv.slice(2)));
+        for (const result of results) {
+            console.log(result.ok ? `  ${result.name}: ok, ${result.count} records` : `  ${result.name}: FAILED, file unchanged`);
         }
-
-        // The venue correction runs HERE, not inside page.evaluate. That callback is
-        // serialised and executed in the browser, where normaliseVenue — a Node
-        // function in this module's scope — does not exist, so calling it there threw
-        // a ReferenceError as soon as __NEXT_DATA__ actually yielded events.
-        const data = rawEvents.map(event => ({
-            ...event,
-            location_name: normaliseVenue(event.location_name),
-        }));
-
-        console.log(`Found ${data.length} events.`);
-
-        // Write to file
-        fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
-        console.log(`Successfully wrote extracted data to ${OUTPUT_FILE}`);
-
-    } catch (e) {
-        console.error('Error scraping:', e);
     } finally {
         await browser.close();
     }
 }
 
-scrapeEvents();
+syncLumaCalendars().catch((error) => {
+    console.error('Luma sync could not start:', error);
+});

@@ -1,112 +1,79 @@
 import { Container } from '../components/Container';
 import { ButtonLink } from '../components/ButtonLink';
-import { Emphasis } from '../components/Emphasis';
-import { LUMA_CALENDAR_URL } from '../data/socialLinks';
-import { WORKSHOP_PILLARS } from '../data/workshopsData';
+import { EventCard } from '../components/EventCard';
+import { WORKSHOP_PILLARS, upcomingWorkshops } from '../data/workshopsData';
 
 /**
- * /workshops — Venkat-approved pack 2026-09-24-workshops-v2.
+ * /workshops. Copy and section order from
+ * ifn-copy/workshops/2026-11-25-workshops-concise.md (draft preview).
  *
- * Order: Hero → How it works → 7 pillars → Upcoming (Luma) → Host once →
- * Membership teaser once. Kill list applied (no meetup digression, no duplicate
- * propose, no fake dates/$ table). Luma calendar URL is the shared site SoT.
+ * Order: Hero (H1 plus one line) → Upcoming (Luma cards) → What we cover →
+ * Host a workshop → Membership teaser. How it works is gone. The Upcoming
+ * cards are IFN's Claude workshops synced from Luma into
+ * src/data/workshops.json, rendered with the meetup EventCard.
  */
 export function Workshops() {
+    // Each card drops off once its own Luma end time has passed.
+    const scheduled = upcomingWorkshops();
+
     return (
         <div className="pt-24 pb-20">
-            {/* Hero */}
+            {/* Hero: H1 plus one line. No eyebrow, no extra paragraphs, no buttons. */}
             <section className="relative mb-16 overflow-hidden bg-band py-20">
                 <Container className="relative z-10">
                     <div className="max-w-3xl">
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                            Skill and ops track
-                        </p>
-                        <h1 className="mt-4 text-5xl font-bold tracking-tight text-ink md:text-6xl">
-                            Workshops: the skill and ops <Emphasis>track</Emphasis>
+                        <h1 className="text-5xl font-bold tracking-tight text-ink md:text-6xl">
+                            Workshops
                         </h1>
                         <p className="mt-6 text-xl leading-relaxed text-muted">
-                            Meetups are the room. Membership is the private channel and member call.
-                            Workshops are where we dig into one founder problem for one session:
-                            visas, banking, housing, hiring, fundraising, US go-to-market, entity and tax.
+                            One problem per session, for international founders in Austin.
                         </p>
-                        <p className="mt-4 text-lg leading-relaxed text-muted">
-                            IFN hosts most sessions. Guest and member hosts are welcome when the topic
-                            is useful. Price is set per workshop on Luma. Members usually get a
-                            discount or free entry, depending on the session.
-                        </p>
-                        <div className="mt-8 flex flex-wrap gap-4">
-                            <ButtonLink
-                                href={LUMA_CALENDAR_URL}
-                                external
-                                variant="primary"
-                                size="lg"
-                                className="shadow-lg"
-                            >
-                                See upcoming on Luma
-                            </ButtonLink>
-                            <ButtonLink to="/membership" variant="outline" size="lg">
-                                Become a member
-                            </ButtonLink>
-                        </div>
                     </div>
                 </Container>
             </section>
 
-            {/* How it works */}
-            <Container className="mb-20">
-                <h2 className="text-2xl font-bold tracking-tight text-ink">How it works</h2>
-                <ol className="mt-8 max-w-2xl list-decimal space-y-4 pl-5 text-lg leading-relaxed text-muted">
-                    <li>
-                        <span className="text-ink">Pick a session on Luma</span>. Topic, date, host,
-                        and price live there.
-                    </li>
-                    <li>
-                        RSVP and pay on that session page. There is no public price menu on this site.
-                    </li>
-                    <li>
-                        Members get better pricing when the session offers it (discount or free). That
-                        offer is listed on the Luma page for that workshop.
-                    </li>
-                </ol>
-                <p className="mt-8 max-w-2xl text-base leading-relaxed text-muted">
-                    This is not a course catalog with invented dates. It is not licensed legal,
-                    tax, or immigration advice. Bring your situation. Leave with next steps and people
-                    who have done it.
-                </p>
+            {/* Upcoming. With no workshops left, only the heading remains. */}
+            <Container className="mb-16">
+                <div className="rounded-2xl border border-rule bg-band p-8 md:p-10">
+                    <h2
+                        id="upcoming-workshops"
+                        className="scroll-mt-28 text-2xl font-bold tracking-tight text-ink"
+                    >
+                        Upcoming workshops
+                    </h2>
+                    {scheduled.length > 0 && (
+                        <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                            {scheduled.map((workshop, index) => (
+                                <EventCard
+                                    key={workshop.id}
+                                    event={workshop}
+                                    index={index}
+                                    upcomingOnly
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
             </Container>
 
-            {/* Seven pillars */}
+            {/* What we cover: titles and type bullets only, then the disclaimer. */}
             <Container className="mb-20">
-                <div className="max-w-3xl">
-                    <h2 className="text-2xl font-bold tracking-tight text-ink">What we cover</h2>
-                    <p className="mt-4 text-lg leading-relaxed text-muted">
-                        Seven pillars. When we schedule a session, it lands under one of these.
-                    </p>
-                </div>
+                <h2 className="text-2xl font-bold tracking-tight text-ink">What we cover</h2>
 
                 <div className="mt-12 space-y-12">
-                    {WORKSHOP_PILLARS.map((pillar, index) => (
+                    {WORKSHOP_PILLARS.map((pillar) => (
                         <section
                             key={pillar.id}
                             aria-labelledby={`pillar-${pillar.id}`}
                             className="border-t border-rule pt-10"
                         >
-                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                                Pillar {String(index + 1).padStart(2, '0')}
-                            </p>
                             <h3
                                 id={`pillar-${pillar.id}`}
-                                className="mt-2 text-xl font-bold tracking-tight text-ink md:text-2xl"
+                                className="text-xl font-bold tracking-tight text-ink md:text-2xl"
                             >
                                 {pillar.title}
                             </h3>
-                            <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
-                                {pillar.summary}
-                            </p>
-                            <p className="mt-6 text-sm font-semibold uppercase tracking-[0.08em] text-muted">
-                                Workshop types
-                            </p>
-                            <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+                            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
                                 {pillar.types.map((type) => (
                                     <li
                                         key={type.label}
@@ -119,28 +86,11 @@ export function Workshops() {
                         </section>
                     ))}
                 </div>
-            </Container>
 
-            {/* Upcoming — Luma only */}
-            <Container className="mb-16">
-                <div className="rounded-2xl border border-rule bg-band p-8 md:p-10">
-                    <h2 className="text-2xl font-bold tracking-tight text-ink">
-                        Upcoming workshops
-                    </h2>
-                    <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
-                        Dates, prices, and seats live on Luma. We do not mirror a second calendar
-                        here.
-                    </p>
-                    <ButtonLink
-                        href={LUMA_CALENDAR_URL}
-                        external
-                        variant="primary"
-                        size="lg"
-                        className="mt-6 shadow-lg"
-                    >
-                        Browse workshops on Luma
-                    </ButtonLink>
-                </div>
+                <p className="mt-12 max-w-2xl text-base leading-relaxed text-muted">
+                    This is not licensed legal, tax, or immigration advice. Bring your
+                    situation. Leave with next steps and people who have done it.
+                </p>
             </Container>
 
             {/* Host once */}
@@ -148,12 +98,9 @@ export function Workshops() {
                 <div className="max-w-2xl">
                     <h2 className="text-2xl font-bold tracking-tight text-ink">Host a workshop</h2>
                     <p className="mt-4 text-lg leading-relaxed text-muted">
-                        IFN runs most sessions. If you have a topic that fits a pillar above and you
-                        can run a practical 60–90 minute session for founders, propose it.
-                    </p>
-                    <p className="mt-4 text-lg leading-relaxed text-muted">
-                        Tell us the pillar, the problem you solve in one sitting, and whether you want
-                        it free, paid, or members-preferred.
+                        IFN runs most sessions. To propose a practical 60 to 90 minute session,
+                        tell us the pillar, the problem you solve, and whether it is free, paid,
+                        or members-preferred.
                     </p>
                     <ButtonLink
                         to="/contact?intent=workshops"
@@ -174,9 +121,9 @@ export function Workshops() {
                             Members get better workshop access
                         </h2>
                         <p className="mt-3 leading-relaxed text-muted">
-                            Optional membership unlocks member pricing when a workshop offers it. You get
-                            the discount or free entry listed on that Luma page. You also get the
-                            private member channel and the monthly members-only call.
+                            When a session has a member price, it is listed on its Luma page.
+                            Members also get the private member channel and the monthly
+                            members-only call.
                         </p>
                     </div>
                     <ButtonLink

@@ -155,7 +155,7 @@ export const ROUTE_SEO: Record<string, RouteSeo> = {
     '/workshops': {
         title: 'Workshops for international founders | IFN',
         description:
-            'Practical workshops for international founders in Austin: visas, banking, hiring, fundraising. Price on Luma. Ask about hosting.',
+            'Practical workshops for international founders in Austin. One problem per session: visas, banking, hiring, fundraising, and more. Dates and RSVP on Luma.',
         indexable: true,
         priority: 0.7,
         changefreq: 'monthly',

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "evt-cgHLpg8sSDms4cH",
+    "slug": "awlxti59",
+    "title": "Claude SMB Workshop with International Founders Network - Austin",
+    "start_at": "2026-12-03T20:00:00.000Z",
+    "end_at": "2026-12-03T23:00:00.000Z",
+    "timezone": "America/Chicago",
+    "cover_url": "https://images.lumacdn.com/uploads/dv/29073328-6cfd-4455-8c68-cd57dcafd7f2.jpg",
+    "host": "IFN Community",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/awlxti59"
+      }
+    ]
+  },
+  {
+    "id": "evt-h19tj8hBUCMXlbz",
+    "slug": "lx5nu5r6",
+    "title": "Claude SMB Workshop with International Founders Network - Austin",
+    "start_at": "2026-12-17T20:00:00.000Z",
+    "end_at": "2026-12-17T23:00:00.000Z",
+    "timezone": "America/Chicago",
+    "cover_url": "https://images.lumacdn.com/uploads/dv/29073328-6cfd-4455-8c68-cd57dcafd7f2.jpg",
+    "host": "IFN Community",
+    "registrations": [
+      {
+        "platform": "luma",
+        "url": "https://lu.ma/lx5nu5r6"
+      }
+    ]
+  }
+]

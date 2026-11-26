@@ -6,6 +6,7 @@ import { Emphasis } from '../components/Emphasis';
 import { useEvents } from '../hooks/useEvents';
 import { EventCard, ExternalActionLink, type Event } from '../components/EventCard';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
+import { upcomingWorkshops } from '../data/workshopsData';
 
 type WhenFilter = 'upcoming' | 'this-month' | 'past';
 type PlaceFilter = 'all' | 'austin' | 'elsewhere';
@@ -212,6 +213,22 @@ export function Events() {
                             />
                         </div>
                     </div>
+                )}
+
+                {/* Claude workshops: one note under the meetup list, not meetup
+                    cards. Shown while src/data/workshops.json (synced from Luma)
+                    still has an IFN workshop that has not ended. */}
+                {upcomingWorkshops(now).length > 0 && (
+                    <p className="mt-10 text-muted">
+                        Workshops are also scheduled. See dates on the{' '}
+                        <Link
+                            to="/workshops"
+                            className="font-semibold text-ink underline underline-offset-2 rounded-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"
+                        >
+                            workshops page
+                        </Link>
+                        .
+                    </p>
                 )}
 
                 {!loading && (
