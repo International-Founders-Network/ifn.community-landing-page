@@ -98,3 +98,86 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
         ],
     },
 ];
+
+/**
+ * December 2026 Claude workshops. Copy is verbatim from
+ * ifn-copy/workshops/2026-11-25-dec-workshops-listing.md (draft, pending
+ * Venkat's approval).
+ *
+ * Hardcoded on purpose: both events live on the Claude Workshops Luma calendar
+ * (claudeworkshops), which the Sync Events workflow does not read, and
+ * events.json rows all render as meetups. Do not move these into events.json.
+ *
+ * `endsAt` is America/Chicago wall time with its offset, from the Luma event
+ * JSON-LD. A card stops rendering once its end has passed, judged at render
+ * time, so at prerender time for the static HTML and again in the browser.
+ */
+export interface ScheduledWorkshop {
+    id: string;
+    eyebrow: string;
+    title: string;
+    date: string;
+    time: string;
+    venue: string;
+    logistics: string;
+    pitch: string;
+    walkAway: string;
+    perk: string;
+    hosting: string;
+    rsvpUrl: string;
+    /** Official Luma title. Shared by both events, so never the visible title. */
+    lumaTitle: string;
+    startsAt: string;
+    endsAt: string;
+}
+
+const LUMA_TITLE = 'Claude SMB Workshop with International Founders Network - Austin';
+const HOSTING =
+    'Hosted by International Founders Network and Approved Claude SMB Trainers, with Yani Partners as AI technology partner.';
+const PERK = 'One free month of Claude Max for people new to Claude Max';
+const LOGISTICS = 'Free. In person. Bring your laptop. Registration needs host approval.';
+const VENUE = '7820 Burnet Rd, Austin, TX 78757';
+
+export const SCHEDULED_WORKSHOPS: ScheduledWorkshop[] = [
+    {
+        id: 'claude-2026-12-03',
+        eyebrow: 'Run the week. A free, hands-on Claude workshop for business owners.',
+        title: 'Buried in admin again this week?',
+        date: 'Thursday, December 3',
+        time: '2:00 to 5:00 PM CT',
+        venue: VENUE,
+        logistics: LOGISTICS,
+        pitch: 'A free, in-person afternoon to put Claude on the weekly admin you still do by hand.',
+        walkAway:
+            'Walk out with Claude set up for your business, connected to a tool you use, and a weekly routine on a schedule.',
+        perk: PERK,
+        hosting: HOSTING,
+        rsvpUrl: 'https://luma.com/awlxti59',
+        lumaTitle: LUMA_TITLE,
+        startsAt: '2026-12-03T14:00:00-06:00',
+        endsAt: '2026-12-03T17:00:00-06:00',
+    },
+    {
+        id: 'claude-2026-12-17',
+        eyebrow: 'Grow and close. A free, hands-on Claude workshop for business owners.',
+        title: 'Behind on marketing and month end?',
+        date: 'Thursday, December 17',
+        time: '2:00 to 5:00 PM CT',
+        venue: VENUE,
+        logistics: LOGISTICS,
+        pitch: 'A free, in-person afternoon to put Claude on marketing and month end.',
+        walkAway:
+            'Walk out with Claude set up for your business, your first skill built, and your numbers turned into a clear one-page view.',
+        perk: PERK,
+        hosting: HOSTING,
+        rsvpUrl: 'https://luma.com/lx5nu5r6',
+        lumaTitle: LUMA_TITLE,
+        startsAt: '2026-12-17T14:00:00-06:00',
+        endsAt: '2026-12-17T17:00:00-06:00',
+    },
+];
+
+/** Workshops whose end has not passed at `now`, in date order. */
+export function upcomingWorkshops(now: Date = new Date()): ScheduledWorkshop[] {
+    return SCHEDULED_WORKSHOPS.filter((workshop) => Date.parse(workshop.endsAt) > now.getTime());
+}

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight, Loader2 } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Container } from './Container';
@@ -8,6 +9,7 @@ import { ExternalActionLink } from './EventCard';
 import type { Event, EventRegistration } from './EventCard';
 import { describeMoment } from '../lib/eventTime';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
+import { upcomingWorkshops } from '../data/workshopsData';
 
 /**
  * EVENTS PREVIEW. REDESIGN-PLAN.md section 5, row 5.
@@ -478,6 +480,24 @@ export function EventsPreview() {
                         See all meetups
                     </ButtonLink>
                 </div>
+
+                {/* December Claude workshops: a short note beside the meetups,
+                    never a row in them. Gone once both workshops have ended. */}
+                {upcomingWorkshops().length > 0 && (
+                    <div className="mt-10 max-w-[65ch] text-base text-muted">
+                        <p>Two free Claude workshops in Austin this December.</p>
+                        <p className="mt-1">
+                            See dates and RSVP on the{' '}
+                            <Link
+                                to="/workshops"
+                                className="font-medium text-ink underline decoration-rule underline-offset-4 transition-colors hover:decoration-ink focus-visible:outline-hidden focus-visible:[box-shadow:0_0_0_2px_var(--paper),0_0_0_4px_var(--ink)]"
+                            >
+                                workshops page
+                            </Link>
+                            .
+                        </p>
+                    </div>
+                )}
             </Container>
         </section>
     );

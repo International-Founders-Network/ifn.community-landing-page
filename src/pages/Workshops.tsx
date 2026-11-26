@@ -1,17 +1,57 @@
 import { Container } from '../components/Container';
 import { ButtonLink } from '../components/ButtonLink';
 import { Emphasis } from '../components/Emphasis';
-import { LUMA_CALENDAR_URL } from '../data/socialLinks';
-import { WORKSHOP_PILLARS } from '../data/workshopsData';
+import { WORKSHOP_PILLARS, upcomingWorkshops, type ScheduledWorkshop } from '../data/workshopsData';
 
 /**
  * /workshops — Venkat-approved pack 2026-09-24-workshops-v2.
  *
  * Order: Hero → How it works → 7 pillars → Upcoming (Luma) → Host once →
  * Membership teaser once. Kill list applied (no meetup digression, no duplicate
- * propose, no fake dates/$ table). Luma calendar URL is the shared site SoT.
+ * propose, no fake dates/$ table).
+ *
+ * December 2026 Claude workshop cards, hero, and how-it-works copy are from
+ * ifn-copy/workshops/2026-11-25-dec-workshops-listing.md (draft preview). Each
+ * card links to its own Luma event, not the IFN_ATX meetup calendar.
  */
+function WorkshopCard({ workshop }: { workshop: ScheduledWorkshop }) {
+    return (
+        <article
+            aria-labelledby={`workshop-${workshop.id}`}
+            className="flex flex-col rounded-2xl border border-rule bg-paper p-6 md:p-8"
+        >
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+                {workshop.eyebrow}
+            </p>
+            <h3
+                id={`workshop-${workshop.id}`}
+                className="mt-3 text-xl font-bold tracking-tight text-ink md:text-2xl"
+            >
+                {workshop.title}
+            </h3>
+            <p className="mt-4 text-lg font-semibold text-ink tabular-nums">
+                <time dateTime={workshop.startsAt}>{workshop.date}</time>
+                <span className="block font-medium">{workshop.time}</span>
+            </p>
+            <p className="mt-3 text-base text-muted">{workshop.venue}</p>
+            <p className="mt-1 text-sm text-muted">{workshop.logistics}</p>
+            <p className="mt-6 text-base leading-relaxed text-ink">{workshop.pitch}</p>
+            <p className="mt-3 text-base leading-relaxed text-muted">{workshop.walkAway}</p>
+            <p className="mt-3 text-base leading-relaxed text-muted">{workshop.perk}</p>
+            <p className="mt-6 text-sm leading-relaxed text-muted">{workshop.hosting}</p>
+            <div className="mt-auto pt-6">
+                <ButtonLink href={workshop.rsvpUrl} external variant="primary" size="lg">
+                    RSVP on Luma
+                </ButtonLink>
+            </div>
+        </article>
+    );
+}
+
 export function Workshops() {
+    // Each card drops off once its own end time has passed.
+    const scheduled = upcomingWorkshops();
+
     return (
         <div className="pt-24 pb-20">
             {/* Hero */}
@@ -26,23 +66,27 @@ export function Workshops() {
                         </h1>
                         <p className="mt-6 text-xl leading-relaxed text-muted">
                             Meetups are the room. Membership is the private channel and member call.
-                            Workshops are where we dig into one founder problem for one session:
-                            visas, banking, housing, hiring, fundraising, US go-to-market, entity and tax.
+                            Workshops are where we dig into one problem for one session.
+                        </p>
+                        <p className="mt-4 text-lg leading-relaxed text-muted">
+                            Two free Claude workshops are scheduled in Austin this December. Dates and
+                            RSVP links are below. The rest of this page is the longer skill and ops
+                            track: visas, banking, housing, hiring, fundraising, US go-to-market,
+                            entity and tax.
                         </p>
                         <p className="mt-4 text-lg leading-relaxed text-muted">
                             IFN hosts most sessions. Guest and member hosts are welcome when the topic
-                            is useful. Price is set per workshop on Luma. Members usually get a
-                            discount or free entry, depending on the session.
+                            is useful. The December Claude workshops are free. When another session
+                            has a price or a member offer, that is listed on its Luma page.
                         </p>
                         <div className="mt-8 flex flex-wrap gap-4">
                             <ButtonLink
-                                href={LUMA_CALENDAR_URL}
-                                external
+                                to="/workshops#upcoming-workshops"
                                 variant="primary"
                                 size="lg"
                                 className="shadow-lg"
                             >
-                                See upcoming on Luma
+                                See the December workshops
                             </ButtonLink>
                             <ButtonLink to="/membership" variant="outline" size="lg">
                                 Become a member
@@ -57,15 +101,14 @@ export function Workshops() {
                 <h2 className="text-2xl font-bold tracking-tight text-ink">How it works</h2>
                 <ol className="mt-8 max-w-2xl list-decimal space-y-4 pl-5 text-lg leading-relaxed text-muted">
                     <li>
-                        <span className="text-ink">Pick a session on Luma</span>. Topic, date, host,
-                        and price live there.
+                        <span className="text-ink">Pick a session</span>. When a date is set, the
+                        topic, date, and host are on this page, and on Luma.
                     </li>
                     <li>
-                        RSVP and pay on that session page. There is no public price menu on this site.
+                        RSVP on Luma. The December Claude workshops are free and need host approval.
                     </li>
                     <li>
-                        Members get better pricing when the session offers it (discount or free). That
-                        offer is listed on the Luma page for that workshop.
+                        When a session offers a member price, that offer is listed on its Luma page.
                     </li>
                 </ol>
                 <p className="mt-8 max-w-2xl text-base leading-relaxed text-muted">
@@ -121,25 +164,29 @@ export function Workshops() {
                 </div>
             </Container>
 
-            {/* Upcoming — Luma only */}
+            {/* Upcoming. The hero button jumps here. With no cards left, only the
+                heading remains: no dated lead-in and no stand-in copy. */}
             <Container className="mb-16">
                 <div className="rounded-2xl border border-rule bg-band p-8 md:p-10">
-                    <h2 className="text-2xl font-bold tracking-tight text-ink">
+                    <h2
+                        id="upcoming-workshops"
+                        className="scroll-mt-28 text-2xl font-bold tracking-tight text-ink"
+                    >
                         Upcoming workshops
                     </h2>
-                    <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
-                        Dates, prices, and seats live on Luma. We do not mirror a second calendar
-                        here.
-                    </p>
-                    <ButtonLink
-                        href={LUMA_CALENDAR_URL}
-                        external
-                        variant="primary"
-                        size="lg"
-                        className="mt-6 shadow-lg"
-                    >
-                        Browse workshops on Luma
-                    </ButtonLink>
+                    {scheduled.length > 0 && (
+                        <>
+                            <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+                                Two free, hands-on Claude workshops in Austin this December. RSVP on
+                                each Luma page. Registration needs host approval.
+                            </p>
+                            <div className="mt-8 grid gap-6 md:grid-cols-2">
+                                {scheduled.map((workshop) => (
+                                    <WorkshopCard key={workshop.id} workshop={workshop} />
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
             </Container>
 
