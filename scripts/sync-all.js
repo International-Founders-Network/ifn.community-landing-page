@@ -15,8 +15,10 @@ async function syncAll() {
     console.log('--- Starting Global Event Sync ---');
 
     try {
+        // Meetups only. The Claude workshops calendar writes its own file,
+        // src/data/workshops.json, and must never be scraped into this merge.
         console.log('Syncing Luma...');
-        execSync('node scripts/update-events.js', { stdio: 'inherit' });
+        execSync('node scripts/update-events.js --only=meetups', { stdio: 'inherit' });
 
         console.log('Syncing Meetup...');
         execSync('node scripts/sync-meetup.js', { stdio: 'inherit' });
