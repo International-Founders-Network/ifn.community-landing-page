@@ -32,7 +32,8 @@
 # splat catches the homepage, slash-less paths and anything deeper.
 #
 # Why this is safe both before and after that dashboard change:
-#   - Every rule is scoped to the www host and points at the apex host, so
+#   - Every rule is scoped to the www host (or the site.ifn.community
+#     placeholder below) and points at the apex host, so
 #     no rule can match its own destination (no loop), and the apex host,
 #     deploy previews (*.netlify.app) and branch deploys never match.
 #   - The apex keeps its existing behavior: /api/* rewrite, the explicit
@@ -56,6 +57,17 @@
 #
 # Verify with scripts/check-redirects.sh (production) after any change here
 # or to the Netlify domain settings.
+
+# Placeholder primary domain for the workaround above. INERT until
+# site.ifn.community is added to this site in Netlify and made primary; until
+# then no request ever arrives with that host. Once it is primary, Netlify
+# serves the site there too, and this rule keeps it from being a duplicate
+# copy by sending every path to the canonical apex in one hop. A primary
+# subdomain has no www counterpart, so no automatic redirect shadows it.
+# The splat keeps a trailing slash, so site.ifn.community/{path}/ is two
+# hops; nothing links there, so that is accepted rather than adding more
+# placeholder rules for a host no one visits.
+https://site.ifn.community/*            https://ifn.community/:splat       301!
 
 # www, trailing slash, one and two segments (every current sitemap path)
 https://www.ifn.community/:path/        https://ifn.community/:path        301!

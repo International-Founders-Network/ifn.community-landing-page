@@ -362,6 +362,14 @@ function registrationUrl(registrations: unknown): string | undefined {
  * -05:00 CDT), because IFN only meets in Austin. A record with no parseable
  * start or no location is skipped: an in-person Event without a place is
  * invalid markup, and the venue is not something to guess.
+ *
+ * Against Google's Event rich result docs: the required name, startDate and
+ * location.address are always present; of the recommended properties,
+ * location.name, eventStatus, eventAttendanceMode, image and organizer (name
+ * and url) are filled. description, offers, performer and previousStartDate
+ * are left out because events.json has no field for them, and endDate only
+ * appears if a record carries `end_at` (the Sync Events scraper does not
+ * capture one today, although the Luma listing shows an end time).
  */
 export function eventSchemas(events: readonly EventRecord[], now: number) {
     return events
