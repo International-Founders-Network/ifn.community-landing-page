@@ -261,6 +261,19 @@ Then load the site and check GA4 → **Reports → Realtime**. You should see
 yourself. Accept the consent banner, and you should still see yourself — refusal
 also reports, anonymously and without cookies, by design.
 
+### 3.1a Microsoft Clarity (heatmaps and recordings), optional
+
+Wired in `src/lib/clarity.ts` and inert until `VITE_CLARITY_PROJECT_ID` is set,
+with the same scopes and Production only context as the GA4 id above, then a
+redeploy. Unlike GA4 it does not load at all until a visitor clicks OK on the
+consent banner (or did so on an earlier visit), and it never loads on `/admin`.
+In the Clarity project settings, turn on cookie consent so Clarity waits for
+the `consentv2` signal the site sends. Before turning it on, add Microsoft
+Clarity to the Privacy policy, which Clarity's terms require.
+
+To verify: load the site in a fresh profile, filter DevTools → Network on
+`clarity`, and confirm nothing appears until you click OK.
+
 ### 3.2 Google Search Console — already verified, just go read it
 
 **You do not need to set this up.** It is verified via a DNS TXT record on the

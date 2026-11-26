@@ -382,7 +382,7 @@ export function JoinModal({ isOpen, onClose }: JoinModalProps) {
                             </div>
 
                             {step === 'form' ? (
-                                <form onSubmit={handleSubmit} className="space-y-5">
+                                <form onSubmit={handleSubmit} className="space-y-5" data-clarity-mask="true">
                                     <p className="text-ink leading-relaxed">
                                         Monthly, in person, in Austin, Texas, and running for more than six
                                         months. Tell us who you are, and come to the next one.

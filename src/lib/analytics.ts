@@ -34,6 +34,14 @@
  *      has been updated for the new route.
  */
 
+import {
+    grantClarity,
+    initClarity,
+    isClarityConfigured,
+    revokeClarity,
+    syncClarityRoute,
+} from './clarity';
+
 const MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID as
     | string
     | undefined;
@@ -61,8 +69,13 @@ const CONSENT_STORAGE_KEY = 'ifn-analytics-consent';
 
 export type ConsentChoice = 'granted' | 'denied';
 
-/** Whether analytics is configured at all. Everything below short-circuits on this. */
-export const isAnalyticsEnabled = Boolean(MEASUREMENT_ID);
+/**
+ * Whether any analytics is configured at all, and therefore whether the consent
+ * banner has anything to ask about. Clarity counts on its own: a build with only
+ * VITE_CLARITY_PROJECT_ID set still needs the banner, or Clarity could never be
+ * granted.
+ */
+export const isAnalyticsEnabled = Boolean(MEASUREMENT_ID) || isClarityConfigured;
 
 /**
  * The visitor's stored choice, or null if they have not made one.
@@ -140,6 +153,9 @@ let initialised = false;
  * injection below for why the script itself is allowed to arrive later.
  */
 export function initAnalytics() {
+    /** Clarity is gated on the stored choice alone, independent of GA4's id. */
+    initClarity(storedConsent() === 'granted');
+
     if (!MEASUREMENT_ID || initialised) return;
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
@@ -245,6 +261,8 @@ export function initAnalytics() {
  */
 export function setConsent(choice: ConsentChoice) {
     persistConsent(choice);
+    if (choice === 'granted') grantClarity();
+    else revokeClarity();
     if (!MEASUREMENT_ID) return;
     gtag('consent', 'update', {
         analytics_storage: choice === 'granted' ? 'granted' : 'denied',
@@ -259,6 +277,8 @@ export function setConsent(choice: ConsentChoice) {
  * every campaign IFN ever runs look like direct traffic.
  */
 export function trackPageview(path: string, title: string) {
+    /** Stops Clarity on entry to /admin, or loads it on the way out. */
+    syncClarityRoute(path.split(/[?#]/)[0]);
     if (!MEASUREMENT_ID) return;
     gtag('event', 'page_view', {
         page_path: path,

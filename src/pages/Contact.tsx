@@ -281,7 +281,7 @@ export function Contact() {
                                 </a>
                             </div>
                         ) : (
-                            <form className="space-y-6" onSubmit={handleSubmit}>
+                            <form className="space-y-6" onSubmit={handleSubmit} data-clarity-mask="true">
                                 <div>
                                     <h2 className="text-xl font-bold text-ink">Save a message</h2>
                                     <p className="mt-1 text-sm text-muted">

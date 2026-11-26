@@ -206,6 +206,7 @@ export function Membership() {
                     <div
                         role="status"
                         className="mx-auto max-w-2xl rounded-2xl border border-rule bg-paper p-6"
+                        data-clarity-mask="true"
                     >
                         <h2 className="mb-2 text-lg font-bold text-ink">Payment received</h2>
                         <p className="leading-relaxed text-muted">
