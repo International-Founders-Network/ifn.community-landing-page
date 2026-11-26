@@ -206,6 +206,44 @@ async function injectFaqSchema(page) {
 }
 
 /**
+ * Refuse to bake /events without its Event markup (IFN-116).
+ *
+ * The Event nodes come from src/data/structuredData.ts via <Head>, built from
+ * the same events.json this script serves as /api/events. This only checks
+ * the result: exactly one JSON-LD script (a second writer would give crawlers
+ * two competing graphs), and one Event node for every meetup in events.json
+ * that starts after this moment and has a title and a location. Without it a
+ * regression would ship /events with no Event graph and nothing would notice.
+ */
+async function assertEventSchema(page, eventsFixture) {
+    const now = Date.now()
+    const expected = JSON.parse(eventsFixture).filter(
+        (event) =>
+            typeof event.title === 'string' &&
+            event.title.trim() &&
+            typeof event.location_name === 'string' &&
+            event.location_name.trim() &&
+            Date.parse(event.start_at) >= now,
+    ).length
+
+    const { scripts, events } = await page.evaluate(() => {
+        const nodes = [...document.querySelectorAll('script[type="application/ld+json"]')]
+        const graph = nodes[0] ? JSON.parse(nodes[0].textContent || '{}') : {}
+        return {
+            scripts: nodes.length,
+            events: (graph['@graph'] || []).filter((node) => node['@type'] === 'Event').length,
+        }
+    })
+
+    if (scripts !== 1) {
+        throw new Error(`/events has ${scripts} JSON-LD scripts, expected exactly 1`)
+    }
+    if (events !== expected) {
+        throw new Error(`/events has ${events} Event node(s), expected ${expected} from src/data/events.json`)
+    }
+}
+
+/**
  * Remove the things that must not be frozen into a static file.
  *
  * The consent banner is the important one: it renders only for a visitor who
@@ -281,6 +319,7 @@ async function main() {
                 await waitForRender(page)
 
                 if (route === '/') await injectFaqSchema(page)
+                if (route === '/events') await assertEventSchema(page, eventsFixture)
                 await stripRuntimeOnly(page)
 
                 const html = await page.evaluate(

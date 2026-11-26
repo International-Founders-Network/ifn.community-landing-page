@@ -136,17 +136,26 @@ remove. Crawling is allowed everywhere so the noindex headers in `netlify.toml`
 can actually be obeyed. `/admin` access control was never robots.txt's job and
 is unaffected.
 
-### Event JSON-LD is deliberately absent
+### Event JSON-LD comes from events.json, upcoming meetups only
 
-`src/data/structuredData.ts` emits Organization, WebSite, WebPage, BreadcrumbList,
-Offer and FAQPage — but no `Event`, which would be the most valuable type on an
-events-driven site. `src/data/events.json` is regenerated from Luma by
-`.github/workflows/sync-events.yml` on the 1st and 15th, and Luma still says
-Capital Factory while the site says Station Austin. `scripts/update-events.js`
-now rewrites the two known-stale venue strings on the way in, but that is a
-stopgap: **fix the venue on the Luma records**, then add Event markup. Marking
-up a venue that contradicts the rendered page is a structured-data policy
-violation, not merely untidy.
+`src/data/structuredData.ts` emits Organization, WebSite, WebPage,
+BreadcrumbList, Offer, FAQPage and, on `/events` only, one `Event` per meetup
+in `src/data/events.json` that has not started yet (IFN-116). It used to be
+deliberately absent because Luma said Capital Factory while the site said
+Station Austin; `scripts/update-events.js` now rewrites the known stale venue
+strings on the way in, and `/events` renders the same `location_name`, so the
+markup and the page agree. Still **fix the venue on the Luma records**: an
+unrecognised Capital Factory string is passed through as-is, and marking up a
+venue that contradicts the rendered page is a structured-data policy
+violation.
+
+The markup states only what the data carries: no `endDate` (events.json has
+no end time), no `offers` (no price), no description. Dates are
+America/Chicago wall time with the offset for that date. "Upcoming" is judged
+when the graph is built, i.e. at prerender time for the static HTML and again
+in the browser; a past meetup stays in the static HTML until the next build.
+`scripts/prerender.mjs` fails the build if `/events` does not carry one Event
+node per upcoming meetup in exactly one JSON-LD script.
 
 ## Blog posts publish by editorial status, not by merge
 
