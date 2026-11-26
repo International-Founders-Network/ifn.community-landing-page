@@ -84,7 +84,7 @@ const NAV_ITEMS: NavItem[] = [
             {
                 name: 'Workshops',
                 href: '/workshops',
-                description: 'Free Claude workshops in December, plus the skill and ops track',
+                description: 'Visas, banking, hiring, fundraising',
                 icon: Presentation,
             },
         ],

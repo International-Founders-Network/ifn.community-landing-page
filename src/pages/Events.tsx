@@ -220,7 +220,7 @@ export function Events() {
                     still has an IFN workshop that has not ended. */}
                 {upcomingWorkshops(now).length > 0 && (
                     <p className="mt-10 text-muted">
-                        Two free Claude workshops are also scheduled in December. See dates on the{' '}
+                        Workshops are also scheduled. See dates on the{' '}
                         <Link
                             to="/workshops"
                             className="font-semibold text-ink underline underline-offset-2 rounded-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-paper"

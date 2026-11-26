@@ -62,7 +62,7 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
         types: [
             { label: 'First US hire vs contractor (when each breaks)' },
             { label: 'Offer letters, equity basics, and payroll setup for small teams' },
-            { label: 'Ops cadence for a 2–10 person company' },
+            { label: 'Ops cadence for a 2 to 10 person company' },
             { label: 'Vendors and tools that matter in year one (and which to skip)' },
         ],
     },

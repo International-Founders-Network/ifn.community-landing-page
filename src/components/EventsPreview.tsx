@@ -486,7 +486,7 @@ export function EventsPreview() {
                     Luma) still has an IFN workshop that has not ended. */}
                 {upcomingWorkshops().length > 0 && (
                     <div className="mt-10 max-w-[65ch] text-base text-muted">
-                        <p>Two free Claude workshops in Austin this December.</p>
+                        <p>Workshops are also scheduled in Austin.</p>
                         <p className="mt-1">
                             See dates and RSVP on the{' '}
                             <Link

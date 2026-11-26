@@ -105,17 +105,16 @@ function covers($: ReturnType<typeof load>) {
         .get();
 }
 
-const HERO = [
-    'Meetups are the room. Membership is the private channel and member call. Workshops are where we dig into one problem for one session.',
-    'Two free Claude workshops are scheduled in Austin this December. Dates and RSVP links are below. The rest of this page is the longer skill and ops track: visas, banking, housing, hiring, fundraising, US go-to-market, entity and tax.',
-    'IFN hosts most sessions. Guest and member hosts are welcome when the topic is useful. The December Claude workshops are free. When another session has a price or a member offer, that is listed on its Luma page.',
-];
+const HERO_LINE = 'One problem per session, for international founders in Austin.';
 
-const HOW_IT_WORKS = [
-    'Pick a session. When a date is set, the topic, date, and host are on this page, and on Luma.',
-    'RSVP on Luma. The December Claude workshops are free and need host approval.',
-    'When a session offers a member price, that offer is listed on its Luma page.',
-];
+const HOST_LINE =
+    'IFN runs most sessions. To propose a practical 60 to 90 minute session, tell us the pillar, the problem you solve, and whether it is free, paid, or members-preferred.';
+
+const MEMBERS_LINE =
+    'When a session has a member price, it is listed on its Luma page. Members also get the private member channel and the monthly members-only call.';
+
+const DISCLAIMER =
+    'This is not licensed legal, tax, or immigration advice. Bring your situation. Leave with next steps and people who have done it.';
 
 /** The hand-written v1 card copy. None of it may come back. */
 const OLD_CARD_COPY = [
@@ -138,10 +137,15 @@ const STALE = [
     'Dates, prices, and seats live on Luma',
     'See upcoming on Luma',
     'Browse workshops on Luma',
+    'See the December workshops',
+    'Two free Claude workshops are scheduled in Austin this December',
+    'The December Claude workshops are free',
+    'this December',
+    'in December',
 ];
 
-const HOME_MENTION = ['Two free Claude workshops in Austin this December.', 'See dates and RSVP on the workshops page.'];
-const EVENTS_MENTION = 'Two free Claude workshops are also scheduled in December. See dates on the workshops page.';
+const HOME_MENTION = ['Workshops are also scheduled in Austin.', 'See dates and RSVP on the workshops page.'];
+const EVENTS_MENTION = 'Workshops are also scheduled. See dates on the workshops page.';
 
 describe('/workshops renders the synced Luma workshops', () => {
     it('shows both Dec events with the Luma title, CT date and time, Luma cover, and own Luma link', () => {
@@ -162,17 +166,35 @@ describe('/workshops renders the synced Luma workshops', () => {
         expect(registerLinks($)).toEqual([DEC_3_HREF, DEC_17_HREF]);
     });
 
-    it('keeps the approved hero, how-it-works, jump link, and Become a member', () => {
+    it('uses the concise hero and section order, with no How it works block', () => {
         at(BEFORE_DEC_3);
         const { $, text } = render(<Workshops />, '/workshops');
-        expect($('h1').text().replace(/\s+/g, ' ').trim()).toBe('Workshops: the skill and ops track');
-        for (const line of [...HERO, ...HOW_IT_WORKS]) expect(text).toContain(line);
-
-        const jump = $('a').filter((_, a) => $(a).text().trim() === 'See the December workshops');
-        expect(jump).toHaveLength(1);
-        expect(jump.attr('href')).toBe('/workshops#upcoming-workshops');
+        expect($('h1').text().replace(/\s+/g, ' ').trim()).toBe('Workshops');
+        expect(text).toContain(HERO_LINE);
+        expect(text).not.toContain('Skill and ops track');
+        expect(text).not.toContain('How it works');
+        expect(text).not.toContain('See the December workshops');
+        expect($('a').filter((_, a) => $(a).text().trim() === 'See the December workshops')).toHaveLength(0);
         expect($('#upcoming-workshops').text().trim()).toBe('Upcoming workshops');
         expect($('a').filter((_, a) => $(a).text().trim() === 'Become a member').length).toBeGreaterThan(0);
+
+        const headings = $('h1, h2')
+            .map((_, h) => $(h).text().replace(/\s+/g, ' ').trim())
+            .get();
+        expect(headings).toEqual([
+            'Workshops',
+            'Upcoming workshops',
+            'What we cover',
+            'Host a workshop',
+            'Members get better workshop access',
+        ]);
+        expect(text).toContain(HOST_LINE);
+        expect(text).toContain(MEMBERS_LINE);
+        expect(text).toContain(DISCLAIMER);
+        expect(text).toContain('Ops cadence for a 2 to 10 person company');
+        expect(text).not.toContain('Seven pillars');
+        expect(text).not.toContain('Pillar 01');
+        expect(text).not.toContain('Workshop types');
     });
 
     it('has none of the hand-written card copy, the venue, or the stale price and pay lines', () => {
@@ -341,7 +363,7 @@ describe('meta and meetup data that must not move', () => {
         const seo = seoFor('/workshops');
         expect(seo.title).toBe('Workshops for international founders | IFN');
         expect(seo.description).toBe(
-            'Free Claude workshops in Austin on December 3 and 17. Hands-on sessions for business owners. RSVP on Luma.',
+            'Practical workshops for international founders in Austin. One problem per session: visas, banking, hiring, fundraising, and more. Dates and RSVP on Luma.',
         );
     });
 
