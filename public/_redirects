@@ -1,0 +1,77 @@
+# IFN-111 (was IFN-107, PR #64): send https://www.ifn.community/{path}/ to
+# the canonical apex URL in a single 301.
+#
+# Canonical URLs:
+#   https://ifn.community/          homepage (trailing slash)
+#   https://ifn.community/{path}    every other path (no trailing slash)
+#
+# THESE RULES ARE INERT WHILE ifn.community IS THE PRIMARY DOMAIN.
+#
+# Netlify's automatic redirect between a primary domain's apex and its www
+# counterpart runs before _redirects and netlify.toml are consulted, and no
+# rule can override it (Netlify support forum; the redirect docs also say
+# "You cannot use a redirect rule to add or remove a trailing slash" and that
+# edge nodes normalize URLs before rules are matched). That automatic redirect
+# keeps the path as requested, so today production does:
+#
+#   https://www.ifn.community/about/  -301->  https://ifn.community/about/
+#   https://ifn.community/about/      -301->  /about
+#
+# The second hop is Netlify's static file handling, not a rule:
+# scripts/prerender.mjs writes flat files (dist/about.html, not
+# dist/about/index.html), and for a flat file Netlify answers the slashed
+# form with a 301 to the unslashed one. That layout is deliberate; see the
+# comment above `outPath` in scripts/prerender.mjs.
+#
+# The rules below only start matching once www.ifn.community is no longer
+# auto-redirected, i.e. once ifn.community and www.ifn.community are both
+# domain ALIASES of the site (Netlify's documented workaround is to make a
+# different domain primary). At that point they are the only thing sending
+# www to the apex, so they must cover every www path, and they do: the
+# one- and two-segment rules drop a trailing slash on the same hop, and the
+# splat catches the homepage, slash-less paths and anything deeper.
+#
+# Why this is safe both before and after that dashboard change:
+#   - Every rule is scoped to the www host (or the site.ifn.community
+#     placeholder below) and points at the apex host, so
+#     no rule can match its own destination (no loop), and the apex host,
+#     deploy previews (*.netlify.app) and branch deploys never match.
+#   - The apex keeps its existing behavior: /api/* rewrite, the explicit
+#     200 routes and the 404 catch-all in netlify.toml are untouched.
+#   - www /api/* requests get the same 301 to the apex that the automatic
+#     redirect gives them today. The site calls /api/* with relative URLs,
+#     so its own requests are always on the apex already.
+#
+# Netlify processes this file (copied from public/ to dist/) before the
+# [[redirects]] in netlify.toml, so the 404 catch-all there cannot shadow
+# these rules.
+#
+# There are deliberately NO http:// rules. Netlify upgrades http to https
+# on the same host at the edge before any rule runs (production shows
+# http://www.ifn.community/about -> https://www.ifn.community/about as the
+# first hop), so http rules could never match, and an apex http rule would
+# be one scheme-matching quirk away from a redirect loop on the apex.
+#
+# Do not add same-host trailing-slash rules here. Netlify normalizes slashes
+# before matching, so a same-host slash-strip rule would loop.
+#
+# Verify with scripts/check-redirects.sh (production) after any change here
+# or to the Netlify domain settings.
+
+# Placeholder primary domain for the workaround above. INERT until
+# site.ifn.community is added to this site in Netlify and made primary; until
+# then no request ever arrives with that host. Once it is primary, Netlify
+# serves the site there too, and this rule keeps it from being a duplicate
+# copy by sending every path to the canonical apex in one hop. A primary
+# subdomain has no www counterpart, so no automatic redirect shadows it.
+# The splat keeps a trailing slash, so site.ifn.community/{path}/ is two
+# hops; nothing links there, so that is accepted rather than adding more
+# placeholder rules for a host no one visits.
+https://site.ifn.community/*            https://ifn.community/:splat       301!
+
+# www, trailing slash, one and two segments (every current sitemap path)
+https://www.ifn.community/:path/        https://ifn.community/:path        301!
+https://www.ifn.community/:path/:sub/   https://ifn.community/:path/:sub   301!
+
+# www, everything else: the homepage, no trailing slash, deeper paths
+https://www.ifn.community/*             https://ifn.community/:splat       301!

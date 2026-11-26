@@ -13,16 +13,16 @@
  * is therefore sourced from the same constants the components render from, not
  * re-typed. Where a fact is not on the page, it is not in the graph.
  *
- * WHY THERE IS NO Event SCHEMA HERE. It is the single most valuable type this
- * site could emit and it is deliberately absent. src/data/events.json is
+ * Event SCHEMA, AND WHY IT WAS ONCE ABSENT. src/data/events.json is
  * regenerated on the 1st and 15th of every month by .github/workflows/
- * sync-events.yml, which runs scripts/update-events.js and takes the venue
- * verbatim from Luma's `geo_address_info.full_address`. Luma currently says
- * "Capital Factory, 701 Brazos St" while every surface of this site says
- * Station Austin. Emitting Event markup from that file would publish a venue
- * that contradicts the visible page, and would silently revert to the wrong
- * value on the next sync. Fix the venue in Luma first, then add Event markup
- * and not before. See the note in scripts/update-events.js.
+ * sync-events.yml, which runs scripts/update-events.js. Luma used to say
+ * "Capital Factory, 701 Brazos St" while every surface of this site said
+ * Station Austin, so Event markup from that file would have published a venue
+ * that contradicted the visible page. scripts/update-events.js now rewrites
+ * the known stale venue strings to the Station Austin address on the way in,
+ * and /events renders `location_name` from that same file, so the markup and
+ * the page read the same value by construction. eventSchemas() below states
+ * only fields the data carries: no invented end time, price or description.
  */
 
 import {
@@ -31,7 +31,9 @@ import {
 } from './membershipData';
 import { SOCIAL_LINKS } from './socialLinks';
 import { getPostBySlug } from './blog.generated';
+import eventsData from './events.json';
 import { SITE_NAME, SITE_URL, absoluteUrl, canonicalFor, normalisePath, seoFor } from './seo';
+import { isoToChicagoOffsetIso } from '../lib/chicagoTime';
 
 const ORGANIZATION_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
@@ -282,7 +284,137 @@ export function blogPostingSchema(pathname: string) {
     };
 }
 
-export function graphFor(pathname: string, faq: FaqEntry[] = []) {
+/** The subset of an events.json record the Event markup reads. Loose on purpose. */
+export interface EventRecord {
+    id?: unknown;
+    title?: unknown;
+    start_at?: unknown;
+    end_at?: unknown;
+    location_name?: unknown;
+    cover_url?: unknown;
+    registrations?: unknown;
+}
+
+function text(value: unknown): string | undefined {
+    return typeof value === 'string' && value.trim() !== '' ? value.trim() : undefined;
+}
+
+const US_STATE_AND_ZIP = /^([A-Z]{2})(?:\s+(\d{5}(?:-\d{4})?))?$/;
+const US_COUNTRY = /^(USA|US|United States(?: of America)?)$/i;
+
+/**
+ * A Place from Luma's one-line address, e.g. "Station Austin, 701 Brazos St,
+ * Austin, TX 78701, USA". Read right to left: optional country, then "ST
+ * 12345" (zip optional), then the city; of what is left, the first part is
+ * the venue name and the rest is the street. A bare "Austin, TX" (the older
+ * Meetup records) yields a Place named as written with only city and state.
+ * A string that does not parse keeps its text as the Place name and address
+ * rather than guessing at fields.
+ */
+export function placeFromLocation(locationName: string) {
+    const raw = locationName.trim();
+    const parts = raw.split(',').map((part) => part.trim()).filter(Boolean);
+
+    if (parts.length > 0 && US_COUNTRY.test(parts[parts.length - 1])) parts.pop();
+    const stateZip = parts.length >= 2 ? US_STATE_AND_ZIP.exec(parts[parts.length - 1]) : null;
+    if (!stateZip) {
+        return { '@type': 'Place', name: raw, address: raw };
+    }
+    parts.pop();
+    const locality = parts.pop() as string;
+    const venue = parts.length >= 2 ? parts.shift() : undefined;
+    const street = parts.length > 0 ? parts.join(', ') : undefined;
+
+    return {
+        '@type': 'Place',
+        name: venue ?? raw,
+        address: {
+            '@type': 'PostalAddress',
+            ...(street ? { streetAddress: street } : {}),
+            addressLocality: locality,
+            addressRegion: stateZip[1],
+            ...(stateZip[2] ? { postalCode: stateZip[2] } : {}),
+            addressCountry: 'US',
+        },
+    };
+}
+
+/** Luma first, because it is where IFN registration lives; else the first link. */
+function registrationUrl(registrations: unknown): string | undefined {
+    if (!Array.isArray(registrations)) return undefined;
+    const links = registrations
+        .filter((entry): entry is { platform?: unknown; url?: unknown } => !!entry && typeof entry === 'object')
+        .map((entry) => ({ platform: text(entry.platform), url: text(entry.url) }))
+        .filter((entry): entry is { platform: string | undefined; url: string } => !!entry.url);
+    return (links.find((entry) => entry.platform === 'luma') ?? links[0])?.url;
+}
+
+/**
+ * One schema.org Event per meetup that has not started yet, soonest first.
+ *
+ * "Not started" uses the same `start >= now` test as the Upcoming filter on
+ * /events, and `now` is the moment the graph is built: at build time inside
+ * scripts/prerender.mjs, which is what crawlers read, and again in the
+ * visitor's browser, where Head replaces the graph wholesale, so a meetup
+ * that has since happened drops out without a rebuild.
+ *
+ * Dates are America/Chicago wall time with that date's offset (-06:00 CST,
+ * -05:00 CDT), because IFN only meets in Austin. A record with no parseable
+ * start or no location is skipped: an in-person Event without a place is
+ * invalid markup, and the venue is not something to guess.
+ *
+ * Against Google's Event rich result docs: the required name, startDate and
+ * location.address are always present; of the recommended properties,
+ * location.name, eventStatus, eventAttendanceMode, image and organizer (name
+ * and url) are filled. description, offers, performer and previousStartDate
+ * are left out because events.json has no field for them, and endDate only
+ * appears if a record carries `end_at` (the Sync Events scraper does not
+ * capture one today, although the Luma listing shows an end time).
+ */
+export function eventSchemas(events: readonly EventRecord[], now: number) {
+    return events
+        .map((event) => {
+            const name = text(event.title);
+            const start = text(event.start_at);
+            const location = text(event.location_name);
+            const startMs = start ? Date.parse(start) : Number.NaN;
+            if (!name || !start || !location || Number.isNaN(startMs) || startMs < now) return null;
+
+            const startDate = isoToChicagoOffsetIso(start);
+            const end = text(event.end_at);
+            const endDate = end ? isoToChicagoOffsetIso(end) : null;
+            const id = text(event.id);
+            const url = registrationUrl(event.registrations);
+            const image = text(event.cover_url);
+
+            return {
+                startMs,
+                node: {
+                    '@type': 'Event',
+                    ...(id ? { '@id': `${SITE_URL}/events#event-${id}` } : {}),
+                    name,
+                    startDate,
+                    ...(endDate ? { endDate } : {}),
+                    eventStatus: 'https://schema.org/EventScheduled',
+                    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+                    location: placeFromLocation(location),
+                    ...(image ? { image } : {}),
+                    ...(url ? { url } : {}),
+                    organizer: {
+                        '@type': 'Organization',
+                        '@id': ORGANIZATION_ID,
+                        name: SITE_NAME,
+                        url: `${SITE_URL}/`,
+                    },
+                },
+            };
+        })
+        .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
+        .sort((a, b) => a.startMs - b.startMs)
+        .map((entry) => entry.node);
+}
+
+export function graphFor(pathname: string, faq: FaqEntry[] = [], now: number = Date.now()) {
     const normalised = normalisePath(pathname);
 
     const nodes: Record<string, unknown>[] = [
@@ -300,6 +432,11 @@ export function graphFor(pathname: string, faq: FaqEntry[] = []) {
 
     const blogPosting = blogPostingSchema(pathname);
     if (blogPosting) nodes.push(blogPosting);
+
+    /** The meetup list renders on /events from the same events.json. */
+    if (normalised === '/events') {
+        nodes.push(...eventSchemas(eventsData as EventRecord[], now));
+    }
 
     /** The FAQ component renders on the homepage, so its markup belongs there. */
     if (normalised === '/') {

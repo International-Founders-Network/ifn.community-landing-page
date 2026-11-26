@@ -72,6 +72,18 @@ export function chicagoWallTimeToIso(local: string): string | null {
     return `${p.date}T${p.time}:${p.seconds}${p.offset}`;
 }
 
+/**
+ * ISO instant → the same instant as Chicago wall time with its offset, e.g.
+ * "2026-12-16T00:30:00.000Z" → "2026-12-15T18:30:00-06:00". For schema.org
+ * dates, which should read in the event's own zone. null if unparseable.
+ */
+export function isoToChicagoOffsetIso(iso: string): string | null {
+    const ms = Date.parse(iso);
+    if (Number.isNaN(ms)) return null;
+    const p = chicagoParts(ms);
+    return `${p.date}T${p.time}:${p.seconds}${p.offset}`;
+}
+
 /** ISO instant → "YYYY-MM-DDTHH:mm" in Chicago, for prefilling a datetime-local input. */
 export function isoToChicagoWallTime(iso: string): string {
     const p = chicagoParts(Date.parse(iso));
