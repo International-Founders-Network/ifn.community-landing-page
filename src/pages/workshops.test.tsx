@@ -159,7 +159,7 @@ describe('auto-hide after each workshop ends', () => {
         expect(render(<Events />, '/events').text).toContain(EVENTS_MENTION);
     });
 
-    it('still shows Dec 3 at its exact end time', () => {
+    it('hides Dec 3 at its exact end time, and still shows it one millisecond before', () => {
         at(new Date('2026-12-03T23:00:00.000Z'));
         expect(upcomingWorkshops()).toHaveLength(1);
         at(new Date('2026-12-03T22:59:59.999Z'));

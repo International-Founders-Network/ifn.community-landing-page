@@ -20,7 +20,7 @@ function WorkshopCard({ workshop }: { workshop: ScheduledWorkshop }) {
             aria-labelledby={`workshop-${workshop.id}`}
             className="flex flex-col rounded-2xl border border-rule bg-paper p-6 md:p-8"
         >
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+            <p className="text-sm font-medium leading-relaxed text-muted">
                 {workshop.eyebrow}
             </p>
             <h3
