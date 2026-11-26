@@ -41,6 +41,7 @@ import {
     revokeClarity,
     syncClarityRoute,
 } from './clarity';
+import { redactSensitivePath } from './sensitiveUrl';
 
 const MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID as
     | string
@@ -277,12 +278,24 @@ export function setConsent(choice: ConsentChoice) {
  * every campaign IFN ever runs look like direct traffic.
  */
 export function trackPageview(path: string, title: string) {
-    /** Stops Clarity on entry to /admin, or loads it on the way out. */
-    syncClarityRoute(path.split(/[?#]/)[0]);
+    /**
+     * Clarity gets the UNREDACTED path: it is the one that has to see a
+     * sensitive parameter in order to latch itself off. See clarity.ts.
+     */
+    syncClarityRoute(path);
     if (!MEASUREMENT_ID) return;
+    /**
+     * GA4 gets the path with sensitive parameters removed (Stripe's
+     * session_id above all; see sensitiveUrl.ts). Head.tsx sends the router's
+     * search verbatim, and the very first pageview on the Stripe return page
+     * fires before Membership.tsx has stripped session_id from the address
+     * bar, so redacting here is what keeps it out of GA4. UTM parameters are
+     * not on the list and pass through untouched.
+     */
+    const safePath = redactSensitivePath(path);
     gtag('event', 'page_view', {
-        page_path: path,
-        page_location: `${window.location.origin}${path}`,
+        page_path: safePath,
+        page_location: `${window.location.origin}${safePath}`,
         page_title: title,
     });
 }

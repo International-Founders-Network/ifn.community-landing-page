@@ -13,7 +13,7 @@ let appended: FakeScript[];
 let loadListeners: (() => void)[];
 let store: Record<string, string>;
 let fakeWindow: {
-    location: { pathname: string; origin: string };
+    location: { pathname: string; search: string; hash: string; origin: string };
     clarity?: ((...args: unknown[]) => void) & { q?: ArrayLike<unknown>[] };
     dataLayer?: unknown[];
     requestIdleCallback?: unknown;
@@ -24,11 +24,15 @@ let fakeDocument: { readyState: string };
 
 function setup({
     pathname = '/',
+    search = '',
+    hash = '',
     readyState = 'complete',
     consent,
     webdriver = false,
 }: {
     pathname?: string;
+    search?: string;
+    hash?: string;
     readyState?: string;
     consent?: 'granted' | 'denied';
     webdriver?: boolean;
@@ -37,7 +41,7 @@ function setup({
     loadListeners = [];
     store = consent ? { 'ifn-analytics-consent': consent } : {};
     fakeWindow = {
-        location: { pathname, origin: 'https://ifn.community' },
+        location: { pathname, search, hash, origin: 'https://ifn.community' },
         addEventListener: (type, fn) => {
             if (type === 'load') loadListeners.push(fn);
         },
@@ -249,6 +253,112 @@ describe('Clarity revoke', () => {
         trackPageview('/about', 'About');
         expect(clarityScripts()).toHaveLength(0);
         expect(fakeWindow.clarity).toBeUndefined();
+    });
+});
+
+describe('Clarity and sensitive URLs', () => {
+    it.each([
+        ['?checkout=success&session_id=cs_test_abc', '/membership'],
+        ['?email=a%40b.co', '/'],
+        ['?TOKEN=xyz', '/about'],
+        ['?utm_source=x&code=123', '/'],
+    ])('does not load with %s in the initial URL, even with stored consent', async (search, pathname) => {
+        setup({ pathname, search, consent: 'granted' });
+        const { initAnalytics, setConsent, trackPageview } = await load('testclarity');
+        initAnalytics();
+        setConsent('granted');
+        trackPageview(pathname + search, 'Page');
+        expect(clarityScripts()).toHaveLength(0);
+        expect(fakeWindow.clarity).toBeUndefined();
+    });
+
+    it('treats a token in the fragment as sensitive too', async () => {
+        setup({ hash: '#access_token=abc', consent: 'granted' });
+        const { initAnalytics } = await load('testclarity');
+        initAnalytics();
+        expect(clarityScripts()).toHaveLength(0);
+    });
+
+    it('stays latched after the URL is cleaned and consent is granted later', async () => {
+        setup({ pathname: '/membership', search: '?checkout=success&session_id=cs_test_abc' });
+        const { initAnalytics, setConsent, trackPageview } = await load('testclarity');
+        initAnalytics();
+        // Membership.tsx strips the id, then the visitor browses on and accepts.
+        fakeWindow.location.search = '?checkout=success';
+        fakeWindow.location.pathname = '/about';
+        fakeWindow.location.search = '';
+        trackPageview('/about', 'About');
+        setConsent('granted');
+        trackPageview('/events', 'Events');
+        expect(clarityScripts()).toHaveLength(0);
+    });
+
+    it('latches on a sensitive URL reached client side before consent', async () => {
+        const { initAnalytics, setConsent, trackPageview } = await load('testclarity');
+        initAnalytics();
+        trackPageview('/contact?email=a%40b.co', 'Contact');
+        fakeWindow.location.pathname = '/';
+        trackPageview('/', 'Home');
+        setConsent('granted');
+        expect(clarityScripts()).toHaveLength(0);
+    });
+
+    it('stops on client side navigation to a sensitive URL and never restarts', async () => {
+        const { setConsent, trackPageview } = await load('testclarity');
+        setConsent('granted');
+        expect(clarityScripts()).toHaveLength(1);
+        fakeWindow.location.search = '?token=abc';
+        trackPageview('/about?token=abc', 'About');
+        fakeWindow.location.search = '';
+        trackPageview('/', 'Home');
+        expect(queued().filter((args) => args[0] === 'stop')).toHaveLength(1);
+        expect(clarityScripts()).toHaveLength(1);
+    });
+
+    it.each(['?checkout=success', '?checkout=cancelled'])('excludes /membership%s', async (search) => {
+        setup({ pathname: '/membership', search, consent: 'granted' });
+        const { initAnalytics, setConsent, trackPageview, isClarityExcludedLocation } = await load('testclarity');
+        expect(isClarityExcludedLocation('/membership', search)).toBe(true);
+        initAnalytics();
+        setConsent('granted');
+        trackPageview('/membership' + search, 'Membership');
+        expect(clarityScripts()).toHaveLength(0);
+        // Not a latch: the rest of the site is measured as normal.
+        fakeWindow.location.search = '';
+        fakeWindow.location.pathname = '/about';
+        trackPageview('/about', 'About');
+        expect(clarityScripts()).toHaveLength(1);
+    });
+
+    it('still loads on plain /membership', async () => {
+        setup({ pathname: '/membership', consent: 'granted' });
+        const { initAnalytics } = await load('testclarity');
+        initAnalytics();
+        expect(clarityScripts()).toHaveLength(1);
+    });
+
+    it('stops when navigating client side onto the Stripe return page', async () => {
+        const { setConsent, trackPageview } = await load('testclarity');
+        setConsent('granted');
+        fakeWindow.location.pathname = '/membership';
+        fakeWindow.location.search = '?checkout=cancelled';
+        trackPageview('/membership?checkout=cancelled', 'Membership');
+        expect(queued().filter((args) => args[0] === 'stop')).toHaveLength(1);
+    });
+});
+
+describe('GA4 pageviews', () => {
+    it('drop sensitive params from page_path and page_location, keep UTM', async () => {
+        setup({ pathname: '/membership', search: '?checkout=success&session_id=cs_test_abc' });
+        const { trackPageview } = await load(undefined, 'G-TEST000000');
+        trackPageview('/membership?checkout=success&session_id=cs_test_abc&utm_source=x', 'Membership');
+        const pageView = (fakeWindow.dataLayer ?? [])
+            .map((entry) => Array.from(entry as ArrayLike<unknown>))
+            .find((args) => args[0] === 'event' && args[1] === 'page_view');
+        expect(pageView?.[2]).toMatchObject({
+            page_path: '/membership?checkout=success&utm_source=x',
+            page_location: 'https://ifn.community/membership?checkout=success&utm_source=x',
+        });
     });
 });
 
