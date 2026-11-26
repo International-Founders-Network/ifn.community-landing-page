@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { Container } from '../components/Container';
@@ -6,6 +6,12 @@ import { Button } from '../components/Button';
 import { ButtonLink } from '../components/ButtonLink';
 import { MEMBERSHIP_PRICE_STANDARD } from '../data/membershipData';
 import { LUMA_CALENDAR_URL } from '../data/socialLinks';
+import {
+    checkoutSessionStore,
+    checkoutStatusUrl,
+    resolveCheckoutSessionId,
+    stripCheckoutSessionId,
+} from '../lib/checkoutSession';
 
 /** The one published plan slug. Resolved server-side; see netlify/functions/checkout.ts. */
 const PLAN_SLUG = 'founding-member';
@@ -114,7 +120,15 @@ function MembershipNextStep({ check }: { check: MembershipCheck }) {
 export function Membership() {
     const [searchParams] = useSearchParams();
     const checkoutResult = searchParams.get('checkout');
-    const sessionId = searchParams.get('session_id');
+    /**
+     * From the URL on Stripe's redirect (and persisted to sessionStorage right
+     * here, before the strip below runs), or from sessionStorage on a refresh
+     * after it. See src/lib/checkoutSession.ts.
+     */
+    const sessionId = useMemo(
+        () => resolveCheckoutSessionId(searchParams, checkoutSessionStore()),
+        [searchParams],
+    );
     const [checkoutState, setCheckoutState] = useState<'idle' | 'starting' | 'error'>('idle');
     const [membershipCheck, setMembershipCheck] = useState<MembershipCheck>({ kind: 'checking' });
 
@@ -125,10 +139,15 @@ export function Membership() {
      * not in the bundle.
      */
     useEffect(() => {
+        /** Out of the address bar once read; `checkout` stays, so nothing visible changes. */
+        stripCheckoutSessionId();
+    }, [searchParams]);
+
+    useEffect(() => {
         if (checkoutResult !== 'success' || !sessionId) return;
         const controller = new AbortController();
 
-        fetch(`/api/checkout-status?session_id=${encodeURIComponent(sessionId)}`, {
+        fetch(checkoutStatusUrl(sessionId), {
             signal: controller.signal,
         })
             .then((response) => (response.ok ? response.json() : null))
