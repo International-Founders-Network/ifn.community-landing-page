@@ -136,7 +136,7 @@ function LoginScreen({ onAuthenticated }: { onAuthenticated: (email: string) => 
  */
 export function AdminShell({ children, actions }: { children: React.ReactNode; actions?: React.ReactNode }) {
     return (
-        <div className="flex min-h-screen flex-col bg-band">
+        <div className="flex min-h-screen flex-col bg-band" data-clarity-mask="true">
             <header className="border-b border-rule bg-paper">
                 <Container className="flex flex-wrap items-center justify-between gap-4 py-4">
                     <h1 className="text-xl font-bold text-ink">IFN Admin</h1>
