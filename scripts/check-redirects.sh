@@ -1,25 +1,46 @@
 #!/usr/bin/env bash
-# IFN-107: check that host/slash variants reach the canonical apex URL
-# in at most one hop and finish with HTTP 200.
+# IFN-111 (was IFN-107): check that host/slash variants reach the canonical
+# apex URL in at most one hop and finish with HTTP 200.
+#
+# Canonical: https://ifn.community/ for home, https://ifn.community/{path}
+# (no trailing slash) for everything else.
 #
 # Usage:
 #   scripts/check-redirects.sh
 #       Production: https and http, apex and www, slash and no-slash,
 #       for home plus every sitemap path.
 #
-#   scripts/check-redirects.sh --base https://deploy-preview-N--site.netlify.app
-#       Deploy preview: apex-style paths only. Preview hosts do not serve
-#       www.ifn.community, so www and http checks are skipped.
+#   scripts/check-redirects.sh --base https://deploy-preview-N--incandescent-dusk-aa82c2.netlify.app
+#       Deploy preview: apex-style paths on the preview host only. Paths
+#       come from the preview's own sitemap (whose <loc>s name the
+#       production origin), or the frozen list below if it cannot be read. Preview hosts do not
+#       serve www.ifn.community, so www and http checks are skipped.
 #
-#   scripts/check-redirects.sh --https-only
-#       Skip http:// variants (useful when port 80 cannot be reached).
+#   --https-only     Skip http:// variants (useful when port 80 is blocked).
+#   --strict-http    Count http:// variants that take 2+ hops as failures.
+#   --no-sitemap     Use the frozen path list only.
 #
-# Exit 0 if every check passes (skips do not fail the run).
-# Exit 1 if any URL takes more than one hop or does not finish at the
-# canonical URL with 200.
+# Result classes:
+#   PASS  final URL is canonical, HTTP 200, at most one hop.
+#   FAIL  more than one hop, wrong final URL, or not 200.
+#   WARN  an http:// variant that reaches the canonical URL with 200 in more
+#         than one hop. Netlify upgrades http to https on the same host at
+#         the edge before any redirect rule runs, so http://www.../about/ is
+#         at least two hops on this platform whatever the rules say. Use
+#         --strict-http to fail on these instead.
+#   SKIP  not checked (see the reason column).
 #
-# Note: www checks can only pass after a production deploy. Deploy previews
-# are for apex trailing-slash behavior.
+# Exit 0 if there are no FAILs (WARN and SKIP do not fail the run).
+# Exit 1 if any check FAILs. Exit 2 on bad arguments.
+#
+# EXPECTED RESULT TODAY. The https://www.ifn.community/{path}/ checks fail
+# with two hops until the Netlify domain change described at the top of
+# public/_redirects is made. ifn.community is the primary domain, and
+# Netlify's automatic www -> primary redirect runs before _redirects, keeps
+# the trailing slash, and cannot be overridden by a rule; the apex then
+# 301s /{path}/ to /{path} because the prerendered pages are flat files.
+# Deploy previews cannot show the www fix either, because they never
+# receive www traffic: --base only exercises apex trailing-slash behavior.
 set -euo pipefail
 
 PROD_ORIGIN="https://ifn.community"
@@ -34,7 +55,7 @@ CURL_MAX_TIME=20
 CURL_MAX_REDIRS=5
 CURL_RETRIES=3
 
-# Sitemap paths as of 2026-11-16 (26 non-home locs). Home is tested
+# Sitemap paths as of 2026-11-25 (35 non-home locs). Home is tested
 # separately. The script unions this list with a live sitemap fetch when
 # one is available, so a new post is still checked.
 FROZEN_PATHS=(
@@ -64,14 +85,24 @@ FROZEN_PATHS=(
   /blog/visa-paths-founders-talk-about-at-ifn
   /blog/forming-a-us-company-from-abroad
   /blog/welcome-to-the-ifn-blog
+  /blog/working-the-austin-day-and-the-home-country-night
+  /blog/moving-to-austin-with-family-while-you-build
+  /blog/getting-paid-by-your-first-us-customers
+  /blog/raising-prices-after-years-of-underpricing
+  /blog/the-founder-spouse-who-carries-the-company-with-no-title
+  /blog/when-ai-takes-the-clients-who-used-to-pay-your-rent
+  /blog/founder-burnout-that-ends-a-business-you-still-love
+  /blog/when-your-accent-or-foreign-degree-gets-you-treated-as-a-risk
+  /blog/founder-loneliness-the-room-is-full-and-you-are-still-alone
 )
 
 BASE=""
 HTTPS_ONLY=0
+STRICT_HTTP=0
 NO_SITEMAP=0
 
 usage() {
-  sed -n '2,24p' "$0" | sed 's/^# \?//'
+  awk 'NR == 1 { next } /^#/ { sub(/^# ?/, ""); print; next } { exit }' "$0"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -86,6 +117,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --https-only)
       HTTPS_ONLY=1
+      shift
+      ;;
+    --strict-http)
+      STRICT_HTTP=1
       shift
       ;;
     --no-sitemap)
@@ -207,14 +242,18 @@ prepare_http_resolve() {
 }
 
 extract_sitemap_paths() {
-  # stdin: sitemap xml; arg 1: origin
+  # stdin: sitemap xml; args: origins whose <loc>s count as site paths.
+  # A deploy preview serves the production sitemap, whose <loc>s name
+  # https://ifn.community, so the production origin is always passed too.
   python3 -c '
 import re, sys
-origin = sys.argv[1].rstrip("/")
 text = sys.stdin.read()
 locs = re.findall(r"<loc>\s*([^<]+)\s*</loc>", text)
 seen = set()
-prefixes = [origin, origin.replace("https://", "http://")]
+prefixes = []
+for origin in sys.argv[1:]:
+    origin = origin.rstrip("/")
+    prefixes += [origin, origin.replace("https://", "http://")]
 for loc in locs:
     loc = loc.strip()
     path = None
@@ -229,7 +268,7 @@ for loc in locs:
     if path and path != "/" and path not in seen:
         seen.add(path)
         print(path)
-' "$1"
+' "$@"
 }
 
 load_paths() {
@@ -247,8 +286,13 @@ load_paths() {
   fi
   tmp="$(mktemp)"
   if curl -sS --max-time 15 -o "$tmp" "$sitemap_url" 2>/dev/null; then
-    extra="$(extract_sitemap_paths "$CANON_ORIGIN" < "$tmp" || true)"
+    extra="$(extract_sitemap_paths "$PROD_ORIGIN" "$CANON_ORIGIN" < "$tmp" || true)"
     if [[ -n "$extra" ]]; then
+      # A preview publishes whatever its own build published (blog posts
+      # go live by editorial status, not by merge), so its sitemap replaces
+      # the frozen list rather than adding to it. Production keeps the
+      # union, so a post that drops out of the live sitemap still fails.
+      [[ "$is_prod" -ne 1 ]] && paths=()
       while IFS= read -r line; do
         [[ -n "$line" ]] && paths+=("$line")
       done <<< "$extra"
@@ -328,8 +372,37 @@ trace_url() {
 
 pass=0
 fail=0
+warn=0
 skip=0
 failures=()
+# Per-class tallies, "scheme host shape" -> "pass fail warn skip", so the
+# summary shows which variant is still chained rather than one total.
+declare -A class_counts=()
+
+url_class() {
+  local url="$1" scheme host path shape
+  scheme="${url%%://*}"
+  host="apex"
+  [[ "$url" == *"://www."* ]] && host="www"
+  path="/${url#*://*/}"
+  [[ "$url" != *://*/* ]] && path="/"
+  if [[ "$path" == "/" ]]; then
+    shape="home"
+  elif [[ "$path" == */ ]]; then
+    shape="slash"
+  else
+    shape="noslash"
+  fi
+  echo "${scheme} ${host} ${shape}"
+}
+
+tally() {
+  local url="$1" idx="$2" key
+  key="$(url_class "$url")"
+  local -a c=(${class_counts[$key]:-0 0 0 0})
+  c[$idx]=$((c[idx] + 1))
+  class_counts[$key]="${c[*]}"
+}
 
 printf '%-8s %-62s %4s %4s %s\n' "RESULT" "URL" "HOPS" "CODE" "FINAL / NOTE"
 printf '%s\n' "------------------------------------------------------------------------------------------------------------------------"
@@ -337,6 +410,7 @@ printf '%s\n' "-----------------------------------------------------------------
 record_pass() {
   local url="$1"
   pass=$((pass + 1))
+  tally "$url" 0
   printf '%-8s %-62s %4s %4s %s\n' "PASS" "$url" "$_hops" "$_code" "$_final"
 }
 
@@ -344,14 +418,24 @@ record_fail() {
   local url="$1"
   local note="$2"
   fail=$((fail + 1))
+  tally "$url" 1
   failures+=("$url  hops=${_hops} code=${_code} final=${_final}  ${note}")
   printf '%-8s %-62s %4s %4s %s\n' "FAIL" "$url" "$_hops" "$_code" "${note} final=${_final} chain=${_chain}"
+}
+
+record_warn() {
+  local url="$1"
+  local note="$2"
+  warn=$((warn + 1))
+  tally "$url" 2
+  printf '%-8s %-62s %4s %4s %s\n' "WARN" "$url" "$_hops" "$_code" "${note} chain=${_chain}"
 }
 
 record_skip() {
   local url="$1"
   local reason="$2"
   skip=$((skip + 1))
+  tally "$url" 3
   printf '%-8s %-62s %4s %4s %s\n' "SKIP" "$url" "-" "-" "$reason"
 }
 
@@ -374,6 +458,10 @@ check_one() {
     return
   fi
   if [[ "$_hops" -gt 1 ]]; then
+    if [[ "$url" == http://* && "$STRICT_HTTP" -ne 1 ]]; then
+      record_warn "$url" "${_hops} hops (http upgrade runs before rules)"
+      return
+    fi
     record_fail "$url" "more than one hop"
     return
   fi
@@ -440,7 +528,12 @@ for path in "${PATHS[@]}"; do
 done
 
 echo
-echo "Summary: ${pass} passed, ${fail} failed, ${skip} skipped"
+echo "By class (scheme host shape: pass fail warn skip):"
+for key in $(printf '%s\n' "${!class_counts[@]}" | tr ' ' '_' | sort); do
+  printf '  %-24s %s\n' "${key//_/ }" "${class_counts[${key//_/ }]}"
+done
+echo
+echo "Summary: ${pass} passed, ${fail} failed, ${warn} warned, ${skip} skipped"
 if [[ ${#failures[@]} -gt 0 ]]; then
   echo
   echo "Failures:"
