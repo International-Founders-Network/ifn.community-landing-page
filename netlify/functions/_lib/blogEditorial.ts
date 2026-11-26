@@ -78,12 +78,32 @@ export type TransitionResult =
     | { ok: true; status: BlogStatus; publishAt: string | null }
     | { ok: false; error: string };
 
+/** Clear error when Admin tries to mark live or schedule without a complete image set. */
+export function missingImageSetActionError(
+    action: 'schedule' | 'mark_live',
+    post: { slug?: string; title?: string; imagesMissing?: string[] }
+): string {
+    const verb = action === 'schedule' ? 'schedule' : 'mark live';
+    const title = post.title ? ` "${post.title}"` : post.slug ? ` "${post.slug}"` : '';
+    const missing = post.imagesMissing?.length ? ` Missing: ${post.imagesMissing.join(', ')}.` : '';
+    const slug = post.slug || '<slug>';
+    return `Cannot ${verb}${title} because its image set is incomplete.${missing} Generate it with: node scripts/build-blog-og-images.mjs ${slug} (needs an entry in scripts/blog-og-manifest.json).`;
+}
+
 /**
  * The only transitions Admin may make. Nothing reaches approved without passing
  * through in_review, and nothing reaches scheduled/live without approved.
+ * Mark live and schedule also require a complete image set (imagesReady).
  */
 export function applyAction(
-    current: { status: BlogStatus; publishAt: string | null },
+    current: {
+        status: BlogStatus;
+        publishAt: string | null;
+        imagesReady?: boolean;
+        imagesMissing?: string[];
+        slug?: string;
+        title?: string;
+    },
     action: BlogAction,
     publishAt?: unknown
 ): TransitionResult {
@@ -99,10 +119,16 @@ export function applyAction(
             if (!isValidPublishAt(publishAt)) {
                 return { ok: false, error: 'Schedule needs publishAt as ISO-8601 with an offset.' };
             }
+            if (current.imagesReady === false) {
+                return { ok: false, error: missingImageSetActionError('schedule', current) };
+            }
             return { ok: true, status: 'scheduled', publishAt };
         case 'mark_live':
             if (from !== 'approved' && from !== 'scheduled') {
                 return { ok: false, error: `Cannot mark live from ${from}; approve first.` };
+            }
+            if (current.imagesReady === false) {
+                return { ok: false, error: missingImageSetActionError('mark_live', current) };
             }
             return { ok: true, status: 'live', publishAt: current.publishAt };
         case 'hold':

@@ -135,19 +135,35 @@ export type PreparedAction =
     | { kind: 'error'; message: string }
     | { kind: 'cancelled' };
 
+/** Same wording as missingImageSetActionError in blogEditorial.ts (server). */
+export function missingImageSetActionError(
+    action: 'schedule' | 'mark_live',
+    post: Pick<EditorialPost, 'title'> & Partial<Pick<EditorialPost, 'slug' | 'imagesMissing'>>
+): string {
+    const verb = action === 'schedule' ? 'schedule' : 'mark live';
+    const title = post.title ? ` "${post.title}"` : post.slug ? ` "${post.slug}"` : '';
+    const missing = post.imagesMissing?.length ? ` Missing: ${post.imagesMissing.join(', ')}.` : '';
+    const slug = post.slug || '<slug>';
+    return `Cannot ${verb}${title} because its image set is incomplete.${missing} Generate it with: node scripts/build-blog-og-images.mjs ${slug} (needs an entry in scripts/blog-og-manifest.json).`;
+}
+
 /**
  * Turn a button press into a PATCH body, or an error, or nothing when the
  * person backs out of a confirm. Schedule converts the Chicago wall time;
  * a time already past asks first, since the post would then go out on the
- * rebuild that the schedule itself starts.
+ * rebuild that the schedule itself starts. Mark live and schedule refuse
+ * immediately when imagesReady is false.
  */
 export function prepareAction(
-    post: Pick<EditorialPost, 'title'>,
+    post: Pick<EditorialPost, 'title'> & Partial<Pick<EditorialPost, 'slug' | 'imagesReady' | 'imagesMissing'>>,
     action: BlogAction,
     wallTime: string,
     confirm: (message: string) => boolean,
     nowMs = Date.now()
 ): PreparedAction {
+    if ((action === 'mark_live' || action === 'schedule') && post.imagesReady === false) {
+        return { kind: 'error', message: missingImageSetActionError(action, post) };
+    }
     if (action === 'mark_live') {
         return confirm(`${MARK_LIVE_CONFIRM}\n\n"${post.title}"`) ? { kind: 'send' } : { kind: 'cancelled' };
     }

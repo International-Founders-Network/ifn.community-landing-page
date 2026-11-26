@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import type { HandlerEvent } from '@netlify/functions';
-import { applyAction, isPubliclyVisible, isValidPublishAt, mergeOverlay, type QueueEntry } from '../functions/_lib/blogEditorial';
+import { applyAction, isPubliclyVisible, isValidPublishAt, mergeOverlay, missingImageSetActionError, type QueueEntry } from '../functions/_lib/blogEditorial';
 import { createSessionCookie } from '../functions/_lib/auth';
 import { handler } from '../functions/admin-blog';
 
@@ -31,6 +31,34 @@ describe('applyAction (openspec/changes/blog-editorial-publish)', () => {
         expect(applyAction({ status: 'draft', publishAt: null }, 'mark_live').ok).toBe(false);
         expect(applyAction({ status: 'in_review', publishAt: null }, 'mark_live').ok).toBe(false);
         expect(applyAction({ status: 'approved', publishAt: null }, 'mark_live')).toMatchObject({ ok: true, status: 'live' });
+    });
+
+    it('refuses mark live and schedule when the image set is missing', () => {
+        const current = {
+            status: 'approved' as const,
+            publishAt: null,
+            imagesReady: false,
+            imagesMissing: ['public/blog/a-og.png'],
+            slug: 'a',
+            title: 'A',
+        };
+        const live = applyAction(current, 'mark_live');
+        expect(live.ok).toBe(false);
+        if (live.ok) throw new Error('expected refusal');
+        expect(live.error).toBe(missingImageSetActionError('mark_live', current));
+        expect(live.error).toContain('public/blog/a-og.png');
+        expect(live.error).toContain('node scripts/build-blog-og-images.mjs a');
+
+        const scheduled = applyAction(current, 'schedule', AT);
+        expect(scheduled.ok).toBe(false);
+        if (scheduled.ok) throw new Error('expected refusal');
+        expect(scheduled.error).toBe(missingImageSetActionError('schedule', current));
+    });
+
+    it('allows mark live and schedule when the image set is ready', () => {
+        const current = { status: 'approved' as const, publishAt: null, imagesReady: true, slug: 'a', title: 'A' };
+        expect(applyAction(current, 'mark_live')).toMatchObject({ ok: true, status: 'live' });
+        expect(applyAction(current, 'schedule', AT)).toMatchObject({ ok: true, status: 'scheduled', publishAt: AT });
     });
 
     it('hold returns approved/scheduled to in_review and clears publishAt', () => {

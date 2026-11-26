@@ -78,7 +78,7 @@ function ReviewBar({
                                 'Ready'
                             ) : (
                                 <span title={post.imagesMissing.join(', ')}>
-                                    {post.imagesMissing.length} missing, going live fails the build
+                                    {post.imagesMissing.length} missing; mark live and schedule are blocked until the set is complete
                                 </span>
                             )}
                         </Fact>
