@@ -1,5 +1,15 @@
 {
   "$about": [
+    "ADDED 2026-11-25: IFN Vol. 11 (Nov 23 2026, Station Austin / Capital Factory,",
+    "Captain America Room, 8th floor) founder-approved album of 18 frames. The whole",
+    "curated album is used; there is no shortlist. The one video in the album",
+    "(vol11-010.mp4) is omitted because the gallery has no video slot. Sources land in",
+    "meetups/ under camera timestamps (20261123_*). The portrait frame 007 was stored",
+    "with EXIF orientation 6; its source was baked upright to 2252x4000, orientation 1,",
+    "so crop boxes stay in source pixels. Eighteen gallery-nov-* slots ship, each with",
+    "gallery.subjectScale. gallery-nov-group (019, the group shot) leads the Vol. 11 run.",
+    "Gallery.tsx overflow mosaic places the Vol. 11 frames; the authored hang is untouched.",
+    "",
     "ADDED 2026-10-23: IFN Vol. 10 (Oct 22 2026, Station Austin / Capital Factory,",
     "Captain America Room, 8th floor) founder-approved album of 18 frames. Near-duplicates",
     "004 and 018 excluded and never copied into photos-source. Sources land in meetups/",
@@ -30,7 +40,7 @@
     "Declarative input for scripts/build-photos.mjs. See REDESIGN-PLAN.md section 7.",
     "Sources live in assets/photos-source/ and are never published: Vite copies public/ verbatim,",
     "and the 15 originals are 41MB. Only the derivatives named here reach dist/.",
-    "Crop boxes are in SOURCE pixels. Every source is 4000x2252, EXIF orientation 1.",
+    "Crop boxes are in SOURCE pixels. Every source is EXIF orientation 1. Almost every source is 4000x2252; the Vol. 11 portrait (meetups/20261123_191248.jpg) is 2252x4000 after a baked rotation.",
     "Consent: participants signed off on appearing in IFN marketing material (founder ruling 2026-08-09).",
     "Venue: Capital Factory was rebranded Station Austin. Its signage in these frames is dated, not dishonest.",
     "",
@@ -98,7 +108,7 @@
     "$note": "REDESIGN-PLAN.md section 7. Measured at build, never estimated.",
     "heroAt1440AvifBytes": 112640,
     "totalAt1440ViewportBytes": 512000,
-    "galleryTilesAvifBytes": 900000,
+    "galleryTilesAvifBytes": 1200000,
     "$landingNote": [
       "Every avif tier a 1440px viewport at 1x actually selects on the landing route, named as data.",
       "The runner used to hardcode this list in JavaScript while carrying a comment claiming it did not,",
@@ -167,6 +177,12 @@
       }
     ],
     "$galleryNote": [
+      "RAISED 2026-11-25 for the Vol. 11 album (18 frames): 900,000 to 1,200,000 bytes.",
+      "Full-scroll tile sum measured 1058.6 KB across 76 avif tiles after adding the eighteen",
+      "gallery-nov-* 640w tiles (Vol. 11 adds about 200.1 KB). Same reasoning as the Vol. 10 raise:",
+      "the founder approved the set for publication and every frame below the first row is lazy.",
+      "Arrival cost at 1440x900 is unchanged at 34.5 KB. Recorded as a raise, not a pass.",
+      "",
       "RAISED 2026-10-23 for the Vol. 10 album (18 frames): 720,000 to 900,000 bytes.",
       "Full-scroll tile sum measured 858.5 KB across 58 avif tiles after adding the eighteen",
       "gallery-oct-* 640w tiles (Vol. 10 adds about 234 KB). Same reasoning as the Vol. 08 raise:",
@@ -283,6 +299,17 @@
       "blackPoint": 0.04,
       "whitePoint": 0.92,
       "note": "Evening interior under mixed LED light at Station Austin / Capital Factory, Captain America Room (8th floor), 2026-10-22. Same room family as september-2026; warmth left alone."
+    },
+    "november-2026": {
+      "whiteBalance": [
+        1,
+        1,
+        1
+      ],
+      "saturation": 0.55,
+      "blackPoint": 0.04,
+      "whitePoint": 0.92,
+      "note": "Evening interior under mixed LED light at Station Austin / Capital Factory, Captain America Room (8th floor), 2026-11-23. Same room family as october-2026; warmth left alone."
     }
   },
   "slots": [
@@ -2676,6 +2703,673 @@
         "tileWidth": 640,
         "viewWidth": 1280,
         "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-nov-group",
+      "status": "ship",
+      "source": "meetups/20261123_202744.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Lead frame of the Vol. 11 album, so it opens the Vol. 11 overflow run. Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Attendees standing together for a group photo on a red carpet in front of the Capital Factory logo, with a thank you slide, flags and screens on either side.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-nov-arrivals",
+      "status": "ship",
+      "source": "meetups/20261123_190128.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Attendees standing and seated at high tables in a meetup room, with an agenda for today slide on the wall screen.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-nov-gravity",
+      "status": "ship",
+      "source": "meetups/20261123_190132.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee stands holding a phone near a high table where another attendee sits with a laptop, under a Center of Gravity screen.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-nov-agenda",
+      "status": "ship",
+      "source": "meetups/20261123_190504.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee in a cap speaks into a microphone in front of the agenda for today slide, with others seated and standing nearby.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-nov-intro",
+      "status": "ship",
+      "source": "meetups/20261123_190908.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A speaker seated at a high table holds a microphone and gestures, with a group photo on the wall screen and attendees nearby.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "lg"
+      }
+    },
+    {
+      "name": "gallery-nov-remarks",
+      "status": "ship",
+      "source": "meetups/20261123_190924.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "A speaker seated at a high table talks into a microphone, with two attendees standing nearby.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-nov-listening",
+      "status": "ship",
+      "source": "meetups/20261123_190932.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Attendees at high tables listening, one seated and two standing, with empty tables in the foreground.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-nov-texas",
+      "status": "ship",
+      "source": "meetups/20261123_191248.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 6,
+        "top": 850,
+        "width": 2240,
+        "height": 1260
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). 16:9 crop from the baked-upright portrait source (2252x4000).",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang.",
+        "The source was rotated from EXIF orientation 6 to upright pixels (orientation 1) before this crop was written."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee in a Texas jacket holds a microphone and speaks.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-nov-pab",
+      "status": "ship",
+      "source": "meetups/20261123_192049.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee in a brown shirt speaks into a microphone at a high table, with a PAB and Station Austin screen behind him.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-nov-round",
+      "status": "ship",
+      "source": "meetups/20261123_192542.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee seated at a round table speaks into a microphone, with two other attendees behind him.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-nov-conversation",
+      "status": "ship",
+      "source": "meetups/20261123_195834.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees talking across a round wooden table, with a kitchen counter behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-nov-laptop",
+      "status": "ship",
+      "source": "meetups/20261123_195837.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "An attendee looks at a laptop on a round table while talking with another attendee standing beside it.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-nov-chat",
+      "status": "ship",
+      "source": "meetups/20261123_195843.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees talking across a round table, one holding a phone.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-nov-talk",
+      "status": "ship",
+      "source": "meetups/20261123_195846.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees in conversation at a round table, with empty tables stretching out behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-nov-one-on-one",
+      "status": "ship",
+      "source": "meetups/20261123_195851.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees talking one on one across a round table.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "sm"
+      }
+    },
+    {
+      "name": "gallery-nov-pair",
+      "status": "ship",
+      "source": "meetups/20261123_195911.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees talking at a round table, with other conversations going on behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-nov-standing",
+      "status": "ship",
+      "source": "meetups/20261123_195918.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees standing by a long table in a lounge area, facing the camera.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
+      }
+    },
+    {
+      "name": "gallery-nov-tables",
+      "status": "ship",
+      "source": "meetups/20261123_195932.jpg",
+      "grade": "november-2026",
+      "aspectRatio": "16:9",
+      "crop": {
+        "left": 0,
+        "top": 1,
+        "width": 4000,
+        "height": 2250
+      },
+      "cropNote": [
+        "NEW 2026-11-25. Vol. 11 approved album (18). Full frame at exactly 16:9.",
+        "Placed by Gallery.tsx overflow mosaic, not re-authored into the hang."
+      ],
+      "outputs": [
+        {
+          "width": 640,
+          "height": 360
+        },
+        {
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "fallbackWidth": 640,
+      "sizes": "(max-width: 639px) 100vw, 67vw",
+      "alt": "Two attendees talking at a round table in the foreground, with other attendees at tables behind them.",
+      "loading": "lazy",
+      "fetchPriority": "auto",
+      "gallery": {
+        "tileWidth": 640,
+        "viewWidth": 1280,
+        "subjectScale": "md"
       }
     },
     {
