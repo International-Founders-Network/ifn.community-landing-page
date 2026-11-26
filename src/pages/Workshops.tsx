@@ -1,7 +1,8 @@
 import { Container } from '../components/Container';
 import { ButtonLink } from '../components/ButtonLink';
 import { Emphasis } from '../components/Emphasis';
-import { WORKSHOP_PILLARS, upcomingWorkshops, type ScheduledWorkshop } from '../data/workshopsData';
+import { EventCard } from '../components/EventCard';
+import { WORKSHOP_PILLARS, upcomingWorkshops } from '../data/workshopsData';
 
 /**
  * /workshops — Venkat-approved pack 2026-09-24-workshops-v2.
@@ -10,46 +11,16 @@ import { WORKSHOP_PILLARS, upcomingWorkshops, type ScheduledWorkshop } from '../
  * Membership teaser once. Kill list applied (no meetup digression, no duplicate
  * propose, no fake dates/$ table).
  *
- * December 2026 Claude workshop cards, hero, and how-it-works copy are from
- * ifn-copy/workshops/2026-11-25-dec-workshops-listing.md (draft preview). Each
- * card links to its own Luma event, not the IFN_ATX meetup calendar.
+ * Hero and how-it-works copy are from
+ * ifn-copy/workshops/2026-11-25-dec-workshops-listing.md (draft preview).
+ * The Upcoming cards are IFN's Claude workshops synced from Luma into
+ * src/data/workshops.json, rendered with the meetup EventCard: Luma title,
+ * date and time in CT, Luma cover (or a poster from
+ * workshop-image-overrides.ts), and a link to that event's own Luma page,
+ * never the IFN_ATX meetup calendar.
  */
-function WorkshopCard({ workshop }: { workshop: ScheduledWorkshop }) {
-    return (
-        <article
-            aria-labelledby={`workshop-${workshop.id}`}
-            className="flex flex-col rounded-2xl border border-rule bg-paper p-6 md:p-8"
-        >
-            <p className="text-sm font-medium leading-relaxed text-muted">
-                {workshop.eyebrow}
-            </p>
-            <h3
-                id={`workshop-${workshop.id}`}
-                className="mt-3 text-xl font-bold tracking-tight text-ink md:text-2xl"
-            >
-                {workshop.title}
-            </h3>
-            <p className="mt-4 text-lg font-semibold text-ink tabular-nums">
-                <time dateTime={workshop.startsAt}>{workshop.date}</time>
-                <span className="block font-medium">{workshop.time}</span>
-            </p>
-            <p className="mt-3 text-base text-muted">{workshop.venue}</p>
-            <p className="mt-1 text-sm text-muted">{workshop.logistics}</p>
-            <p className="mt-6 text-base leading-relaxed text-ink">{workshop.pitch}</p>
-            <p className="mt-3 text-base leading-relaxed text-muted">{workshop.walkAway}</p>
-            <p className="mt-3 text-base leading-relaxed text-muted">{workshop.perk}</p>
-            <p className="mt-6 text-sm leading-relaxed text-muted">{workshop.hosting}</p>
-            <div className="mt-auto pt-6">
-                <ButtonLink href={workshop.rsvpUrl} external variant="primary" size="lg">
-                    RSVP on Luma
-                </ButtonLink>
-            </div>
-        </article>
-    );
-}
-
 export function Workshops() {
-    // Each card drops off once its own end time has passed.
+    // Each card drops off once its own Luma end time has passed.
     const scheduled = upcomingWorkshops();
 
     return (
@@ -164,8 +135,8 @@ export function Workshops() {
                 </div>
             </Container>
 
-            {/* Upcoming. The hero button jumps here. With no cards left, only the
-                heading remains: no dated lead-in and no stand-in copy. */}
+            {/* Upcoming. The hero button jumps here. With no workshops left, only
+                the heading remains: no stand-in copy. */}
             <Container className="mb-16">
                 <div className="rounded-2xl border border-rule bg-band p-8 md:p-10">
                     <h2
@@ -175,17 +146,16 @@ export function Workshops() {
                         Upcoming workshops
                     </h2>
                     {scheduled.length > 0 && (
-                        <>
-                            <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
-                                Two free, hands-on Claude workshops in Austin this December. RSVP on
-                                each Luma page. Registration needs host approval.
-                            </p>
-                            <div className="mt-8 grid gap-6 md:grid-cols-2">
-                                {scheduled.map((workshop) => (
-                                    <WorkshopCard key={workshop.id} workshop={workshop} />
-                                ))}
-                            </div>
-                        </>
+                        <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                            {scheduled.map((workshop, index) => (
+                                <EventCard
+                                    key={workshop.id}
+                                    event={workshop}
+                                    index={index}
+                                    upcomingOnly
+                                />
+                            ))}
+                        </div>
                     )}
                 </div>
             </Container>

@@ -1,3 +1,7 @@
+import type { Event } from '../components/EventCard';
+import workshopsData from './workshops.json';
+import { WORKSHOP_IMAGE_OVERRIDES } from './workshop-image-overrides';
+
 /**
  * Workshops page copy — Venkat-approved pack 2026-09-24-workshops-v2.
  * Pillar headings and workshop TYPES are locked. Dates/prices live on Luma.
@@ -100,84 +104,46 @@ export const WORKSHOP_PILLARS: WorkshopPillar[] = [
 ];
 
 /**
- * December 2026 Claude workshops. Copy is verbatim from
- * ifn-copy/workshops/2026-11-25-dec-workshops-listing.md (draft, pending
- * Venkat's approval).
+ * IFN's Claude workshops, synced from lu.ma/claudeworkshops by
+ * scripts/update-events.js into src/data/workshops.json (only events hosted by
+ * IFN Community or titled for International Founders Network; the calendar is
+ * global). Never merged into events.json, which is the meetup feed.
  *
- * Hardcoded on purpose: both events live on the Claude Workshops Luma calendar
- * (claudeworkshops), which the Sync Events workflow does not read, and
- * events.json rows all render as meetups. Do not move these into events.json.
- *
- * `endsAt` is America/Chicago wall time with its offset, from the Luma event
- * JSON-LD. A card stops rendering once its end has passed, judged at render
- * time, so at prerender time for the static HTML and again in the browser.
+ * A workshop is upcoming until its `end_at` passes (`start_at` when Luma gives
+ * no end), judged at render time: at prerender for the static HTML, and again
+ * in the browser.
  */
-export interface ScheduledWorkshop {
-    id: string;
-    eyebrow: string;
-    title: string;
-    date: string;
-    time: string;
-    venue: string;
-    logistics: string;
-    pitch: string;
-    walkAway: string;
-    perk: string;
-    hosting: string;
-    rsvpUrl: string;
-    /** Official Luma title. Shared by both events, so never the visible title. */
-    lumaTitle: string;
-    startsAt: string;
-    endsAt: string;
+export interface Workshop extends Event {
+    /** Luma URL slug, e.g. `awlxti59` for lu.ma/awlxti59. */
+    slug: string;
+    /** ISO 8601 instant. */
+    end_at?: string;
+    host?: string;
 }
 
-const LUMA_TITLE = 'Claude SMB Workshop with International Founders Network - Austin';
-const HOSTING =
-    'Hosted by International Founders Network and Approved Claude SMB Trainers, with Yani Partners as AI technology partner.';
-const PERK = 'One free month of Claude Max for people new to Claude Max';
-const LOGISTICS = 'Free. In person. Bring your laptop. Registration needs host approval.';
-const VENUE = '7820 Burnet Rd, Austin, TX 78757';
+export const SYNCED_WORKSHOPS: readonly Workshop[] = workshopsData as Workshop[];
 
-export const SCHEDULED_WORKSHOPS: ScheduledWorkshop[] = [
-    {
-        id: 'claude-2026-12-03',
-        eyebrow: 'Run the week. A free, hands-on Claude workshop for business owners.',
-        title: 'Buried in admin again this week?',
-        date: 'Thursday, December 3',
-        time: '2:00 to 5:00 PM CT',
-        venue: VENUE,
-        logistics: LOGISTICS,
-        pitch: 'A free, in-person afternoon to put Claude on the weekly admin you still do by hand.',
-        walkAway:
-            'Walk out with Claude set up for your business, connected to a tool you use, and a weekly routine on a schedule.',
-        perk: PERK,
-        hosting: HOSTING,
-        rsvpUrl: 'https://luma.com/awlxti59',
-        lumaTitle: LUMA_TITLE,
-        startsAt: '2026-12-03T14:00:00-06:00',
-        endsAt: '2026-12-03T17:00:00-06:00',
-    },
-    {
-        id: 'claude-2026-12-17',
-        eyebrow: 'Grow and close. A free, hands-on Claude workshop for business owners.',
-        title: 'Behind on marketing and month end?',
-        date: 'Thursday, December 17',
-        time: '2:00 to 5:00 PM CT',
-        venue: VENUE,
-        logistics: LOGISTICS,
-        pitch: 'A free, in-person afternoon to put Claude on marketing and month end.',
-        walkAway:
-            'Walk out with Claude set up for your business, your first skill built, and your numbers turned into a clear one-page view.',
-        perk: PERK,
-        hosting: HOSTING,
-        rsvpUrl: 'https://luma.com/lx5nu5r6',
-        lumaTitle: LUMA_TITLE,
-        startsAt: '2026-12-17T14:00:00-06:00',
-        endsAt: '2026-12-17T17:00:00-06:00',
-    },
-];
+function endOf(workshop: Workshop): number {
+    return Date.parse(workshop.end_at ?? workshop.start_at);
+}
 
-/** Workshops whose end has not passed at `now`, in date order. */
-export function upcomingWorkshops(now: Date = new Date()): ScheduledWorkshop[] {
-    return SCHEDULED_WORKSHOPS.filter((workshop) => Date.parse(workshop.endsAt) > now.getTime());
+/** The cover with any poster override from workshop-image-overrides.ts applied. */
+export function withImageOverride(
+    workshop: Workshop,
+    overrides: Record<string, string> = WORKSHOP_IMAGE_OVERRIDES,
+): Workshop {
+    const poster = overrides[workshop.id] ?? overrides[workshop.slug];
+    return poster ? { ...workshop, cover_url: poster } : workshop;
+}
+
+/** Workshops whose end has not passed at `now`, soonest first, overrides applied. */
+export function upcomingWorkshops(
+    now: Date = new Date(),
+    workshops: readonly Workshop[] = SYNCED_WORKSHOPS,
+    overrides: Record<string, string> = WORKSHOP_IMAGE_OVERRIDES,
+): Workshop[] {
+    return workshops
+        .filter((workshop) => endOf(workshop) > now.getTime())
+        .sort((a, b) => Date.parse(a.start_at) - Date.parse(b.start_at))
+        .map((workshop) => withImageOverride(workshop, overrides));
 }

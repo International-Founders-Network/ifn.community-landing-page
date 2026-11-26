@@ -28,6 +28,13 @@ export interface Event {
 interface EventCardProps {
     event: Event;
     index: number;
+    /**
+     * For a list that has already dropped everything that has ended, such as
+     * the synced workshops on /workshops. The card then never takes its past
+     * state ("Past meetup" badge, "View on" links), which it would otherwise
+     * do from the moment the event starts.
+     */
+    upcomingOnly?: boolean;
 }
 
 /**
@@ -133,13 +140,13 @@ function registrationLabel(platform: RegistrationPlatform, isPast: boolean): str
  * vendor the artwork into `public/` with permission and pass it as `icon`.
  */
 
-export function EventCard({ event, index }: EventCardProps) {
+export function EventCard({ event, index, upcomingOnly = false }: EventCardProps) {
     const { date, eventZone, shown, inReaderZone, showReaderLine } = describeMoment(event);
     const reduce = useReducedMotion() ?? false;
 
     // Read once at mount: the past/upcoming split must not flip mid-session on a re-render.
     const [renderedAt] = useState(() => Date.now());
-    const isPast = date.getTime() < renderedAt;
+    const isPast = !upcomingOnly && date.getTime() < renderedAt;
     const links = (event.registrations ?? []).filter((reg) => reg.url);
 
     return (

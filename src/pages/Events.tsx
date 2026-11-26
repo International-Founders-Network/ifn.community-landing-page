@@ -215,8 +215,9 @@ export function Events() {
                     </div>
                 )}
 
-                {/* December Claude workshops: one note under the meetup list, not
-                    meetup cards. Gone once both workshops have ended. */}
+                {/* Claude workshops: one note under the meetup list, not meetup
+                    cards. Shown while src/data/workshops.json (synced from Luma)
+                    still has an IFN workshop that has not ended. */}
                 {upcomingWorkshops(now).length > 0 && (
                     <p className="mt-10 text-muted">
                         Two free Claude workshops are also scheduled in December. See dates on the{' '}

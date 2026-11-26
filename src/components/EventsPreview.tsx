@@ -481,8 +481,9 @@ export function EventsPreview() {
                     </ButtonLink>
                 </div>
 
-                {/* December Claude workshops: a short note beside the meetups,
-                    never a row in them. Gone once both workshops have ended. */}
+                {/* Claude workshops: a short note beside the meetups, never a row
+                    in them. Shown while src/data/workshops.json (synced from
+                    Luma) still has an IFN workshop that has not ended. */}
                 {upcomingWorkshops().length > 0 && (
                     <div className="mt-10 max-w-[65ch] text-base text-muted">
                         <p>Two free Claude workshops in Austin this December.</p>
